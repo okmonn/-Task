@@ -2,9 +2,7 @@
 #include "Main.h"
 #include "Typedef.h"
 #include "DxLib.h"
-int a = 0;
-int b = 0;
-int c = 0;
+
 // システムの初期化
 bool System(void)
 {
@@ -25,10 +23,15 @@ bool System(void)
 
 	//ひとまずﾊﾞｯｸﾊﾞｯﾌｧに描画
 	SetDrawScreen(DX_SCREEN_BACK);		
-	a = LoadGraph("img/splatterhouse.png");
-	b = LoadGraph("img/bar_bottom.png");
-	c = LoadGraph("img/bar_top.png");
+	
 	return true;
+}
+
+// インスタンス化
+void Create(void)
+{
+	//背景クラス
+	back = std::make_shared<BackGround>();
 }
 
 // 描画
@@ -36,10 +39,7 @@ void Draw(void)
 {
 	//画面消去
 	ClsDrawScreen();
-	DrawGraph(0, 0, a, true);
-	DrawTurnGraph(576, 0,  a, false);
-	DrawGraph(0, 0, c, false);
-	DrawGraph(0, 448 - 64, b, false);
+	back->Draw();
 	//裏画面を表画面に瞬間コピー
 	ScreenFlip();
 }
@@ -54,6 +54,7 @@ void UpData(void)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	System();
+	Create();
 	
 	//ループ処理
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_RETURN) == 0)
