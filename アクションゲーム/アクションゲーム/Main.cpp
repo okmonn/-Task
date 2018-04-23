@@ -32,6 +32,9 @@ void Create(void)
 {
 	//背景クラス
 	back = std::make_shared<BackGround>();
+
+	//プレイヤークラス
+	pl = std::make_shared<Player>();
 }
 
 // 描画
@@ -39,7 +42,10 @@ void Draw(void)
 {
 	//画面消去
 	ClsDrawScreen();
+
 	back->Draw();
+	pl->Draw();
+
 	//裏画面を表画面に瞬間コピー
 	ScreenFlip();
 }
@@ -48,6 +54,8 @@ void Draw(void)
 void UpData(void)
 {
 	Draw();
+
+
 }
 
 // メイン処理

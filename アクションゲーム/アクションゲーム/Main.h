@@ -7,6 +7,7 @@
 #endif
 
 #include "BackGround.h"
+#include "Player.h"
 #include <memory>
 
 // システムの初期化
@@ -26,3 +27,6 @@ void Destroy(void);
 
 // 背景クラス
 EXTERN_MAIN std::shared_ptr<BackGround>back;
+
+// プレイヤークラス
+EXTERN_MAIN std::shared_ptr<Player>pl;

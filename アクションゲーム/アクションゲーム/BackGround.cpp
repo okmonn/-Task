@@ -2,7 +2,7 @@
 #include "Typedef.h"
 #include "DxLib.h"
 
-#define BACK_SIZE_X 548
+#define BACK_SIZE_X 576
 #define BAR_SIZE_Y  64
 
 // コンストラクタ
@@ -34,7 +34,7 @@ void BackGround::Draw(void)
 	DrawGraph(0, 0, top, false);
 
 	//下部バー
-	DrawGraph(0, WINDOW_Y - BAR_SIZE_Y, bottom, false);
+	DrawGraph(0, (WINDOW_Y - BAR_SIZE_Y), bottom, false);
 }
 
 // 処理

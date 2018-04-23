@@ -128,12 +128,14 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Interface.cpp" />
+    <ClCompile Include="Load.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Over.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="SceneManeger.cpp" />
+    <ClCompile Include="Scene\Game.cpp" />
+    <ClCompile Include="Scene\Over.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
+    <ClCompile Include="Scene\Title.cpp" />
     <ClCompile Include="Stage.cpp" />
-    <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -141,12 +143,14 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Interface.h" />
+    <ClInclude Include="Load.h" />
     <ClInclude Include="Main.h" />
-    <ClInclude Include="Over.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="SceneManeger.h" />
+    <ClInclude Include="Scene\Game.h" />
+    <ClInclude Include="Scene\Over.h" />
+    <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Scene\Title.h" />
     <ClInclude Include="Stage.h" />
-    <ClInclude Include="Title.h" />
     <ClInclude Include="Typedef.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
