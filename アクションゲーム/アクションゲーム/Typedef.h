@@ -1,4 +1,5 @@
 #pragma once
+#include "DxLib.h"
 #include <string>
 
 // 画面サイズ
@@ -114,12 +115,12 @@ struct Rect
 	//描画
 	void Draw(unsigned int color = 0xffffffff)
 	{
-
+		DrawBox(GetLeft(), GetTop(), GetRight(), GetBottom(), color, false);
 	}
 	//描画
 	void Draw(const Vector2D& offset, unsigned int color = 0xffffffff)
 	{
-
+		DrawBox(GetLeft() + offset.x, GetTop() + offset.y, GetRight() + offset.x, GetBottom() + offset.y, color, false);
 	}
 };
 
@@ -151,5 +152,6 @@ struct ImageData
 	//アクション名
 	std::string name;
 	//アニメーション数
+	char loop;
 	int animCnt;
 };

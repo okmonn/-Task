@@ -10,13 +10,13 @@
 BackGround::BackGround()
 {
 	//背景
-	back = LoadGraph(_T("img/splatterhouse.png"));
+	back = LoadGraph(_T("アクション/img/splatterhouse.png"));
 
 	//上部バー
-	top = LoadGraph(_T("img/bar_top.png"));
+	top = LoadGraph(_T("アクション/img/bar_top.png"));
 
 	//下部バー
-	bottom = LoadGraph(_T("img/bar_bottom.png"));
+	bottom = LoadGraph(_T("アクション/img/bar_bottom.png"));
 }
 
 // デストラクタ

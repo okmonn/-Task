@@ -9,6 +9,7 @@ Load::Load()
 {
 	header = {};
 	data.clear();
+	cut.clear();
 }
 
 // デストラクタ
@@ -53,18 +54,48 @@ bool Load::LoadAct(std::string fileName)
 
 	fread(&header.dataNum, sizeof(header.dataNum), 1, file);
 
-	data.resize(header.dataNum);
-	for (int i = 0; i < data.size(); ++i)
+	ImageData dummy = {};
+	for (int i = 0; i < header.dataNum; ++i)
 	{
-		fread(&data[i].nameNum, sizeof(data[i].nameNum), 1, file);
+		fread(&dummy.nameNum, sizeof(dummy.nameNum), 1, file);
 
-		data[i].name.resize(data[i].nameNum);
-		fread(&data[i].name[0], data[i].nameNum, 1, file);
+		dummy.name.resize(dummy.nameNum);
+		fread(&dummy.name[0], dummy.nameNum, 1, file);
 
-		fread(&data[i].animCnt, sizeof(int), 1, file);
+		fread(&dummy.loop, sizeof(dummy.loop), 1, file);
+
+		fread(&dummy.animCnt, sizeof(dummy.animCnt), 1, file);
+
+		data[i] = dummy;
+
+		cut[dummy.name].resize(dummy.animCnt);
+		for (int o = 0; o < dummy.animCnt; ++o)
+		{
+			fread(&cut[dummy.name][o], sizeof(cut[dummy.name][o]), 1, file);
+		}
+
+		dummy = {};
 	}
 
 	fclose(file);
 
 	return true;
+}
+
+// ヘッダーの取得
+ImageHeader Load::GetHeader(void)
+{
+	return header;
+}
+
+// 画像データの取得
+ImageData Load::GetImageData(USHORT index)
+{
+	return data[index];
+}
+
+// 分割データの取得
+CutData Load::GetCutData(std::string name, USHORT index)
+{
+	return cut[name][index];
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "Typedef.h"
 #include <vector>
+#include <map>
 #include <string>
 
 class Load
@@ -23,6 +24,13 @@ public:
 	// 読み込み
 	bool LoadAct(std::string fileName);
 
+	// ヘッダーの取得
+	ImageHeader GetHeader(void);
+	// 画像データの取得
+	ImageData GetImageData(USHORT index);
+	// 分割データの取得
+	CutData GetCutData(std::string name, USHORT index);
+
 private:
 	// コンストラクタ
 	Load();
@@ -31,5 +39,6 @@ private:
 	static Load* s_Instance;
 
 	ImageHeader header;
-	std::vector<ImageData>data;
+	std::map<USHORT, ImageData>data;
+	std::map<std::string, std::vector<CutData>>cut;
 };
