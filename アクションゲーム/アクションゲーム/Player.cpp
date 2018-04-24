@@ -1,20 +1,24 @@
 #include "Player.h"
 #include "DxLib.h"
-#include "Typedef.h"
+#include "Load.h"
 
 // コンストラクタ
 Player::Player()
 {
+
 	//画像データの初期化
-	image = LoadGraph("img/rick.png");
+	image = LoadGraph(_T("img/rick.png"));
 	
 	//フレーム数の初期化
 	flam = 0;
+	Load::Create();
+	Load::GetInstance()->LoadAct("アクション/player.act");
 }
 
 // デストラクタ
 Player::~Player()
 {
+	Load::Destroy();
 }
 
 // 描画

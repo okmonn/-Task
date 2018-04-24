@@ -1,5 +1,6 @@
 #pragma once
 #include "Typedef.h"
+
 class Player
 {
 public:

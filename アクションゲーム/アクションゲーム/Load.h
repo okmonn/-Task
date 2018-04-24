@@ -1,5 +1,8 @@
 #pragma once
+#include "Typedef.h"
+#include <vector>
 #include <string>
+
 class Load
 {
 public:
@@ -12,7 +15,7 @@ public:
 	static void Destroy(void);
 
 	// インスタンス変数の取得
-	Load* GetInstance(void)
+	static Load* GetInstance(void)
 	{
 		return s_Instance;
 	}
@@ -26,5 +29,7 @@ private:
 
 	// インスタンス変数
 	static Load* s_Instance;
-};
 
+	ImageHeader header;
+	std::vector<ImageData>data;
+};

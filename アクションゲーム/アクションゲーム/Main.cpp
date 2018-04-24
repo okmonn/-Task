@@ -13,7 +13,7 @@ bool System(void)
 	ChangeWindowMode(true);
 
 	//windowテキストの設定
-	SetWindowText("1601271_岡繁男");
+	SetWindowText(_T("1601271_岡繁男"));
 
 	//Dxlibの初期化
 	if (DxLib_Init() == -1)
