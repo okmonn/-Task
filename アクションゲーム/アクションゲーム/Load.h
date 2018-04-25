@@ -29,7 +29,12 @@ public:
 	// 画像データの取得
 	ImageData GetImageData(USHORT index);
 	// 分割データの取得
-	CutData GetCutData(std::string name, USHORT index);
+	std::vector<CutData> GetCutData(std::string name);
+
+	// 画像データのサイズの取得
+	UINT GetImageDataSize(void);
+	// 分割データのサイズの取得
+	UINT GetCutDataSize(void);
 
 private:
 	// コンストラクタ

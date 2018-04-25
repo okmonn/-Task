@@ -1,4 +1,6 @@
 #pragma once
+#include "Typedef.h"
+
 class BackGround
 {
 public:

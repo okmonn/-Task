@@ -1,5 +1,7 @@
 #pragma once
 #include "Typedef.h"
+#include <vector>
+#include <map>
 
 class Player
 {
@@ -14,6 +16,14 @@ public:
 
 	// 処理
 	void UpData(void);
+
+	// 状態のセット
+	void SetMode(std::string m);
+	// 状態の取得
+	std::string GetMode(void);
+
+	// 中心点の取得
+	Position Getcenter(void);
 
 private:
 	// 文字列の検索
@@ -33,5 +43,21 @@ private:
 
 	// 分割
 	Rect rect;
+
+	// モード配列
+	std::map<std::string, ImageData>data;
+	std::vector<std::string>fmode;
+
+	// 分割データ
+	std::map<std::string, std::vector<CutData>>cut;
+
+	// 配列番号
+	int index;
+
+	// 状態
+	std::string mode;
+
+	// 反転フラグ
+	bool reverse;
 };
 

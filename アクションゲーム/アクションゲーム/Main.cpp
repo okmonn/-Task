@@ -55,7 +55,7 @@ void UpData(void)
 {
 	Draw();
 
-
+	pl->UpData();
 }
 
 // ƒƒCƒ“ˆ—

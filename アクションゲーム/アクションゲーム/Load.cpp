@@ -95,7 +95,19 @@ ImageData Load::GetImageData(USHORT index)
 }
 
 // 分割データの取得
-CutData Load::GetCutData(std::string name, USHORT index)
+std::vector<CutData> Load::GetCutData(std::string name)
 {
-	return cut[name][index];
+	return cut[name];
+}
+
+// 画像データのサイズの取得
+UINT Load::GetImageDataSize(void)
+{
+	return data.size();
+}
+
+// 分割データのサイズの取得
+UINT Load::GetCutDataSize(void)
+{
+	return cut.size();
 }
