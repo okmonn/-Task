@@ -10,14 +10,15 @@ Player::Player()
 	flam = 0;
 
 	//座標
-	pos = {};
+	pos = {50, 330};
 
 	//分割
 	rect = {};
 
+	//状態
 	fmode.clear();
 
-	//状態
+	//モード
 	data.clear();
 
 	//分割データ
@@ -25,6 +26,9 @@ Player::Player()
 
 	//配列番号
 	index = 0;
+
+	//中心点
+	center = {};
 
 	//反転フラグ
 	reverse = false;
@@ -87,25 +91,23 @@ void Player::Load(void)
 		cut[itr->first] = Load::GetInstance()->GetCutData(itr->first);
 	}
 
-	mode = fmode[2];
+	SetMode(fmode[2]);
 }
 
 // 描画
 void Player::Draw(void)
 {
-	if (data[mode].loop == 1)
-	{
-		
-	}
 	index = (flam++ / cut[mode][0].flam) % cut[mode].size();
 
-	DrawRectRotaGraph2(300, 300, 
+	DrawRectRotaGraph2((int)pos.x, (int)pos.y, 
 		cut[mode][index].rect.GetLeft(), cut[mode][index].rect.GetTop(), 
 		cut[mode][index].rect.GetWidth(), cut[mode][index].rect.GetHeight(), 
-		(cut[mode][index].center.x - (int)pos.x), (cut[mode][index].center.y - (int)pos.y), 
+		center.x, center.y, 
 		2.0f, 0.0f, image, true, reverse);
 
 	DrawFormatString(10, 10, GetColor(255, 255, 255), "%d", index);
+	DrawFormatString(30, 10, GetColor(255, 255, 255), "%d", Getcenter().x);
+	DrawFormatString(50, 10, GetColor(255, 255, 255), "%d", Getcenter().y);
 }
 
 // 処理
@@ -113,41 +115,37 @@ void Player::UpData(void)
 {
 	if (CheckHitKey(KEY_INPUT_RIGHT))
 	{
-		if (reverse != false)
-		{
-			reverse = false;
-		}
+		SetMode(fmode[0]);
 		pos.x += 1.0f;
-
-		if (mode != fmode[0])
-		{
-			SetMode(fmode[0]);
-		}
 	}
 	else if (CheckHitKey(KEY_INPUT_LEFT))
 	{
-		reverse = true;
+		SetMode(fmode[0], true);
 		pos.x -= 1.0f;
-		if (mode != fmode[0])
-		{
-			SetMode(fmode[0]);
-		}
 	}
 	else
 	{
-		if (mode != fmode[2])
-		{
-			SetMode(fmode[2]);
-		}
+		SetMode(fmode[2], reverse);
 	}
 	
 }
 
 // 状態のセット
-void Player::SetMode(std::string m)
+void Player::SetMode(std::string m, bool r)
 {
+	if (mode == m && reverse == r)
+	{
+		return;
+	}
+	index = 0;
 	flam = 0;
-	mode = m;
+	mode = m; 
+	center = cut[mode][index].center;
+	reverse = r;
+	if(reverse == true)
+	{
+		center.x = cut[mode][index].rect.GetWidth() - center.x;
+	}
 }
 
 // 状態の取得
@@ -159,7 +157,13 @@ std::string Player::GetMode(void)
 // 中心点の取得
 Position Player::Getcenter(void)
 {
-	Position dummy = { cut[mode][index].center.x - (int)pos.x, cut[mode][index].center.y - (int)pos.y };
+	Position dummy = { cut[mode][index].center.x + (int)pos.x, cut[mode][index].center.y + (int)pos.y };
 
 	return dummy;
+}
+
+// 状態一覧の取得
+std::vector<std::string> Player::GetAllMode(void)
+{
+	return fmode;
 }

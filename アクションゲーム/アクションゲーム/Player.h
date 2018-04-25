@@ -18,12 +18,15 @@ public:
 	void UpData(void);
 
 	// 状態のセット
-	void SetMode(std::string m);
+	void SetMode(std::string m, bool r = false);
 	// 状態の取得
 	std::string GetMode(void);
 
 	// 中心点の取得
 	Position Getcenter(void);
+
+	// 状態一覧の取得
+	std::vector<std::string> GetAllMode(void);
 
 private:
 	// 文字列の検索
@@ -46,6 +49,8 @@ private:
 
 	// モード配列
 	std::map<std::string, ImageData>data;
+
+	// 状態
 	std::vector<std::string>fmode;
 
 	// 分割データ
@@ -56,6 +61,9 @@ private:
 
 	// 状態
 	std::string mode;
+
+	// 中心
+	Position center;
 
 	// 反転フラグ
 	bool reverse;
