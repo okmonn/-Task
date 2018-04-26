@@ -47,59 +47,59 @@ struct Size
 struct Rect
 {
 	//中心座標
-	Position center;
+	Position pos;
 
 	//幅
 	Size size;
 
-	Rect() : center({ 0,0 }), size({0,0})
+	Rect() : pos({ 0,0 }), size({0,0})
 	{}
-	Rect(int x, int y, int w, int h) : center({ x, y }), size({ w,h })
+	Rect(int x, int y, int w, int h) : pos({ x, y }), size({ w,h })
 	{}
-	Rect(Position& pos, int w, int h) : center(pos), size({ w,h })
+	Rect(Position& pos, int w, int h) : pos(pos), size({ w,h })
 	{}
 	//中心位置の更新
 	void SetCenter(int x, int y)
 	{
-		center = { x, y };
+		pos = { x, y };
 	}
 	void SetCenter(Position& pos)
 	{
-		center = pos;
+		this->pos = pos;
 	}
 
 	//
 	void SetLeftTopWidthHeight(int x, int y, int w, int h)
 	{
 		size = { w, h };
-		center = { (x + size.width / 2), (y + size.height / 2) };
+		pos = { (x + size.width / 2), (y + size.height / 2) };
 	}
 	
-	//中心位置の取得
+	//区切り座標の取得
 	Vector2D GetCenter(void)
 	{
-		return center;
+		return pos;
 	}
 
 	//左座標の取得
 	int GetLeft(void)
 	{
-		return center.x - size.width / 2;
+		return pos.x - size.width / 2;
 	}
 	//上座標の取得
 	int GetTop(void)
 	{
-		return center.y - size.height / 2;
+		return pos.y - size.height / 2;
 	}
 	//右座標の取得
 	int GetRight(void)
 	{
-		return center.x + size.width / 2;
+		return pos.x + size.width / 2;
 	}
 	//下座標の取得
 	int GetBottom(void)
 	{
-		return center.y + size.height / 2;
+		return pos.y + size.height / 2;
 	}
 	//横幅の取得
 	int GetWidth(void)

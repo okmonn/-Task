@@ -7,6 +7,7 @@
 #endif
 
 #include "BackGround.h"
+#include "Input.h"
 #include "Player.h"
 #include <memory>
 
@@ -27,6 +28,9 @@ void Destroy(void);
 
 // 背景クラス
 EXTERN_MAIN std::shared_ptr<BackGround>back;
+
+// インプット
+EXTERN_MAIN std::shared_ptr<Input>in;
 
 // プレイヤークラス
 EXTERN_MAIN std::shared_ptr<Player>pl;

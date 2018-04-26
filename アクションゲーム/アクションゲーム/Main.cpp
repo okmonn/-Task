@@ -33,8 +33,11 @@ void Create(void)
 	//背景クラス
 	back = std::make_shared<BackGround>();
 
+	//インプット
+	in = std::make_shared<Input>();
+
 	//プレイヤークラス
-	pl = std::make_shared<Player>();
+	pl = std::make_shared<Player>(in);
 }
 
 // 描画
@@ -54,6 +57,8 @@ void Draw(void)
 void UpData(void)
 {
 	Draw();
+
+	in->UpData();
 
 	pl->UpData();
 }

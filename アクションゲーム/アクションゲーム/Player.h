@@ -1,13 +1,15 @@
 #pragma once
 #include "Typedef.h"
+#include "Input.h"
 #include <vector>
 #include <map>
+#include <memory>
 
 class Player
 {
 public:
 	// コンストラクタ
-	Player();
+	Player(std::weak_ptr<Input>in);
 	// デストラクタ
 	virtual ~Player();
 
@@ -15,8 +17,10 @@ public:
 	void Draw(void);
 
 	// 処理
-	void UpData(void);
+	void UpData();
 
+
+	void SetCenter(Position& pos, bool r = false);
 	// 状態のセット
 	void SetMode(std::string m, bool r = false);
 	// 状態の取得
@@ -34,12 +38,15 @@ private:
 	// 読み込み
 	void Load(void);
 
+	// 
+	std::weak_ptr<Input>in;
+
 
 	// 画像データ
 	int image;
 	
 	// フレーム数
-	int flam;
+	UINT flam;
 
 	// 座標
 	Positionf pos;
@@ -57,7 +64,7 @@ private:
 	std::map<std::string, std::vector<CutData>>cut;
 
 	// 配列番号
-	int index;
+	UINT index;
 
 	// 状態
 	std::string mode;
@@ -67,5 +74,8 @@ private:
 
 	// 反転フラグ
 	bool reverse;
+
+	// ループフラグ
+	bool loop;
 };
 

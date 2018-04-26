@@ -4,7 +4,7 @@
 const char* actionPath = "アクション/player.act";
 
 // コンストラクタ
-Player::Player()
+Player::Player(std::weak_ptr<Input>in) : in(in)
 {
 	//フレーム数の初期化
 	flam = 0;
@@ -32,6 +32,9 @@ Player::Player()
 
 	//反転フラグ
 	reverse = false;
+
+	//ループフラグ
+	loop = true;
 
 	if (Load::GetInstance() == nullptr)
 	{
@@ -91,13 +94,34 @@ void Player::Load(void)
 		cut[itr->first] = Load::GetInstance()->GetCutData(itr->first);
 	}
 
-	SetMode(fmode[2]);
+	SetMode(fmode[0]);
 }
 
 // 描画
 void Player::Draw(void)
 {
-	index = (flam++ / cut[mode][0].flam) % cut[mode].size();
+	if (data[mode].loop)
+	{
+		index = (flam++ / cut[mode][index].flam) % cut[mode].size();
+		SetCenter(cut[mode][index].center, reverse);
+	}
+	else
+	{
+		if (index < cut[mode].size() && loop == true)
+		{
+			index = (flam++ / cut[mode][index].flam) % (cut[mode].size());
+			SetCenter(cut[mode][index].center, reverse);
+			if (flam >= cut[mode][index].flam * cut[mode].size())
+			{
+				loop = false;
+			}
+		}
+		else
+		{
+			SetMode(fmode[2], reverse);
+		}
+		
+	}
 
 	DrawRectRotaGraph2((int)pos.x, (int)pos.y, 
 		cut[mode][index].rect.GetLeft(), cut[mode][index].rect.GetTop(), 
@@ -106,28 +130,36 @@ void Player::Draw(void)
 		2.0f, 0.0f, image, true, reverse);
 
 	DrawFormatString(10, 10, GetColor(255, 255, 255), "%d", index);
-	DrawFormatString(30, 10, GetColor(255, 255, 255), "%d", Getcenter().x);
-	DrawFormatString(50, 10, GetColor(255, 255, 255), "%d", Getcenter().y);
+	DrawFormatString(30, 10, GetColor(255, 255, 255), "%d", center.x);
+	DrawFormatString(50, 10, GetColor(255, 255, 255), "%d", center.y);
 }
 
 // 処理
-void Player::UpData(void)
+void Player::UpData()
 {
-	if (CheckHitKey(KEY_INPUT_RIGHT))
+	if (in.lock()->CheckPress(PAD_INPUT_RIGHT))
 	{
 		SetMode(fmode[0]);
 		pos.x += 1.0f;
 	}
-	else if (CheckHitKey(KEY_INPUT_LEFT))
+	else if (in.lock()->CheckPress(PAD_INPUT_LEFT))
 	{
 		SetMode(fmode[0], true);
 		pos.x -= 1.0f;
 	}
-	else
+	else if (CheckHitKey(KEY_INPUT_SPACE))
 	{
-		SetMode(fmode[2], reverse);
+		SetMode(fmode[3], reverse);
 	}
-	
+}
+
+void Player::SetCenter(Position & pos, bool r)
+{
+	center = pos;
+	if (r == true)
+	{
+		center.x = cut[mode][index].rect.GetWidth() - pos.x;
+	}
 }
 
 // 状態のセット
@@ -137,15 +169,12 @@ void Player::SetMode(std::string m, bool r)
 	{
 		return;
 	}
-	index = 0;
 	flam = 0;
+	index = 0;
 	mode = m; 
-	center = cut[mode][index].center;
 	reverse = r;
-	if(reverse == true)
-	{
-		center.x = cut[mode][index].rect.GetWidth() - center.x;
-	}
+	loop = true;
+	SetCenter(cut[mode][index].center, reverse);
 }
 
 // 状態の取得
