@@ -19,7 +19,7 @@ public:
 	// 処理
 	void UpData();
 
-
+	// 中心座標のセット
 	void SetCenter(Position& pos, bool r = false);
 	// 状態のセット
 	void SetMode(std::string m, bool r = false);
@@ -38,7 +38,7 @@ private:
 	// 読み込み
 	void Load(void);
 
-	// 
+	// インプットクラス
 	std::weak_ptr<Input>in;
 
 

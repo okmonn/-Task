@@ -153,6 +153,7 @@ void Player::UpData()
 	}
 }
 
+// 中心座標のセット
 void Player::SetCenter(Position & pos, bool r)
 {
 	center = pos;
