@@ -2,6 +2,7 @@
 #include "Load.h"
 
 const char* actionPath = "アクション/player.act";
+const float g = 9.8f;
 
 // コンストラクタ
 Player::Player(std::weak_ptr<Input>in) : in(in)
@@ -36,11 +37,14 @@ Player::Player(std::weak_ptr<Input>in) : in(in)
 	//ループフラグ
 	loop = true;
 
+	//速度
+	vel = {20.0f, -9.8f * 4};
+
 	if (Load::GetInstance() == nullptr)
 	{
 		Load::Create();
 	}
-
+	
 	Load();
 }
 
@@ -116,10 +120,10 @@ void Player::Draw(void)
 				loop = false;
 			}
 		}
-		else
+		/*else
 		{
 			SetMode(fmode[2], reverse);
-		}
+		}*/
 		
 	}
 
@@ -131,25 +135,79 @@ void Player::Draw(void)
 
 	DrawFormatString(10, 10, GetColor(255, 255, 255), "%d", index);
 	DrawFormatString(30, 10, GetColor(255, 255, 255), "%d", center.x);
-	DrawFormatString(50, 10, GetColor(255, 255, 255), "%d", center.y);
+	DrawFormatString(50, 10, GetColor(255, 255, 255), "%d", (int)pos.y);
+	DrawPixel((int)pos.x, (int)pos.y, GetColor(255, 255, 255));
+}
+
+// 待機の処理
+void Player::Wait(void)
+{
+}
+
+// 歩きの処理
+void Player::Walk(void)
+{
+	if (mode != "Walk")
+	{
+		return;
+	}
+
+	if (in.lock()->CheckPress(PAD_INPUT_RIGHT) || in.lock()->CheckPress(PAD_INPUT_LEFT))
+	{
+		pos.x += reverse == false ? 1.0f : -1.0f;
+	}
+}
+
+// ジャンプの処理
+void Player::Jump(void)
+{
+	if (mode != "Jump")
+	{
+		return;
+	}
+	pos += vel;
+	vel.y += g;
+}
+
+// パンチの処理
+void Player::Panch(void)
+{
+}
+
+// キックの処理
+void Player::Kick(void)
+{
+}
+
+// スライディングの処理
+void Player::Sliding(void)
+{
+}
+
+// しゃがみの処理
+void Player::Down(void)
+{
+}
+
+// ダメージの処理
+void Player::Damage(void)
+{
 }
 
 // 処理
 void Player::UpData()
 {
-	if (in.lock()->CheckPress(PAD_INPUT_RIGHT))
+	if (in.lock()->CheckTrigger(PAD_INPUT_RIGHT))
 	{
 		SetMode(fmode[0]);
-		pos.x += 1.0f;
 	}
-	else if (in.lock()->CheckPress(PAD_INPUT_LEFT))
+	else if (in.lock()->CheckTrigger(PAD_INPUT_LEFT))
 	{
 		SetMode(fmode[0], true);
-		pos.x -= 1.0f;
 	}
 	else if (CheckHitKey(KEY_INPUT_SPACE))
 	{
-		SetMode(fmode[3], reverse);
+		SetMode("Jump", reverse);
 	}
 }
 
@@ -175,6 +233,14 @@ void Player::SetMode(std::string m, bool r)
 	mode = m; 
 	reverse = r;
 	loop = true;
+	if (reverse == false)
+	{
+		vel = { 20.0f, -g * 4 };
+	}
+	else
+	{
+		vel = { -20.0f, -g * 4 };
+	}
 	SetCenter(cut[mode][index].center, reverse);
 }
 
@@ -184,16 +250,32 @@ std::string Player::GetMode(void)
 	return mode;
 }
 
-// 中心点の取得
-Position Player::Getcenter(void)
+// 座標の取得
+Positionf Player::GetPos(void)
 {
-	Position dummy = { cut[mode][index].center.x + (int)pos.x, cut[mode][index].center.y + (int)pos.y };
+	return pos;
+}
 
-	return dummy;
+// 座標のセット
+void Player::SetPos(Positionf pos)
+{
+	this->pos = pos;
+}
+
+// 座標のセット
+void Player::SetPos(float y)
+{
+	pos.y = y;
 }
 
 // 状態一覧の取得
 std::vector<std::string> Player::GetAllMode(void)
 {
 	return fmode;
+}
+
+// 反転フラグの取得
+bool Player::GetReverse(void)
+{
+	return reverse;
 }

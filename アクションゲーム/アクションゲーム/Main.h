@@ -9,6 +9,7 @@
 #include "BackGround.h"
 #include "Input.h"
 #include "Player.h"
+#include "Ground.h"
 #include <memory>
 
 // システムの初期化
@@ -34,3 +35,6 @@ EXTERN_MAIN std::shared_ptr<Input>in;
 
 // プレイヤークラス
 EXTERN_MAIN std::shared_ptr<Player>pl;
+
+// 地面クラス
+EXTERN_MAIN std::shared_ptr<Ground>ground;

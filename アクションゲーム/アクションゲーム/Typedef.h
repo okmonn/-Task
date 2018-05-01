@@ -29,6 +29,12 @@ struct Vector2
 		x += a;
 		y += a;
 	}
+
+	void operator+=(const Vector2& vec)
+	{
+		x += vec.x;
+		y += vec.y;
+	}
 };
 typedef Vector2<int>Vector2D;
 typedef Vector2D Position;

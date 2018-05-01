@@ -38,6 +38,9 @@ void Create(void)
 
 	//プレイヤークラス
 	pl = std::make_shared<Player>(in);
+
+	//地面クラス
+	ground = std::make_shared<Ground>(pl);
 }
 
 // 描画
@@ -48,6 +51,7 @@ void Draw(void)
 
 	back->Draw();
 	pl->Draw();
+	ground->Draw();
 
 	//裏画面を表画面に瞬間コピー
 	ScreenFlip();
@@ -59,8 +63,10 @@ void UpData(void)
 	Draw();
 
 	in->UpData();
-
+	
 	pl->UpData();
+
+	ground->UpData();
 }
 
 // メイン処理

@@ -5,8 +5,11 @@
 #include <map>
 #include <memory>
 
+class Game;
+
 class Player
 {
+	friend Game;
 public:
 	// コンストラクタ
 	Player(std::weak_ptr<Input>in);
@@ -26,11 +29,17 @@ public:
 	// 状態の取得
 	std::string GetMode(void);
 
-	// 中心点の取得
-	Position Getcenter(void);
+	// 座標の取得
+	Positionf GetPos(void);
+	// 座標のセット
+	void SetPos(Positionf pos);
+	void SetPos(float y);
 
 	// 状態一覧の取得
 	std::vector<std::string> GetAllMode(void);
+
+	// 反転フラグの取得
+	bool GetReverse(void);
 
 private:
 	// 文字列の検索
@@ -38,9 +47,27 @@ private:
 	// 読み込み
 	void Load(void);
 
+	// 待機の処理
+	void Wait(void);
+	// 歩きの処理
+	void Walk(void);
+	// ジャンプの処理
+	void Jump(void);
+	// パンチの処理
+	void Panch(void);
+	// キックの処理
+	void Kick(void);
+	// スライディングの処理
+	void Sliding(void);
+	// しゃがみの処理
+	void Down(void);
+	// ダメージの処理
+	void Damage(void);
+
+
+
 	// インプットクラス
 	std::weak_ptr<Input>in;
-
 
 	// 画像データ
 	int image;
@@ -77,5 +104,11 @@ private:
 
 	// ループフラグ
 	bool loop;
+
+	// 速度
+	Vector2Df vel;
+
+	// 
+	void (Player::*func)(void);
 };
 
