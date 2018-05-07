@@ -2,7 +2,7 @@
 #include "Load.h"
 
 const char* actionPath = "アクション/player.act";
-const float g = 9.8f;
+const float g = 0.5f;
 
 // コンストラクタ
 Player::Player(std::weak_ptr<Input>in) : in(in)
@@ -38,7 +38,7 @@ Player::Player(std::weak_ptr<Input>in) : in(in)
 	loop = true;
 
 	//速度
-	vel = {20.0f, -9.8f * 4};
+	vel = {2.0f, -10.0f};
 
 	if (Load::GetInstance() == nullptr)
 	{
@@ -118,6 +118,7 @@ void Player::Draw(void)
 			if (flam >= cut[mode][index].flam * cut[mode].size())
 			{
 				loop = false;
+				index = cut[mode].size() - 1;
 			}
 		}
 		/*else
@@ -137,6 +138,7 @@ void Player::Draw(void)
 	DrawFormatString(30, 10, GetColor(255, 255, 255), "%d", center.x);
 	DrawFormatString(50, 10, GetColor(255, 255, 255), "%d", (int)pos.y);
 	DrawPixel((int)pos.x, (int)pos.y, GetColor(255, 255, 255));
+	DrawFormatString(100, 10, GetColor(255, 255, 255), "%s", mode.c_str());
 }
 
 // 待機の処理
@@ -194,20 +196,36 @@ void Player::Damage(void)
 {
 }
 
-// 処理
-void Player::UpData()
+// 状態の変更
+void Player::ChangeMode(void)
 {
-	if (in.lock()->CheckTrigger(PAD_INPUT_RIGHT))
+	if (in.lock()->CheckTrigger(PAD_INPUT_RIGHT) && mode != "Jump")
 	{
 		SetMode(fmode[0]);
 	}
-	else if (in.lock()->CheckTrigger(PAD_INPUT_LEFT))
+	else if (in.lock()->CheckTrigger(PAD_INPUT_LEFT) && mode != "Jump")
 	{
 		SetMode(fmode[0], true);
 	}
-	else if (CheckHitKey(KEY_INPUT_SPACE))
+
+	if (CheckHitKey(KEY_INPUT_SPACE))
 	{
 		SetMode("Jump", reverse);
+	}
+}
+
+// 処理
+void Player::UpData()
+{
+	ChangeMode();
+
+	if (mode == "Walk")
+	{
+		Walk();
+	}
+	else if (mode == "Jump")
+	{
+		Jump();
 	}
 }
 
@@ -235,11 +253,11 @@ void Player::SetMode(std::string m, bool r)
 	loop = true;
 	if (reverse == false)
 	{
-		vel = { 20.0f, -g * 4 };
+		vel = { 2.0f, -10.0f };
 	}
 	else
 	{
-		vel = { -20.0f, -g * 4 };
+		vel = { -2.0f, -10.0f };
 	}
 	SetCenter(cut[mode][index].center, reverse);
 }

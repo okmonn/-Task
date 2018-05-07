@@ -130,19 +130,11 @@ struct Rect
 	}
 };
 
-//分割データ
-struct CutData
-{
-	//切り抜き短形
-	Rect rect;
-	//中心座標
-	Position center;
-	//アニメーション時間
-	int flam;
-};
 // 画像ヘッダー構造体
 struct ImageHeader
 {
+	//バージョン
+	float ver;
 	//文字列の長さ
 	int pathNum;
 	//ファイルパス
@@ -160,4 +152,22 @@ struct ImageData
 	//アニメーション数
 	char loop;
 	int animCnt;
+};
+
+//分割データ
+struct CutData
+{
+	//切り抜き短形
+	Rect rect;
+	//中心座標
+	Position center;
+	//アニメーション時間
+	int flam;
+};
+
+//攻撃短形のデータ
+struct Attack
+{
+	int type;
+	Rect rect;
 };

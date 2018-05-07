@@ -43,7 +43,12 @@ private:
 	// インスタンス変数
 	static Load* s_Instance;
 
+	// ヘッダー
 	ImageHeader header;
+	// 画像データ
 	std::map<USHORT, ImageData>data;
+	// 分割データ
 	std::map<std::string, std::vector<CutData>>cut;
+	// 攻撃短形データ
+	std::map<std::string, std::vector<Attack>>attack;
 };

@@ -30,8 +30,8 @@ void Ground::UpData(void)
 
 	if (pl.lock()->GetPos().y >= y)
 	{
-		pl.lock()->SetMode("Ground", pl.lock()->GetReverse());
 		pl.lock()->SetPos(330.0f);
+		pl.lock()->SetMode("Ground", pl.lock()->GetReverse());
 	}
 }
 

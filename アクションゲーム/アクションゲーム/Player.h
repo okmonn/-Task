@@ -50,7 +50,7 @@ private:
 	// 待機の処理
 	void Wait(void);
 	// 歩きの処理
-	void Walk(void);
+	void Walk();
 	// ジャンプの処理
 	void Jump(void);
 	// パンチの処理
@@ -63,6 +63,9 @@ private:
 	void Down(void);
 	// ダメージの処理
 	void Damage(void);
+
+	// 状態の変更
+	void ChangeMode(void);
 
 
 

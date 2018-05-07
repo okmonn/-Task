@@ -10,6 +10,7 @@ Load::Load()
 	header = {};
 	data.clear();
 	cut.clear();
+	attack.clear();
 }
 
 // デストラクタ
@@ -47,6 +48,8 @@ bool Load::LoadAct(std::string fileName)
 		return false;
 	}
 
+	fread(&header.ver, sizeof(header.ver), 1, file);
+
 	fread(&header.pathNum, sizeof(header.pathNum), 1, file);
 
 	header.path.resize(header.pathNum);
@@ -72,6 +75,13 @@ bool Load::LoadAct(std::string fileName)
 		for (int o = 0; o < dummy.animCnt; ++o)
 		{
 			fread(&cut[dummy.name][o], sizeof(cut[dummy.name][o]), 1, file);
+			int num = 0;
+			fread(&num, sizeof(num), 1, file);
+			attack[dummy.name].resize(num);
+			for (int p = 0; p < num; ++p)
+			{
+				fread(&attack[dummy.name][0], sizeof(attack[dummy.name][0]), 1, file);
+			}
 		}
 
 		dummy = {};
