@@ -1,5 +1,5 @@
 #include "Load.h"
-
+#include <cassert>
 #include <tchar.h>
 
 Load* Load::s_Instance = nullptr;
@@ -49,6 +49,8 @@ bool Load::LoadAct(std::string fileName)
 	}
 
 	fread(&header.ver, sizeof(header.ver), 1, file);
+
+	//assert(header.ver == 1.0f);
 
 	fread(&header.pathNum, sizeof(header.pathNum), 1, file);
 

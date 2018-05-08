@@ -53,6 +53,8 @@ private:
 	void Walk();
 	// ジャンプの処理
 	void Jump(void);
+	// 着地の処理
+	void Ground(void);
 	// パンチの処理
 	void Punch(void);
 	// キックの処理
@@ -63,10 +65,6 @@ private:
 	void Down(void);
 	// ダメージの処理
 	void Damage(void);
-
-	// 状態の変更
-	void ChangeMode(void);
-
 
 
 	// インプットクラス

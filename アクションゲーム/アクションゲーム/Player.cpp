@@ -145,13 +145,16 @@ void Player::Draw(void)
 		}
 		else
 		{
-			if (mode != "Jump")
+			if (mode != "Jump" && mode != "Crouch" && mode != " Damage")
 			{
 				SetMode("Wait", reverse);
 			}
 			else
 			{
-				index = cut[mode].size() - 1;
+				if (mode != "Kick")
+				{
+					index = cut[mode].size() - 1;
+				}
 			}
 		}
 	}
@@ -197,6 +200,13 @@ void Player::Wait(void)
 		SetMode("Punch", reverse);
 		func = &Player::Punch;
 	}
+
+	//しゃがみ
+	if (in.lock()->CheckTrigger(PAD_INPUT_DOWN))
+	{
+		SetMode("Crouch", reverse);
+		func = &Player::Down;
+	}
 }
 
 // 歩きの処理
@@ -216,6 +226,13 @@ void Player::Walk(void)
 		SetMode("Wait", reverse);
 		func = &Player::Wait;
 	}
+
+	//ジャンプ
+	if (in.lock()->CheckTrigger(PAD_INPUT_A))
+	{
+		SetMode("Jump", reverse);
+		func = &Player::Jump;
+	}
 }
 
 // ジャンプの処理
@@ -227,6 +244,30 @@ void Player::Jump(void)
 	}
 	pos += vel;
 	vel.y += g;
+
+	//しゃがみ
+	if (in.lock()->CheckTrigger(PAD_INPUT_DOWN))
+	{
+		SetMode("Crouch", reverse);
+		func = &Player::Down;
+	}
+
+	//スライディング
+	if (in.lock()->CheckTrigger(PAD_INPUT_D))
+	{
+		SetMode("Sliding", reverse);
+		func = &Player::Sliding;
+	}
+}
+
+// 着地の処理
+void Player::Ground(void)
+{
+	if (in.lock()->CheckTrigger(PAD_INPUT_A))
+	{
+		SetMode("Sliding", reverse);
+		func = &Player::Sliding;
+	}
 }
 
 // パンチの処理
@@ -237,16 +278,46 @@ void Player::Punch(void)
 // キックの処理
 void Player::Kick(void)
 {
+	if ((int)flam >= cut[mode][cut[mode].size() - 1].flam)
+	{
+		if (in.lock()->CheckPress(PAD_INPUT_DOWN))
+		{
+			SetMode("Crouch", reverse);
+			func = &Player::Down;
+		}
+	}
 }
 
 // スライディングの処理
 void Player::Sliding(void)
 {
+	pos.x += reverse == false ? 2.0f : -2.0f;
 }
 
 // しゃがみの処理
 void Player::Down(void)
 {
+	if (!(in.lock()->CheckPress(PAD_INPUT_DOWN)) && pos.y >= 330)
+	{
+		SetMode("Wait", reverse);
+	}
+	else
+	{
+		if (in.lock()->CheckTrigger(PAD_INPUT_C))
+		{
+			SetMode("Kick", reverse);
+			func = &Player::Kick;
+		}
+	}
+	
+	if (in.lock()->CheckTrigger(PAD_INPUT_LEFT))
+	{
+		reverse = true;
+	}
+	else if (in.lock()->CheckTrigger(PAD_INPUT_RIGHT))
+	{
+		reverse = false;
+	}
 }
 
 // ダメージの処理
@@ -254,15 +325,18 @@ void Player::Damage(void)
 {
 }
 
-// 状態の変更
-void Player::ChangeMode(void)
-{
-	
-}
-
 // 処理
 void Player::UpData()
 {
+	if (mode != "Jump")
+	{
+		if (pos.y < 330)
+		{
+			pos.y += vel.y;
+			vel.y += g;
+		}
+	}
+
 	if (wait == true)
 	{
 		func = &Player::Wait;
@@ -287,7 +361,7 @@ void Player::SetMode(std::string m, bool r)
 	if (mode == m && reverse == r && wait == false)
 	{
 		return;
-	}
+	}	
 
 	if (m == "Wait")
 	{
@@ -300,17 +374,28 @@ void Player::SetMode(std::string m, bool r)
 		mode = m;
 	}
 
+	if (mode == "Ground")
+	{
+		func = &Player::Ground;
+	}
+
 	flam = 0;
 	index = 0;
 	reverse = r;
 	loop = true;
 	if (reverse == false)
 	{
-		vel = { 2.0f, -10.0f };
+		if (mode != "Crouch" && mode != "Kick")
+		{
+			vel = { 2.0f, -10.0f };
+		}
 	}
 	else
 	{
-		vel = { -2.0f, -10.0f };
+		if (mode != "Crouch" && mode != "Kick")
+		{
+			vel = { -2.0f, -10.0f };
+		}
 	}
 	SetCenter(cut[mode][index].center, reverse);
 }

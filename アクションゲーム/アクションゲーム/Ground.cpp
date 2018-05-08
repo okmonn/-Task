@@ -23,15 +23,13 @@ void Ground::Draw(void)
 // ˆ—
 void Ground::UpData(void)
 {
-	if (pl.lock()->GetMode() != "Jump")
+	if (pl.lock()->GetMode() == "Jump")
 	{
-		return;
-	}
-
-	if (pl.lock()->GetPos().y >= y)
-	{
-		pl.lock()->SetPos(330.0f);
-		pl.lock()->SetMode("Ground", pl.lock()->GetReverse());
+		if (pl.lock()->GetPos().y >= y)
+		{
+			pl.lock()->SetPos(330.0f);
+			pl.lock()->SetMode("Ground", pl.lock()->GetReverse());
+		}
 	}
 }
 
