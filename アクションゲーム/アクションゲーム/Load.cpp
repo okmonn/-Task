@@ -79,10 +79,10 @@ bool Load::LoadAct(std::string fileName)
 			fread(&cut[dummy.name][o], sizeof(cut[dummy.name][o]), 1, file);
 			int num = 0;
 			fread(&num, sizeof(num), 1, file);
-			attack[dummy.name].resize(num);
+			attack[dummy.name][o].resize(num);
 			for (int p = 0; p < num; ++p)
 			{
-				fread(&attack[dummy.name][p], sizeof(attack[dummy.name][p]), 1, file);
+				fread(&attack[dummy.name][o][p], sizeof(attack[dummy.name][o][p]), 1, file);
 			}
 		}
 
