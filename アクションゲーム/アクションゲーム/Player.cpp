@@ -40,6 +40,12 @@ Player::Player(std::weak_ptr<Input>in) : in(in)
 	//速度
 	vel = {2.0f, -10.0f};
 
+	//関数ポインタ
+	func = &Player::Wait;
+
+	//待機フラグ
+	wait = true;
+
 	if (Load::GetInstance() == nullptr)
 	{
 		Load::Create();
@@ -98,7 +104,7 @@ void Player::Load(void)
 		cut[itr->first] = Load::GetInstance()->GetCutData(itr->first);
 	}
 
-	SetMode(fmode[0]);
+	SetMode("Wait");
 }
 
 // 描画
@@ -106,26 +112,48 @@ void Player::Draw(void)
 {
 	if (data[mode].loop)
 	{
-		index = (flam++ / cut[mode][index].flam) % cut[mode].size();
+		if (wait == false)
+		{
+			++flam;
+		}
+		index = (flam / cut[mode][index].flam) % cut[mode].size();
 		SetCenter(cut[mode][index].center, reverse);
 	}
 	else
 	{
 		if (index < cut[mode].size() && loop == true)
 		{
-			index = (flam++ / cut[mode][index].flam) % (cut[mode].size());
-			SetCenter(cut[mode][index].center, reverse);
-			if (flam >= cut[mode][index].flam * cut[mode].size())
+			flam++;
+			if ((int)flam >= cut[mode][index].flam)
 			{
-				loop = false;
+				if (cut[mode].size() - 1 > index)
+				{
+
+					if (mode == "Ground")
+					{
+						int i = 0;
+					}
+					++index;
+					flam = 0;
+				}
+				else
+				{
+					loop = false;
+				}
+			}
+			SetCenter(cut[mode][index].center, reverse);
+		}
+		else
+		{
+			if (mode != "Jump")
+			{
+				SetMode("Wait", reverse);
+			}
+			else
+			{
 				index = cut[mode].size() - 1;
 			}
 		}
-		/*else
-		{
-			SetMode(fmode[2], reverse);
-		}*/
-		
 	}
 
 	DrawRectRotaGraph2((int)pos.x, (int)pos.y, 
@@ -144,6 +172,31 @@ void Player::Draw(void)
 // 待機の処理
 void Player::Wait(void)
 {
+	//歩き
+	if (in.lock()->CheckTrigger(PAD_INPUT_RIGHT) && mode != "Jump")
+	{
+		SetMode(fmode[0]);
+		func = &Player::Walk;
+	}
+	else if (in.lock()->CheckTrigger(PAD_INPUT_LEFT) && mode != "Jump")
+	{
+		SetMode(fmode[0], true);
+		func = &Player::Walk;
+	}
+
+	//ジャンプ
+	if (in.lock()->CheckTrigger(PAD_INPUT_A))
+	{
+		SetMode("Jump", reverse);
+		func = &Player::Jump;
+	}
+
+	//パンチ
+	if (in.lock()->CheckTrigger(PAD_INPUT_B) && mode != "Punch")
+	{
+		SetMode("Punch", reverse);
+		func = &Player::Punch;
+	}
 }
 
 // 歩きの処理
@@ -157,6 +210,11 @@ void Player::Walk(void)
 	if (in.lock()->CheckPress(PAD_INPUT_RIGHT) || in.lock()->CheckPress(PAD_INPUT_LEFT))
 	{
 		pos.x += reverse == false ? 1.0f : -1.0f;
+	}
+	else
+	{
+		SetMode("Wait", reverse);
+		func = &Player::Wait;
 	}
 }
 
@@ -172,7 +230,7 @@ void Player::Jump(void)
 }
 
 // パンチの処理
-void Player::Panch(void)
+void Player::Punch(void)
 {
 }
 
@@ -199,34 +257,18 @@ void Player::Damage(void)
 // 状態の変更
 void Player::ChangeMode(void)
 {
-	if (in.lock()->CheckTrigger(PAD_INPUT_RIGHT) && mode != "Jump")
-	{
-		SetMode(fmode[0]);
-	}
-	else if (in.lock()->CheckTrigger(PAD_INPUT_LEFT) && mode != "Jump")
-	{
-		SetMode(fmode[0], true);
-	}
-
-	if (CheckHitKey(KEY_INPUT_SPACE))
-	{
-		SetMode("Jump", reverse);
-	}
+	
 }
 
 // 処理
 void Player::UpData()
 {
-	ChangeMode();
+	if (wait == true)
+	{
+		func = &Player::Wait;
+	}
 
-	if (mode == "Walk")
-	{
-		Walk();
-	}
-	else if (mode == "Jump")
-	{
-		Jump();
-	}
+	(this->*func)();
 }
 
 // 中心座標のセット
@@ -242,13 +284,24 @@ void Player::SetCenter(Position & pos, bool r)
 // 状態のセット
 void Player::SetMode(std::string m, bool r)
 {
-	if (mode == m && reverse == r)
+	if (mode == m && reverse == r && wait == false)
 	{
 		return;
 	}
+
+	if (m == "Wait")
+	{
+		wait = true;
+		mode = "Walk";
+	}
+	else
+	{
+		wait = false;
+		mode = m;
+	}
+
 	flam = 0;
 	index = 0;
-	mode = m; 
 	reverse = r;
 	loop = true;
 	if (reverse == false)

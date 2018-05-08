@@ -54,7 +54,7 @@ private:
 	// ジャンプの処理
 	void Jump(void);
 	// パンチの処理
-	void Panch(void);
+	void Punch(void);
 	// キックの処理
 	void Kick(void);
 	// スライディングの処理
@@ -111,7 +111,10 @@ private:
 	// 速度
 	Vector2Df vel;
 
-	// 
+	// 関数ポインタ
 	void (Player::*func)(void);
+
+	// 待機フラグ
+	bool wait;
 };
 
