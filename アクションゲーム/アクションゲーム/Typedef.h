@@ -58,7 +58,7 @@ struct Rect
 	//幅
 	Size size;
 
-	Rect() : pos({ 0,0 }), size({0,0})
+	Rect() : pos({ 0,0 }), size({ 0,0 })
 	{}
 	Rect(int x, int y, int w, int h) : pos({ x, y }), size({ w,h })
 	{}
@@ -80,7 +80,7 @@ struct Rect
 		size = { w, h };
 		pos = { (x + size.width / 2), (y + size.height / 2) };
 	}
-	
+
 	//区切り座標の取得
 	Vector2D GetCenter(void)
 	{
@@ -165,9 +165,17 @@ struct CutData
 	int flam;
 };
 
+//あたり矩形の種類
+enum class RectType
+{
+	anchoe,//アンカー
+	attack,//攻撃
+	damage //やられ
+};
+
 //攻撃短形のデータ
 struct Attack
 {
-	int type;
+	RectType type;
 	Rect rect;
 };

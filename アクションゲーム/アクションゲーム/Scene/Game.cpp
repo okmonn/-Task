@@ -12,7 +12,6 @@ Game::Game()
 // コンストラクタ
 Game::Game(const Game&)
 {
-
 }
 
 // デストラクタ
@@ -40,7 +39,7 @@ void Game::Init(void)
 	//ひとまずﾊﾞｯｸﾊﾞｯﾌｧに描画
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	
+
 	Create();
 }
 
@@ -49,6 +48,9 @@ void Game::Create(void)
 {
 	//背景クラス
 	back = std::make_shared<BackGround>();
+
+	//UIクラス
+	ui = std::make_shared<Interface>();
 
 	//インプット
 	in = std::make_shared<Input>();
@@ -67,6 +69,7 @@ void Game::Draw(void)
 	ClsDrawScreen();
 
 	back->Draw();
+	ui->Draw();
 	pl->Draw();
 	ground->Draw();
 

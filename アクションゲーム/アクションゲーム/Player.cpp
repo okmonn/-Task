@@ -3,6 +3,7 @@
 
 const char* actionPath = "アクション/player.act";
 const float g = 0.5f;
+const int line = 330;
 
 // コンストラクタ
 Player::Player(std::weak_ptr<Input>in) : in(in)
@@ -11,7 +12,7 @@ Player::Player(std::weak_ptr<Input>in) : in(in)
 	flam = 0;
 
 	//座標
-	pos = {50, 330};
+	pos = { 50, 330 };
 
 	//分割
 	rect = {};
@@ -38,7 +39,7 @@ Player::Player(std::weak_ptr<Input>in) : in(in)
 	loop = true;
 
 	//速度
-	vel = {2.0f, -10.0f};
+	vel = { 2.0f, -8.0f };
 
 	//関数ポインタ
 	func = &Player::Wait;
@@ -46,11 +47,14 @@ Player::Player(std::weak_ptr<Input>in) : in(in)
 	//待機フラグ
 	wait = true;
 
+	//
+	fly = false;
+
 	if (Load::GetInstance() == nullptr)
 	{
 		Load::Create();
 	}
-	
+
 	Load();
 }
 
@@ -145,24 +149,21 @@ void Player::Draw(void)
 		}
 		else
 		{
-			if (mode != "Jump" && mode != "Crouch" && mode != " Damage")
+			if (mode != "Jump" && mode != "Crouch" && mode != " Damage" && mode != "Kick")
 			{
 				SetMode("Wait", reverse);
 			}
 			else
 			{
-				if (mode != "Kick")
-				{
-					index = cut[mode].size() - 1;
-				}
+				index = cut[mode].size() - 1;
 			}
 		}
 	}
 
-	DrawRectRotaGraph2((int)pos.x, (int)pos.y, 
-		cut[mode][index].rect.GetLeft(), cut[mode][index].rect.GetTop(), 
-		cut[mode][index].rect.GetWidth(), cut[mode][index].rect.GetHeight(), 
-		center.x, center.y, 
+	DrawRectRotaGraph2((int)pos.x, (int)pos.y,
+		cut[mode][index].rect.GetLeft(), cut[mode][index].rect.GetTop(),
+		cut[mode][index].rect.GetWidth(), cut[mode][index].rect.GetHeight(),
+		center.x, center.y,
 		2.0f, 0.0f, image, true, reverse);
 
 	DrawFormatString(10, 10, GetColor(255, 255, 255), "%d", index);
@@ -170,6 +171,7 @@ void Player::Draw(void)
 	DrawFormatString(50, 10, GetColor(255, 255, 255), "%d", (int)pos.y);
 	DrawPixel((int)pos.x, (int)pos.y, GetColor(255, 255, 255));
 	DrawFormatString(100, 10, GetColor(255, 255, 255), "%s", mode.c_str());
+	DrawFormatString(200, 10, GetColor(255, 255, 255), "%d", fly);
 }
 
 // 待機の処理
@@ -212,7 +214,7 @@ void Player::Wait(void)
 // 歩きの処理
 void Player::Walk(void)
 {
-	if (mode != "Walk")
+	if (mode != "Walk" || fly == true)
 	{
 		return;
 	}
@@ -242,6 +244,10 @@ void Player::Jump(void)
 	{
 		return;
 	}
+	if (fly == false)
+	{
+		fly = true;
+	}
 	pos += vel;
 	vel.y += g;
 
@@ -250,6 +256,13 @@ void Player::Jump(void)
 	{
 		SetMode("Crouch", reverse);
 		func = &Player::Down;
+	}
+
+	//パンチ
+	if (in.lock()->CheckTrigger(PAD_INPUT_B))
+	{
+		SetMode("Punch", reverse);
+		func = &Player::Punch;
 	}
 
 	//スライディング
@@ -280,36 +293,33 @@ void Player::Kick(void)
 {
 	if ((int)flam >= cut[mode][cut[mode].size() - 1].flam)
 	{
-		if (in.lock()->CheckPress(PAD_INPUT_DOWN))
-		{
-			SetMode("Crouch", reverse);
-			func = &Player::Down;
-		}
+		SetMode("Crouch", reverse);
+		func = &Player::Down;
 	}
 }
 
 // スライディングの処理
 void Player::Sliding(void)
 {
-	pos.x += reverse == false ? 2.0f : -2.0f;
+	pos.x += reverse == false ? 3.0f : -3.0f;
 }
 
 // しゃがみの処理
 void Player::Down(void)
 {
-	if (!(in.lock()->CheckPress(PAD_INPUT_DOWN)) && pos.y >= 330)
+	if (!(in.lock()->CheckPress(PAD_INPUT_DOWN)) && pos.y >= line)
 	{
 		SetMode("Wait", reverse);
 	}
 	else
 	{
-		if (in.lock()->CheckTrigger(PAD_INPUT_C))
+		if (in.lock()->CheckTrigger(PAD_INPUT_B))
 		{
 			SetMode("Kick", reverse);
 			func = &Player::Kick;
 		}
 	}
-	
+
 	if (in.lock()->CheckTrigger(PAD_INPUT_LEFT))
 	{
 		reverse = true;
@@ -330,10 +340,14 @@ void Player::UpData()
 {
 	if (mode != "Jump")
 	{
-		if (pos.y < 330)
+		if (pos.y < line)
 		{
 			pos.y += vel.y;
 			vel.y += g;
+		}
+		else
+		{
+			fly = false;
 		}
 	}
 
@@ -361,7 +375,7 @@ void Player::SetMode(std::string m, bool r)
 	if (mode == m && reverse == r && wait == false)
 	{
 		return;
-	}	
+	}
 
 	if (m == "Wait")
 	{
@@ -385,16 +399,16 @@ void Player::SetMode(std::string m, bool r)
 	loop = true;
 	if (reverse == false)
 	{
-		if (mode != "Crouch" && mode != "Kick")
+		if (mode != "Crouch" && mode != "Kick" && mode != "Punch" && wait == false && fly == false)
 		{
-			vel = { 2.0f, -10.0f };
+			vel = { 2.0f, -8.0f };
 		}
 	}
 	else
 	{
-		if (mode != "Crouch" && mode != "Kick")
+		if (mode != "Crouch" && mode != "Kick" && mode != "Punch" && wait == false && fly == false)
 		{
-			vel = { -2.0f, -10.0f };
+			vel = { -2.0f, -8.0f };
 		}
 	}
 	SetCenter(cut[mode][index].center, reverse);

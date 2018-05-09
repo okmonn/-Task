@@ -50,5 +50,5 @@ private:
 	// 分割データ
 	std::map<std::string, std::vector<CutData>>cut;
 	// 攻撃短形データ
-	std::map<std::string, std::map<USHORT, std::vector<Attack>>>attack;
+	std::map<std::string, std::map<int, std::vector<Attack>>>attack;
 };

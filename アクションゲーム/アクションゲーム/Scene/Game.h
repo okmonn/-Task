@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "../BackGround.h"
+#include "../Interface.h"
 #include "../Input.h"
 #include "../Player.h"
 #include "../Ground.h"
@@ -44,6 +45,9 @@ private:
 
 	// 背景クラス
 	std::shared_ptr<BackGround>back;
+
+	// UIクラス
+	std::shared_ptr<Interface>ui;
 
 	// インプット
 	std::shared_ptr<Input>in;

@@ -50,7 +50,7 @@ bool Load::LoadAct(std::string fileName)
 
 	fread(&header.ver, sizeof(header.ver), 1, file);
 
-	//assert(header.ver == 1.0f);
+	assert(header.ver == 1.01f);
 
 	fread(&header.pathNum, sizeof(header.pathNum), 1, file);
 

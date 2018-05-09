@@ -43,7 +43,7 @@ public:
 
 private:
 	// 文字列の検索
-	std::string FindString(const std::string path, const char find , int offset = 0, bool start = true);
+	std::string FindString(const std::string path, const char find, int offset = 0, bool start = true);
 	// 読み込み
 	void Load(void);
 
@@ -72,7 +72,7 @@ private:
 
 	// 画像データ
 	int image;
-	
+
 	// フレーム数
 	UINT flam;
 
@@ -114,5 +114,8 @@ private:
 
 	// 待機フラグ
 	bool wait;
+
+	// 
+	bool fly;
 };
 

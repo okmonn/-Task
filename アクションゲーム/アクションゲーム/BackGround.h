@@ -18,11 +18,5 @@ public:
 private:
 	// 背景画像
 	int back;
-
-	// 上部バー
-	int top;
-
-	// 下部バー
-	int bottom;
 };
 
