@@ -26,6 +26,9 @@ Player::Player(std::weak_ptr<Input>in) : in(in)
 	//分割データ
 	cut.clear();
 
+	//あたり矩形データ
+	attack.clear();
+
 	//配列番号
 	index = 0;
 
@@ -47,8 +50,11 @@ Player::Player(std::weak_ptr<Input>in) : in(in)
 	//待機フラグ
 	wait = true;
 
-	//
+	//ジャンプフラグ
 	fly = false;
+
+	//矩形のサイズ
+	attackSize = 2;
 
 	if (Load::GetInstance() == nullptr)
 	{
@@ -108,6 +114,8 @@ void Player::Load(void)
 		cut[itr->first] = Load::GetInstance()->GetCutData(itr->first);
 	}
 
+	attack = Load::GetInstance()->GetAttac();
+
 	SetMode("Wait");
 }
 
@@ -164,14 +172,49 @@ void Player::Draw(void)
 		cut[mode][index].rect.GetLeft(), cut[mode][index].rect.GetTop(),
 		cut[mode][index].rect.GetWidth(), cut[mode][index].rect.GetHeight(),
 		center.x, center.y,
-		2.0f, 0.0f, image, true, reverse);
+		(float)attackSize, 0.0f, image, true, reverse);
 
+#ifdef _DEBUG
 	DrawFormatString(10, 10, GetColor(255, 255, 255), "%d", index);
 	DrawFormatString(30, 10, GetColor(255, 255, 255), "%d", center.x);
 	DrawFormatString(50, 10, GetColor(255, 255, 255), "%d", (int)pos.y);
 	DrawPixel((int)pos.x, (int)pos.y, GetColor(255, 255, 255));
 	DrawFormatString(100, 10, GetColor(255, 255, 255), "%s", mode.c_str());
 	DrawFormatString(200, 10, GetColor(255, 255, 255), "%d", fly);
+
+	for (unsigned int i = 0; i < attack[mode][index].size(); ++i)
+	{
+		UINT color = 0;
+		if (attack[mode][index][i].type == RectType::attack)
+		{
+			color = GetColor(255, 0, 0);
+		}
+		else if(attack[mode][index][i].type == RectType::damage)
+		{
+			color = GetColor(0, 255, 0);
+		}
+		else
+		{
+			color = GetColor(0, 0, 255);
+		}
+		if (reverse == false)
+		{
+			DrawBox((int)pos.x + (attack[mode][index][i].rect.GetLeft() * attackSize),
+				(int)pos.y + (attack[mode][index][i].rect.GetTop() * attackSize),
+				(int)pos.x + (attack[mode][index][i].rect.GetLeft() + attack[mode][index][i].rect.GetWidth()) * attackSize,
+				(int)pos.y + (attack[mode][index][i].rect.GetTop() + attack[mode][index][i].rect.GetHeight()) * attackSize,
+				color, false);
+		}
+		else
+		{
+			DrawBox((int)pos.x - (attack[mode][index][i].rect.GetLeft() * 2),
+				(int)pos.y + (attack[mode][index][i].rect.GetTop() * 2),
+				(int)pos.x - (attack[mode][index][i].rect.GetLeft() + attack[mode][index][i].rect.GetWidth()) * 2,
+				(int)pos.y + (attack[mode][index][i].rect.GetTop() + attack[mode][index][i].rect.GetHeight()) * 2,
+				color, false);
+		}
+	}
+#endif
 }
 
 // 待機の処理
@@ -180,12 +223,12 @@ void Player::Wait(void)
 	//歩き
 	if (in.lock()->CheckTrigger(PAD_INPUT_RIGHT) && mode != "Jump")
 	{
-		SetMode(fmode[0]);
+		SetMode("Walk");
 		func = &Player::Walk;
 	}
 	else if (in.lock()->CheckTrigger(PAD_INPUT_LEFT) && mode != "Jump")
 	{
-		SetMode(fmode[0], true);
+		SetMode("Walk", true);
 		func = &Player::Walk;
 	}
 

@@ -1,11 +1,6 @@
-﻿  Game.cpp
-  Player.cpp
-  Load.cpp
-  Interface.cpp
-  Ground.cpp
-  BackGround.cpp
-  コードを生成中...
-  コンパイル中...
+﻿  Ground.cpp
   Main.cpp
+  Player.cpp
+  Game.cpp
   コードを生成中...
   アクションゲーム.vcxproj -> C:\Users\1601271\Documents\GitHub\-Task\アクションゲーム\Debug\アクションゲーム.exe

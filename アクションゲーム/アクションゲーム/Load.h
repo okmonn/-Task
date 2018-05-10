@@ -30,6 +30,8 @@ public:
 	ImageData GetImageData(USHORT index);
 	// 分割データの取得
 	std::vector<CutData> GetCutData(std::string name);
+	// あたり短径の取得
+	std::map<std::string, std::map<int, std::vector<Attack>>> GetAttac(void);
 
 	// 画像データのサイズの取得
 	UINT GetImageDataSize(void);

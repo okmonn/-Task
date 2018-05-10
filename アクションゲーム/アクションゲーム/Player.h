@@ -91,6 +91,9 @@ private:
 	// 分割データ
 	std::map<std::string, std::vector<CutData>>cut;
 
+	// あたり矩形のデータ
+	std::map < std::string, std::map<int, std::vector<Attack>>>attack;
+
 	// 配列番号
 	UINT index;
 
@@ -115,7 +118,10 @@ private:
 	// 待機フラグ
 	bool wait;
 
-	// 
+	// ジャンプフラグ
 	bool fly;
+
+	// 矩形サイズ
+	int attackSize;
 };
 

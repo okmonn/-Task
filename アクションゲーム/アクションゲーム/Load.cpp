@@ -112,6 +112,11 @@ std::vector<CutData> Load::GetCutData(std::string name)
 	return cut[name];
 }
 
+std::map<std::string, std::map<int, std::vector<Attack>>> Load::GetAttac(void)
+{
+	return attack;
+}
+
 // 画像データのサイズの取得
 UINT Load::GetImageDataSize(void)
 {
