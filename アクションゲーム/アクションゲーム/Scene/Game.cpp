@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "DxLib.h"
+#include "../Load.h"
 
 const int SIZE_X = 768;
 const int SIZE_Y = 448;
@@ -46,6 +47,9 @@ void Game::Init(void)
 // クラスのインスタンス化
 void Game::Create(void)
 {
+	//ロードクラス
+	Load::Create();
+
 	//背景クラス
 	back = std::make_shared<BackGround>();
 
@@ -57,6 +61,10 @@ void Game::Create(void)
 
 	//プレイヤークラス
 	pl = std::make_shared<Player>(in);
+
+	//敵クラス
+	Positionf pos = { 300.0f,330.0f };
+	man = std::make_shared<Deadman>(pos, pl);
 
 	//地面クラス
 	ground = std::make_shared<Ground>(pl);
@@ -71,6 +79,7 @@ void Game::Draw(void)
 	back->Draw();
 	ui->Draw();
 	pl->Draw();
+	man->Draw();
 	ground->Draw();
 
 	//裏画面を表画面に瞬間コピー
@@ -86,6 +95,8 @@ void Game::UpData(void)
 
 	pl->UpData();
 
+	man->UpData();
+
 	ground->UpData();
 }
 
@@ -97,11 +108,15 @@ void Game::Run(void)
 	{
 		UpData();
 	}
+
+	Destroy();
 }
 
 // 終了処理
 void Game::Destroy(void)
 {
+	Load::Destroy();
+
 	//Dxlibの終了
 	DxLib_End();
 }

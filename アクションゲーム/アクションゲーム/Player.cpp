@@ -14,9 +14,6 @@ Player::Player(std::weak_ptr<Input>in) : in(in)
 	//座標
 	pos = { 50, 330 };
 
-	//分割
-	rect = {};
-
 	//状態
 	fmode.clear();
 
@@ -56,10 +53,6 @@ Player::Player(std::weak_ptr<Input>in) : in(in)
 	//矩形のサイズ
 	attackSize = 2;
 
-	if (Load::GetInstance() == nullptr)
-	{
-		Load::Create();
-	}
 
 	Load();
 }
@@ -67,7 +60,6 @@ Player::Player(std::weak_ptr<Input>in) : in(in)
 // デストラクタ
 Player::~Player()
 {
-	Load::Destroy();
 	DeleteGraph(image);
 }
 
@@ -100,21 +92,21 @@ void Player::Load(void)
 		return;
 	}
 
-	std::string path = FindString(actionPath, '/', 1, false) + Load::GetInstance()->GetHeader().path;
+	std::string path = FindString(actionPath, '/', 1, false) + Load::GetInstance()->GetHeader(actionPath).path;
 	//画像データの初期化
 	image = LoadGraph(path.c_str());
 
-	for (UINT i = 0; i < Load::GetInstance()->GetImageDataSize(); ++i)
+	for (UINT i = 0; i < Load::GetInstance()->GetImageDataSize(actionPath); ++i)
 	{
-		fmode.push_back(Load::GetInstance()->GetImageData(i).name);
-		data[Load::GetInstance()->GetImageData(i).name] = Load::GetInstance()->GetImageData(i);
+		fmode.push_back(Load::GetInstance()->GetImageData(actionPath, i).name);
+		data[Load::GetInstance()->GetImageData(actionPath, i).name] = Load::GetInstance()->GetImageData(actionPath, i);
 	}
 	for (auto itr = data.begin(); itr != data.end(); ++itr)
 	{
-		cut[itr->first] = Load::GetInstance()->GetCutData(itr->first);
+		cut[itr->first] = Load::GetInstance()->GetCutData(actionPath, itr->first);
 	}
 
-	attack = Load::GetInstance()->GetAttac();
+	attack = Load::GetInstance()->GetAttac(actionPath);
 
 	SetMode("Wait");
 }
@@ -197,6 +189,7 @@ void Player::Draw(void)
 		{
 			color = GetColor(0, 0, 255);
 		}
+
 		if (reverse == false)
 		{
 			DrawBox((int)pos.x + (attack[mode][index][i].rect.GetLeft() * attackSize),
@@ -207,10 +200,10 @@ void Player::Draw(void)
 		}
 		else
 		{
-			DrawBox((int)pos.x - (attack[mode][index][i].rect.GetLeft() * 2),
-				(int)pos.y + (attack[mode][index][i].rect.GetTop() * 2),
-				(int)pos.x - (attack[mode][index][i].rect.GetLeft() + attack[mode][index][i].rect.GetWidth()) * 2,
-				(int)pos.y + (attack[mode][index][i].rect.GetTop() + attack[mode][index][i].rect.GetHeight()) * 2,
+			DrawBox((int)pos.x - (attack[mode][index][i].rect.GetLeft() * attackSize),
+				(int)pos.y + (attack[mode][index][i].rect.GetTop() * attackSize),
+				(int)pos.x - (attack[mode][index][i].rect.GetLeft() + attack[mode][index][i].rect.GetWidth()) * attackSize,
+				(int)pos.y + (attack[mode][index][i].rect.GetTop() + attack[mode][index][i].rect.GetHeight()) * attackSize,
 				color, false);
 		}
 	}
@@ -262,9 +255,21 @@ void Player::Walk(void)
 		return;
 	}
 
-	if (in.lock()->CheckPress(PAD_INPUT_RIGHT) || in.lock()->CheckPress(PAD_INPUT_LEFT))
+	if (in.lock()->CheckPress(PAD_INPUT_RIGHT))
 	{
-		pos.x += reverse == false ? 1.0f : -1.0f;
+		if (reverse == true)
+		{
+			reverse = false;
+		}
+		pos.x += 1.0f;
+	}
+	else if (in.lock()->CheckPress(PAD_INPUT_LEFT))
+	{
+		if (reverse == false)
+		{
+			reverse = true;
+		}
+		pos.x += -1.0f;
 	}
 	else
 	{
@@ -491,4 +496,50 @@ std::vector<std::string> Player::GetAllMode(void)
 bool Player::GetReverse(void)
 {
 	return reverse;
+}
+
+// あたり矩形の数
+int Player::GetAttackNum(void)
+{
+	return attack[mode][index].size();
+}
+
+// あたり矩形の取得
+Attack Player::GetAttack(USHORT num)
+{
+	return attack[mode][index][num];
+}
+
+// あたり座標の取得
+Positionf Player::GetAttackPos(USHORT num, bool flag)
+{
+	Positionf tmp;
+	if (flag == false)
+	{
+		if (reverse == false)
+		{
+			tmp.x = pos.x + (attack[mode][index][num].rect.GetLeft() + attack[mode][index][num].rect.GetWidth()) * attackSize;
+			tmp.y = pos.y + (attack[mode][index][num].rect.GetTop() + attack[mode][index][num].rect.GetHeight()) * attackSize;
+		}
+		else
+		{
+			tmp.x = pos.x - (attack[mode][index][num].rect.GetLeft() + attack[mode][index][num].rect.GetWidth()) * attackSize;
+			tmp.y = pos.y + (attack[mode][index][num].rect.GetTop() + attack[mode][index][num].rect.GetHeight()) * attackSize;
+		}
+	}
+	else
+	{
+		if (reverse == false)
+		{
+			tmp.x = pos.x + (attack[mode][index][num].rect.GetLeft()) * attackSize;
+			tmp.y = pos.y + (attack[mode][index][num].rect.GetTop()) * attackSize;
+		}
+		else
+		{
+			tmp.x = pos.x - (attack[mode][index][num].rect.GetLeft()) * attackSize;
+			tmp.y = pos.y + (attack[mode][index][num].rect.GetTop()) * attackSize;
+		}
+	}
+
+	return tmp;
 }

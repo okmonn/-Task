@@ -42,25 +42,33 @@ bool Load::LoadAct(std::string fileName)
 {
 	FILE* file;
 
+	for (auto itr = header.begin(); itr != header.end(); ++itr)
+	{
+		if (fileName == itr->first)
+		{
+			return true;
+		}
+	}
+
 	//ファイル開らく
 	if ((fopen_s(&file, fileName.c_str(), "rb")) != 0)
 	{
 		return false;
 	}
 
-	fread(&header.ver, sizeof(header.ver), 1, file);
+	fread(&header[fileName].ver, sizeof(header[fileName].ver), 1, file);
 
-	assert(header.ver == 1.01f);
+	assert(header[fileName].ver == 1.01f);
 
-	fread(&header.pathNum, sizeof(header.pathNum), 1, file);
+	fread(&header[fileName].pathNum, sizeof(header[fileName].pathNum), 1, file);
 
-	header.path.resize(header.pathNum);
-	fread(&header.path[0], header.pathNum, 1, file);
+	header[fileName].path.resize(header[fileName].pathNum);
+	fread(&header[fileName].path[0], header[fileName].pathNum, 1, file);
 
-	fread(&header.dataNum, sizeof(header.dataNum), 1, file);
+	fread(&header[fileName].dataNum, sizeof(header[fileName].dataNum), 1, file);
 
 	ImageData dummy = {};
-	for (int i = 0; i < header.dataNum; ++i)
+	for (int i = 0; i < header[fileName].dataNum; ++i)
 	{
 		fread(&dummy.nameNum, sizeof(dummy.nameNum), 1, file);
 
@@ -71,18 +79,18 @@ bool Load::LoadAct(std::string fileName)
 
 		fread(&dummy.animCnt, sizeof(dummy.animCnt), 1, file);
 
-		data[i] = dummy;
+		data[fileName][i] = dummy;
 
-		cut[dummy.name].resize(dummy.animCnt);
+		cut[fileName][dummy.name].resize(dummy.animCnt);
 		for (int o = 0; o < dummy.animCnt; ++o)
 		{
-			fread(&cut[dummy.name][o], sizeof(cut[dummy.name][o]), 1, file);
+			fread(&cut[fileName][dummy.name][o], sizeof(cut[fileName][dummy.name][o]), 1, file);
 			int num = 0;
 			fread(&num, sizeof(num), 1, file);
-			attack[dummy.name][o].resize(num);
+			attack[fileName][dummy.name][o].resize(num);
 			for (int p = 0; p < num; ++p)
 			{
-				fread(&attack[dummy.name][o][p], sizeof(attack[dummy.name][o][p]), 1, file);
+				fread(&attack[fileName][dummy.name][o][p], sizeof(attack[fileName][dummy.name][o][p]), 1, file);
 			}
 		}
 
@@ -95,36 +103,36 @@ bool Load::LoadAct(std::string fileName)
 }
 
 // ヘッダーの取得
-ImageHeader Load::GetHeader(void)
+ImageHeader Load::GetHeader(std::string m)
 {
-	return header;
+	return header[m];
 }
 
 // 画像データの取得
-ImageData Load::GetImageData(USHORT index)
+ImageData Load::GetImageData(std::string m, USHORT index)
 {
-	return data[index];
+	return data[m][index];
 }
 
 // 分割データの取得
-std::vector<CutData> Load::GetCutData(std::string name)
+std::vector<CutData> Load::GetCutData(std::string m, std::string name)
 {
-	return cut[name];
+	return cut[m][name];
 }
 
-std::map<std::string, std::map<int, std::vector<Attack>>> Load::GetAttac(void)
+std::map<std::string, std::map<int, std::vector<Attack>>> Load::GetAttac(std::string m)
 {
-	return attack;
+	return attack[m];
 }
 
 // 画像データのサイズの取得
-UINT Load::GetImageDataSize(void)
+UINT Load::GetImageDataSize(std::string m)
 {
-	return data.size();
+	return data[m].size();
 }
 
 // 分割データのサイズの取得
-UINT Load::GetCutDataSize(void)
+UINT Load::GetCutDataSize(std::string m)
 {
-	return cut.size();
+	return cut[m].size();
 }

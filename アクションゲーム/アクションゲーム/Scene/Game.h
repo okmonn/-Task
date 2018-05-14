@@ -4,6 +4,7 @@
 #include "../Interface.h"
 #include "../Input.h"
 #include "../Player.h"
+#include "../Deadman.h"
 #include "../Ground.h"
 #include <memory>
 class Game :
@@ -54,6 +55,9 @@ private:
 
 	// プレイヤークラス
 	std::shared_ptr<Player>pl;
+
+	// 敵クラス
+	std::shared_ptr<Deadman>man;
 
 	// 地面クラス
 	std::shared_ptr<Ground>ground;

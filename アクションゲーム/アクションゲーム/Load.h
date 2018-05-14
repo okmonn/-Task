@@ -25,18 +25,18 @@ public:
 	bool LoadAct(std::string fileName);
 
 	// ヘッダーの取得
-	ImageHeader GetHeader(void);
+	ImageHeader GetHeader(std::string m);
 	// 画像データの取得
-	ImageData GetImageData(USHORT index);
+	ImageData GetImageData(std::string m, USHORT index);
 	// 分割データの取得
-	std::vector<CutData> GetCutData(std::string name);
+	std::vector<CutData> GetCutData(std::string m, std::string name);
 	// あたり短径の取得
-	std::map<std::string, std::map<int, std::vector<Attack>>> GetAttac(void);
+	std::map<std::string, std::map<int, std::vector<Attack>>> GetAttac(std::string m);
 
 	// 画像データのサイズの取得
-	UINT GetImageDataSize(void);
+	UINT GetImageDataSize(std::string m);
 	// 分割データのサイズの取得
-	UINT GetCutDataSize(void);
+	UINT GetCutDataSize(std::string m);
 
 private:
 	// コンストラクタ
@@ -46,11 +46,11 @@ private:
 	static Load* s_Instance;
 
 	// ヘッダー
-	ImageHeader header;
+	std::map<std::string, ImageHeader> header;
 	// 画像データ
-	std::map<USHORT, ImageData>data;
+	std::map<std::string, std::map<USHORT, ImageData>>data;
 	// 分割データ
-	std::map<std::string, std::vector<CutData>>cut;
+	std::map<std::string, std::map<std::string, std::vector<CutData>>>cut;
 	// 攻撃短形データ
-	std::map<std::string, std::map<int, std::vector<Attack>>>attack;
+	std::map<std::string, std::map<std::string, std::map<int, std::vector<Attack>>>>attack;
 };

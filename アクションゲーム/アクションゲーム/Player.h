@@ -41,6 +41,13 @@ public:
 	// 反転フラグの取得
 	bool GetReverse(void);
 
+	// あたり矩形の数
+	int GetAttackNum(void);
+	// あたり矩形の取得
+	Attack GetAttack(USHORT num);
+	// あたり座標の取得
+	Positionf GetAttackPos(USHORT num, bool flag = false);
+
 private:
 	// 文字列の検索
 	std::string FindString(const std::string path, const char find, int offset = 0, bool start = true);
@@ -78,9 +85,6 @@ private:
 
 	// 座標
 	Positionf pos;
-
-	// 分割
-	Rect rect;
 
 	// モード配列
 	std::map<std::string, ImageData>data;
