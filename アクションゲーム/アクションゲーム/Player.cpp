@@ -543,3 +543,9 @@ Positionf Player::GetAttackPos(USHORT num, bool flag)
 
 	return tmp;
 }
+
+// •ªŠ„î•ñ‚Ìæ“¾
+CutData Player::GetCut(void)
+{
+	return cut[mode][index];
+}

@@ -78,7 +78,11 @@ void Deadman::Draw(void)
 
 #ifdef _DEBUG
 	DrawPixel((int)pos.x, (int)pos.y, GetColor(255, 0, 255));
-	DrawFormatString(500, 10, GetColor(255, 255, 0), "%f", pos.y);
+	DrawFormatString(500, 10, GetColor(255, 255, 0), "%d", (int)pos.y);
+	if (CheackHit() == true)
+	{
+		DrawString(550, 10, "‚ ‚½‚è", GetColor(255, 0, 0), false);
+	}
 
 	for (unsigned int i = 0; i < attack[mode][index].size(); ++i)
 	{
@@ -127,11 +131,12 @@ bool Deadman::CheackHit(void)
 {
 	for (int i = 0; i < pl.lock()->GetAttackNum(); ++i)
 	{
-		if (reverse == true)
+		for (int j = 0; j < attack[mode][index].size(); ++j)
 		{
-			if (pl.lock()->GetAttack(i).type == RectType::attack
-				&& pl.lock()->GetAttackPos(i).x >= pos.x - cut[mode][index].rect.GetWidth()
-				&& pl.lock()->GetAttackPos(i).y >= pos.y - cut[mode][index].rect.GetHeight())
+			if ((pos.x - (attack[mode][index][j].rect.GetLeft() * attackSize)) <= pl.lock()->GetAttackPos(i).x
+				
+				&& (pos.y + (attack[mode][index][j].rect.GetTop() * attackSize)) <= pl.lock()->GetAttackPos(i).y
+				&& (pos.y + (attack[mode][index][i].rect.GetTop() + attack[mode][index][i].rect.GetHeight()) * attackSize) >= pl.lock()->GetAttackPos(i, true).y)
 			{
 				return true;
 			}
@@ -149,7 +154,7 @@ void Deadman::Walk(void)
 		{
 			reverse = false;
 		}
-		pos.x += 1.0f;
+		//pos.x += 1.0f;
 	}
 	else if (pl.lock()->GetPos().x < pos.x)
 	{
@@ -157,13 +162,12 @@ void Deadman::Walk(void)
 		{
 			reverse = true;
 		}
-		pos.x -= 1.0f;
+		//pos.x -= 1.0f;
 	}
 
 	if (CheackHit() == true)
 	{
-		SetMode("Die", reverse);
-		func = &Deadman::Die;
+		
 	}
 }
 

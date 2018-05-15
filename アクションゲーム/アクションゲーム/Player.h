@@ -47,6 +47,8 @@ public:
 	Attack GetAttack(USHORT num);
 	// ‚ ‚½‚èÀ•W‚Ìæ“¾
 	Positionf GetAttackPos(USHORT num, bool flag = false);
+	// •ªŠ„î•ñ‚Ìæ“¾
+	CutData GetCut(void);
 
 private:
 	// •¶š—ñ‚ÌŒŸõ
