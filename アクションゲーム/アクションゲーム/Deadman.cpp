@@ -10,12 +10,13 @@ Deadman::Deadman()
 }
 
 // コンストラクタ
-Deadman::Deadman(Positionf pos, std::weak_ptr<Player>pl) : pl(pl)
+Deadman::Deadman(Positionf pos, std::weak_ptr<Player>pl) : pl(pl), down(18.0f), wait(0), go(0)
 {
 	Load(path);
 	this->pos = pos;
 	SetMode("Walk", true);
 	func = &Deadman::Walk;
+	memset(dir, false, sizeof(dir));
 }
 
 // デストラクタ
@@ -28,8 +29,16 @@ void Deadman::SetMode(std::string m, bool r)
 {
 	wait = false;
 	flam = 0;
+	index = 0;
 	mode = m;
 	reverse = r;
+	memset(dir, false, sizeof(dir));
+	go = 0;
+
+	if (m == "Die")
+	{
+		wait = 30;
+	}
 }
 
 // 描画
@@ -62,6 +71,18 @@ void Deadman::Draw(void)
 			if (index < cut[mode].size() - 1)
 			{
 				++index;
+				if (mode == "Die")
+				{
+					pos.y += down;
+					down -= 1.0f;
+				}
+			}
+			else
+			{
+				if (mode == "Die")
+				{
+					func = &Deadman::Die;
+				}
 			}
 			flam = 0;
 		}
@@ -77,13 +98,9 @@ void Deadman::Draw(void)
 		(float)attackSize, 0.0f, image, true, reverse);
 
 #ifdef _DEBUG
-	DrawPixel((int)pos.x, (int)pos.y, GetColor(255, 0, 255));
 	DrawFormatString(500, 10, GetColor(255, 255, 0), "%d", (int)pos.y);
-	if (CheackHit() == true)
-	{
-		DrawString(550, 10, "あたり", GetColor(255, 0, 0), false);
-	}
-
+	DrawPixel((int)pos.x, (int)pos.y, GetColor(255, 255, 255));
+	DrawFormatString(550, 10, GetColor(255, 0, 0), "%d", index);
 	for (unsigned int i = 0; i < attack[mode][index].size(); ++i)
 	{
 		UINT color = 0;
@@ -123,23 +140,33 @@ void Deadman::Draw(void)
 // 処理
 void Deadman::UpData(void)
 {
+	if (mode != "Die")
+	{
+		if (pos.y < line || pos.y >= line)
+		{
+			pos.y = line;
+		}
+	}
 	(this->*func)();
 }
 
 // あたり判定
-bool Deadman::CheackHit(void)
+bool Deadman::CheackHit(Positionf& pos1, Attack& a1, Positionf& pos2, Attack& a2)
 {
-	for (int i = 0; i < pl.lock()->GetAttackNum(); ++i)
+	if (reverse == true)
 	{
-		for (int j = 0; j < attack[mode][index].size(); ++j)
+		if (abs((pos1.x + a1.rect.pos.x) - (pos2.x + a2.rect.pos.x)) < (a1.rect.GetWidth() + a2.rect.GetWidth())
+			&& abs((pos1.y + a1.rect.pos.y) - (pos2.y + a2.rect.pos.y)) < (a1.rect.GetHeight() + a2.rect.GetHeight()))
 		{
-			if ((pos.x - (attack[mode][index][j].rect.GetLeft() * attackSize)) <= pl.lock()->GetAttackPos(i).x
-				
-				&& (pos.y + (attack[mode][index][j].rect.GetTop() * attackSize)) <= pl.lock()->GetAttackPos(i).y
-				&& (pos.y + (attack[mode][index][i].rect.GetTop() + attack[mode][index][i].rect.GetHeight()) * attackSize) >= pl.lock()->GetAttackPos(i, true).y)
-			{
-				return true;
-			}
+			return true;
+		}
+	}
+	else
+	{
+		if (abs((pos1.x - a1.rect.pos.x) - (pos2.x - a2.rect.pos.x)) < (a1.rect.GetWidth() + a2.rect.GetWidth())
+			&& abs((pos1.y - a1.rect.pos.y) - (pos2.y - a2.rect.pos.y)) < (a1.rect.GetHeight() + a2.rect.GetHeight()))
+		{
+			return true;
 		}
 	}
 	return false;
@@ -148,30 +175,90 @@ bool Deadman::CheackHit(void)
 // 歩きの処理
 void Deadman::Walk(void)
 {
-	if (pl.lock()->GetPos().x > pos.x)
+	if (mode != "Walk")
 	{
-		if (reverse == true)
-		{
-			reverse = false;
-		}
-		//pos.x += 1.0f;
-	}
-	else if (pl.lock()->GetPos().x < pos.x)
-	{
-		if (reverse == false)
-		{
-			reverse = true;
-		}
-		//pos.x -= 1.0f;
+		return;
 	}
 
-	if (CheackHit() == true)
+	if (go == 0)
 	{
-		
+		if (pl.lock()->GetPos().x > pos.x)
+		{
+			if (reverse == true)
+			{
+				reverse = false;
+			}
+			dir[0] = true;
+			pos.x += 1.0f;
+		}
+		else if (pl.lock()->GetPos().x < pos.x)
+		{
+			if (reverse == false)
+			{
+				reverse = true;
+			}
+			dir[1] = true;
+			pos.x -= 1.0f;
+		}
+	}
+	else
+	{
+		if (dir[0] == true)
+		{
+			pos.x += 1.0f;
+		}
+		else if (dir[1] == true)
+		{
+			pos.x -= 1.0f;
+		}
+		if (go < 60)
+		{
+			++go;
+		}
+		else
+		{
+			memset(dir, false, sizeof(dir));
+			go = 0;
+		}
+	}
+
+	for (int i = 0; i < pl.lock()->GetAttackNum(); ++i)
+	{
+		Positionf tmp = pl.lock()->GetPos();
+		Attack at = pl.lock()->GetAttack(i);
+		for (unsigned int j = 0; j < attack[mode][index].size(); ++j)
+		{
+			if (CheackHit(pos, attack[mode][index][j], tmp, at) == true)
+			{
+				if (at.type == RectType::attack && attack[mode][index][j].type == RectType::damage)
+				{
+					SetMode("Die", reverse);
+				}
+				else if (at.type == RectType::damage && attack[mode][index][j].type == RectType::attack)
+				{
+					pl.lock()->SetMode("Damage", pl.lock()->GetReverse());
+				}
+			}
+		}
 	}
 }
 
 // 死亡の処理
 void Deadman::Die(void)
 {
+	++wait;
+	if (wait > 200)
+	{
+		if ((wait - 200) >= cut[mode][index].flam)
+		{
+			--index;
+			pos.y -= down;
+			down += 1.0f;
+			if (index == 0)
+			{
+				SetMode("Walk", reverse);
+				func = &Deadman::Walk;
+			}
+		}
+	}
 }

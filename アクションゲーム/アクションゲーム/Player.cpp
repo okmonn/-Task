@@ -381,6 +381,19 @@ void Player::Down(void)
 // ƒ_ƒ[ƒW‚Ìˆ—
 void Player::Damage(void)
 {
+	if (wait == false)
+	{
+		if (reverse == false)
+		{
+			pos.x -= 10.0f;
+			wait = true;
+		}
+		else
+		{
+			pos.x += 10.0f;
+			wait = true;
+		}
+	}
 }
 
 // ˆ—
@@ -399,9 +412,19 @@ void Player::UpData()
 		}
 	}
 
+	if (pos.y >= line)
+	{
+		SetPos((float)line);
+	}
+
 	if (wait == true)
 	{
 		func = &Player::Wait;
+	}
+
+	if (mode == "Damage")
+	{
+		func = &Player::Damage;
 	}
 
 	(this->*func)();

@@ -26,8 +26,16 @@ private:
 	// プレイヤークラス
 	std::weak_ptr<Player>pl;
 
+	float down;
+
+	int wait;
+
+	int go;
+
+	bool dir[2];
+
 	// あたり判定
-	bool CheackHit(void);
+	bool CheackHit(Positionf& pos1, Attack& a1, Positionf& pos2, Attack& a2);
 	// 歩きの処理
 	void Walk(void);
 	// 死亡の処理
