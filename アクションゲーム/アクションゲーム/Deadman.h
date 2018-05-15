@@ -34,8 +34,6 @@ private:
 
 	bool dir[2];
 
-	// ‚ ‚½‚è”»’è
-	bool CheackHit(Positionf& pos1, Attack& a1, Positionf& pos2, Attack& a2);
 	// •à‚«‚Ìˆ—
 	void Walk(void);
 	// €–S‚Ìˆ—

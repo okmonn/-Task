@@ -76,10 +76,15 @@ void Deadman::Draw(void)
 					pos.y += down;
 					down -= 1.0f;
 				}
+				else if (mode == "Die2")
+				{
+					pos.y += down;
+					down += 12.0f;
+				}
 			}
 			else
 			{
-				if (mode == "Die")
+				if (mode == "Die" || mode == "Die2")
 				{
 					func = &Deadman::Die;
 				}
@@ -140,7 +145,7 @@ void Deadman::Draw(void)
 // èàóù
 void Deadman::UpData(void)
 {
-	if (mode != "Die")
+	if (mode != "Die" && mode != "Die2")
 	{
 		if (pos.y < line || pos.y >= line)
 		{
@@ -148,28 +153,6 @@ void Deadman::UpData(void)
 		}
 	}
 	(this->*func)();
-}
-
-// Ç†ÇΩÇËîªíË
-bool Deadman::CheackHit(Positionf& pos1, Attack& a1, Positionf& pos2, Attack& a2)
-{
-	if (reverse == true)
-	{
-		if (abs((pos1.x + a1.rect.pos.x) - (pos2.x + a2.rect.pos.x)) < (a1.rect.GetWidth() + a2.rect.GetWidth())
-			&& abs((pos1.y + a1.rect.pos.y) - (pos2.y + a2.rect.pos.y)) < (a1.rect.GetHeight() + a2.rect.GetHeight()))
-		{
-			return true;
-		}
-	}
-	else
-	{
-		if (abs((pos1.x - a1.rect.pos.x) - (pos2.x - a2.rect.pos.x)) < (a1.rect.GetWidth() + a2.rect.GetWidth())
-			&& abs((pos1.y - a1.rect.pos.y) - (pos2.y - a2.rect.pos.y)) < (a1.rect.GetHeight() + a2.rect.GetHeight()))
-		{
-			return true;
-		}
-	}
-	return false;
 }
 
 // ï‡Ç´ÇÃèàóù
@@ -230,9 +213,15 @@ void Deadman::Walk(void)
 		{
 			if (CheackHit(pos, attack[mode][index][j], tmp, at) == true)
 			{
-				if (at.type == RectType::attack && attack[mode][index][j].type == RectType::damage)
+				if (at.type == RectType::attack && attack[mode][index][j].type == RectType::damage
+					&& pl.lock()->GetMode() == "Punch")
 				{
 					SetMode("Die", reverse);
+				}
+				else if (at.type == RectType::attack && attack[mode][index][j].type == RectType::damage
+					&& pl.lock()->GetMode() != "Punch")
+				{
+					SetMode("Die2", reverse);
 				}
 				else if (at.type == RectType::damage && attack[mode][index][j].type == RectType::attack)
 				{
@@ -251,13 +240,27 @@ void Deadman::Die(void)
 	{
 		if ((wait - 200) >= cut[mode][index].flam)
 		{
-			--index;
-			pos.y -= down;
-			down += 1.0f;
-			if (index == 0)
+			if (mode == "Die")
 			{
-				SetMode("Walk", reverse);
-				func = &Deadman::Walk;
+				--index;
+				pos.y -= down;
+				down += 1.0f;
+				if (index == 0)
+				{
+					SetMode("Walk", reverse);
+					func = &Deadman::Walk;
+				}
+			}
+			else
+			{
+				--index;
+				pos.y -= down;
+				down -= 12.0f;
+				if (index == 0)
+				{
+					SetMode("Walk", reverse);
+					func = &Deadman::Walk;
+				}
 			}
 		}
 	}

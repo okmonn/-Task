@@ -385,12 +385,12 @@ void Player::Damage(void)
 	{
 		if (reverse == false)
 		{
-			pos.x -= 10.0f;
+			pos.x -= 15.0f;
 			wait = true;
 		}
 		else
 		{
-			pos.x += 10.0f;
+			pos.x += 15.0f;
 			wait = true;
 		}
 	}

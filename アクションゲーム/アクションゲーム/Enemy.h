@@ -17,6 +17,9 @@ public:
 	// “Ç‚İ‚İ
 	void Load(std::string s);
 
+	// ‚ ‚½‚è”»’è
+	bool CheackHit(Positionf& pos1, Attack& a1, Positionf& pos2, Attack& a2);
+
 	// ’†S“_‚Ìİ’è
 	void SetSenter(Position & pos, bool r);
 	// À•W‚Ìİ’è
