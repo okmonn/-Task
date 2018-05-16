@@ -33,6 +33,9 @@ public:
 	// 分割情報の取得
 	CutData GetCutData(std::string m, UINT index);
 
+	// 死亡フラグの取得
+	bool GetDie(void);
+
 	// 状態のセット
 	virtual void SetMode(std::string m, bool r) = 0;
 	// 描画
@@ -76,6 +79,9 @@ protected:
 
 	// 矩形サイズ
 	int attackSize;
+
+	// 死亡フラグ
+	bool die;
 
 	// 画像データ
 	std::map<std::string, ImageData>data;

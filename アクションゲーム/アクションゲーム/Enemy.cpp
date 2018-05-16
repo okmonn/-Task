@@ -35,6 +35,9 @@ Enemy::Enemy()
 	//矩形のサイズ
 	attackSize = 2;
 
+	//死亡フラグ
+	die = false;
+
 	//画像データ
 	data.clear();
 
@@ -109,7 +112,7 @@ bool Enemy::CheackHit(Positionf& pos1, Attack& a1, Positionf& pos2, Attack& a2)
 	else
 	{
 		if (abs((pos1.x - a1.rect.pos.x) - (pos2.x - a2.rect.pos.x)) < (a1.rect.GetWidth() + a2.rect.GetWidth())
-			&& abs((pos1.y - a1.rect.pos.y) - (pos2.y - a2.rect.pos.y)) < (a1.rect.GetHeight() + a2.rect.GetHeight()))
+			&& abs((pos1.y + a1.rect.pos.y) - (pos2.y + a2.rect.pos.y)) < (a1.rect.GetHeight() + a2.rect.GetHeight()))
 		{
 			return true;
 		}
@@ -155,4 +158,10 @@ std::string Enemy::GetMode(void)
 CutData Enemy::GetCutData(std::string m, UINT index)
 {
 	return cut[m][index];
+}
+
+// 死亡フラグの取得
+bool Enemy::GetDie(void)
+{
+	return die;
 }

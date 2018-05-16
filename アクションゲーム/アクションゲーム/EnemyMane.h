@@ -1,6 +1,6 @@
 #pragma once
 #include "Player.h"
-#include "Deadman.h"
+#include "Enemy.h"
 #include <memory>
 
 class EnemyMane
@@ -21,7 +21,7 @@ public:
 	}
 
 	// デッドマンの生成
-	std::shared_ptr<Deadman> CreateDeadman(float x, float y, std::shared_ptr<Player>pl);
+	std::shared_ptr<Enemy> CreateDeadman(float x, float y, std::shared_ptr<Player>pl);
 private:
 	// コンストラクタ
 	EnemyMane();

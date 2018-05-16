@@ -225,7 +225,8 @@ void Deadman::Walk(void)
 				}
 				else if (at.type == RectType::damage && attack[mode][index][j].type == RectType::attack)
 				{
-					pl.lock()->SetMode("Damage", pl.lock()->GetReverse());
+					bool flag = reverse == true ? false : true;
+					pl.lock()->SetMode("Damage", flag);
 				}
 			}
 		}
@@ -235,6 +236,7 @@ void Deadman::Walk(void)
 // Ž€–S‚Ìˆ—
 void Deadman::Die(void)
 {
+	die = true;
 	++wait;
 	if (wait > 200)
 	{

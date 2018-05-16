@@ -17,7 +17,9 @@ Ground::~Ground()
 // •`‰æ
 void Ground::Draw(void)
 {
+#ifdef _DEBUG
 	DrawLine(0, y, WINDOW_X, y, GetColor(255, 0, 0), false);
+#endif
 }
 
 // ˆ—

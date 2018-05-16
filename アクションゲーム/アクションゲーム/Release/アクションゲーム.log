@@ -1,0 +1,20 @@
+﻿  BackGround.cpp
+  Camera.cpp
+  Deadman.cpp
+  Enemy.cpp
+  EnemyMane.cpp
+  Ground.cpp
+  Input.cpp
+  Interface.cpp
+  Load.cpp
+  Main.cpp
+  Player.cpp
+  Game.cpp
+  Over.cpp
+  Scene.cpp
+  Title.cpp
+  Stage.cpp
+  コード生成しています。
+  All 1829 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  コード生成が終了しました。
+  アクションゲーム.vcxproj -> C:\Users\1601271\Documents\GitHub\-Task\アクションゲーム\Release\アクションゲーム.exe

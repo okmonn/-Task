@@ -89,6 +89,9 @@ void Game::Draw(void)
 	}
 	ground->Draw();
 
+#ifdef _DEBUG
+	DrawFormatString(600, 10, GetColor(0, 255, 0), "%d", e_list.size());
+#endif
 	//裏画面を表画面に瞬間コピー
 	ScreenFlip();
 }
@@ -102,9 +105,25 @@ void Game::UpData(void)
 
 	pl->UpData();
 
-	for (auto itr = e_list.begin(); itr != e_list.end(); ++itr)
+	if (pl->GetPos().x == 300)
+	{
+		if (e_list.size() < 10)
+		{
+			e_list.push_back(EnemyMane::GetInstance()->CreateDeadman(50, 330, pl));
+		}
+	}
+
+	for (auto itr = e_list.begin(); itr != e_list.end();)
 	{
 		(*itr)->UpData();
+		if ((*itr)->GetDie() == true)
+		{
+			itr = e_list.erase(itr);
+		}
+		else
+		{
+			++itr;
+		}
 	}
 
 	ground->UpData();
