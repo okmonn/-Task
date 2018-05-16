@@ -4,9 +4,10 @@
 #include "../Interface.h"
 #include "../Input.h"
 #include "../Player.h"
-#include "../Deadman.h"
+#include "../Enemy.h"
 #include "../Ground.h"
 #include <memory>
+#include <list>
 class Game :
 	public Scene
 {
@@ -56,8 +57,8 @@ private:
 	// プレイヤークラス
 	std::shared_ptr<Player>pl;
 
-	// 敵クラス
-	std::shared_ptr<Deadman>man;
+	// 敵のリスト
+	std::list<std::shared_ptr<Enemy>>e_list;
 
 	// 地面クラス
 	std::shared_ptr<Ground>ground;

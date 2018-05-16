@@ -172,7 +172,7 @@ void Deadman::Walk(void)
 				reverse = false;
 			}
 			dir[0] = true;
-			pos.x += 1.0f;
+			++go;
 		}
 		else if (pl.lock()->GetPos().x < pos.x)
 		{
@@ -181,7 +181,7 @@ void Deadman::Walk(void)
 				reverse = true;
 			}
 			dir[1] = true;
-			pos.x -= 1.0f;
+			++go;
 		}
 	}
 	else
@@ -194,7 +194,7 @@ void Deadman::Walk(void)
 		{
 			pos.x -= 1.0f;
 		}
-		if (go < 60)
+		if (go < 120)
 		{
 			++go;
 		}

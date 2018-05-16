@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "DxLib.h"
 #include "../Load.h"
+#include "../EnemyMane.h"
 
 const int SIZE_X = 768;
 const int SIZE_Y = 448;
@@ -50,6 +51,9 @@ void Game::Create(void)
 	//ロードクラス
 	Load::Create();
 
+	// 敵の管理クラス
+	EnemyMane::Create();
+
 	//背景クラス
 	back = std::make_shared<BackGround>();
 
@@ -63,8 +67,8 @@ void Game::Create(void)
 	pl = std::make_shared<Player>(in);
 
 	//敵クラス
-	Positionf pos = { 300.0f,330.0f };
-	man = std::make_shared<Deadman>(pos, pl);
+	e_list.push_back(EnemyMane::GetInstance()->CreateDeadman(300, 330, pl));
+	e_list.push_back(EnemyMane::GetInstance()->CreateDeadman(500, 330, pl));
 
 	//地面クラス
 	ground = std::make_shared<Ground>(pl);
@@ -79,7 +83,10 @@ void Game::Draw(void)
 	back->Draw();
 	ui->Draw();
 	pl->Draw();
-	man->Draw();
+	for (auto itr = e_list.begin(); itr != e_list.end(); ++itr)
+	{
+		(*itr)->Draw();
+	}
 	ground->Draw();
 
 	//裏画面を表画面に瞬間コピー
@@ -95,7 +102,10 @@ void Game::UpData(void)
 
 	pl->UpData();
 
-	man->UpData();
+	for (auto itr = e_list.begin(); itr != e_list.end(); ++itr)
+	{
+		(*itr)->UpData();
+	}
 
 	ground->UpData();
 }
@@ -115,6 +125,7 @@ void Game::Run(void)
 // 終了処理
 void Game::Destroy(void)
 {
+	EnemyMane::Destroy();
 	Load::Destroy();
 
 	//Dxlibの終了
