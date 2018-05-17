@@ -28,6 +28,9 @@ private:
 	// テリトリー
 	float range;
 
+	// カウント
+	int cnt;
+
 	// 関数ポインタ
 	void(Bat::*func)(void);
 

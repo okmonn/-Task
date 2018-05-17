@@ -3,7 +3,7 @@
 const std::string path = "アクション/bat.act";
 
 // コンストラクタ
-Bat::Bat(Positionf pos, std::weak_ptr<Player>pl) : pl(pl), range(200.0f)
+Bat::Bat(Positionf pos, std::weak_ptr<Player>pl) : pl(pl), range(200.0f), cnt(0)
 {
 	Load(path);
 	this->pos = pos;
@@ -154,11 +154,13 @@ void Bat::Fly(void)
 
 	if (pl.lock()->GetPos().y - pl.lock()->GetCut().rect.GetWidth() > pos.y)
 	{
-		pos.y += 1.0f;
+		pos.y += 2.0f * sinf(3.14f * 2 / 270 * cnt);
+		cnt++;
 	}
 	else if (pl.lock()->GetPos().y - pl.lock()->GetCut().rect.GetWidth() < pos.y)
 	{
-		pos.y -= 1.0f;
+		pos.y -= 2.0f * sinf(3.14f * 2 / 270 * cnt);
+		cnt++;
 	}
 
 	for (int i = 0; i < pl.lock()->GetAttackNum(); ++i)
@@ -199,4 +201,6 @@ void Bat::Die(void)
 	{
 		return;
 	}
+
+	
 }
