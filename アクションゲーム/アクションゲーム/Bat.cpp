@@ -1,6 +1,7 @@
 #include "Bat.h"
 
 const std::string path = "アクション/bat.act";
+const float line = 330;
 
 // コンストラクタ
 Bat::Bat(Positionf pos, std::weak_ptr<Player>pl) : pl(pl), range(200.0f), cnt(0)
@@ -52,6 +53,13 @@ void Bat::Draw(void)
 			if (index < cut[mode].size() - 1)
 			{
 				++index;
+			}
+			else
+			{
+				if (mode == "Die")
+				{
+					die = true;
+				}
 			}
 			flam = 0;
 		}
@@ -173,7 +181,8 @@ void Bat::Fly(void)
 			{
 				if (at.type == RectType::attack && attack[mode][index][j].type == RectType::damage)
 				{
-					SetMode("Die", reverse);
+					SetMode("Damage", reverse);
+					func = &Bat::Damage;
 				}
 				else if (at.type == RectType::damage && attack[mode][index][j].type == RectType::attack)
 				{
@@ -192,6 +201,16 @@ void Bat::Damage(void)
 	{
 		return;
 	}
+
+	if (pos.y < line)
+	{
+		pos.y += 1.0f;
+	}
+	else
+	{
+		SetMode("Die", reverse);
+		func = &Bat::Die;
+	}
 }
 
 // 死亡の処理
@@ -202,5 +221,8 @@ void Bat::Die(void)
 		return;
 	}
 
-	
+	if (pos.y <= line + 10.0f)
+	{
+		pos.y += 2.0f;
+	}
 }
