@@ -1,5 +1,6 @@
 #include "EnemyMane.h"
 #include "Deadman.h"
+#include "Bat.h"
 #include "Typedef.h"
 
 EnemyMane* EnemyMane::instance = nullptr;
@@ -40,4 +41,13 @@ std::shared_ptr<Enemy> EnemyMane::CreateDeadman(float x, float y, std::shared_pt
 	std::shared_ptr<Deadman>man;
 	man = std::make_shared<Deadman>(pos, pl);
 	return man;
+}
+
+// ƒoƒbƒh‚Ì¶¬
+std::shared_ptr<Enemy> EnemyMane::CreateBat(float x, float y, std::shared_ptr<Player> pl)
+{
+	Positionf pos = { x, y };
+	std::shared_ptr<Bat>bat;
+	bat = std::make_shared<Bat>(pos, pl);
+	return bat;
 }

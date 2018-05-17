@@ -68,7 +68,8 @@ void Game::Create(void)
 
 	//敵クラス
 	e_list.push_back(EnemyMane::GetInstance()->CreateDeadman(300, 330, pl));
-	e_list.push_back(EnemyMane::GetInstance()->CreateDeadman(500, 330, pl));
+
+	//e_list.push_back(EnemyMane::GetInstance()->CreateBat(500, 100, pl));
 
 	//地面クラス
 	ground = std::make_shared<Ground>(pl);
