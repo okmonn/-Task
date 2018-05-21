@@ -135,8 +135,10 @@
     <ClCompile Include="Load.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Scene\Continue.cpp" />
     <ClCompile Include="Scene\Game.cpp" />
     <ClCompile Include="Scene\Over.cpp" />
+    <ClCompile Include="Scene\Play.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\Title.cpp" />
     <ClCompile Include="Stage.cpp" />
@@ -153,9 +155,10 @@
     <ClInclude Include="Interface.h" />
     <ClInclude Include="Load.h" />
     <ClInclude Include="Main.h" />
-    <ClInclude Include="Player.h" />
+    <ClInclude Include="Scene\Continue.h" />
     <ClInclude Include="Scene\Game.h" />
     <ClInclude Include="Scene\Over.h" />
+    <ClInclude Include="Scene\Play.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\Title.h" />
     <ClInclude Include="Stage.h" />

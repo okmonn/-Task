@@ -1,15 +1,7 @@
 #pragma once
 #include "Scene.h"
-#include "../BackGround.h"
-#include "../Interface.h"
-#include "../Input.h"
-#include "../Player.h"
-#include "../Enemy.h"
-#include "../Ground.h"
-#include <memory>
-#include <list>
-class Game :
-	public Scene
+
+class Game
 {
 public:
 	// デストラクタ
@@ -28,6 +20,9 @@ public:
 	// クラスのインスタンス化
 	void Create(void);
 
+	// シーンの移行
+	void ChangeScene(Scene* s);
+
 	// それぞれのクラスの描画
 	void Draw(void);
 
@@ -45,22 +40,11 @@ private:
 	Game();
 	Game(const Game&);
 
-	// 背景クラス
-	std::shared_ptr<BackGround>back;
-
-	// UIクラス
-	std::shared_ptr<Interface>ui;
-
 	// インプット
 	std::shared_ptr<Input>in;
 
-	// プレイヤークラス
-	std::shared_ptr<Player>pl;
+	// シーンクラス
+	std::shared_ptr<Scene>scene;
 
-	// 敵のリスト
-	std::list<std::shared_ptr<Enemy>>e_list;
-
-	// 地面クラス
-	std::shared_ptr<Ground>ground;
 };
 

@@ -117,7 +117,11 @@ void Bat::Draw(void)
 // ˆ—
 void Bat::UpData(void)
 {
-	
+	if (pos.y >= line)
+	{
+		pos.y = line;
+	}
+
 	(this->*func)();
 }
 

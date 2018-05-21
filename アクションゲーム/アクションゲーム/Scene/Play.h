@@ -1,0 +1,43 @@
+#pragma once
+#include "Scene.h"
+#include "../BackGround.h"
+#include "../Interface.h"
+#include "../Player.h"
+#include "../Enemy.h"
+#include "../Ground.h"
+#include <list>
+
+class Play :
+	public Scene
+{
+public:
+	// コンストラクタ
+	Play(std::weak_ptr<Input>in);
+	// デストラクタ
+	~Play();
+
+	// インスタンス化
+	void Create(void);
+
+	// 処理
+	void Draw(void);
+
+	// 処理
+	void UpData(void);
+
+private:
+	// 背景クラス
+	std::shared_ptr<BackGround>back;
+
+	// UIクラス
+	std::shared_ptr<Interface>ui;
+
+	// プレイヤークラス
+	std::shared_ptr<Player>pl;
+
+	// 敵のリスト
+	std::list<std::shared_ptr<Enemy>>e_list;
+
+	// 地面クラス
+	std::shared_ptr<Ground>ground;
+};

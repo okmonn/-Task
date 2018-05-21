@@ -5,11 +5,16 @@ class Over :
 {
 public:
 	// コンストラクタ
-	Over();
+	Over(std::weak_ptr<Input>in);
 	// デストラクタ
 	~Over();
 
+	// 描画
+	void Draw(void);
+
 	// 処理
 	void UpData(void);
+
+private:
 };
 
