@@ -16,5 +16,7 @@ public:
 	void UpData(void);
 
 private:
+	// ‰æ‘œƒnƒ“ƒhƒ‹
+	int image;
 };
 

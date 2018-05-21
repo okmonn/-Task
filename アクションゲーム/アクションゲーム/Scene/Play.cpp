@@ -25,11 +25,11 @@ void Play::Create(void)
 	//背景クラス
 	back = std::make_shared<BackGround>();
 
-	//UIクラス
-	ui = std::make_shared<Interface>();
-
 	//プレイヤークラス
 	pl = std::make_shared<Player>(in);
+
+	//UIクラス
+	ui = std::make_shared<Interface>(pl);
 
 	//敵クラス
 	e_list.push_back(EnemyMane::GetInstance()->CreateDeadman(300, 330, pl));

@@ -8,18 +8,23 @@ Title::Title(std::weak_ptr<Input>in)
 {
 	//インプットクラス
 	this->in = in;
+
+	//画像ハンドル
+	image = LoadGraph("img/title.png");
 }
 
 // デストラクタ
 Title::~Title()
 {
-	DrawString(300, 300, "Title Scene END", 0xffffff);
+	DeleteGraph(image);
 }
 
 // 描画
 void Title::Draw(void)
 {
-	DrawString(300, 300, "Title Scene", 0xffffff);
+	DrawGraph(0, 0, image, true);
+
+	DrawString(300, 400, "PUSH START (W)", GetColor(255, 0, 0), false);
 }
 
 // 処理

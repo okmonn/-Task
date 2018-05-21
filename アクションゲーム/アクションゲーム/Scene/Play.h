@@ -1,8 +1,8 @@
 #pragma once
 #include "Scene.h"
 #include "../BackGround.h"
-#include "../Interface.h"
 #include "../Player.h"
+#include "../Interface.h"
 #include "../Enemy.h"
 #include "../Ground.h"
 #include <list>
@@ -29,11 +29,11 @@ private:
 	// 背景クラス
 	std::shared_ptr<BackGround>back;
 
-	// UIクラス
-	std::shared_ptr<Interface>ui;
-
 	// プレイヤークラス
 	std::shared_ptr<Player>pl;
+
+	// UIクラス
+	std::shared_ptr<Interface>ui;
 
 	// 敵のリスト
 	std::list<std::shared_ptr<Enemy>>e_list;
