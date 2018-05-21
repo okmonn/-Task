@@ -18,6 +18,8 @@ Interface::Interface()
 // デストラクタ
 Interface::~Interface()
 {
+	DeleteGraph(top);
+	DeleteGraph(bottom);
 }
 
 // 描画

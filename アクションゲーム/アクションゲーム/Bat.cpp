@@ -15,6 +15,7 @@ Bat::Bat(Positionf pos, std::weak_ptr<Player>pl) : pl(pl), range(200.0f), cnt(0)
 // デストラクタ
 Bat::~Bat()
 {
+	DeleteGraph(image);
 }
 
 // 状態の設定

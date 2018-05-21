@@ -16,7 +16,7 @@ Play::Play(std::weak_ptr<Input>in)
 // デストラクタ
 Play::~Play()
 {
-	DrawString(200, 200, "Game Scene END", 0xffffff);
+	e_list.clear();
 }
 
 // インスタンス化

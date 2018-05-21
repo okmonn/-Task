@@ -22,6 +22,7 @@ Deadman::Deadman(Positionf pos, std::weak_ptr<Player>pl) : pl(pl), down(18.0f), 
 // デストラクタ
 Deadman::~Deadman()
 {
+	DeleteGraph(image);
 }
 
 // 状態の設定

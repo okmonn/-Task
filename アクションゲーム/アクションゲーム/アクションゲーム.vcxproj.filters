@@ -134,5 +134,8 @@
     <ClInclude Include="Scene\Play.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

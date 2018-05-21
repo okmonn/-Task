@@ -13,6 +13,7 @@ BackGround::BackGround()
 // デストラクタ
 BackGround::~BackGround()
 {
+	DeleteGraph(back);
 }
 
 // 描画

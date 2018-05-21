@@ -155,6 +155,7 @@
     <ClInclude Include="Interface.h" />
     <ClInclude Include="Load.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Scene\Continue.h" />
     <ClInclude Include="Scene\Game.h" />
     <ClInclude Include="Scene\Over.h" />
