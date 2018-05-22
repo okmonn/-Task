@@ -36,6 +36,11 @@ public:
 	// 死亡フラグの取得
 	bool GetDie(void);
 
+	// あたりフラグの取得
+	bool GetHit(void);
+	// あたりフラグの変更
+	void SetHit(bool flg);
+
 	// 状態のセット
 	virtual void SetMode(std::string m, bool r) = 0;
 	// 描画
@@ -82,6 +87,9 @@ protected:
 
 	// 死亡フラグ
 	bool die;
+
+	// あたりフラグ
+	bool hit;
 
 	// 画像データ
 	std::map<std::string, ImageData>data;

@@ -18,5 +18,14 @@ public:
 protected:
 	// インプットクラス
 	std::weak_ptr<Input>in;
+
+	// 透明度
+	int blend;
+
+	// フォントサイズ
+	int fSize;
+
+	// 透明開始フラグ
+	bool alpha;
 };
 

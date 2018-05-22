@@ -1,21 +1,2 @@
-﻿  Stage.cpp
-  Title.cpp
-  Scene.cpp
-  Play.cpp
-  Over.cpp
-  Game.cpp
-  Continue.cpp
-  Player.cpp
-  Main.cpp
-  Load.cpp
-  Interface.cpp
-  Input.cpp
-  Ground.cpp
-  EnemyMane.cpp
-  Enemy.cpp
-  Deadman.cpp
-  Camera.cpp
-  Bat.cpp
-  BackGround.cpp
-  コードを生成中...
+﻿  Continue.cpp
   アクションゲーム.vcxproj -> C:\Users\1601271\Documents\GitHub\-Task\アクションゲーム\Debug\アクションゲーム.exe

@@ -194,6 +194,7 @@ void Bat::Fly(void)
 					bool flag = reverse == true ? false : true;
 					pl.lock()->SetMode("Damage", flag);
 				}
+				hit = true;
 			}
 		}
 	}
@@ -209,7 +210,7 @@ void Bat::Damage(void)
 
 	if (pos.y < line)
 	{
-		pos.y += 1.0f;
+		pos.y += 3.0f;
 	}
 	else
 	{

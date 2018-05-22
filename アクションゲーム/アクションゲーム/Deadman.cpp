@@ -97,6 +97,7 @@ void Deadman::Draw(void)
 			++flam;
 		}
 	}
+
 	DrawRectRotaGraph2((int)pos.x, (int)pos.y,
 		cut[mode][index].rect.GetLeft(), cut[mode][index].rect.GetTop(),
 		cut[mode][index].rect.GetWidth(), cut[mode][index].rect.GetHeight(),
@@ -229,6 +230,7 @@ void Deadman::Walk(void)
 					bool flag = reverse == true ? false : true;
 					pl.lock()->SetMode("Damage", flag);
 				}
+				hit = true;
 			}
 		}
 	}

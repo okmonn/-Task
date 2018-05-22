@@ -1,7 +1,7 @@
 #include "Scene.h"
 
 // コンストラクタ
-Scene::Scene()
+Scene::Scene(): blend(0), alpha(false), fSize(18)
 {
 }
 

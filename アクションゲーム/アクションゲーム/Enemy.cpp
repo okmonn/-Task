@@ -38,6 +38,9 @@ Enemy::Enemy()
 	//死亡フラグ
 	die = false;
 
+	//あたりフラグ
+	hit = false;
+
 	//画像データ
 	data.clear();
 
@@ -164,4 +167,16 @@ CutData Enemy::GetCutData(std::string m, UINT index)
 bool Enemy::GetDie(void)
 {
 	return die;
+}
+
+// あたりフラグの取得
+bool Enemy::GetHit(void)
+{
+	return hit;
+}
+
+// あたりフラグの変更
+void Enemy::SetHit(bool flg)
+{
+	hit = flg;
 }

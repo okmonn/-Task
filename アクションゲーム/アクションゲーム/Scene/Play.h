@@ -26,6 +26,10 @@ public:
 	void UpData(void);
 
 private:
+	// フェードイン
+	bool FadeIn(void);
+	// フェードアウト
+	bool FadeOut(void);
 	// 背景クラス
 	std::shared_ptr<BackGround>back;
 
@@ -40,4 +44,7 @@ private:
 
 	// 地面クラス
 	std::shared_ptr<Ground>ground;
+
+	// 関数ポインタ
+	bool (Play::*func)(void);
 };

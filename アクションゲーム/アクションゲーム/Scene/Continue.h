@@ -16,5 +16,9 @@ public:
 	void UpData(void);
 
 private:
+	// 画像データ
+	int image;
 
+	// フレーム
+	int flam;
 };
