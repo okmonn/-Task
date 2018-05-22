@@ -8,18 +8,21 @@ Over::Over(std::weak_ptr<Input>in)
 {
 	//インプットクラス
 	this->in = in;
+	
+	//画像
+	image = LoadGraph("img/gameover.png");
 }
 
 // デストラクタ
 Over::~Over()
 {
-	DrawString(300, 300, "Over Scene END", 0xffffff);
+	DeleteGraph(image);
 }
 
 // 描画
 void Over::Draw(void)
 {
-	DrawString(300, 300, "Over Scene", 0xffffff);
+	DrawGraph(0, 0, image, true);
 }
 
 // 処理

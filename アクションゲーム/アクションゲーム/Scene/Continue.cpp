@@ -42,6 +42,10 @@ void Continue::Draw(void)
 // ˆ—
 void Continue::UpData(void)
 {
+	if (in.lock()->CheckTrigger(PAD_INPUT_1) || in.lock()->CheckTrigger(PAD_INPUT_2))
+	{
+		flam += time - (flam % time);
+	}
 	if (flam < time * COUNT_MAX)
 	{
 		if (in.lock()->CheckTrigger(PAD_INPUT_8))
