@@ -10,10 +10,11 @@ Deadman::Deadman()
 }
 
 // コンストラクタ
-Deadman::Deadman(Positionf pos, std::weak_ptr<Player>pl) : pl(pl), down(18.0f), wait(0), go(0)
+Deadman::Deadman(Positionf pos, std::weak_ptr<Player>pl, std::weak_ptr<Camera>cam) : pl(pl), cam(cam), down(18.0f), wait(0), go(0)
 {
 	Load(path);
 	this->pos = pos;
+	camPos = { 0,0 };
 	SetMode("Walk", true);
 	func = &Deadman::Walk;
 	memset(dir, false, sizeof(dir));
@@ -98,16 +99,22 @@ void Deadman::Draw(void)
 		}
 	}
 
-	DrawRectRotaGraph2((int)pos.x, (int)pos.y,
+	auto right = cam.lock()->GetViewSize().GetRight();
+	auto left = cam.lock()->GetViewSize().GetLeft();
+	pos.x = min(max(pos.x, left), right);
+
+	camPos = cam.lock()->CorrectionPos(pos);
+
+	DrawRectRotaGraph2((int)camPos.x, (int)camPos.y,
 		cut[mode][index].rect.GetLeft(), cut[mode][index].rect.GetTop(),
 		cut[mode][index].rect.GetWidth(), cut[mode][index].rect.GetHeight(),
 		center.x, center.y,
 		(float)attackSize, 0.0f, image, true, reverse);
 
 #ifdef _DEBUG
-	DrawFormatString(500, 10, GetColor(255, 255, 0), "%d", (int)pos.y);
-	DrawPixel((int)pos.x, (int)pos.y, GetColor(255, 255, 255));
-	DrawFormatString(550, 10, GetColor(255, 0, 0), "%d", index);
+	DrawFormatString(500, 100, GetColor(255, 255, 0), "%d", (int)camPos.x);
+	DrawPixel((int)camPos.x, (int)camPos.y, GetColor(255, 255, 255));
+//	DrawFormatString(550, 10, GetColor(255, 0, 0), "%d", index);
 	for (unsigned int i = 0; i < attack[mode][index].size(); ++i)
 	{
 		UINT color = 0;
@@ -126,18 +133,18 @@ void Deadman::Draw(void)
 
 		if (reverse == false)
 		{
-			DrawBox((int)pos.x + (attack[mode][index][i].rect.GetLeft() * attackSize),
-				(int)pos.y + (attack[mode][index][i].rect.GetTop() * attackSize),
-				(int)pos.x + (attack[mode][index][i].rect.GetLeft() + attack[mode][index][i].rect.GetWidth()) * attackSize,
-				(int)pos.y + (attack[mode][index][i].rect.GetTop() + attack[mode][index][i].rect.GetHeight()) * attackSize,
+			DrawBox((int)camPos.x + (attack[mode][index][i].rect.GetLeft() * attackSize),
+				(int)camPos.y + (attack[mode][index][i].rect.GetTop() * attackSize),
+				(int)camPos.x + (attack[mode][index][i].rect.GetLeft() + attack[mode][index][i].rect.GetWidth()) * attackSize,
+				(int)camPos.y + (attack[mode][index][i].rect.GetTop() + attack[mode][index][i].rect.GetHeight()) * attackSize,
 				color, false);
 		}
 		else
 		{
-			DrawBox((int)pos.x - (attack[mode][index][i].rect.GetLeft() * attackSize),
-				(int)pos.y + (attack[mode][index][i].rect.GetTop() * attackSize),
-				(int)pos.x - (attack[mode][index][i].rect.GetLeft() + attack[mode][index][i].rect.GetWidth()) * attackSize,
-				(int)pos.y + (attack[mode][index][i].rect.GetTop() + attack[mode][index][i].rect.GetHeight()) * attackSize,
+			DrawBox((int)camPos.x - (attack[mode][index][i].rect.GetLeft() * attackSize),
+				(int)camPos.y + (attack[mode][index][i].rect.GetTop() * attackSize),
+				(int)camPos.x - (attack[mode][index][i].rect.GetLeft() + attack[mode][index][i].rect.GetWidth()) * attackSize,
+				(int)camPos.y + (attack[mode][index][i].rect.GetTop() + attack[mode][index][i].rect.GetHeight()) * attackSize,
 				color, false);
 		}
 	}
@@ -167,7 +174,7 @@ void Deadman::Walk(void)
 
 	if (go == 0)
 	{
-		if (pl.lock()->GetPos().x > pos.x)
+		if (pl.lock()->GetCamPos().x > camPos.x)
 		{
 			if (reverse == true)
 			{
@@ -176,7 +183,7 @@ void Deadman::Walk(void)
 			dir[0] = true;
 			++go;
 		}
-		else if (pl.lock()->GetPos().x < pos.x)
+		else if (pl.lock()->GetCamPos().x < camPos.x)
 		{
 			if (reverse == false)
 			{
@@ -209,11 +216,11 @@ void Deadman::Walk(void)
 
 	for (int i = 0; i < pl.lock()->GetAttackNum(); ++i)
 	{
-		Positionf tmp = pl.lock()->GetPos();
+		Positionf tmp = pl.lock()->GetCamPos();
 		Attack at = pl.lock()->GetAttack(i);
 		for (unsigned int j = 0; j < attack[mode][index].size(); ++j)
 		{
-			if (CheackHit(pos, attack[mode][index][j], tmp, at) == true)
+			if (CheackHit(camPos, attack[mode][index][j], tmp, at) == true)
 			{
 				if (at.type == RectType::attack && attack[mode][index][j].type == RectType::damage
 					&& pl.lock()->GetMode() == "Punch")

@@ -179,7 +179,7 @@ void Player::Draw(void)
 #ifdef _DEBUG
 	DrawFormatString(10, 10, GetColor(255, 255, 255), "%d", (int)camPos.x);
 	DrawFormatString(50, 10, GetColor(255, 255, 255), "%d", (int)camPos.y);
-	DrawPixel((int)pos.x, (int)pos.y, GetColor(255, 255, 255));
+	DrawPixel((int)camPos.x, (int)camPos.y, GetColor(255, 255, 255));
 	DrawFormatString(150, 10, GetColor(255, 255, 255), "%s", mode.c_str());
 	
 	for (unsigned int i = 0; i < attack[mode][index].size(); ++i)
@@ -554,26 +554,26 @@ Positionf Player::GetAttackPos(USHORT num, bool flag)
 	{
 		if (reverse == false)
 		{
-			tmp.x = pos.x + (attack[mode][index][num].rect.GetLeft() + attack[mode][index][num].rect.GetWidth()) * attackSize;
-			tmp.y = pos.y + (attack[mode][index][num].rect.GetTop() + attack[mode][index][num].rect.GetHeight()) * attackSize;
+			tmp.x = camPos.x + (attack[mode][index][num].rect.GetLeft() + attack[mode][index][num].rect.GetWidth()) * attackSize;
+			tmp.y = camPos.y + (attack[mode][index][num].rect.GetTop() + attack[mode][index][num].rect.GetHeight()) * attackSize;
 		}
 		else
 		{
-			tmp.x = pos.x - (attack[mode][index][num].rect.GetLeft() + attack[mode][index][num].rect.GetWidth()) * attackSize;
-			tmp.y = pos.y + (attack[mode][index][num].rect.GetTop() + attack[mode][index][num].rect.GetHeight()) * attackSize;
+			tmp.x = camPos.x - (attack[mode][index][num].rect.GetLeft() + attack[mode][index][num].rect.GetWidth()) * attackSize;
+			tmp.y = camPos.y + (attack[mode][index][num].rect.GetTop() + attack[mode][index][num].rect.GetHeight()) * attackSize;
 		}
 	}
 	else
 	{
 		if (reverse == false)
 		{
-			tmp.x = pos.x + (attack[mode][index][num].rect.GetLeft()) * attackSize;
-			tmp.y = pos.y + (attack[mode][index][num].rect.GetTop()) * attackSize;
+			tmp.x = camPos.x + (attack[mode][index][num].rect.GetLeft()) * attackSize;
+			tmp.y = camPos.y + (attack[mode][index][num].rect.GetTop()) * attackSize;
 		}
 		else
 		{
-			tmp.x = pos.x - (attack[mode][index][num].rect.GetLeft()) * attackSize;
-			tmp.y = pos.y + (attack[mode][index][num].rect.GetTop()) * attackSize;
+			tmp.x = camPos.x - (attack[mode][index][num].rect.GetLeft()) * attackSize;
+			tmp.y = camPos.y + (attack[mode][index][num].rect.GetTop()) * attackSize;
 		}
 	}
 

@@ -35,19 +35,19 @@ void EnemyMane::Destroy(void)
 }
 
 // デッドマンの生成
-std::shared_ptr<Enemy> EnemyMane::CreateDeadman(float x, float y, std::shared_ptr<Player>pl)
+std::shared_ptr<Enemy> EnemyMane::CreateDeadman(float x, float y, std::shared_ptr<Player>pl, std::shared_ptr<Camera>cam)
 {
 	Positionf pos = { x, y };
 	std::shared_ptr<Deadman>man;
-	man = std::make_shared<Deadman>(pos, pl);
+	man = std::make_shared<Deadman>(pos, pl, cam);
 	return man;
 }
 
 // バッドの生成
-std::shared_ptr<Enemy> EnemyMane::CreateBat(float x, float y, std::shared_ptr<Player> pl)
+std::shared_ptr<Enemy> EnemyMane::CreateBat(float x, float y, std::shared_ptr<Player> pl, std::shared_ptr<Camera>cam)
 {
 	Positionf pos = { x, y };
 	std::shared_ptr<Bat>bat;
-	bat = std::make_shared<Bat>(pos, pl);
+	bat = std::make_shared<Bat>(pos, pl, cam);
 	return bat;
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "Enemy.h"
+#include "Camera.h"
 #include "Player.h"
 #include <memory>
 
@@ -8,7 +9,7 @@ class Bat :
 {
 public:
 	// コンストラクタ
-	Bat(Positionf pos, std::weak_ptr<Player>pl);
+	Bat(Positionf pos, std::weak_ptr<Player>pl, std::weak_ptr<Camera>cam);
 	// デストラクタ
 	~Bat();
 
@@ -25,11 +26,16 @@ private:
 	// プレイヤークラス
 	std::weak_ptr<Player>pl;
 
+	// カメラクラス
+	std::weak_ptr<Camera>cam;
+
 	// テリトリー
 	float range;
 
 	// カウント
 	int cnt;
+
+	Positionf camPos;
 
 	// 関数ポインタ
 	void(Bat::*func)(void);

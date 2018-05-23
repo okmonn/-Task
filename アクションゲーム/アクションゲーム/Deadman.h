@@ -1,5 +1,6 @@
 #pragma once
 #include "Enemy.h"
+#include "Camera.h"
 #include "Player.h"
 #include <memory>
 
@@ -9,7 +10,7 @@ class Deadman :
 public:
 	// コンストラクタ
 	Deadman();
-	Deadman(Positionf pos, std::weak_ptr<Player>pl);
+	Deadman(Positionf pos, std::weak_ptr<Player>pl, std::weak_ptr<Camera>cam);
 	// デストラクタ
 	~Deadman();
 
@@ -26,6 +27,9 @@ private:
 	// プレイヤークラス
 	std::weak_ptr<Player>pl;
 
+	// カメラクラス
+	std::weak_ptr<Camera>cam;
+
 	float down;
 
 	int wait;
@@ -33,6 +37,8 @@ private:
 	int go;
 
 	bool dir[2];
+
+	Positionf camPos;
 
 	// 歩きの処理
 	void Walk(void);

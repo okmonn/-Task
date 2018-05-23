@@ -1,11 +1,11 @@
 #pragma once
-#include "Typedef.h"
+#include "Camera.h"
 
 class BackGround
 {
 public:
 	// コンストラクタ
-	BackGround();
+	BackGround(std::weak_ptr<Camera>cam);
 	// デストラクタ
 	virtual ~BackGround();
 
@@ -16,7 +16,15 @@ public:
 	void UpData(void);
 
 private:
+	// カメラクラス
+	std::weak_ptr<Camera>cam;
+
 	// 背景画像
 	int back;
+
+	// 座標
+	Positionf pos;
+
+	float z;
 };
 

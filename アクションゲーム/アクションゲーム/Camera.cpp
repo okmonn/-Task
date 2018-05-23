@@ -16,6 +16,7 @@ Camera::~Camera()
 void Camera::SetFocus(std::shared_ptr<Player>pl)
 {
 	this->pl = pl;
+	pos = this->pl.lock()->GetPos();
 }
 
 // 座標の取得
@@ -61,10 +62,7 @@ Positionf Camera::CorrectionPos(Positionf pos)
 	//座標からカメラの座標を引く
 	Positionf tmp = pos;
 	
-	if (tmp.x > WINDOW_X / 2)
-	{
-		tmp.x -= this->pos.x - WINDOW_X / 2;
-	}
+	tmp.x -= this->pos.x - (float)(WINDOW_X / 2);
 
 	return tmp;
 }

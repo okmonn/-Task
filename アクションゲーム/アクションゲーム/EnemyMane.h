@@ -1,4 +1,5 @@
 #pragma once
+#include "Camera.h"
 #include "Player.h"
 #include "Enemy.h"
 #include <memory>
@@ -21,9 +22,9 @@ public:
 	}
 
 	// デッドマンの生成
-	std::shared_ptr<Enemy> CreateDeadman(float x, float y, std::shared_ptr<Player>pl);
+	std::shared_ptr<Enemy> CreateDeadman(float x, float y, std::shared_ptr<Player>pl, std::shared_ptr<Camera>cam);
 	// バッドの生成
-	std::shared_ptr<Enemy> CreateBat(float x, float y, std::shared_ptr<Player>pl);
+	std::shared_ptr<Enemy> CreateBat(float x, float y, std::shared_ptr<Player>pl, std::shared_ptr<Camera>acm);
 private:
 	// コンストラクタ
 	EnemyMane();

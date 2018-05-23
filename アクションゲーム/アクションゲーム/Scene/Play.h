@@ -1,12 +1,12 @@
 #pragma once
 #include "Scene.h"
+#include "../Camera.h"
 #include "../Stage.h"
 #include "../BackGround.h"
 #include "../Player.h"
 #include "../Interface.h"
 #include "../Enemy.h"
 #include "../Ground.h"
-#include "../Camera.h"
 #include <list>
 
 class Play :
@@ -33,14 +33,14 @@ private:
 	// フェードアウト
 	bool FadeOut(void);
 
-	// 背景クラス
-	std::shared_ptr<BackGround>back;
-
 	// ステージクラス
 	std::shared_ptr<Stage>st;
 
 	// カメラクラス
 	std::shared_ptr<Camera>cam;
+
+	// 背景クラス
+	std::shared_ptr<BackGround>back;
 
 	// プレイヤークラス
 	std::shared_ptr<Player>pl;

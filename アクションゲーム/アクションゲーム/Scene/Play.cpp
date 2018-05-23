@@ -31,9 +31,6 @@ Play::~Play()
 // インスタンス化
 void Play::Create(void)
 {
-	//背景クラス
-	back = std::make_shared<BackGround>();
-
 	//ステージクラス
 	st = std::make_shared<Stage>();
 
@@ -42,20 +39,22 @@ void Play::Create(void)
 
 	//プレイヤークラス
 	pl = std::make_shared<Player>(in, cam);
+	cam->SetFocus(pl);
+
+	//背景クラス
+	back = std::make_shared<BackGround>(cam);
 
 	//UIクラス
 	ui = std::make_shared<Interface>(pl);
 
 	//敵クラス
-	e_list.push_back(EnemyMane::GetInstance()->CreateDeadman(300, 330, pl));
+	e_list.push_back(EnemyMane::GetInstance()->CreateDeadman(300, 330, pl, cam));
 
-	e_list.push_back(EnemyMane::GetInstance()->CreateBat(500, 100, pl));
+	e_list.push_back(EnemyMane::GetInstance()->CreateBat(500, 100, pl, cam));
 
 	//地面クラス
 	ground = std::make_shared<Ground>(pl);
 
-
-	cam->SetFocus(pl);
 }
 
 // 描画
@@ -88,13 +87,13 @@ void Play::UpData(void)
 		}
 		else
 		{
-			cam->UpData();
-			pl->UpData();
+			back->UpData();
+		
 			if (pl->GetPos().x == 300)
 			{
 				if (e_list.size() < 10)
 				{
-					e_list.push_back(EnemyMane::GetInstance()->CreateDeadman(50, 330, pl));
+					e_list.push_back(EnemyMane::GetInstance()->CreateDeadman(50, 330, pl, cam));
 				}
 			}
 
@@ -110,7 +109,8 @@ void Play::UpData(void)
 					++itr;
 				}
 			}
-
+			pl->UpData();
+			cam->UpData();
 			ground->UpData();
 		}
 	}
