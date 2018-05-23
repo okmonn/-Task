@@ -4,9 +4,10 @@
 const char* actionPath = "アクション/player.act";
 const float g = 0.5f;
 const int line = 330;
+const float speed = 1.0f;
 
 // コンストラクタ
-Player::Player(std::weak_ptr<Input>in) : in(in)
+Player::Player(std::weak_ptr<Input>in, std::weak_ptr<Camera>cam) : in(in), cam(cam)
 {
 	//フレーム数の初期化
 	flam = 0;
@@ -160,20 +161,24 @@ void Player::Draw(void)
 		}
 	}
 
-	DrawRectRotaGraph2((int)pos.x, (int)pos.y,
+	auto right = cam.lock()->GetViewSize().GetRight();
+	auto left = cam.lock()->GetViewSize().GetLeft();
+	pos.x = min(max(pos.x, left), right);
+
+	auto tmp = cam.lock()->CorrectionPos(pos);
+
+	DrawRectRotaGraph2((int)tmp.x, (int)tmp.y,
 		cut[mode][index].rect.GetLeft(), cut[mode][index].rect.GetTop(),
 		cut[mode][index].rect.GetWidth(), cut[mode][index].rect.GetHeight(),
 		center.x, center.y,
 		(float)attackSize, 0.0f, image, true, reverse);
 
 #ifdef _DEBUG
-	DrawFormatString(10, 10, GetColor(255, 255, 255), "%d", index);
-	DrawFormatString(30, 10, GetColor(255, 255, 255), "%d", center.x);
-	DrawFormatString(50, 10, GetColor(255, 255, 255), "%d", (int)pos.y);
+	DrawFormatString(10, 10, GetColor(255, 255, 255), "%d", (int)tmp.x);
+	DrawFormatString(50, 10, GetColor(255, 255, 255), "%d", (int)tmp.y);
 	DrawPixel((int)pos.x, (int)pos.y, GetColor(255, 255, 255));
-	DrawFormatString(100, 10, GetColor(255, 255, 255), "%s", mode.c_str());
-	DrawFormatString(200, 10, GetColor(255, 255, 255), "%d", fly);
-
+	DrawFormatString(150, 10, GetColor(255, 255, 255), "%s", mode.c_str());
+	
 	for (unsigned int i = 0; i < attack[mode][index].size(); ++i)
 	{
 		UINT color = 0;
@@ -261,7 +266,7 @@ void Player::Walk(void)
 		{
 			reverse = false;
 		}
-		pos.x += 1.0f;
+		pos.x += speed;
 	}
 	else if (in.lock()->CheckPress(PAD_INPUT_LEFT))
 	{
@@ -269,7 +274,7 @@ void Player::Walk(void)
 		{
 			reverse = true;
 		}
-		pos.x += -1.0f;
+		pos.x += -speed;
 	}
 	else
 	{

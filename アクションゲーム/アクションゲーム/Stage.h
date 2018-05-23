@@ -1,4 +1,5 @@
 #pragma once
+#include "Typedef.h"
 class Stage
 {
 public:
@@ -10,7 +11,11 @@ public:
 	// 処理
 	void UpData(void);
 
-private:
+	// ステージサイズの取得
+	Rect& GetStageRange(void);
 
+private:
+	// ステージの全体サイズ
+	Rect rect;
 };
 

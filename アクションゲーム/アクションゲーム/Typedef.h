@@ -24,6 +24,14 @@ struct Vector2
 		return tmp;
 	}
 
+	Vector2 operator-(const Vector2& vec) const
+	{
+		Vector2<T> tmp;
+		tmp.x = x - vec.x;
+		tmp.y = y - vec.y;
+		return tmp;
+	}
+
 	void operator+=(const T a)
 	{
 		x += a;

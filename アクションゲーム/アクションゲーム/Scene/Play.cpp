@@ -13,7 +13,7 @@ Play::Play(std::weak_ptr<Input>in)
 
 	blend = 255;
 	//フォントサイズ
-	fSize = 18;
+	fSize = 24;
 	SetFontSize(fSize);
 
 	//関数ポインタ
@@ -34,8 +34,14 @@ void Play::Create(void)
 	//背景クラス
 	back = std::make_shared<BackGround>();
 
+	//ステージクラス
+	st = std::make_shared<Stage>();
+
+	//カメラクラス
+	cam = std::make_shared<Camera>(st);
+
 	//プレイヤークラス
-	pl = std::make_shared<Player>(in);
+	pl = std::make_shared<Player>(in, cam);
 
 	//UIクラス
 	ui = std::make_shared<Interface>(pl);
@@ -47,6 +53,9 @@ void Play::Create(void)
 
 	//地面クラス
 	ground = std::make_shared<Ground>(pl);
+
+
+	cam->SetFocus(pl);
 }
 
 // 描画
@@ -60,6 +69,7 @@ void Play::Draw(void)
 		(*itr)->Draw();
 	}
 	ground->Draw();
+	cam->Draw();
 	
 	SetDrawBlendMode(DX_BLENDMODE_MULA, blend);
 	DrawBox(0, 0, WINDOW_X, WINDOW_Y, GetColor(0, 0, 0), true);
@@ -78,7 +88,7 @@ void Play::UpData(void)
 		}
 		else
 		{
-
+			cam->UpData();
 			pl->UpData();
 			if (pl->GetPos().x == 300)
 			{

@@ -106,6 +106,11 @@ bool Enemy::CheackHit(Positionf& pos1, Attack& a1, Positionf& pos2, Attack& a2)
 {
 	if (reverse == true)
 	{
+		/*if (abs((pos1.x + a1.rect.pos.x * 2) - (pos2.x + a2.rect.pos.x * 2)) < (a1.rect.GetWidth() * 2 + a2.rect.GetWidth() * 2) / 2
+			&& abs((pos1.y + a1.rect.pos.y * 2) - (pos2.y + a2.rect.pos.y * 2)) < (a1.rect.GetHeight() * 2 + a2.rect.GetHeight() * 2) / 2)
+		{
+			return true;
+		}*/
 		if (abs((pos1.x + a1.rect.pos.x) - (pos2.x + a2.rect.pos.x)) < (a1.rect.GetWidth() + a2.rect.GetWidth())
 			&& abs((pos1.y + a1.rect.pos.y) - (pos2.y + a2.rect.pos.y)) < (a1.rect.GetHeight() + a2.rect.GetHeight()))
 		{
@@ -114,6 +119,11 @@ bool Enemy::CheackHit(Positionf& pos1, Attack& a1, Positionf& pos2, Attack& a2)
 	}
 	else
 	{
+		/*if (abs((pos1.x - a1.rect.pos.x * 2) - (pos2.x - a2.rect.pos.x * 2)) < (a1.rect.GetWidth() * 2 + a2.rect.GetWidth() * 2) / 2
+			&& abs((pos1.y + a1.rect.pos.y * 2) - (pos2.y + a2.rect.pos.y * 2)) < (a1.rect.GetHeight() * 2 + a2.rect.GetHeight() * 2) / 2)
+		{
+			return true;
+		}*/
 		if (abs((pos1.x - a1.rect.pos.x) - (pos2.x - a2.rect.pos.x)) < (a1.rect.GetWidth() + a2.rect.GetWidth())
 			&& abs((pos1.y + a1.rect.pos.y) - (pos2.y + a2.rect.pos.y)) < (a1.rect.GetHeight() + a2.rect.GetHeight()))
 		{

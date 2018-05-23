@@ -34,7 +34,7 @@ Continue::~Continue()
 void Continue::Draw(void)
 {
 	DrawRectGraph(300, 150, 
-		(COUNT_SIZE_X * ((flam++ / time) % 5)),
+		(COUNT_SIZE_X * ((flam++ / time) % COUNT_X)),
 		(COUNT_SIZE_Y * ((flam++ / (time * COUNT_X)) % CONUT_Y)),
 		COUNT_SIZE_X, COUNT_SIZE_Y, image, true);
 }

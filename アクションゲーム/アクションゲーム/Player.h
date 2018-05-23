@@ -1,6 +1,7 @@
 #pragma once
 #include "Typedef.h"
 #include "Input.h"
+#include "Camera.h"
 #include <vector>
 #include <map>
 #include <memory>
@@ -12,7 +13,7 @@ class Player
 	friend Game;
 public:
 	// コンストラクタ
-	Player(std::weak_ptr<Input>in);
+	Player(std::weak_ptr<Input>in, std::weak_ptr<Camera>cam);
 	// デストラクタ
 	virtual ~Player();
 
@@ -78,6 +79,9 @@ private:
 
 	// インプットクラス
 	std::weak_ptr<Input>in;
+
+	// カメラクラス
+	std::weak_ptr<Camera>cam;
 
 	// 画像データ
 	int image;
