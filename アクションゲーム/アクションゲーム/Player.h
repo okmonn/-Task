@@ -32,6 +32,7 @@ public:
 
 	// 座標の取得
 	Positionf GetPos(void);
+	Positionf GetCamPos(void);
 	// 座標のセット
 	void SetPos(Positionf pos);
 	void SetPos(float y);
@@ -133,5 +134,8 @@ private:
 
 	// 矩形サイズ
 	int attackSize;
+
+	// 修正座標
+	Positionf camPos;
 };
 

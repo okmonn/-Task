@@ -54,6 +54,9 @@ Player::Player(std::weak_ptr<Input>in, std::weak_ptr<Camera>cam) : in(in), cam(c
 	//矩形のサイズ
 	attackSize = 2;
 
+	//修正座標
+	camPos = { 0,0 };
+
 
 	Load();
 }
@@ -165,17 +168,17 @@ void Player::Draw(void)
 	auto left = cam.lock()->GetViewSize().GetLeft();
 	pos.x = min(max(pos.x, left), right);
 
-	auto tmp = cam.lock()->CorrectionPos(pos);
+	camPos = cam.lock()->CorrectionPos(pos);
 
-	DrawRectRotaGraph2((int)tmp.x, (int)tmp.y,
+	DrawRectRotaGraph2((int)camPos.x, (int)camPos.y,
 		cut[mode][index].rect.GetLeft(), cut[mode][index].rect.GetTop(),
 		cut[mode][index].rect.GetWidth(), cut[mode][index].rect.GetHeight(),
 		center.x, center.y,
 		(float)attackSize, 0.0f, image, true, reverse);
 
 #ifdef _DEBUG
-	DrawFormatString(10, 10, GetColor(255, 255, 255), "%d", (int)tmp.x);
-	DrawFormatString(50, 10, GetColor(255, 255, 255), "%d", (int)tmp.y);
+	DrawFormatString(10, 10, GetColor(255, 255, 255), "%d", (int)camPos.x);
+	DrawFormatString(50, 10, GetColor(255, 255, 255), "%d", (int)camPos.y);
 	DrawPixel((int)pos.x, (int)pos.y, GetColor(255, 255, 255));
 	DrawFormatString(150, 10, GetColor(255, 255, 255), "%s", mode.c_str());
 	
@@ -197,18 +200,18 @@ void Player::Draw(void)
 
 		if (reverse == false)
 		{
-			DrawBox((int)pos.x + (attack[mode][index][i].rect.GetLeft() * attackSize),
-				(int)pos.y + (attack[mode][index][i].rect.GetTop() * attackSize),
-				(int)pos.x + (attack[mode][index][i].rect.GetLeft() + attack[mode][index][i].rect.GetWidth()) * attackSize,
-				(int)pos.y + (attack[mode][index][i].rect.GetTop() + attack[mode][index][i].rect.GetHeight()) * attackSize,
+			DrawBox((int)camPos.x + (attack[mode][index][i].rect.GetLeft() * attackSize),
+				(int)camPos.y + (attack[mode][index][i].rect.GetTop() * attackSize),
+				(int)camPos.x + (attack[mode][index][i].rect.GetLeft() + attack[mode][index][i].rect.GetWidth()) * attackSize,
+				(int)camPos.y + (attack[mode][index][i].rect.GetTop() + attack[mode][index][i].rect.GetHeight()) * attackSize,
 				color, false);
 		}
 		else
 		{
-			DrawBox((int)pos.x - (attack[mode][index][i].rect.GetLeft() * attackSize),
-				(int)pos.y + (attack[mode][index][i].rect.GetTop() * attackSize),
-				(int)pos.x - (attack[mode][index][i].rect.GetLeft() + attack[mode][index][i].rect.GetWidth()) * attackSize,
-				(int)pos.y + (attack[mode][index][i].rect.GetTop() + attack[mode][index][i].rect.GetHeight()) * attackSize,
+			DrawBox((int)camPos.x - (attack[mode][index][i].rect.GetLeft() * attackSize),
+				(int)camPos.y + (attack[mode][index][i].rect.GetTop() * attackSize),
+				(int)camPos.x - (attack[mode][index][i].rect.GetLeft() + attack[mode][index][i].rect.GetWidth()) * attackSize,
+				(int)camPos.y + (attack[mode][index][i].rect.GetTop() + attack[mode][index][i].rect.GetHeight()) * attackSize,
 				color, false);
 		}
 	}
@@ -499,6 +502,12 @@ std::string Player::GetMode(void)
 Positionf Player::GetPos(void)
 {
 	return pos;
+}
+
+// 座標の取得
+Positionf Player::GetCamPos(void)
+{
+	return camPos;
 }
 
 // 座標のセット
