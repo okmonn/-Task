@@ -234,7 +234,7 @@ void Player::Wait(void)
 	}
 
 	//ジャンプ
-	if (in.lock()->CheckTrigger(PAD_INPUT_A))
+	if (in.lock()->CheckTrigger(PAD_INPUT_A) && camPos.x - 1 > 0)
 	{
 		SetMode("Jump", reverse);
 		func = &Player::Jump;
@@ -277,7 +277,11 @@ void Player::Walk(void)
 		{
 			reverse = true;
 		}
-		pos.x += -speed;
+
+		if (camPos.x - 1 > 0)
+		{
+			pos.x += -speed;
+		}
 	}
 	else
 	{
@@ -304,8 +308,10 @@ void Player::Jump(void)
 	{
 		fly = true;
 	}
+
 	pos += vel;
 	vel.y += g;
+	
 
 	//しゃがみ
 	if (in.lock()->CheckTrigger(PAD_INPUT_DOWN))
@@ -357,7 +363,10 @@ void Player::Kick(void)
 // スライディングの処理
 void Player::Sliding(void)
 {
-	pos.x += reverse == false ? 3.0f : -3.0f;
+	if (camPos.x - 1 > 0)
+	{
+		pos.x += reverse == false ? 3.0f : -3.0f;
+	}
 }
 
 // しゃがみの処理

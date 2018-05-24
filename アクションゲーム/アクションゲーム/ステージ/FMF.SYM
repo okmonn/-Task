@@ -1,0 +1,11 @@
+#include "typedef.h"
+
+
+$BYTE identifier[4];// ファイル識別子 'FMF_' (0x5F464D46)
+$DWORD size;//ヘッダをのぞいたデータサイズ
+$DWORD mapWidth;//マップの横幅
+$DWORD mapHeight;//マップの縦幅
+$BYTE chipWidth;//パーツの横幅
+$BYTE chipHeight;//パーツの縦幅
+$BYTE layercount;//レイヤー数
+$BYTE bitCount;//レイヤーデータのビットカウント(8/16)

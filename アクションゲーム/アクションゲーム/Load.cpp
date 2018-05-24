@@ -11,6 +11,8 @@ Load::Load()
 	data.clear();
 	cut.clear();
 	attack.clear();
+	st.clear();
+	eData.clear();
 }
 
 // デストラクタ
@@ -47,6 +49,7 @@ bool Load::LoadAct(std::string fileName)
 		if (fileName == itr->first)
 		{
 			return true;
+			break;
 		}
 	}
 
@@ -102,6 +105,51 @@ bool Load::LoadAct(std::string fileName)
 	return true;
 }
 
+// 読み込み
+bool Load::LoadMap(std::string fileName)
+{
+	FILE* file;
+
+	for (auto itr = st.begin(); itr != st.end(); ++itr)
+	{
+		if (fileName == itr->first)
+		{
+			return true;
+			break;
+		}
+	}
+	
+	//ファイル開らく
+	if ((fopen_s(&file, fileName.c_str(), "rb")) != 0)
+	{
+		return false;
+	}
+
+	fread(&st[fileName], sizeof(st[fileName]), 1, file);
+
+	std::vector<UCHAR>dummy;
+	dummy.resize(st[fileName].mapHeight * st[fileName].mapWidth);
+
+	eData[fileName].resize(st[fileName].mapHeight * st[fileName].mapWidth);
+
+	for (UINT i = 0; i < eData[fileName].size(); ++i)
+	{
+		fread(&dummy[i], sizeof(UCHAR), 1, file);
+	}
+
+	fclose(file);
+
+	for (UINT i = 0; i < st[fileName].mapHeight; ++i)
+	{
+		for (UINT j = 0; j < st[fileName].mapWidth; ++j)
+		{
+			eData[fileName][j * st[fileName].mapHeight + i] = dummy[i * st[fileName].mapWidth + j];
+		}
+	}
+
+	return true;
+}
+
 // ヘッダーの取得
 ImageHeader Load::GetHeader(std::string m)
 {
@@ -135,4 +183,20 @@ UINT Load::GetImageDataSize(std::string m)
 UINT Load::GetCutDataSize(std::string m)
 {
 	return cut[m].size();
+}
+
+// ステージヘッダーの取得
+StageHeader Load::GetStageHeader(std::string fileName)
+{
+	return st[fileName];
+}
+
+std::vector<UCHAR> Load::GetEnemyData(std::string p,int min, int max)
+{
+	int index = min / 64;
+	int indey = max / 64;
+
+	auto it = eData[p].begin() + index * st[p].mapWidth;
+	auto ir = eData[p].begin() + indey * st[p].mapHeight;
+	return std::vector<UCHAR>(it, ir);
 }

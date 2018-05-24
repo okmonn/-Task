@@ -1,5 +1,6 @@
 #pragma once
 #include "Typedef.h"
+
 class Stage
 {
 public:
@@ -7,6 +8,9 @@ public:
 	Stage();
 	// デストラクタ
 	virtual ~Stage();
+	
+	// 読み込み
+	void Load(std::string fileName);
 
 	// 処理
 	void UpData(void);
@@ -17,5 +21,8 @@ public:
 private:
 	// ステージの全体サイズ
 	Rect rect;
+
+	// ステージデータ
+	StageHeader data;
 };
 

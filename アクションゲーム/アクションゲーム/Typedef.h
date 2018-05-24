@@ -126,6 +126,12 @@ struct Rect
 		return size.height;
 	}
 
+	//サイズの取得
+	Size GetSize(void)
+	{
+		return size;
+	}
+
 	//描画
 	void Draw(unsigned int color = 0xffffffff)
 	{
@@ -186,4 +192,25 @@ struct Attack
 {
 	RectType type;
 	Rect rect;
+};
+
+//ステージデータ
+struct StageHeader
+{
+	//ID
+	char id[4];
+	//データサイズ
+	UINT size;
+	//マップの横幅
+	UINT mapWidth;
+	//マップの縦幅
+	UINT mapHeight;
+	//パーツの横幅
+	UCHAR chipWidth;
+	//パーツの縦幅
+	UCHAR chipHeight;
+	//レイヤーサイズ
+	UCHAR layerCnt;
+	//レイヤーデータのビット数
+	UCHAR bitCnt;
 };

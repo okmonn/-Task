@@ -34,8 +34,10 @@ Rect & Camera::GetViewSize(void)
 // •`‰æ
 void Camera::Draw(void)
 {
-	DrawFormatString(620, 50, GetColor(0, 255, 0), "%d", (int)pos.x);
+#ifdef _DEBUG
+	DrawFormatString(600, 50, GetColor(0, 255, 0), "%d", (int)pos.x);
 	DrawFormatString(650, 50, GetColor(0, 255, 0), "%d", (int)pos.y);
+#endif
 }
 
 // ˆ—
@@ -53,6 +55,11 @@ void Camera::UpData(void)
 	else if (pos.x + WINDOW_X / 2 > range.GetRight()) 
 	{
 		pos.x = (float)(range.GetRight() - WINDOW_X / 2);
+	}
+
+	if (pos.x < 0)
+	{
+		pos.x = 0;
 	}
 }
 

@@ -23,6 +23,7 @@ public:
 
 	// 読み込み
 	bool LoadAct(std::string fileName);
+	bool LoadMap(std::string fileName);
 
 	// ヘッダーの取得
 	ImageHeader GetHeader(std::string m);
@@ -37,6 +38,11 @@ public:
 	UINT GetImageDataSize(std::string m);
 	// 分割データのサイズの取得
 	UINT GetCutDataSize(std::string m);
+
+	// ステージヘッダーの取得
+	StageHeader GetStageHeader(std::string fileName);
+
+	std::vector<UCHAR>GetEnemyData(std::string p,int min, int max);
 
 private:
 	// コンストラクタ
@@ -53,4 +59,10 @@ private:
 	std::map<std::string, std::map<std::string, std::vector<CutData>>>cut;
 	// 攻撃短形データ
 	std::map<std::string, std::map<std::string, std::map<int, std::vector<Attack>>>>attack;
+
+	// ステージヘッダー
+	std::map<std::string, StageHeader>st;
+
+	// ステージの敵データ
+	std::map<std::string, std::vector<UCHAR>>eData;
 };
