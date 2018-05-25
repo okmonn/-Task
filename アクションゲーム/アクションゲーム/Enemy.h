@@ -19,6 +19,8 @@ public:
 
 	// ‚ ‚½‚è”»’è
 	bool CheackHit(Positionf& pos1, Attack& a1, Positionf& pos2, Attack& a2);
+	// ‚ ‚½‚è”»’è
+	bool CheackHit(Positionf& pos1, Positionf& pos2, Positionf& pos3, Positionf& pos4);
 
 	// ’†S“_‚Ìİ’è
 	void SetSenter(Position & pos, bool r);

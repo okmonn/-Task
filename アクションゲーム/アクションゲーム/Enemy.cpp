@@ -133,6 +133,20 @@ bool Enemy::CheackHit(Positionf& pos1, Attack& a1, Positionf& pos2, Attack& a2)
 	return false;
 }
 
+// Ç†ÇΩÇËîªíË
+bool Enemy::CheackHit(Positionf & pos1, Positionf & pos2, Positionf & pos3, Positionf & pos4)
+{
+	if (pos1.x <= pos4.x
+		&& pos2.x >= pos3.x
+		&& pos1.y <= pos4.y
+		&& pos2.y >= pos3.y)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 // íÜêSì_ÇÃê›íË
 void Enemy::SetSenter(Position & pos, bool r)
 {

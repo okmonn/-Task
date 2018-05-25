@@ -1,8 +1,7 @@
 #include "Stage.h"
 #include "Load.h"
 
-//1チップ 64x64サイズ
-
+// チップサイズ
 #define CHIP_SIZE 64
 
 const char* path = "ステージ/stage1.fmf";
@@ -28,7 +27,10 @@ void Stage::Load(std::string fileName)
 	data.chipWidth *= 2;
 
 	//ステージサイズ
-	rect = Rect(0, 0, data.mapWidth * CHIP_SIZE, data.mapHeight * CHIP_SIZE);
+	rect = Rect(0, 0, (data.mapWidth * CHIP_SIZE) * 2, (data.mapHeight * CHIP_SIZE));
+
+	//ステージの敵データ
+	eData = Load::GetInstance()->GetEnemyData(fileName);
 }
 
 // 処理

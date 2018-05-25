@@ -225,12 +225,20 @@ void Deadman::Walk(void)
 				if (at.type == RectType::attack && attack[mode][index][j].type == RectType::damage
 					&& pl.lock()->GetMode() == "Punch")
 				{
-					SetMode("Die", reverse);
+					if (reverse == true && pl.lock()->GetReverse() == false
+						|| reverse == false && pl.lock()->GetReverse() == true)
+					{
+						SetMode("Die", reverse);
+					}
 				}
 				else if (at.type == RectType::attack && attack[mode][index][j].type == RectType::damage
 					&& pl.lock()->GetMode() != "Punch")
 				{
-					SetMode("Die2", reverse);
+					if (reverse == true && pl.lock()->GetReverse() == false
+						|| reverse == false && pl.lock()->GetReverse() == true)
+					{
+						SetMode("Die2", reverse);
+					}
 				}
 				else if (at.type == RectType::damage && attack[mode][index][j].type == RectType::attack)
 				{

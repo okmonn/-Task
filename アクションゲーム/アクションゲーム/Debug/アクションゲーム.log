@@ -1,5 +1,2 @@
-﻿  Load.cpp
-c:\users\1601271\documents\github\-task\アクションゲーム\アクションゲーム\load.cpp(135): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-c:\users\1601271\documents\github\-task\アクションゲーム\アクションゲーム\load.cpp(142): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
-c:\users\1601271\documents\github\-task\アクションゲーム\アクションゲーム\load.cpp(144): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+﻿  Deadman.cpp
   アクションゲーム.vcxproj -> C:\Users\1601271\Documents\GitHub\-Task\アクションゲーム\Debug\アクションゲーム.exe

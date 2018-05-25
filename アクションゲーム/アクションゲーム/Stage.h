@@ -1,5 +1,6 @@
 #pragma once
 #include "Typedef.h"
+#include <vector>
 
 class Stage
 {
@@ -24,5 +25,8 @@ private:
 
 	// ステージデータ
 	StageHeader data;
+
+	// ステージの敵データ
+	std::vector<UCHAR>eData;
 };
 
