@@ -141,6 +141,7 @@
     <ClCompile Include="Scene\Play.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\Title.cpp" />
+    <ClCompile Include="Spear.cpp" />
     <ClCompile Include="Stage.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +163,7 @@
     <ClInclude Include="Scene\Play.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\Title.h" />
+    <ClInclude Include="Spear.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Typedef.h" />
   </ItemGroup>

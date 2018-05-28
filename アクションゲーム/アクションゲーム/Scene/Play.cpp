@@ -5,6 +5,8 @@
 #include "../Typedef.h"
 #include "DxLib.h"
 
+#define CHIP_SIZE 64
+
 // コンストラクタ
 Play::Play(std::weak_ptr<Input>in)
 {
@@ -47,11 +49,6 @@ void Play::Create(void)
 	//UIクラス
 	ui = std::make_shared<Interface>(pl);
 
-	//敵クラス
-	e_list.push_back(EnemyMane::GetInstance()->CreateDeadman(300, 330, pl, cam));
-
-	e_list.push_back(EnemyMane::GetInstance()->CreateBat(500, 100, pl, cam));
-
 	//地面クラス
 	ground = std::make_shared<Ground>(pl);
 
@@ -88,15 +85,6 @@ void Play::UpData(void)
 		else
 		{
 			back->UpData();
-		
-			if (pl->GetPos().x == 300)
-			{
-				if (e_list.size() < 10)
-				{
-					e_list.push_back(EnemyMane::GetInstance()->CreateDeadman(50, 330, pl, cam));
-				}
-			}
-
 			for (auto itr = e_list.begin(); itr != e_list.end();)
 			{
 				(*itr)->UpData();
@@ -112,6 +100,26 @@ void Play::UpData(void)
 			pl->UpData();
 			cam->UpData();
 			ground->UpData();
+			int y = 0;
+			static int x = 0;
+			for (auto& e : st->GetEnemyData((int)(cam->GetPos().x), (int)((cam->GetPos().x + WINDOW_X / 2 + CHIP_SIZE * 3))))
+			{
+				if (e == 1)
+				{
+					e_list.push_back(EnemyMane::GetInstance()->CreateDeadman((float)(x * CHIP_SIZE), (float)(y * CHIP_SIZE), pl, cam));
+				}
+				else if (e == 2)
+				{
+					e_list.push_back(EnemyMane::GetInstance()->CreateBat((float)(x * CHIP_SIZE), (float)(y * CHIP_SIZE), pl, cam));
+				}
+				++y;
+				if (y >= st->GetStageRange().GetHeight() / CHIP_SIZE)
+				{
+					++x;
+					y = 0;
+				}
+			}
+
 		}
 	}
 }

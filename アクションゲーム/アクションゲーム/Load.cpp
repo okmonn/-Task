@@ -192,17 +192,6 @@ StageHeader Load::GetStageHeader(std::string fileName)
 }
 
 // ステージの敵データの取得
-std::vector<UCHAR> Load::GetEnemyData(std::string fileName,int min, int max)
-{
-	int index = min / 64;
-	int indey = max / 64;
-
-	auto it = eData[fileName].begin() + index * st[fileName].mapWidth;
-	auto ir = eData[fileName].begin() + indey * st[fileName].mapHeight;
-	return std::vector<UCHAR>(it, ir);
-}
-
-// ステージの敵データの取得
 std::vector<UCHAR> Load::GetEnemyData(std::string fileName)
 {
 	return eData[fileName];

@@ -19,6 +19,10 @@ public:
 	// ステージサイズの取得
 	Rect& GetStageRange(void);
 
+	// ステージの敵の取得
+	std::vector<UCHAR>GetEnemyData(int minx, int max);
+	std::vector<UCHAR>GetEnemyData(void);
+
 private:
 	// ステージの全体サイズ
 	Rect rect;
@@ -28,5 +32,8 @@ private:
 
 	// ステージの敵データ
 	std::vector<UCHAR>eData;
+
+	// 読み込み
+	int readX;
 };
 

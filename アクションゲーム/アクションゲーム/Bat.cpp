@@ -31,6 +31,7 @@ void Bat::SetMode(std::string m, bool r)
 // •`‰æ
 void Bat::Draw(void)
 {
+	DrawFormatString(500, 100, GetColor(255, 0, 0), "%d", (int)pos.y);
 	if (data[mode].loop)
 	{
 		++flam;
@@ -194,8 +195,12 @@ void Bat::Fly(void)
 			{
 				if (at.type == RectType::attack && attack[mode][index][j].type == RectType::damage)
 				{
-					SetMode("Damage", reverse);
-					func = &Bat::Damage;
+					if (reverse == true && pl.lock()->GetReverse() == false
+						|| reverse == false && pl.lock()->GetReverse() == true)
+					{
+						SetMode("Damage", reverse);
+						func = &Bat::Damage;
+					}
 				}
 				else if (at.type == RectType::damage && attack[mode][index][j].type == RectType::attack)
 				{
@@ -219,6 +224,7 @@ void Bat::Damage(void)
 	if (pos.y < line)
 	{
 		pos.y += 3.0f;
+		pos.x += reverse == true ? 1.0f : -1.0f;
 	}
 	else
 	{

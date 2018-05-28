@@ -43,7 +43,6 @@ public:
 	StageHeader GetStageHeader(std::string fileName);
 
 	// ステージの敵データの取得
-	std::vector<UCHAR>GetEnemyData(std::string fileName,int min, int max);
 	std::vector<UCHAR>GetEnemyData(std::string fileName);
 
 private:

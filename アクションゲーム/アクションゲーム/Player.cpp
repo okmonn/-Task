@@ -13,7 +13,7 @@ Player::Player(std::weak_ptr<Input>in, std::weak_ptr<Camera>cam) : in(in), cam(c
 	flam = 0;
 
 	//À•W
-	pos = { 50, 330 };
+	pos = { 0, 330 };
 
 	//ó‘Ô
 	fmode.clear();
