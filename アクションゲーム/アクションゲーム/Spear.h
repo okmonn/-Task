@@ -26,5 +26,13 @@ private:
 
 	// カメラ
 	std::weak_ptr<Camera>cam;
+
+	Positionf camPos;
+
+	// 関数ポインタ
+	void(Spear::*func)();
+
+	// 攻撃の処理
+	void Attacker(void);
 };
 

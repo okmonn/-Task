@@ -6,6 +6,9 @@
 #define WINDOW_X 768
 #define WINDOW_Y 448
 
+// UIサイズ
+#define BAR_SIZE_Y  64
+
 // 二次元座標
 template<typename T>
 struct Vector2

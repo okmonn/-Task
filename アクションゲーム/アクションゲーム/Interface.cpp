@@ -2,8 +2,6 @@
 #include "Typedef.h"
 #include "DxLib.h"
 
-#define BAR_SIZE_Y  64
-
 
 // コンストラクタ
 Interface::Interface(std::weak_ptr<Player>pl) : pl(pl)

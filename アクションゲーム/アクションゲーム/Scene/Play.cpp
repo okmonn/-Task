@@ -4,6 +4,7 @@
 #include "Continue.h"
 #include "../Typedef.h"
 #include "DxLib.h"
+#include <iostream>
 
 #define CHIP_SIZE 64
 
@@ -106,11 +107,15 @@ void Play::UpData(void)
 			{
 				if (e == 1)
 				{
-					e_list.push_back(EnemyMane::GetInstance()->CreateDeadman((float)(x * CHIP_SIZE), (float)(y * CHIP_SIZE), pl, cam));
+					e_list.push_back(EnemyMane::GetInstance()->CreateDeadman((float)(x * CHIP_SIZE), (float)(y * CHIP_SIZE) + BAR_SIZE_Y + BAR_SIZE_Y / 2, pl, cam));
 				}
 				else if (e == 2)
 				{
-					e_list.push_back(EnemyMane::GetInstance()->CreateBat((float)(x * CHIP_SIZE), (float)(y * CHIP_SIZE), pl, cam));
+					e_list.push_back(EnemyMane::GetInstance()->CreateBat((float)(x * CHIP_SIZE), (float)(y * CHIP_SIZE) + BAR_SIZE_Y + BAR_SIZE_Y / 2, pl, cam));
+				}
+				else if (e == 3)
+				{
+					e_list.push_back(EnemyMane::GetInstance()->CreateSpear((float)(x * CHIP_SIZE), (float)(y * CHIP_SIZE), pl, cam));
 				}
 				++y;
 				if (y >= st->GetStageRange().GetHeight() / CHIP_SIZE)

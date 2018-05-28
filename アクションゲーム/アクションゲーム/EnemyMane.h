@@ -25,6 +25,8 @@ public:
 	std::shared_ptr<Enemy> CreateDeadman(float x, float y, std::shared_ptr<Player>pl, std::shared_ptr<Camera>cam);
 	// バッドの生成
 	std::shared_ptr<Enemy> CreateBat(float x, float y, std::shared_ptr<Player>pl, std::shared_ptr<Camera>acm);
+	// 槍の生成
+	std::shared_ptr<Enemy> CreateSpear(float x, float y, std::shared_ptr<Player>pl, std::shared_ptr<Camera>cam);
 private:
 	// コンストラクタ
 	EnemyMane();
