@@ -1,5 +1,6 @@
 #include "EventMane.h"
 #include "Block.h"
+#include "Ladder.h"
 #include "Typedef.h"
 
 EventMane* EventMane::instance = nullptr;
@@ -40,4 +41,13 @@ std::shared_ptr<Event> EventMane::CreateBlock(float x, float y, std::shared_ptr<
 	std::shared_ptr<Block>bl;
 	bl = std::make_shared<Block>(pos, pl, cam);
 	return bl;
+}
+
+// ’òq‚Ì¶¬
+std::shared_ptr<Event> EventMane::CreateLadder(float x, float y, std::shared_ptr<Player> pl, std::shared_ptr<Camera> cam)
+{
+	Positionf pos = { x, y };
+	std::shared_ptr<Ladder>la;
+	la = std::make_shared<Ladder>(pos, pl, cam);
+	return la;
 }

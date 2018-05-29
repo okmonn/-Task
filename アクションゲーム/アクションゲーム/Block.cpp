@@ -107,7 +107,7 @@ void Block::UpData(void)
 		{
 			if (CheackHit2(camPos, attack[mode][index][j], tmp, at) == true)
 			{
-				if (pl.lock()->GetMode() == "Jump" && pl.lock()->GetBlock() == false)
+				/*if (pl.lock()->GetMode() == "Jump" && pl.lock()->GetBlock() == false)
 				{
 					pl.lock()->SetBlock(true);
 					pl.lock()->SetMode("Wait", pl.lock()->GetReverse());
@@ -120,7 +120,7 @@ void Block::UpData(void)
 				else if (pl.lock()->GetMode() == "Damage" && pl.lock()->GetBlock() == false)
 				{
 					pl.lock()->SetDamagePW(0.0f);
-				}
+				}*/
 			}
 			else
 			{

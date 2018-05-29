@@ -21,6 +21,8 @@ public:
 
 	// ブロックの生成
 	std::shared_ptr<Event> CreateBlock(float x, float y, std::shared_ptr<Player>pl, std::shared_ptr<Camera>cam);
+	// 梯子の生成
+	std::shared_ptr<Event> CreateLadder(float x, float y, std::shared_ptr<Player>pl, std::shared_ptr<Camera>cam);
 
 private:
 	// コンストラクタ

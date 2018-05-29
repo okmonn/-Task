@@ -135,6 +135,7 @@
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Interface.cpp" />
+    <ClCompile Include="Ladder.cpp" />
     <ClCompile Include="Load.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Interface.h" />
+    <ClInclude Include="Ladder.h" />
     <ClInclude Include="Load.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="Player.h" />

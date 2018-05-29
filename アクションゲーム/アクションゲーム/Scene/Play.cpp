@@ -60,16 +60,16 @@ void Play::Create(void)
 void Play::Draw(void)
 {
 	back->Draw();
-	ui->Draw();
 	for (auto itr = list.begin(); itr != list.end(); ++itr)
 	{
 		(*itr)->Draw();
 	}
-	pl->Draw();
+	ui->Draw();
 	for (auto itr = e_list.begin(); itr != e_list.end(); ++itr)
 	{
 		(*itr)->Draw();
 	}
+	pl->Draw();
 	ground->Draw();
 	cam->Draw();
 	
@@ -138,7 +138,11 @@ void Play::UpData(void)
 			static int ex = 0;
 			for (auto& e : st->GetEventData((int)(cam->GetPos().x), (int)((cam->GetPos().x + WINDOW_X / 2 + CHIP_SIZE * 3))))
 			{
-				if (e == 2)
+				if (e == 1)
+				{
+					list.push_back(EventMane::GetInstance()->CreateLadder((float)(ex * CHIP_SIZE), (float)(y * CHIP_SIZE) - 460, pl, cam));
+				}
+				else if (e == 2)
 				{
 					list.push_back(EventMane::GetInstance()->CreateBlock((float)(ex * CHIP_SIZE), (float)(y * CHIP_SIZE) + BAR_SIZE_Y + BAR_SIZE_Y / 2, pl, cam));
 				}
