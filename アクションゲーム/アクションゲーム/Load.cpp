@@ -13,6 +13,7 @@ Load::Load()
 	attack.clear();
 	st.clear();
 	eData.clear();
+	evData.clear();
 }
 
 // デストラクタ
@@ -137,6 +138,16 @@ bool Load::LoadMap(std::string fileName)
 		fread(&dummy[i], sizeof(UCHAR), 1, file);
 	}
 
+	std::vector<UCHAR>edummy;
+	edummy.resize(st[fileName].mapHeight * st[fileName].mapWidth);
+
+	evData[fileName].resize(st[fileName].mapHeight * st[fileName].mapWidth);
+
+	for (UINT i = 0; i < evData[fileName].size(); ++i)
+	{
+		fread(&edummy[i], sizeof(UCHAR), 1, file);
+	}
+
 	fclose(file);
 
 	for (UINT i = 0; i < st[fileName].mapHeight; ++i)
@@ -144,6 +155,7 @@ bool Load::LoadMap(std::string fileName)
 		for (UINT j = 0; j < st[fileName].mapWidth; ++j)
 		{
 			eData[fileName][j * st[fileName].mapHeight + i] = dummy[i * st[fileName].mapWidth + j];
+			evData[fileName][j * st[fileName].mapHeight + i] = edummy[i * st[fileName].mapWidth + j];
 		}
 	}
 
@@ -195,4 +207,10 @@ StageHeader Load::GetStageHeader(std::string fileName)
 std::vector<UCHAR> Load::GetEnemyData(std::string fileName)
 {
 	return eData[fileName];
+}
+
+// ステージのイベントデータの取得
+std::vector<UCHAR> Load::GetEventData(std::string fileName)
+{
+	return evData[fileName];
 }

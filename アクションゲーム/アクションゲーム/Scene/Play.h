@@ -5,6 +5,7 @@
 #include "../BackGround.h"
 #include "../Player.h"
 #include "../Interface.h"
+#include "../Event.h"
 #include "../Enemy.h"
 #include "../Ground.h"
 #include <list>
@@ -47,6 +48,9 @@ private:
 
 	// UIクラス
 	std::shared_ptr<Interface>ui;
+
+	// イベント
+	std::list<std::shared_ptr<Event>>list;
 
 	// 敵のリスト
 	std::list<std::shared_ptr<Enemy>>e_list;

@@ -11,6 +11,7 @@ Stage::Stage()
 {
 	Load(path);
 	readX = 0;
+	readY = 0;
 }
 
 // デストラクタ
@@ -32,6 +33,9 @@ void Stage::Load(std::string fileName)
 
 	//ステージの敵データ
 	eData = Load::GetInstance()->GetEnemyData(fileName);
+
+	//ステージのイベントデータ
+	evData = Load::GetInstance()->GetEventData(fileName);
 }
 
 // 処理
@@ -75,7 +79,31 @@ std::vector<UCHAR> Stage::GetEnemyData(int minx, int max)
 	return std::vector<UCHAR>(begin, end);
 }
 
-std::vector<UCHAR> Stage::GetEnemyData(void)
+std::vector<UCHAR> Stage::GetEventData(int minx, int max)
 {
-	return eData;
+	int left = max(minx / CHIP_SIZE, readY);
+	int right = max / CHIP_SIZE;
+	if (right <= readY)
+	{
+		return std::vector<UCHAR>();
+	}
+
+	auto index = left * data.mapHeight;
+	auto indey = right * data.mapHeight;
+
+	auto begin = evData.begin() + index;
+	auto itr = evData.end();
+	auto end = itr;
+
+	if (indey < evData.size())
+	{
+		end = evData.begin() + indey;
+		readY = right;
+	}
+	else
+	{
+		return std::vector<UCHAR>();
+	}
+
+	return std::vector<UCHAR>(begin, end);
 }

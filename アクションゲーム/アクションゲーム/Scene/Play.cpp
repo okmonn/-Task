@@ -1,4 +1,5 @@
 #include "Play.h"
+#include "../EventMane.h"
 #include "../EnemyMane.h"
 #include "Game.h"
 #include "Continue.h"
@@ -60,6 +61,10 @@ void Play::Draw(void)
 {
 	back->Draw();
 	ui->Draw();
+	for (auto itr = list.begin(); itr != list.end(); ++itr)
+	{
+		(*itr)->Draw();
+	}
 	pl->Draw();
 	for (auto itr = e_list.begin(); itr != e_list.end(); ++itr)
 	{
@@ -85,7 +90,6 @@ void Play::UpData(void)
 		}
 		else
 		{
-			back->UpData();
 			for (auto itr = e_list.begin(); itr != e_list.end();)
 			{
 				(*itr)->UpData();
@@ -98,8 +102,13 @@ void Play::UpData(void)
 					++itr;
 				}
 			}
+			for (auto itr = list.begin(); itr != list.end(); ++itr)
+			{
+				(*itr)->UpData();
+			}
 			pl->UpData();
 			cam->UpData();
+			back->UpData();
 			ground->UpData();
 			int y = 0;
 			static int x = 0;
@@ -125,6 +134,21 @@ void Play::UpData(void)
 				}
 			}
 
+			y = 0;
+			static int ex = 0;
+			for (auto& e : st->GetEventData((int)(cam->GetPos().x), (int)((cam->GetPos().x + WINDOW_X / 2 + CHIP_SIZE * 3))))
+			{
+				if (e == 2)
+				{
+					list.push_back(EventMane::GetInstance()->CreateBlock((float)(ex * CHIP_SIZE), (float)(y * CHIP_SIZE) + BAR_SIZE_Y + BAR_SIZE_Y / 2, pl, cam));
+				}
+				++y;
+				if (y >= st->GetStageRange().GetHeight() / CHIP_SIZE)
+				{
+					++ex;
+					y = 0;
+				}
+			}
 		}
 	}
 }

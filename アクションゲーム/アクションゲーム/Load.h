@@ -45,6 +45,9 @@ public:
 	// ステージの敵データの取得
 	std::vector<UCHAR>GetEnemyData(std::string fileName);
 
+	// ステージのイベントデータの取得
+	std::vector<UCHAR>GetEventData(std::string fileName);
+
 private:
 	// コンストラクタ
 	Load();
@@ -66,4 +69,7 @@ private:
 
 	// ステージの敵データ
 	std::map<std::string, std::vector<UCHAR>>eData;
+
+	// ステージのイベントデータ
+	std::map<std::string, std::vector<UCHAR>>evData;
 };

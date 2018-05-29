@@ -13,7 +13,7 @@ Player::Player(std::weak_ptr<Input>in, std::weak_ptr<Camera>cam) : in(in), cam(c
 	flam = 0;
 
 	//座標
-	pos = { 0, 330 };
+	pos = { -150, 330 };
 
 	//状態
 	fmode.clear();
@@ -57,6 +57,9 @@ Player::Player(std::weak_ptr<Input>in, std::weak_ptr<Camera>cam) : in(in), cam(c
 	//修正座標
 	camPos = { 0,0 };
 
+	bl = false;
+
+	d = 0;
 
 	Load();
 }
@@ -177,11 +180,14 @@ void Player::Draw(void)
 		(float)attackSize, 0.0f, image, true, reverse);
 
 #ifdef _DEBUG
-	DrawFormatString(10, 10, GetColor(255, 255, 255), "%d", (int)camPos.x);
+	DrawFormatString(10, 10, GetColor(255, 255, 255), "%d", (int)d);
 	DrawFormatString(50, 10, GetColor(255, 255, 255), "%d", (int)camPos.y);
 	DrawPixel((int)camPos.x, (int)camPos.y, GetColor(255, 255, 255));
 	DrawFormatString(150, 10, GetColor(255, 255, 255), "%s", mode.c_str());
-	
+	if (bl == true)
+	{
+		DrawString(200, 150, "ブロックに乗っている", GetColor(255, 0, 0), false);
+	}
 	for (unsigned int i = 0; i < attack[mode][index].size(); ++i)
 	{
 		UINT color = 0;
@@ -307,6 +313,7 @@ void Player::Jump(void)
 	if (fly == false)
 	{
 		fly = true;
+		bl = false;
 	}
 
 	pos += vel;
@@ -372,7 +379,7 @@ void Player::Sliding(void)
 // しゃがみの処理
 void Player::Down(void)
 {
-	if (!(in.lock()->CheckPress(PAD_INPUT_DOWN)) && pos.y >= line)
+	if (!(in.lock()->CheckPress(PAD_INPUT_DOWN)) && (pos.y >= line || bl == true))
 	{
 		SetMode("Wait", reverse);
 	}
@@ -402,12 +409,12 @@ void Player::Damage(void)
 	{
 		if (reverse == false)
 		{
-			pos.x -= 2.0f;
+			pos.x -= d;
 			
 		}
 		else
 		{
-			pos.x += 2.0f;
+			pos.x += d;
 		}
 	}
 }
@@ -417,7 +424,7 @@ void Player::UpData()
 {
 	if (mode != "Jump")
 	{
-		if (pos.y < line)
+		if (pos.y < line && bl == false)
 		{
 			pos.y += vel.y;
 			vel.y += g;
@@ -486,14 +493,14 @@ void Player::SetMode(std::string m, bool r)
 	loop = true;
 	if (reverse == false)
 	{
-		if (mode != "Crouch" && mode != "Kick" && mode != "Punch" && wait == false && fly == false)
+		if (mode != "Walk" && mode != "Crouch" && mode != "Kick" && mode != "Punch" && wait == false && fly == false)
 		{
 			vel = { 2.0f, -8.0f };
 		}
 	}
 	else
 	{
-		if (mode != "Crouch" && mode != "Kick" && mode != "Punch" && wait == false && fly == false)
+		if (mode != "Walk" && mode != "Crouch" && mode != "Kick" && mode != "Punch" && wait == false && fly == false)
 		{
 			vel = { -2.0f, -8.0f };
 		}
@@ -593,4 +600,24 @@ Positionf Player::GetAttackPos(USHORT num, bool flag)
 CutData Player::GetCut(void)
 {
 	return cut[mode][index];
+}
+
+void Player::SetBlock(bool b)
+{
+	bl = b;
+}
+
+bool Player::GetBlock(void)
+{
+	return bl;
+}
+
+void Player::SetVel(Vector2Df v)
+{
+	vel = v;
+}
+
+void Player::SetDamagePW(float pw)
+{
+	d = pw;
 }

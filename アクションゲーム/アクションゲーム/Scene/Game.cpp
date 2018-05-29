@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "DxLib.h"
 #include "../Load.h"
+#include "../EventMane.h"
 #include "../EnemyMane.h"
 #include "Title.h"
 
@@ -51,6 +52,9 @@ void Game::Create(void)
 {
 	//ロードクラス
 	Load::Create();
+
+	// イベント
+	EventMane::Create();
 
 	// 敵の管理クラス
 	EnemyMane::Create();

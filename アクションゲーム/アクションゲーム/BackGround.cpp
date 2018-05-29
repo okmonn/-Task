@@ -22,6 +22,12 @@ BackGround::~BackGround()
 	DeleteGraph(back);
 }
 
+// 座標のセット
+void BackGround::SetPos(Positionf pos)
+{
+	this->pos.x = pos.x;
+}
+
 // 描画
 void BackGround::Draw(void)
 {

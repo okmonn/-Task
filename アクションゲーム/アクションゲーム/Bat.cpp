@@ -144,8 +144,24 @@ void Bat::Wait(void)
 	}
 	if (abs(camPos.x - pl.lock()->GetCamPos().x) <= range)
 	{
-		SetMode("Fly", reverse);
-		func = &Bat::Fly;
+		if (camPos.x > pl.lock()->GetCamPos().x)
+		{
+			reverse = true;
+		}
+		else
+		{
+			reverse = false;
+		}
+
+		if (pos.y < pl.lock()->GetPos().y - pl.lock()->GetCut().rect.GetHeight())
+		{
+			pos.y += 4.0f;
+		}
+		else
+		{
+			SetMode("Fly", reverse);
+			func = &Bat::Fly;
+		}
 	}
 }
 
@@ -157,33 +173,17 @@ void Bat::Fly(void)
 		return;
 	}
 
-	if (pl.lock()->GetCamPos().x > camPos.x)
+	if (reverse == true)
 	{
-		if (reverse == true)
-		{
-			reverse = false;
-		}
-		pos.x += 1.0f;
+		pos.x -= 2.0f;
 	}
-	else if (pl.lock()->GetCamPos().x < camPos.x)
+	else
 	{
-		if (reverse == false)
-		{
-			reverse = true;
-		}
-		pos.x -= 1.0f;
+		pos.x += 2.0f;
 	}
 
-	if (pl.lock()->GetCamPos().y - pl.lock()->GetCut().rect.GetWidth() > camPos.y)
-	{
-		pos.y += 2.0f * sinf(3.14f * 2 / 270 * cnt);
-		cnt++;
-	}
-	else if (pl.lock()->GetCamPos().y - pl.lock()->GetCut().rect.GetWidth() < camPos.y)
-	{
-		pos.y -= 2.0f * sinf(3.14f * 2 / 270 * cnt);
-		cnt++;
-	}
+	pos.y += 2.0f * sinf(3.14f * 2 / 90 * cnt);
+	cnt++;
 
 	for (int i = 0; i < pl.lock()->GetAttackNum(); ++i)
 	{

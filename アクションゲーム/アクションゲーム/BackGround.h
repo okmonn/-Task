@@ -9,6 +9,9 @@ public:
 	// デストラクタ
 	virtual ~BackGround();
 
+	// 座標のセット
+	void SetPos(Positionf pos);
+
 	// 描画
 	void Draw(void);
 

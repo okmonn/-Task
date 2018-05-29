@@ -125,10 +125,13 @@
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Bat.cpp" />
+    <ClCompile Include="Block.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Deadman.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyMane.cpp" />
+    <ClCompile Include="Event.cpp" />
+    <ClCompile Include="EventMane.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Interface.cpp" />
@@ -147,10 +150,13 @@
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Bat.h" />
+    <ClInclude Include="Block.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Deadman.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyMane.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="EventMane.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Interface.h" />

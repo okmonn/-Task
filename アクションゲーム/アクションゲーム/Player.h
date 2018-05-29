@@ -52,6 +52,12 @@ public:
 	// •ªŠ„î•ñ‚Ìæ“¾
 	CutData GetCut(void);
 
+	void SetBlock(bool b);
+	bool GetBlock(void);
+
+	void SetVel(Vector2Df v);
+	void SetDamagePW(float pw);
+
 private:
 	// •¶š—ñ‚ÌŒŸõ
 	std::string FindString(const std::string path, const char find, int offset = 0, bool start = true);
@@ -137,5 +143,9 @@ private:
 
 	// C³À•W
 	Positionf camPos;
+
+	bool bl;
+
+	float d;
 };
 
