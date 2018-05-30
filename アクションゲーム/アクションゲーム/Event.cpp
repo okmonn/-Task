@@ -105,3 +105,13 @@ bool Event::CheackHit2(Positionf & pos1, Attack & a1, Positionf & pos2, Attack &
 
 	return false;
 }
+
+Positionf Event::GetCamPos(void)
+{
+	return camPos;
+}
+
+CutData Event::GetCut(void)
+{
+	return cut[mode][index];
+}

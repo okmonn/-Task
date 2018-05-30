@@ -22,6 +22,9 @@ public:
 	// ‚ ‚½‚è”»’è
 	bool CheackHit2(Positionf& pos1, Attack& a1, Positionf& pos2, Attack& a2);
 
+	Positionf GetCamPos(void);
+	CutData GetCut(void);
+
 	// •`‰æ
 	virtual void Draw(void) = 0;
 
