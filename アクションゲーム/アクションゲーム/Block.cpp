@@ -11,6 +11,7 @@ Block::Block(Positionf pos, std::shared_ptr<Player>pl, std::shared_ptr<Camera>ca
 	Load(path);
 	mode = "Block";
 	flag = false;
+	enter = false;
 }
 
 // デストラクタ
@@ -65,6 +66,7 @@ void Block::Draw(void)
 		(float)attackSize, 0.0f, image, true, false);
 
 #ifdef _DEBUG
+	DrawFormatString(250,100,GetColor(255,0,0),"%d", (int)enter);
 	DrawPixel((int)camPos.x, (int)camPos.y, GetColor(255, 255, 255));
 	for (unsigned int i = 0; i < attack[mode][index].size(); ++i)
 	{
@@ -107,27 +109,55 @@ void Block::UpData(void)
 		{
 			if (CheackHit2(camPos, attack[mode][index][j], tmp, at) == true)
 			{
-				/*if (pl.lock()->GetMode() == "Jump" && pl.lock()->GetBlock() == false)
+				enter = true;
+				if (pl.lock()->GetBlock() == true)
+				{
+					if (pl.lock()->GetCamPos().x + pl.lock()->GetCut().rect.GetWidth() > camPos.x - cut[mode][index].rect.GetWidth() / 2
+						&& pl.lock()->GetCamPos().x - pl.lock()->GetCut().rect.GetWidth() < camPos.x
+						&& pl.lock()->GetPos().y >= pos.y)
+					{
+						float offset = abs((pl.lock()->GetCamPos().x + pl.lock()->GetCut().rect.GetWidth()) - (camPos.x - cut[mode][index].rect.GetWidth() / 2));
+						Positionf set = pl.lock()->GetPos();
+						set.x -= offset;
+						pl.lock()->SetPos(set);
+						pl.lock()->SetDamagePW(0.0f);
+					}
+					else if (pl.lock()->GetCamPos().x - pl.lock()->GetCut().rect.GetWidth() < camPos.x + cut[mode][index].rect.GetWidth() / 2
+						&& pl.lock()->GetCamPos().x + pl.lock()->GetCut().rect.GetWidth() > camPos.x
+						&& pl.lock()->GetPos().y >= pos.y)
+					{
+						float offset = abs((pl.lock()->GetCamPos().x - pl.lock()->GetCut().rect.GetWidth()) - (camPos.x + cut[mode][index].rect.GetWidth() / 2));
+						Positionf set = pl.lock()->GetPos();
+						set.x += offset;
+						pl.lock()->SetPos(set);
+						pl.lock()->SetDamagePW(0.0f);
+					}
+				}
+				else
 				{
 					pl.lock()->SetBlock(true);
-					pl.lock()->SetMode("Wait", pl.lock()->GetReverse());
+					if (pl.lock()->GetMode() == "Jump")
+					{
+						pl.lock()->SetMode("Ground", pl.lock()->GetReverse());
+					}
 				}
-				else if ((pl.lock()->GetMode() == "Walk" || pl.lock()->GetMode() == "Wait") && pl.lock()->GetBlock() == false)
-				{
-					pl.lock()->SetDamagePW(2.0f);
-					pl.lock()->SetMode("Wait", pl.lock()->GetReverse());
-				}
-				else if (pl.lock()->GetMode() == "Damage" && pl.lock()->GetBlock() == false)
-				{
-					pl.lock()->SetDamagePW(0.0f);
-				}*/
 			}
 			else
 			{
-				if (pl.lock()->GetMode() == "Walk" || pl.lock()->GetMode() == "Damage")
+				if (enter == true)
 				{
 					pl.lock()->SetBlock(false);
 					pl.lock()->SetDamagePW(2.0f);
+					enter = false;
+				}
+				else
+				{
+					if ((pl.lock()->GetCamPos().x + 10.0f + pl.lock()->GetCut().rect.GetWidth() >= camPos.x - cut[mode][index].rect.GetWidth() / 2
+						|| pl.lock()->GetCamPos().x - 10.0f - pl.lock()->GetCut().rect.GetWidth() <= camPos.x + cut[mode][index].rect.GetWidth() / 2)
+						&& pl.lock()->GetPos().y >= pos.y)
+					{
+						pl.lock()->SetDamagePW(0.0f);
+					}
 				}
 			}
 		}

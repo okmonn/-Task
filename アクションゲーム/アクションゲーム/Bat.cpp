@@ -153,7 +153,7 @@ void Bat::Wait(void)
 			reverse = false;
 		}
 
-		if (pos.y < pl.lock()->GetPos().y - pl.lock()->GetCut().rect.GetHeight())
+		if (pos.y < pl.lock()->GetPos().y - pl.lock()->GetCut().rect.GetHeight() - 64)
 		{
 			pos.y += 4.0f;
 		}
@@ -202,7 +202,8 @@ void Bat::Fly(void)
 						func = &Bat::Damage;
 					}
 				}
-				else if (at.type == RectType::damage && attack[mode][index][j].type == RectType::attack)
+				else if (at.type == RectType::damage && attack[mode][index][j].type == RectType::attack
+					&& pl.lock()->GetMuteki() == false)
 				{
 					bool flag = reverse == true ? false : true;
 					pl.lock()->SetMode("Damage", flag);

@@ -59,7 +59,10 @@ Player::Player(std::weak_ptr<Input>in, std::weak_ptr<Camera>cam) : in(in), cam(c
 
 	bl = false;
 
-	d = 0;
+	d = 2.0f;
+	
+	m = false;
+	mTime = 0;
 
 	Load();
 }
@@ -173,14 +176,17 @@ void Player::Draw(void)
 
 	camPos = cam.lock()->CorrectionPos(pos);
 
-	DrawRectRotaGraph2((int)camPos.x, (int)camPos.y,
-		cut[mode][index].rect.GetLeft(), cut[mode][index].rect.GetTop(),
-		cut[mode][index].rect.GetWidth(), cut[mode][index].rect.GetHeight(),
-		center.x, center.y,
-		(float)attackSize, 0.0f, image, true, reverse);
+	if (mTime % 4 == 0)
+	{
+		DrawRectRotaGraph2((int)camPos.x, (int)camPos.y,
+			cut[mode][index].rect.GetLeft(), cut[mode][index].rect.GetTop(),
+			cut[mode][index].rect.GetWidth(), cut[mode][index].rect.GetHeight(),
+			center.x, center.y,
+			(float)attackSize, 0.0f, image, true, reverse);
+	}
 
 #ifdef _DEBUG
-	DrawFormatString(10, 10, GetColor(255, 255, 255), "%d", (int)d);
+	DrawFormatString(10, 10, GetColor(255, 255, 255), "%d", (int)mTime);
 	DrawFormatString(50, 10, GetColor(255, 255, 255), "%d", (int)camPos.y);
 	DrawPixel((int)camPos.x, (int)camPos.y, GetColor(255, 255, 255));
 	DrawFormatString(150, 10, GetColor(255, 255, 255), "%s", mode.c_str());
@@ -402,9 +408,27 @@ void Player::Down(void)
 	}
 }
 
+// 登りの処理
+void Player::Climb(void)
+{
+	if (mode != "Climb")
+	{
+		return;
+	}
+
+	pos.y -= speed;
+}
+
 // ダメージの処理
 void Player::Damage(void)
 {
+	if (mode != "Damage")
+	{
+		return;
+	}
+	
+	m = true;
+
 	if (wait == false)
 	{
 		if (reverse == false)
@@ -422,17 +446,14 @@ void Player::Damage(void)
 // 処理
 void Player::UpData()
 {
-	if (mode != "Jump")
+	if (mode != "Jump" && mode != "Climb")
 	{
 		if (pos.y < line && bl == false)
 		{
 			pos.y += vel.y;
 			vel.y += g;
 		}
-		else
-		{
-			fly = false;
-		}
+		fly = false;
 	}
 
 	if (pos.y >= line)
@@ -445,12 +466,31 @@ void Player::UpData()
 		func = &Player::Wait;
 	}
 
+	if (mode == "Climb")
+	{
+		func = &Player::Climb;
+	}
+
 	if (mode == "Damage")
 	{
 		func = &Player::Damage;
 	}
 
 	(this->*func)();
+
+	if (m == true)
+	{
+		if (mTime < 120)
+		{
+			++mTime;
+		}
+		else
+		{
+			m = false;
+			mTime = 0;
+		}
+	}
+
 }
 
 // 中心座標のセット
@@ -620,4 +660,10 @@ void Player::SetVel(Vector2Df v)
 void Player::SetDamagePW(float pw)
 {
 	d = pw;
+}
+
+
+bool Player::GetMuteki(void)
+{
+	return m;
 }

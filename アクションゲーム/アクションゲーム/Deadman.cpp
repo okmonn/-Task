@@ -164,6 +164,40 @@ void Deadman::UpData(void)
 	(this->*func)();
 }
 
+
+void Deadman::ChangeDir(void)
+{
+	if (reverse == true)
+	{
+		if (dir[0] == false)
+		{
+			dir[1] = false;
+			dir[0] = true;
+		}
+		reverse = false;
+	}
+	else
+	{
+		if (dir[1] == false)
+		{
+			dir[0] = false;
+			dir[1] = true;
+		}
+		reverse = true;
+	}
+	go = 1;
+}
+
+Positionf Deadman::GetCamPos(void)
+{
+	return camPos;
+}
+
+CutData Deadman::GetCut(void)
+{
+	return cut[mode][index];
+}
+
 // •à‚«‚Ìˆ—
 void Deadman::Walk(void)
 {
@@ -240,7 +274,8 @@ void Deadman::Walk(void)
 						SetMode("Die2", reverse);
 					}
 				}
-				else if (at.type == RectType::damage && attack[mode][index][j].type == RectType::attack)
+				else if (at.type == RectType::damage && attack[mode][index][j].type == RectType::attack
+					&& pl.lock()->GetMuteki() == false)
 				{
 					bool flag = reverse == true ? false : true;
 					pl.lock()->SetMode("Damage", flag);

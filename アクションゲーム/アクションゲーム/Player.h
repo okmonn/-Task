@@ -58,6 +58,8 @@ public:
 	void SetVel(Vector2Df v);
 	void SetDamagePW(float pw);
 
+	bool GetMuteki(void);
+
 private:
 	// •¶š—ñ‚ÌŒŸõ
 	std::string FindString(const std::string path, const char find, int offset = 0, bool start = true);
@@ -80,6 +82,8 @@ private:
 	void Sliding(void);
 	// ‚µ‚á‚ª‚İ‚Ìˆ—
 	void Down(void);
+	// “o‚è‚Ìˆ—
+	void Climb(void);
 	// ƒ_ƒ[ƒW‚Ìˆ—
 	void Damage(void);
 
@@ -147,5 +151,9 @@ private:
 	bool bl;
 
 	float d;
+
+	bool m;
+
+	int mTime;
 };
 

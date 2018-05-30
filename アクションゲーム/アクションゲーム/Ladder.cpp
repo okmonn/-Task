@@ -92,4 +92,11 @@ void Ladder::Draw(void)
 // ˆ—
 void Ladder::UpData(void)
 {
+	if (pl.lock()->GetCamPos().x >= camPos.x)
+	{
+		if (pl.lock()->GetMode() != "Climb")
+		{
+			pl.lock()->SetMode("Climb", pl.lock()->GetReverse());
+		}
+	}
 }

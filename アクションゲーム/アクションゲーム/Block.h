@@ -2,6 +2,7 @@
 #include "Event.h"
 #include "Camera.h"
 #include "Player.h"
+#include "Enemy.h"
 
 class Block :
 	public Event
@@ -27,5 +28,7 @@ private:
 
 	// 
 	bool flag;
+
+	bool enter;
 };
 

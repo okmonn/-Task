@@ -64,12 +64,13 @@ void Play::Draw(void)
 	{
 		(*itr)->Draw();
 	}
-	ui->Draw();
+	
 	for (auto itr = e_list.begin(); itr != e_list.end(); ++itr)
 	{
 		(*itr)->Draw();
 	}
 	pl->Draw();
+	ui->Draw();
 	ground->Draw();
 	cam->Draw();
 	
@@ -111,7 +112,7 @@ void Play::UpData(void)
 			back->UpData();
 			ground->UpData();
 			int y = 0;
-			static int x = 0;
+			static int x = pl->GetPos().x < 0 ? 0 : (int)pl->GetPos().x / CHIP_SIZE;
 			for (auto& e : st->GetEnemyData((int)(cam->GetPos().x), (int)((cam->GetPos().x + WINDOW_X / 2 + CHIP_SIZE * 3))))
 			{
 				if (e == 1)
@@ -151,6 +152,14 @@ void Play::UpData(void)
 				{
 					++ex;
 					y = 0;
+				}
+			}
+
+			for (auto itr = list.begin(); itr != list.end(); ++itr)
+			{
+				for (auto en = e_list.begin(); en != e_list.end(); ++en)
+				{
+					
 				}
 			}
 		}

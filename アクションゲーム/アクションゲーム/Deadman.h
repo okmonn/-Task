@@ -23,6 +23,11 @@ public:
 	// 処理
 	void UpData(void);
 
+	void ChangeDir(void);
+
+	Positionf GetCamPos(void);
+	CutData GetCut(void);
+
 private:
 	// プレイヤークラス
 	std::weak_ptr<Player>pl;
