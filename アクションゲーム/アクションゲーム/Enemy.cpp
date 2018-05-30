@@ -14,6 +14,9 @@ Enemy::Enemy()
 	//”z—ñ”Ô†
 	index = 0;
 
+
+	ppp = false;
+
 	//’†S“_
 	center = {};
 
@@ -203,4 +206,42 @@ bool Enemy::GetHit(void)
 void Enemy::SetHit(bool flg)
 {
 	hit = flg;
+}
+
+Positionf Enemy::GetCamPos(void)
+{
+	return camPos;
+}
+
+CutData Enemy::GetCut(void)
+{
+	return cut[mode][index];
+}
+
+bool Enemy::GetReverse(void)
+{
+	return reverse;
+}
+
+void Enemy::ChangeDir(void)
+{
+	if (reverse == true)
+	{
+		if (dir[0] == false)
+		{
+			dir[1] = false;
+			dir[0] = true;
+		}
+		reverse = false;
+	}
+	else
+	{
+		if (dir[1] == false)
+		{
+			dir[0] = false;
+			dir[1] = true;
+		}
+		reverse = true;
+	}
+	go = 1;
 }

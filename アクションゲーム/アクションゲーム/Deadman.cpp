@@ -10,12 +10,13 @@ Deadman::Deadman()
 }
 
 // コンストラクタ
-Deadman::Deadman(Positionf pos, std::weak_ptr<Player>pl, std::weak_ptr<Camera>cam) : pl(pl), cam(cam), down(18.0f), wait(0), go(0)
+Deadman::Deadman(Positionf pos, std::weak_ptr<Player>pl, std::weak_ptr<Camera>cam) : pl(pl), cam(cam), down(18.0f), wait(0)
 {
 	Load(path);
 	this->pos = pos;
 	camPos = { 0,0 };
 	SetMode("Walk", true);
+	go = 0;
 	func = &Deadman::Walk;
 	memset(dir, false, sizeof(dir));
 }
@@ -164,40 +165,6 @@ void Deadman::UpData(void)
 	(this->*func)();
 }
 
-
-void Deadman::ChangeDir(void)
-{
-	if (reverse == true)
-	{
-		if (dir[0] == false)
-		{
-			dir[1] = false;
-			dir[0] = true;
-		}
-		reverse = false;
-	}
-	else
-	{
-		if (dir[1] == false)
-		{
-			dir[0] = false;
-			dir[1] = true;
-		}
-		reverse = true;
-	}
-	go = 1;
-}
-
-Positionf Deadman::GetCamPos(void)
-{
-	return camPos;
-}
-
-CutData Deadman::GetCut(void)
-{
-	return cut[mode][index];
-}
-
 // 歩きの処理
 void Deadman::Walk(void)
 {
@@ -229,15 +196,15 @@ void Deadman::Walk(void)
 	}
 	else
 	{
-		if (dir[0] == true)
+		if (dir[0] == true && ppp == false)
 		{
 			pos.x += 1.0f;
 		}
-		else if (dir[1] == true)
+		else if (dir[1] == true && ppp == false)
 		{
 			pos.x -= 1.0f;
 		}
-		if (go < 120)
+		if (go < 180)
 		{
 			++go;
 		}

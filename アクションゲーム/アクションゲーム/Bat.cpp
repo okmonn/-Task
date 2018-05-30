@@ -135,6 +135,10 @@ void Bat::UpData(void)
 	(this->*func)();
 }
 
+void Bat::ChangeDir(void)
+{
+}
+
 // ‘Ò‹@‚Ìˆ—
 void Bat::Wait(void)
 {

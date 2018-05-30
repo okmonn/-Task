@@ -23,11 +23,6 @@ public:
 	// 処理
 	void UpData(void);
 
-	void ChangeDir(void);
-
-	Positionf GetCamPos(void);
-	CutData GetCut(void);
-
 private:
 	// プレイヤークラス
 	std::weak_ptr<Player>pl;
@@ -38,12 +33,6 @@ private:
 	float down;
 
 	int wait;
-
-	int go;
-
-	bool dir[2];
-
-	Positionf camPos;
 
 	// 歩きの処理
 	void Walk(void);

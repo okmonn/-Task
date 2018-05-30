@@ -155,11 +155,39 @@ void Play::UpData(void)
 				}
 			}
 
-			for (auto itr = list.begin(); itr != list.end(); ++itr)
+			for (auto itr = e_list.begin(); itr != e_list.end(); ++itr)
 			{
-				for (auto en = e_list.begin(); en != e_list.end(); ++en)
+				auto epos = (*itr)->GetCamPos();
+				auto ecut = (*itr)->GetCut();
+				for (auto e = list.begin(); e != list.end(); ++e)
 				{
-					
+					auto evpos = (*e)->GetCamPos();
+					auto evcut = (*e)->GetCut();
+
+					if ((*itr)->GetReverse() == true)
+					{
+						if (epos.x - ecut.rect.GetWidth() <= evpos.x + evcut.rect.GetWidth() / 2
+							&& epos.y >= evpos.y && (*itr)->GetMode() != "Die")
+						{
+							(*itr)->SetPPP(true);
+						}
+						else
+						{
+							(*itr)->SetPPP(false);
+						}
+					}
+					else
+					{
+						if (epos.x + ecut.rect.GetWidth() >= evpos.x - evcut.rect.GetWidth() / 2
+							&& epos.y >= evpos.y && (*itr)->GetMode() != "Die")
+						{
+							(*itr)->SetPPP(true);
+						}
+						else
+						{
+							(*itr)->SetPPP(false);
+						}
+					}
 				}
 			}
 		}

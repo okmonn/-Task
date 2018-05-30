@@ -35,6 +35,15 @@ public:
 	// 分割情報の取得
 	CutData GetCutData(std::string m, UINT index);
 
+	bool GetPPP(void)
+	{
+		return ppp;
+	}
+	void SetPPP(bool f)
+	{
+		ppp = f;
+	}
+
 	// 死亡フラグの取得
 	bool GetDie(void);
 
@@ -42,6 +51,13 @@ public:
 	bool GetHit(void);
 	// あたりフラグの変更
 	void SetHit(bool flg);
+
+	Positionf GetCamPos(void);
+	CutData GetCut(void);
+
+	bool GetReverse(void);
+
+	void ChangeDir(void);
 
 	// 状態のセット
 	virtual void SetMode(std::string m, bool r) = 0;
@@ -75,6 +91,8 @@ protected:
 	// ループフラグ
 	bool loop;
 
+	bool ppp;
+
 	// 速度
 	Vector2Df vel;
 
@@ -92,6 +110,12 @@ protected:
 
 	// あたりフラグ
 	bool hit;
+
+	Positionf camPos;
+
+	int go;
+
+	bool dir[2];
 
 	// 画像データ
 	std::map<std::string, ImageData>data;

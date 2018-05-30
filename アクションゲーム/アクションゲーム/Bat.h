@@ -21,6 +21,8 @@ public:
 	// 処理
 	void UpData(void);
 
+	void ChangeDir(void);
+
 private:
 
 	// プレイヤークラス
@@ -34,8 +36,6 @@ private:
 
 	// カウント
 	int cnt;
-
-	Positionf camPos;
 
 	// 関数ポインタ
 	void(Bat::*func)(void);
