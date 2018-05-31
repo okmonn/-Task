@@ -31,7 +31,6 @@ void Bat::SetMode(std::string m, bool r)
 // •`‰æ
 void Bat::Draw(void)
 {
-	DrawFormatString(500, 100, GetColor(255, 0, 0), "%d", (int)pos.y);
 	if (data[mode].loop)
 	{
 		++flam;
@@ -207,7 +206,7 @@ void Bat::Fly(void)
 					}
 				}
 				else if (at.type == RectType::damage && attack[mode][index][j].type == RectType::attack
-					&& pl.lock()->GetMuteki() == false)
+					&& pl.lock()->GetMuteki() == false && pl.lock()->GetMode() != "Die")
 				{
 					bool flag = reverse == true ? false : true;
 					pl.lock()->SetMode("Damage", flag);

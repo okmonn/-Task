@@ -13,7 +13,7 @@ Player::Player(std::weak_ptr<Input>in, std::weak_ptr<Camera>cam) : in(in), cam(c
 	flam = 0;
 
 	//À•W
-	pos = { -150, 330 };
+	pos = { 0, 330 };
 
 	//ó‘Ô
 	fmode.clear();
@@ -63,6 +63,10 @@ Player::Player(std::weak_ptr<Input>in, std::weak_ptr<Camera>cam) : in(in), cam(c
 	
 	m = false;
 	mTime = 0;
+
+	hp = 3;
+
+	die = false;
 
 	Load();
 }
@@ -159,7 +163,7 @@ void Player::Draw(void)
 		}
 		else
 		{
-			if (mode != "Jump" && mode != "Crouch" && mode != " Damage" && mode != "Kick")
+			if (mode != "Jump" && mode != "Crouch" && mode != " Damage" && mode != "Kick" && mode != "Die")
 			{
 				SetMode("Wait", reverse);
 			}
@@ -186,8 +190,7 @@ void Player::Draw(void)
 	}
 
 #ifdef _DEBUG
-	DrawFormatString(10, 10, GetColor(255, 255, 255), "%d", (int)mTime);
-	DrawFormatString(50, 10, GetColor(255, 255, 255), "%d", (int)camPos.y);
+	DrawFormatString(10, 100, GetColor(255, 255, 255), "%d", (int)mTime);
 	DrawPixel((int)camPos.x, (int)camPos.y, GetColor(255, 255, 255));
 	DrawFormatString(150, 10, GetColor(255, 255, 255), "%s", mode.c_str());
 	if (bl == true)
@@ -443,6 +446,20 @@ void Player::Damage(void)
 	}
 }
 
+// €–S‚Ìˆ—
+void Player::Die(void)
+{
+	if (mode != "Die")
+	{
+		return;
+	}
+
+	if ((int)flam >= cut[mode][cut[mode].size() - 1].flam)
+	{
+		die = true;
+	}
+}
+
 // ˆ—
 void Player::UpData()
 {
@@ -476,11 +493,16 @@ void Player::UpData()
 		func = &Player::Damage;
 	}
 
+	if (mode == "Die")
+	{
+		func = &Player::Die;
+	}
+
 	(this->*func)();
 
 	if (m == true)
 	{
-		if (mTime < 120)
+		if (mTime < 180)
 		{
 			++mTime;
 		}
@@ -520,6 +542,15 @@ void Player::SetMode(std::string m, bool r)
 	{
 		wait = false;
 		mode = m;
+	}
+
+	if (mode == "Damage")
+	{
+		--hp;
+		if (hp <= 0)
+		{
+			mode = "Die";
+		}
 	}
 
 	if (mode == "Ground")
@@ -666,4 +697,14 @@ void Player::SetDamagePW(float pw)
 bool Player::GetMuteki(void)
 {
 	return m;
+}
+
+int Player::GetHp(void)
+{
+	return hp;
+}
+
+bool Player::GetDie(void)
+{
+	return die;
 }

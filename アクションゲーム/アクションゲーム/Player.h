@@ -60,6 +60,10 @@ public:
 
 	bool GetMuteki(void);
 
+	int GetHp(void);
+
+	bool GetDie(void);
+
 private:
 	// 文字列の検索
 	std::string FindString(const std::string path, const char find, int offset = 0, bool start = true);
@@ -86,6 +90,8 @@ private:
 	void Climb(void);
 	// ダメージの処理
 	void Damage(void);
+	// 死亡の処理
+	void Die(void);
 
 
 	// インプットクラス
@@ -155,5 +161,10 @@ private:
 	bool m;
 
 	int mTime;
+
+	// 体力
+	int hp;
+
+	bool die;
 };
 

@@ -60,4 +60,7 @@ private:
 
 	// ŠÖ”ƒ|ƒCƒ“ƒ^
 	bool (Play::*func)(void);
+
+	int x;
+	int ex;
 };

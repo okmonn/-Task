@@ -10,8 +10,8 @@ const char* path = "ステージ/stage1.fmf";
 Stage::Stage()
 {
 	Load(path);
-	readX = 0;
-	readY = 0;
+	readX = 2;
+	readY = 2;
 }
 
 // デストラクタ

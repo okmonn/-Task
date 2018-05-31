@@ -140,7 +140,7 @@ void Spear::Attacker(void)
 			if (CheackHit(camPos, attack[mode][index][j], tmp, at) == true)
 			{
 				if (at.type == RectType::damage && attack[mode][index][j].type == RectType::attack
-					&& pl.lock()->GetMuteki() == false)
+					&& pl.lock()->GetMuteki() == false && pl.lock()->GetMode() != "Die")
 				{
 					pl.lock()->SetMode("Damage", pl.lock()->GetReverse());
 				}

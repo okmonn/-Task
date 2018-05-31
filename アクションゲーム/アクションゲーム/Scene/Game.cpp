@@ -34,6 +34,8 @@ void Game::Init(void)
 	//windowテキストの設定
 	SetWindowText(_T("1601271_岡繁男"));
 
+	SetWindowIconID(100);
+
 	//Dxlibの初期化
 	if (DxLib_Init() == -1)
 	{

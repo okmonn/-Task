@@ -15,6 +15,9 @@ Play::Play(std::weak_ptr<Input>in)
 	//インプットクラス
 	this->in = in;
 
+	x = 2;
+	ex = 2;
+
 	blend = 255;
 	//フォントサイズ
 	fSize = 24;
@@ -36,23 +39,23 @@ Play::~Play()
 void Play::Create(void)
 {
 	//ステージクラス
-	st = std::make_shared<Stage>();
+	st.reset(new Stage());
 
 	//カメラクラス
-	cam = std::make_shared<Camera>(st);
+	cam.reset(new Camera(st));
 
 	//プレイヤークラス
-	pl = std::make_shared<Player>(in, cam);
+	pl.reset(new Player(in, cam));
 	cam->SetFocus(pl);
 
 	//背景クラス
-	back = std::make_shared<BackGround>(cam);
+	back.reset(new BackGround(cam));
 
 	//UIクラス
-	ui = std::make_shared<Interface>(pl);
+	ui.reset(new Interface(pl));
 
 	//地面クラス
-	ground = std::make_shared<Ground>(pl);
+	ground.reset(new Ground(pl));
 
 }
 
@@ -84,7 +87,8 @@ void Play::UpData(void)
 {
 	if ((this->*func)() == true)
 	{
-		if (in.lock()->CheckTrigger(PAD_INPUT_8))
+		if (in.lock()->CheckTrigger(PAD_INPUT_8)
+			|| pl->GetDie() == true)
 		{
 			alpha = true;
 			func = &Play::FadeOut;
@@ -112,7 +116,6 @@ void Play::UpData(void)
 			back->UpData();
 			ground->UpData();
 			int y = 0;
-			static int x = pl->GetPos().x < 0 ? 0 : (int)pl->GetPos().x / CHIP_SIZE;
 			for (auto& e : st->GetEnemyData((int)(cam->GetPos().x), (int)((cam->GetPos().x + WINDOW_X / 2 + CHIP_SIZE * 3))))
 			{
 				if (e == 1)
@@ -136,7 +139,6 @@ void Play::UpData(void)
 			}
 
 			y = 0;
-			static int ex = 0;
 			for (auto& e : st->GetEventData((int)(cam->GetPos().x), (int)((cam->GetPos().x + WINDOW_X / 2 + CHIP_SIZE * 3))))
 			{
 				if (e == 1)

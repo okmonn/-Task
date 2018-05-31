@@ -242,7 +242,7 @@ void Deadman::Walk(void)
 					}
 				}
 				else if (at.type == RectType::damage && attack[mode][index][j].type == RectType::attack
-					&& pl.lock()->GetMuteki() == false)
+					&& pl.lock()->GetMuteki() == false && pl.lock()->GetMode() != "Die")
 				{
 					bool flag = reverse == true ? false : true;
 					pl.lock()->SetMode("Damage", flag);
