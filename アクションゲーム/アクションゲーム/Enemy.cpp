@@ -14,6 +14,7 @@ Enemy::Enemy()
 	//”z—ñ”Ô†
 	index = 0;
 
+	out = false;
 
 	ppp = false;
 
@@ -244,4 +245,9 @@ void Enemy::ChangeDir(void)
 		reverse = true;
 	}
 	go = 1;
+}
+
+bool Enemy::GetOut(void)
+{
+	return out;
 }

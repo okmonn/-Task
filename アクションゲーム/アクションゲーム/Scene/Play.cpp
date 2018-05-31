@@ -98,7 +98,8 @@ void Play::UpData(void)
 			for (auto itr = e_list.begin(); itr != e_list.end();)
 			{
 				(*itr)->UpData();
-				if ((*itr)->GetDie() == true)
+				if ((*itr)->GetDie() == true
+					|| (*itr)->GetOut() == true)
 				{
 					itr = e_list.erase(itr);
 				}

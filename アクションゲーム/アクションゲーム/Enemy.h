@@ -59,6 +59,8 @@ public:
 
 	void ChangeDir(void);
 
+	bool GetOut(void);
+
 	// 状態のセット
 	virtual void SetMode(std::string m, bool r) = 0;
 	// 描画
@@ -115,6 +117,7 @@ protected:
 
 	int go;
 
+	bool out;
 	bool dir[2];
 
 	// 画像データ

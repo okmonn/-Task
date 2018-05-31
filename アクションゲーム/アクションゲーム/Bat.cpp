@@ -185,6 +185,13 @@ void Bat::Fly(void)
 		pos.x += 2.0f;
 	}
 
+	if (camPos.x < -100.0f)
+	{
+		out = true;
+	}
+
+
+
 	pos.y += 2.0f * sinf(3.14f * 2 / 90 * cnt);
 	cnt++;
 

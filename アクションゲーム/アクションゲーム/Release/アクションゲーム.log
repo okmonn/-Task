@@ -1,6 +1,17 @@
-﻿  コード生成しています。
-  0 of 2518 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+﻿  Bat.cpp
+  Block.cpp
+  Deadman.cpp
+  Enemy.cpp
+  EnemyMane.cpp
+  EventMane.cpp
+  Continue.cpp
+  Game.cpp
+  Play.cpp
+  Title.cpp
+  Spear.cpp
+  コード生成しています。
+  10 of 2502 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    5 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   アクションゲーム.vcxproj -> C:\Users\1601271\Documents\GitHub\-Task\アクションゲーム\Release\アクションゲーム.exe
