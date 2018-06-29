@@ -63,4 +63,10 @@ private:
 
 	int x;
 	int ex;
+
+	int image;
+
+	bool mm;
+
+	int flam;
 };

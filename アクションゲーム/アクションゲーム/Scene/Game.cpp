@@ -11,6 +11,7 @@ const int SIZE_Y = 448;
 // コンストラクタ
 Game::Game()
 {
+	flag = false;
 }
 
 // コンストラクタ
@@ -73,6 +74,12 @@ void Game::ChangeScene(Scene * s)
 	scene.reset(s);
 }
 
+// フラグのセット
+void Game::ChangeFlag(bool flag)
+{
+	this->flag = flag;
+}
+
 // それぞれのクラスの描画
 void Game::Draw(void)
 {
@@ -99,7 +106,7 @@ void Game::UpData(void)
 void Game::Run(void)
 {
 	//ループ処理
-	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_RETURN) == 0)
+	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0 && flag == false)
 	{
 		UpData();
 	}

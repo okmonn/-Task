@@ -64,6 +64,8 @@ public:
 
 	bool GetDie(void);
 
+	bool GetClear(void);
+
 private:
 	// •¶š—ñ‚ÌŒŸõ
 	std::string FindString(const std::string path, const char find, int offset = 0, bool start = true);
@@ -166,5 +168,7 @@ private:
 	int hp;
 
 	bool die;
+
+	bool clear;
 };
 

@@ -23,6 +23,9 @@ public:
 	// シーンの移行
 	void ChangeScene(Scene* s);
 
+	// フラグのセット
+	void ChangeFlag(bool flag);
+
 	// それぞれのクラスの描画
 	void Draw(void);
 
@@ -45,6 +48,8 @@ private:
 
 	// シーンクラス
 	std::shared_ptr<Scene>scene;
+
+	bool flag;
 
 };
 

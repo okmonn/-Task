@@ -17,7 +17,9 @@ Play::Play(std::weak_ptr<Input>in)
 
 	x = 2;
 	ex = 2;
-
+	image = LoadGraph("img/continue.png");
+	mm = false;
+	flam = 0;
 	blend = 255;
 	//フォントサイズ
 	fSize = 24;
@@ -80,6 +82,16 @@ void Play::Draw(void)
 	SetDrawBlendMode(DX_BLENDMODE_MULA, blend);
 	DrawBox(0, 0, WINDOW_X, WINDOW_Y, GetColor(0, 0, 0), true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	if (mm == true)
+	{
+		DrawGraph(350, 300, image, true);
+		++flam;
+		if (flam >= 60)
+		{
+			Game::Instance().ChangeFlag(true);
+		}
+	}
 }
 
 // 処理
@@ -88,7 +100,7 @@ void Play::UpData(void)
 	if ((this->*func)() == true)
 	{
 		if (in.lock()->CheckTrigger(PAD_INPUT_8)
-			|| pl->GetDie() == true)
+			|| pl->GetDie() == true || pl->GetClear() == true)
 		{
 			alpha = true;
 			func = &Play::FadeOut;
@@ -230,7 +242,14 @@ bool Play::FadeOut(void)
 		blend += 5;
 		if (blend >= 255)
 		{
-			Game::Instance().ChangeScene(new Continue(in));
+			if (pl->GetDie() == true)
+			{
+				Game::Instance().ChangeScene(new Continue(in));
+			}
+			else
+			{
+				mm = true;
+			}
 		}
 	}
 

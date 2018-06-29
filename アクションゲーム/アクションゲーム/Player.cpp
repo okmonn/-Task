@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Load.h"
+#include "Scene/Game.h"
 
 const char* actionPath = "アクション/player.act";
 const float g = 0.5f;
@@ -67,6 +68,8 @@ Player::Player(std::weak_ptr<Input>in, std::weak_ptr<Camera>cam) : in(in), cam(c
 	hp = 3;
 
 	die = false;
+
+	clear = false;
 
 	Load();
 }
@@ -420,6 +423,10 @@ void Player::Climb(void)
 	}
 
 	pos.y -= speed;
+	if (pos.y < 0)
+	{
+		clear = true;
+	}
 }
 
 // ダメージの処理
@@ -707,4 +714,9 @@ int Player::GetHp(void)
 bool Player::GetDie(void)
 {
 	return die;
+}
+
+bool Player::GetClear(void)
+{
+	return clear;
 }
