@@ -65,7 +65,7 @@ Player::Player(std::weak_ptr<Input>in, std::weak_ptr<Camera>cam) : in(in), cam(c
 	m = false;
 	mTime = 0;
 
-	hp = 3;
+	hp = 5;
 
 	die = false;
 

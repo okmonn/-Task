@@ -36,7 +36,7 @@ void Interface::Draw(void)
 	//‘Ì—Í
 	for (int i = 0; i < pl.lock()->GetHp(); ++i)
 	{
-		DrawGraph(220 + (i * 50), (WINDOW_Y - 45), hp, true);
+		DrawGraph(220 + (i * 32), (WINDOW_Y - 45), hp, true);
 	}
 }
 
