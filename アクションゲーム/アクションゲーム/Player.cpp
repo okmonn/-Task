@@ -5,7 +5,7 @@
 const char* actionPath = "アクション/player.act";
 const float g = 0.5f;
 const int line = 330;
-const float speed = 1.0f;
+const float speed = 2.0f;
 
 // コンストラクタ
 Player::Player(std::weak_ptr<Input>in, std::weak_ptr<Camera>cam) : in(in), cam(cam)
@@ -128,6 +128,25 @@ void Player::Load(void)
 	SetMode("Wait");
 }
 
+// ラスタースクロール
+void Player::RasterScroll(int image, const Vector2D& pos, const Vector2D& rect, const Vector2D& size, float expansion, float rotation, float period, float vibration, bool trans, bool xturn, bool yturn)
+{
+	static float  correction = 0.0f;
+
+	for (int i = 0; i < size.y; ++i)
+	{
+		DrawRectRotaGraph2(
+			(int)((float)((pos.x + (size.x * expansion) / 2) - size.x / (2 * 20)) + cosf((i + correction) / 180.0f * 3.141592f * period) * vibration), (int)(pos.y + (size.y * expansion) / 2) - (size.y / (2 * 20)) + i,
+			rect.x, rect.y + i,
+			size.x, 1,
+			(size.x / 2), (size.y / 2),
+			(double)expansion, (double)rotation,
+			image, trans, xturn, yturn);
+	}
+
+	++correction;
+}
+
 // 描画
 void Player::Draw(void)
 {
@@ -141,7 +160,7 @@ void Player::Draw(void)
 		SetCenter(cut[mode][index].center, reverse);
 	}
 	else
-	{
+	{ 
 		if (index < cut[mode].size() && loop == true)
 		{
 			flam++;
@@ -190,6 +209,7 @@ void Player::Draw(void)
 			cut[mode][index].rect.GetWidth(), cut[mode][index].rect.GetHeight(),
 			center.x, center.y,
 			(float)attackSize, 0.0f, image, true, reverse);
+		//RasterScroll(image, { (int)camPos.x, (int)camPos.y }, { cut[mode][index].rect.GetLeft(), cut[mode][index].rect.GetTop() }, { cut[mode][index].rect.GetWidth(), cut[mode][index].rect.GetHeight() }, 2.0f, 0.0f, 5.0f, 5.0f, true, reverse);
 	}
 
 #ifdef _DEBUG

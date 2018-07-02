@@ -61,6 +61,7 @@ void Play::Create(void)
 
 }
 
+
 // •`‰æ
 void Play::Draw(void)
 {

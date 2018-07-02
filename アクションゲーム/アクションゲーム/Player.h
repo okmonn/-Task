@@ -17,6 +17,9 @@ public:
 	// デストラクタ
 	virtual ~Player();
 
+	// ラスタースクロール
+	void RasterScroll(int image, const Vector2D& pos, const Vector2D& rect, const Vector2D& size, float expansion = 1.0f, float rotation = 0.0f, float period = 5.0f, float vibration = 5.0f, bool trans = true, bool xturn = false, bool yturn = false);
+
 	// 描画
 	void Draw(void);
 
