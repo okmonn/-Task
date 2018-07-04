@@ -1,4 +1,5 @@
 #include "Bat.h"
+#include "Load.h"
 
 const std::string path = "ƒAƒNƒVƒ‡ƒ“/bat.act";
 const float line = 330;
@@ -9,6 +10,8 @@ Bat::Bat(Positionf pos, std::weak_ptr<Player>pl, std::weak_ptr<Camera>cam) : pl(
 	Load(path);
 	this->pos = pos;
 	camPos = { 0,0 };
+	sound["wait"] = Load::GetInstance()->LoadSound("se/habataki.mp3");
+	sound["damage"] = Load::GetInstance()->LoadSound("se/bird_damage.mp3");
 	SetMode("Wait", false);
 	func = &Bat::Wait;
 }
@@ -22,6 +25,10 @@ Bat::~Bat()
 // ó‘Ô‚ÌÝ’è
 void Bat::SetMode(std::string m, bool r)
 {
+	for (auto itr = sound.begin(); itr != sound.end(); ++itr)
+	{
+		StopSoundMem(itr->second);
+	}
 	flam = 0;
 	index = 0;
 	mode = m;
@@ -163,6 +170,7 @@ void Bat::Wait(void)
 		else
 		{
 			SetMode("Fly", reverse);
+			PlaySoundMem(sound["wait"], DX_PLAYTYPE_BACK);
 			func = &Bat::Fly;
 		}
 	}
@@ -209,6 +217,7 @@ void Bat::Fly(void)
 						|| reverse == false && pl.lock()->GetReverse() == true)
 					{
 						SetMode("Damage", reverse);
+						PlaySoundMem(sound["damage"], DX_PLAYTYPE_BACK);
 						func = &Bat::Damage;
 					}
 				}

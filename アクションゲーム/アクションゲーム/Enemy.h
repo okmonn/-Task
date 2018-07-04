@@ -128,5 +128,7 @@ protected:
 
 	// あたり矩形のデータ
 	std::map < std::string, std::map<int, std::vector<Attack>>>attack;
+
+	std::map<std::string, int>sound;
 };
 

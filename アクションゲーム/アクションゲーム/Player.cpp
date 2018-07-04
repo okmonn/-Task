@@ -71,6 +71,10 @@ Player::Player(std::weak_ptr<Input>in, std::weak_ptr<Camera>cam) : in(in), cam(c
 
 	clear = false;
 
+	sound["attack"] = Load::GetInstance()->LoadSound("se/punch-swing.mp3");
+	sound["sliding"] = Load::GetInstance()->LoadSound("se/sliding.mp3");
+	sound["damage"] = Load::GetInstance()->LoadSound("se/p_damage.wav");
+
 	Load();
 }
 
@@ -282,6 +286,7 @@ void Player::Wait(void)
 	if (in.lock()->CheckTrigger(PAD_INPUT_B) && mode != "Punch")
 	{
 		SetMode("Punch", reverse);
+		PlaySoundMem(sound["attack"], DX_PLAYTYPE_BACK);
 		func = &Player::Punch;
 	}
 
@@ -363,6 +368,7 @@ void Player::Jump(void)
 	if (in.lock()->CheckTrigger(PAD_INPUT_B))
 	{
 		SetMode("Punch", reverse);
+		PlaySoundMem(sound["attack"], DX_PLAYTYPE_BACK);
 		func = &Player::Punch;
 	}
 
@@ -370,6 +376,7 @@ void Player::Jump(void)
 	if (in.lock()->CheckTrigger(PAD_INPUT_D))
 	{
 		SetMode("Sliding", reverse);
+		PlaySoundMem(sound["sliding"], DX_PLAYTYPE_BACK);
 		func = &Player::Sliding;
 	}
 }
@@ -420,6 +427,7 @@ void Player::Down(void)
 		if (in.lock()->CheckTrigger(PAD_INPUT_B))
 		{
 			SetMode("Kick", reverse);
+			PlaySoundMem(sound["attack"], DX_PLAYTYPE_BACK);
 			func = &Player::Kick;
 		}
 	}
@@ -555,6 +563,11 @@ void Player::SetCenter(Position & pos, bool r)
 // ó‘Ô‚ÌƒZƒbƒg
 void Player::SetMode(std::string m, bool r)
 {
+	for (auto itr = sound.begin(); itr != sound.end(); ++itr)
+	{
+		StopSoundMem(itr->second);
+	}
+
 	if (mode == m && reverse == r && wait == false)
 	{
 		return;
@@ -573,6 +586,7 @@ void Player::SetMode(std::string m, bool r)
 
 	if (mode == "Damage")
 	{
+		PlaySoundMem(sound["damage"], DX_PLAYTYPE_BACK);
 		--hp;
 		if (hp <= 0)
 		{

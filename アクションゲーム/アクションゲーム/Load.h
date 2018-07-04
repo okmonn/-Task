@@ -25,6 +25,9 @@ public:
 	bool LoadAct(std::string fileName);
 	bool LoadMap(std::string fileName);
 
+	// サウンド読み込み
+	int LoadSound(std::string fileName);
+
 	// ヘッダーの取得
 	ImageHeader GetHeader(std::string m);
 	// 画像データの取得
@@ -52,6 +55,9 @@ private:
 	// コンストラクタ
 	Load();
 
+	// リセット
+	void Reset(void);
+
 	// インスタンス変数
 	static Load* s_Instance;
 
@@ -72,4 +78,7 @@ private:
 
 	// ステージのイベントデータ
 	std::map<std::string, std::vector<UCHAR>>evData;
+
+	// サウンドデータ
+	std::map<std::string, int>sound;
 };

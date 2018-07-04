@@ -25,6 +25,9 @@ private:
 	// 画像ハンドル
 	int image;
 
+	// サウンドハンドル
+	int sound;
+
 	// フレーム
 	int flam;
 

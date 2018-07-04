@@ -1,4 +1,5 @@
 #include "Deadman.h"
+#include "Load.h"
 
 const std::string path = "ƒAƒNƒVƒ‡ƒ“/deadman.act";
 const int line = 330;
@@ -18,6 +19,9 @@ Deadman::Deadman(Positionf pos, std::weak_ptr<Player>pl, std::weak_ptr<Camera>ca
 	SetMode("Walk", true);
 	go = 0;
 	func = &Deadman::Walk;
+	sound["wait"] = Load::GetInstance()->LoadSound("se/death_voice.mp3");
+	sound["damage"] = Load::GetInstance()->LoadSound("se/e_gusha.mp3");
+	PlaySoundMem(sound["wait"], DX_PLAYTYPE_BACK);
 	memset(dir, false, sizeof(dir));
 }
 
@@ -30,6 +34,10 @@ Deadman::~Deadman()
 // ó‘Ô‚ÌÝ’è
 void Deadman::SetMode(std::string m, bool r)
 {
+	for (auto itr = sound.begin(); itr != sound.end(); ++itr)
+	{
+		StopSoundMem(itr->second);
+	}
 	wait = false;
 	flam = 0;
 	index = 0;
@@ -230,6 +238,7 @@ void Deadman::Walk(void)
 						|| reverse == false && pl.lock()->GetReverse() == true)
 					{
 						SetMode("Die", reverse);
+						PlaySoundMem(sound["damage"], DX_PLAYTYPE_BACK);
 					}
 				}
 				else if (at.type == RectType::attack && attack[mode][index][j].type == RectType::damage
@@ -239,6 +248,7 @@ void Deadman::Walk(void)
 						|| reverse == false && pl.lock()->GetReverse() == true)
 					{
 						SetMode("Die2", reverse);
+						PlaySoundMem(sound["damage"], DX_PLAYTYPE_BACK);
 					}
 				}
 				else if (at.type == RectType::damage && attack[mode][index][j].type == RectType::attack

@@ -1,4 +1,5 @@
 #include "Play.h"
+#include "../Load.h"
 #include "../EventMane.h"
 #include "../EnemyMane.h"
 #include "Game.h"
@@ -14,6 +15,7 @@ Play::Play(std::weak_ptr<Input>in)
 {
 	//インプットクラス
 	this->in = in;
+	sound = Load::GetInstance()->LoadSound("bgm/stage1.mp3");
 
 	x = 2;
 	ex = 2;
@@ -108,6 +110,11 @@ void Play::UpData(void)
 		}
 		else
 		{
+			if (CheckSoundMem(sound) == false)
+			{
+				PlaySoundMem(sound, DX_PLAYTYPE_LOOP);
+			}
+
 			for (auto itr = e_list.begin(); itr != e_list.end();)
 			{
 				(*itr)->UpData();
@@ -245,6 +252,7 @@ bool Play::FadeOut(void)
 		{
 			if (pl->GetDie() == true)
 			{
+				StopSoundMem(sound);
 				Game::Instance().ChangeScene(new Continue(in));
 			}
 			else

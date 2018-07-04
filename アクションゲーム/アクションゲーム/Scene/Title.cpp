@@ -1,4 +1,5 @@
 #include "Title.h"
+#include "../Load.h"
 #include "Game.h"
 #include "Play.h"
 #include "DxLib.h"
@@ -12,6 +13,7 @@ Title::Title(std::weak_ptr<Input>in) : flam(0)
 
 	//画像ハンドル
 	image = LoadGraph("img/title.png");
+	sound = Load::GetInstance()->LoadSound("se/start.mp3");
 
 	//フォントサイズ
 	fSize = 36;
@@ -73,6 +75,7 @@ void Title::FadeOut(void)
 		blend -= 5;
 		if (blend <= 0)
 		{
+			PlaySoundMem(sound, DX_PLAYTYPE_BACK);
 			Game::Instance().ChangeScene(new Play(in));
 		}
 	}

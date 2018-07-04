@@ -69,4 +69,6 @@ private:
 	bool mm;
 
 	int flam;
+
+	int sound;
 };

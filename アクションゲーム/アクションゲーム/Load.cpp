@@ -7,6 +7,7 @@ Load* Load::s_Instance = nullptr;
 // コンストラクタ
 Load::Load()
 {
+	Reset();
 	header = {};
 	data.clear();
 	cut.clear();
@@ -16,9 +17,19 @@ Load::Load()
 	evData.clear();
 }
 
+// リセット
+void Load::Reset(void)
+{
+	for (auto itr = sound.begin(); itr != sound.end(); ++itr)
+	{
+		DeleteSoundMem(itr->second);
+	}
+}
+
 // デストラクタ
 Load::~Load()
 {
+	Reset();
 }
 
 // インスタンス化
@@ -160,6 +171,21 @@ bool Load::LoadMap(std::string fileName)
 	}
 
 	return true;
+}
+
+// サウンド読み込み
+int Load::LoadSound(std::string fileName)
+{
+	if (sound.find(fileName) != sound.end())
+	{
+		return sound[fileName];
+	}
+	else
+	{
+		sound[fileName] = LoadSoundMem(fileName.c_str());
+		return sound[fileName];
+	}
+	return 0;
 }
 
 // ヘッダーの取得

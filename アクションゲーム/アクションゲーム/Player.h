@@ -108,6 +108,8 @@ private:
 	// 画像データ
 	int image;
 
+	std::map<std::string, int>sound;
+
 	// フレーム数
 	UINT flam;
 
