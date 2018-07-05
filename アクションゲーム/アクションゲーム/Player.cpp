@@ -5,7 +5,7 @@
 const char* actionPath = "アクション/player.act";
 const float g = 0.5f;
 const int line = 330;
-const float speed = 2.0f;
+const float speed = 3.0f;
 
 // コンストラクタ
 Player::Player(std::weak_ptr<Input>in, std::weak_ptr<Camera>cam) : in(in), cam(cam)
@@ -332,6 +332,13 @@ void Player::Walk(void)
 		func = &Player::Wait;
 	}
 
+	//パンチ
+	if (in.lock()->CheckTrigger(PAD_INPUT_B) && mode != "Punch")
+	{
+		SetMode("Punch", reverse);
+		PlaySoundMem(sound["attack"], DX_PLAYTYPE_BACK);
+		func = &Player::Punch;
+	}
 	//ジャンプ
 	if (in.lock()->CheckTrigger(PAD_INPUT_A))
 	{

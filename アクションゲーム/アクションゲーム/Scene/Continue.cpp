@@ -37,6 +37,8 @@ void Continue::Draw(void)
 		(COUNT_SIZE_X * ((flam++ / time) % COUNT_X)),
 		(COUNT_SIZE_Y * ((flam++ / (time * COUNT_X)) % CONUT_Y)),
 		COUNT_SIZE_X, COUNT_SIZE_Y, image, true);
+
+	DrawString(320, 350, "push start", GetColor(255, 0, 0), false);
 }
 
 // èàóù

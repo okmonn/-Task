@@ -3,7 +3,7 @@
 #include "Title.h"
 #include "DxLib.h"
 
-const int time = 500;
+const int time = 300;
 
 // コンストラクタ
 Over::Over(std::weak_ptr<Input>in)
