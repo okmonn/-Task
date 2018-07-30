@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Window">
+      <UniqueIdentifier>{faf87c67-f145-4bb8-b230-fd33d64ffc9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Icon">
+      <UniqueIdentifier>{35d1c06b-d65a-4fd9-a744-d6418c33b1e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12">
+      <UniqueIdentifier>{1b91f560-b5c6-4d49-bd02-34bbc808dba1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Command">
+      <UniqueIdentifier>{2c59bf23-4b46-49d2-965b-1e2612101592}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Debug">
+      <UniqueIdentifier>{187e07fe-99c5-469c-b8f1-7084e3044de3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Device">
+      <UniqueIdentifier>{53935c23-4e39-49d8-af4b-8d2c8268bd09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Obj">
+      <UniqueIdentifier>{05706ec0-ce09-40ad-917b-38517310995f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Union">
+      <UniqueIdentifier>{5472b3d2-8d51-4660-ab3a-cc767bafb41e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Swap">
+      <UniqueIdentifier>{b781f892-0862-4d75-810f-44125bbe7eaf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\Window.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Command\Allocator.cpp">
+      <Filter>DirectX12\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Command\Queue.cpp">
+      <Filter>DirectX12\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Command\List.cpp">
+      <Filter>DirectX12\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Debug.cpp">
+      <Filter>DirectX12\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Device.cpp">
+      <Filter>DirectX12\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Obj.cpp">
+      <Filter>DirectX12\Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Union.cpp">
+      <Filter>DirectX12\Union</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Swap.cpp">
+      <Filter>DirectX12\Swap</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Window\Window.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Icon\Icon.h">
+      <Filter>Icon</Filter>
+    </ClInclude>
+    <ClInclude Include="Tstring.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Command\Allocator.h">
+      <Filter>DirectX12\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Command\Queue.h">
+      <Filter>DirectX12\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Command\List.h">
+      <Filter>DirectX12\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Debug.h">
+      <Filter>DirectX12\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Device.h">
+      <Filter>DirectX12\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Obj.h">
+      <Filter>DirectX12\Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Union.h">
+      <Filter>DirectX12\Union</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Swap.h">
+      <Filter>DirectX12\Swap</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Icon\Icon.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
