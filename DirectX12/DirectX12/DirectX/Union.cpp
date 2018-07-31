@@ -1,3 +1,4 @@
+#include <d3dcompiler.h>
 #include "Union.h"
 #include "../Window/Window.h"
 #ifdef _DEBUG
@@ -11,7 +12,7 @@
 #include "Descriptor/Depth.h"
 #include "Descriptor/Constant.h"
 #include "RootSignature.h"
-#include <d3dcompiler.h>
+
 
 #pragma comment (lib, "d3d12.lib")
 #pragma comment (lib, "dxgi.lib")
