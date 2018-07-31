@@ -40,6 +40,9 @@
     <Filter Include="DirectX12\Swap">
       <UniqueIdentifier>{b781f892-0862-4d75-810f-44125bbe7eaf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DirectX12\Descriptor">
+      <UniqueIdentifier>{2762be26-3004-4a6c-a763-f6643ef1ec63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -47,9 +50,6 @@
     </ClCompile>
     <ClCompile Include="Window\Window.cpp">
       <Filter>Window</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectX\Command\Allocator.cpp">
-      <Filter>DirectX12\Command</Filter>
     </ClCompile>
     <ClCompile Include="DirectX\Command\Queue.cpp">
       <Filter>DirectX12\Command</Filter>
@@ -72,6 +72,21 @@
     <ClCompile Include="DirectX\Swap.cpp">
       <Filter>DirectX12\Swap</Filter>
     </ClCompile>
+    <ClCompile Include="DirectX\Descriptor\Descriptor.cpp">
+      <Filter>DirectX12\Descriptor</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Descriptor\Render.cpp">
+      <Filter>DirectX12\Descriptor</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Descriptor\Depth.cpp">
+      <Filter>DirectX12\Descriptor</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Command\Command.cpp">
+      <Filter>DirectX12\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Descriptor\Constant.cpp">
+      <Filter>DirectX12\Descriptor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window\Window.h">
@@ -79,12 +94,6 @@
     </ClInclude>
     <ClInclude Include="Icon\Icon.h">
       <Filter>Icon</Filter>
-    </ClInclude>
-    <ClInclude Include="Tstring.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectX\Command\Allocator.h">
-      <Filter>DirectX12\Command</Filter>
     </ClInclude>
     <ClInclude Include="DirectX\Command\Queue.h">
       <Filter>DirectX12\Command</Filter>
@@ -106,6 +115,27 @@
     </ClInclude>
     <ClInclude Include="DirectX\Swap.h">
       <Filter>DirectX12\Swap</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Descriptor\Descriptor.h">
+      <Filter>DirectX12\Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Descriptor\Render.h">
+      <Filter>DirectX12\Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Descriptor\Depth.h">
+      <Filter>DirectX12\Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Command\Command.h">
+      <Filter>DirectX12\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="etc\Tstring.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Descriptor\Constant.h">
+      <Filter>DirectX12\Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="etc\Typedef.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

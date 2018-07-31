@@ -2,8 +2,11 @@
 #include "../Device.h"
 
 // コンストラクタ
-Queue::Queue(std::weak_ptr<Device>dev) : dev(dev), queue(nullptr)
+Queue::Queue(std::weak_ptr<Device>dev) : queue(nullptr)
 {
+	this->dev = dev;
+
+
 	Create();
 }
 

@@ -4,10 +4,12 @@
 #include "Debug.h"
 #endif
 #include "Device.h"
-#include "Command/Allocator.h"
 #include "Command/Queue.h"
 #include "Command/List.h"
 #include "Swap.h"
+#include "Descriptor/Render.h"
+#include "Descriptor/Depth.h"
+#include "Descriptor/Constant.h"
 
 #pragma comment (lib, "d3d12.lib")
 #pragma comment (lib,"dxgi.lib")
@@ -26,15 +28,17 @@ Union::~Union()
 // クラスのインスタンス化
 void Union::Create(void)
 {
-	win = std::make_shared<Window>(x, y);
+	win    = std::make_shared<Window>(x, y);
 #ifdef _DEBUG
-	debug = std::make_shared<Debug>();
+	debug  = std::make_shared<Debug>();
 #endif
-	dev = std::make_shared<Device>();
-	allo = std::make_shared<Allocator>(dev);
-	queue = std::make_shared<Queue>(dev);
-	list = std::make_shared<List>(dev, allo);
-	swap = std::make_shared<Swap>(win, queue);
+	dev      = std::make_shared<Device>();
+	queue    = std::make_shared<Queue>(dev);
+	list     = std::make_shared<List>(dev);
+	swap     = std::make_shared<Swap>(win, queue);
+	render   = std::make_shared<Render>(dev, swap);
+	depth    = std::make_shared<Depth>(win, dev, swap);
+	constant = std::make_shared<Constant>(win, dev, swap);
 }
 
 // ウィンドウのサイズセット

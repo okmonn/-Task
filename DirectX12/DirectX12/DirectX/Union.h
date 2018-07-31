@@ -7,10 +7,12 @@ class Window;
 class Debug;
 #endif
 class Device;
-class Allocator;
 class Queue;
 class List;
 class Swap;
+class Render;
+class Depth;
+class Constant;
 
 class Union
 {
@@ -58,9 +60,11 @@ private:
 	std::shared_ptr<Debug>debug;
 #endif
 	std::shared_ptr<Device>dev;
-	std::shared_ptr<Allocator>allo;
 	std::shared_ptr<Queue>queue;
 	std::shared_ptr<List>list;
 	std::shared_ptr<Swap>swap;
+	std::shared_ptr<Render>render;
+	std::shared_ptr<Depth>depth;
+	std::shared_ptr<Constant>constant;
 };
 

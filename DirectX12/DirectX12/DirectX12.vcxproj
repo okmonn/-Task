@@ -117,10 +117,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DirectX\Command\Allocator.cpp" />
+    <ClCompile Include="DirectX\Command\Command.cpp" />
     <ClCompile Include="DirectX\Command\List.cpp" />
     <ClCompile Include="DirectX\Command\Queue.cpp" />
     <ClCompile Include="DirectX\Debug.cpp" />
+    <ClCompile Include="DirectX\Descriptor\Constant.cpp" />
+    <ClCompile Include="DirectX\Descriptor\Depth.cpp" />
+    <ClCompile Include="DirectX\Descriptor\Descriptor.cpp" />
+    <ClCompile Include="DirectX\Descriptor\Render.cpp" />
     <ClCompile Include="DirectX\Device.cpp" />
     <ClCompile Include="DirectX\Obj.cpp" />
     <ClCompile Include="DirectX\Swap.cpp" />
@@ -129,16 +133,21 @@
     <ClCompile Include="Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DirectX\Command\Allocator.h" />
+    <ClInclude Include="DirectX\Command\Command.h" />
     <ClInclude Include="DirectX\Command\List.h" />
     <ClInclude Include="DirectX\Command\Queue.h" />
     <ClInclude Include="DirectX\Debug.h" />
+    <ClInclude Include="DirectX\Descriptor\Constant.h" />
+    <ClInclude Include="DirectX\Descriptor\Depth.h" />
+    <ClInclude Include="DirectX\Descriptor\Descriptor.h" />
+    <ClInclude Include="DirectX\Descriptor\Render.h" />
     <ClInclude Include="DirectX\Device.h" />
     <ClInclude Include="DirectX\Obj.h" />
     <ClInclude Include="DirectX\Swap.h" />
     <ClInclude Include="DirectX\Union.h" />
+    <ClInclude Include="etc\Tstring.h" />
+    <ClInclude Include="etc\Typedef.h" />
     <ClInclude Include="Icon\Icon.h" />
-    <ClInclude Include="Tstring.h" />
     <ClInclude Include="Window\Window.h" />
   </ItemGroup>
   <ItemGroup>

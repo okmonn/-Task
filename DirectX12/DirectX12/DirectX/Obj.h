@@ -1,5 +1,5 @@
 #pragma once
-#include "../Tstring.h"
+#include "../etc/Tstring.h"
 #include <d3d12.h>
 
 // リリースマクロ
