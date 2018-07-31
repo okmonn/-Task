@@ -10,9 +10,13 @@
 #include "Descriptor/Render.h"
 #include "Descriptor/Depth.h"
 #include "Descriptor/Constant.h"
+#include "RootSignature.h"
+#include <d3dcompiler.h>
 
 #pragma comment (lib, "d3d12.lib")
-#pragma comment (lib,"dxgi.lib")
+#pragma comment (lib, "dxgi.lib")
+#pragma comment (lib, "d3dcompiler.lib")
+
 
 // コンストラクタ
 Union::Union() : x(x), y(y)
@@ -39,6 +43,7 @@ void Union::Create(void)
 	render   = std::make_shared<Render>(dev, swap);
 	depth    = std::make_shared<Depth>(win, dev, swap);
 	constant = std::make_shared<Constant>(win, dev, swap);
+	root     = std::make_shared<RootSignature>(dev);
 }
 
 // ウィンドウのサイズセット

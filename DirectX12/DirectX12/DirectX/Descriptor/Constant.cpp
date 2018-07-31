@@ -2,7 +2,6 @@
 #include "../../Window/Window.h"
 #include "../Device.h"
 #include "../Swap.h"
-#include "../../etc/Typedef.h"
 
 // コンストラクタ
 Constant::Constant(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap) : win(win)
@@ -10,6 +9,7 @@ Constant::Constant(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak
 	this->dev = dev;
 	this->swap = swap;
 	wvp = {};
+	data = nullptr;
 
 
 	SetWorldViewProjection();
@@ -92,7 +92,7 @@ HRESULT Constant::CreateView(void)
 	//定数バッファビュー設定用構造体の設定
 	D3D12_CONSTANT_BUFFER_VIEW_DESC desc = {};
 	desc.BufferLocation = resource[0]->GetGPUVirtualAddress();
-	desc.SizeInBytes = (sizeof(WVP) + 0xff) &~0xff;
+	desc.SizeInBytes    = (sizeof(WVP) + 0xff) &~0xff;
 
 	//定数バッファビュー生成
 	dev.lock()->Get()->CreateConstantBufferView(&desc, GetHeap()->GetCPUDescriptorHandleForHeapStart());
@@ -101,12 +101,12 @@ HRESULT Constant::CreateView(void)
 	D3D12_RANGE range = { 0, 0 };
 
 	//マッピング
-	result = resource[0]->Map(0, &range, (void**)(&send));
+	result = resource[0]->Map(0, &range, (void**)(&data));
 	
 	OutDebug(L"\n定数バッファのマップ：失敗\n", result);
 
 	//コピー
-	memcpy(send, &wvp, sizeof(DirectX::XMMATRIX));
+	memcpy(data, &wvp, sizeof(DirectX::XMMATRIX));
 
 	return result;
 }

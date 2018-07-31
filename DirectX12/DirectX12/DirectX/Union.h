@@ -13,6 +13,8 @@ class Swap;
 class Render;
 class Depth;
 class Constant;
+class RootSignature;
+class Compiler;
 
 class Union
 {
@@ -66,5 +68,6 @@ private:
 	std::shared_ptr<Render>render;
 	std::shared_ptr<Depth>depth;
 	std::shared_ptr<Constant>constant;
+	std::shared_ptr<RootSignature>root;
 };
 
