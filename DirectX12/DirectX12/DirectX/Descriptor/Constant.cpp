@@ -2,6 +2,7 @@
 #include "../../Window/Window.h"
 #include "../Device.h"
 #include "../Swap.h"
+#include <tchar.h>
 
 // コンストラクタ
 Constant::Constant(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap) : win(win)
@@ -80,8 +81,10 @@ HRESULT Constant::CreateResource(void)
 	resource.resize(sizeof(BYTE));
 
 	result = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&resource[0]));
-	
-	OutDebug(L"\n定数バッファのリソースの生成：失敗\n", result);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\n定数バッファのリソースの生成：失敗\n"));
+	}
 
 	return result;
 }
@@ -102,8 +105,10 @@ HRESULT Constant::CreateView(void)
 
 	//マッピング
 	result = resource[0]->Map(0, &range, (void**)(&data));
-	
-	OutDebug(L"\n定数バッファのマップ：失敗\n", result);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\n定数バッファのマップ：失敗\n"));
+	}
 
 	//コピー
 	memcpy(data, &wvp, sizeof(DirectX::XMMATRIX));

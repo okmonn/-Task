@@ -1,6 +1,9 @@
 #include "Swap.h"
 #include "../Window/Window.h"
 #include "Command/Queue.h"
+#include <tchar.h>
+
+#pragma comment (lib, "dxgi.lib")
 
 // コンストラクタ
 Swap::Swap(std::weak_ptr<Window>win, std::weak_ptr<Queue>queue) : win(win), queue(queue), factory(nullptr), swap(nullptr), bufferCnt(0)
@@ -20,8 +23,10 @@ Swap::~Swap()
 HRESULT Swap::CreateFactory(void)
 {
 	result = CreateDXGIFactory1(IID_PPV_ARGS(&factory));
-
-	OutDebug(L"\nファクトリーの生成：失敗\n", result);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\nファクトリーの生成：失敗\n"));
+	}
 
 	return result;
 }
@@ -45,8 +50,10 @@ HRESULT Swap::Create(void)
 
 	//スワップチェイン生成
 	result = factory->CreateSwapChainForHwnd(queue.lock()->Get(), win.lock()->GetHandle(), &desc, nullptr, nullptr, (IDXGISwapChain1**)(&swap));
-	
-	OutDebug(L"\nスワップチェインの生成：失敗\n", result);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\nスワップチェインの生成：失敗\n"));
+	}
 
 	//バックバッファ数保存
 	bufferCnt = desc.BufferCount;

@@ -1,4 +1,3 @@
-#include <d3dcompiler.h>
 #include "Union.h"
 #include "../Window/Window.h"
 #ifdef _DEBUG
@@ -12,12 +11,9 @@
 #include "Descriptor/Depth.h"
 #include "Descriptor/Constant.h"
 #include "RootSignature.h"
-
+#include <tchar.h>
 
 #pragma comment (lib, "d3d12.lib")
-#pragma comment (lib, "dxgi.lib")
-#pragma comment (lib, "d3dcompiler.lib")
-
 
 // コンストラクタ
 Union::Union() : x(x), y(y)
@@ -33,9 +29,9 @@ Union::~Union()
 // クラスのインスタンス化
 void Union::Create(void)
 {
-	win    = std::make_shared<Window>(x, y);
+	win      = std::make_shared<Window>(x, y);
 #ifdef _DEBUG
-	debug  = std::make_shared<Debug>();
+	debug    = std::make_shared<Debug>();
 #endif
 	dev      = std::make_shared<Device>();
 	queue    = std::make_shared<Queue>(dev);
@@ -44,7 +40,7 @@ void Union::Create(void)
 	render   = std::make_shared<Render>(dev, swap);
 	depth    = std::make_shared<Depth>(win, dev, swap);
 	constant = std::make_shared<Constant>(win, dev, swap);
-	root     = std::make_shared<RootSignature>(dev);
+	root     = std::make_shared<RootSignature>(dev, _T("Shader2D.hlsl"), "BasicVS", "BasicPS");
 }
 
 // ウィンドウのサイズセット

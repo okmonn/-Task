@@ -35,7 +35,10 @@ HRESULT Device::Create(void)
 		}
 	}
 
-	OutDebug(L"\nデバイスの生成：失敗\n", result);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\nデバイスの生成：失敗\n"));
+	}
 
 	return result;
 }

@@ -5,7 +5,10 @@
 Debug::Debug() : debug(nullptr)
 {
 	result = D3D12GetDebugInterface(IID_PPV_ARGS(&debug));
-	OutDebug(L"\nデバッグの生成：失敗\n", result);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\nデバッグの生成：失敗\n"));
+	}
 
 	debug->EnableDebugLayer();
 }

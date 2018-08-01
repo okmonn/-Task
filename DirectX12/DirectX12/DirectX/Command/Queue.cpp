@@ -1,5 +1,6 @@
 #include "Queue.h"
 #include "../Device.h"
+#include <tchar.h>
 
 // コンストラクタ
 Queue::Queue(std::weak_ptr<Device>dev) : queue(nullptr)
@@ -27,8 +28,10 @@ HRESULT Queue::Create(void)
 	desc.Type     = D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT;
 
 	result = dev.lock()->Get()->CreateCommandQueue(&desc, IID_PPV_ARGS(&queue));
-
-	OutDebug(L"\nコマンドキューの生成：失敗\n", result);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\nコマンドキューの生成：失敗\n"));
+	}
 
 	return result;
 }

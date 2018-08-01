@@ -1,6 +1,7 @@
 #include "Render.h"
 #include "../Device.h"
 #include "../Swap.h"
+#include <tchar.h>
 
 // コンストラクタ
 Render::Render(std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap)
@@ -42,8 +43,10 @@ HRESULT Render::Create(void)
 	for (UINT i = 0; i < resource.size(); ++i)
 	{
 		result = swap.lock()->Get()->GetBuffer(i, IID_PPV_ARGS(&resource[i]));
-
-		OutDebug(L"\nバッファの取得：失敗\n", result);
+		if (FAILED(result))
+		{
+			OutputDebugString(_T("\nバッファの取得：失敗\n"));
+		}
 
 		if (FAILED(result))
 		{

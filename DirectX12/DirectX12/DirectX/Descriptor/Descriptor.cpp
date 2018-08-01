@@ -1,6 +1,7 @@
 #include "Descriptor.h"
 #include "../Device.h"
 #include "../Swap.h"
+#include <tchar.h>
 
 // コンストラクタ
 Descriptor::Descriptor() : size(0)
@@ -27,8 +28,10 @@ HRESULT Descriptor::CreateHeap(const D3D12_DESCRIPTOR_HEAP_TYPE& type, const D3D
 	desc.Type           = type;
 
 	result = dev.lock()->Get()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&dummy));
-
-	OutDebug(L"\nヒープの生成：失敗\n", result);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\nヒープの生成：失敗\n"));
+	}
 
 	//ヒープの追加
 	heap.push_back(dummy);

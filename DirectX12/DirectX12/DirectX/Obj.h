@@ -1,5 +1,4 @@
 #pragma once
-#include "../etc/Tstring.h"
 #include <d3d12.h>
 
 // リリースマクロ
@@ -14,10 +13,6 @@ public:
 	virtual ~Obj();
 
 protected:
-	// デバッグ用出力
-	void OutDebug(const std::tstring tex, HRESULT result);
-
-
 	// 参照結果
 	HRESULT result;
 };

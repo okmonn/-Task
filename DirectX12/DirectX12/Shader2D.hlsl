@@ -1,3 +1,6 @@
+//ルートシグネチャの宣言
+#define RS "RootFlags(ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT), CBV(b0), SRV(t0), DescriptorTable(CBV(b1, numDescriptors = 1,space = 0), visibility = SHADER_VISIBILITY_ALL), DescriptorTable(SRV(t1, numDescriptors = 1,space = 0), visibility = SHADER_VISIBILITY_PIXEL), StaticSampler(s0 , filter = FILTER_MIN_MAG_MIP_LINEAR, addressU = TEXTURE_ADDRESS_WRAP, addressV = TEXTURE_ADDRESS_WRAP, addressW = TEXTURE_ADDRESS_WRAP, mipLodBias = 0.0f, maxAnisotropy = 0, comparisonFunc  = COMPARISON_NEVER,  borderColor = STATIC_BORDER_COLOR_TRANSPARENT_BLACK, minLOD = 0.0f, maxLOD = 3.402823466e+38f, space = 0, visibility = SHADER_VISIBILITY_ALL)"
+
 Texture2D<float4> tex : register(t0);
 SamplerState smp : register(s0);
 
@@ -8,6 +11,17 @@ cbuffer wvp : register(b0)
     float4x4 world;
 	//ビュープロジェクション行列
     float4x4 viewProjection;
+}
+
+//ウィンドウサイズ・画像サイズ
+cbuffer size : register(b1)
+{
+	//ウィンドウサイズ
+	float2 window;
+	//画像サイズ
+	float2 imageSize;
+	//画像UV
+	float2 imageUv;
 }
 
 //出力
@@ -31,6 +45,7 @@ struct VSInput
 };
 
 //頂点シェーダ
+[RootSignature(RS)]
 Out BasicVS(VSInput input)
 {
 	/*座標補正

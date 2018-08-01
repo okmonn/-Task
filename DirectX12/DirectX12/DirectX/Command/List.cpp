@@ -1,5 +1,6 @@
 #include "List.h"
 #include "../Device.h"
+#include <tchar.h>
 
 // コンストラクタ
 List::List(std::weak_ptr<Device>dev) : allo(nullptr), list(nullptr)
@@ -22,8 +23,10 @@ List::~List()
 HRESULT List::CreateAllo(void)
 {
 	result = dev.lock()->Get()->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&allo));
-
-	OutDebug(L"\nコマンドアロケータの生成：失敗\n", result);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\nコマンドアロケータの生成：失敗\n"));
+	}
 
 	return result;
 }
@@ -32,8 +35,10 @@ HRESULT List::CreateAllo(void)
 HRESULT List::CreateList(void)
 {
 	result = dev.lock()->Get()->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT, allo, nullptr, IID_PPV_ARGS(&list));
-
-	OutDebug(L"\nコマンドリストの生成：失敗\n", result);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\nコマンドリストの生成：失敗\n"));
+	}
 
 	list->Close();
 

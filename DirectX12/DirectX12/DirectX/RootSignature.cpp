@@ -1,5 +1,9 @@
+#include <d3dcompiler.h>
 #include "RootSignature.h"
 #include "Device.h"
+#include <tchar.h>
+
+#pragma comment (lib, "d3dcompiler.lib")
 
 // コンストラクタ
 RootSignature::RootSignature(std::weak_ptr<Device>dev) : dev(dev), rootSignature(nullptr)
@@ -14,12 +18,50 @@ RootSignature::RootSignature(std::weak_ptr<Device>dev) : dev(dev), rootSignature
 	Create();
 }
 
+// コンストラクタ
+RootSignature::RootSignature(std::weak_ptr<Device>dev, LPCWSTR fileName, LPCSTR func1, LPCSTR func2) : dev(dev), rootSignature(nullptr)
+{
+	signature = nullptr;
+	error = nullptr;
+	vertex = nullptr;
+	pixel = nullptr;
+
+
+	ComVer(fileName, func1);
+	ComPix(fileName, func2);
+	CreateSignature();
+}
+
 // デストラクタ
 RootSignature::~RootSignature()
 {
 	Release(error);
 	Release(signature);
 	Release(rootSignature);
+}
+
+// 頂点シェーダのコンパイル
+HRESULT RootSignature::ComVer(LPCWSTR fileName, LPCSTR func, LPCSTR target)
+{
+	result = D3DCompileFromFile(fileName, nullptr, nullptr, func, target, D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &vertex, &error);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\n頂点シェーダのコンパイル：失敗\n"));
+	}
+
+	return result;
+}
+
+// ピクセルシェーダのコンパイル
+HRESULT RootSignature::ComPix(LPCWSTR fileName, LPCSTR func, LPCSTR target)
+{
+	result = D3DCompileFromFile(fileName, nullptr, nullptr, func, target, D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &pixel, &error);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\nピクセルシェーダのコンパイル：失敗\n"));
+	}
+
+	return result;
 }
 
 // シリアライズ
@@ -84,8 +126,10 @@ HRESULT RootSignature::Serialize(void)
 
 	//ルートシグネチャのシリアライズ化
 	result = D3D12SerializeRootSignature(&desc, D3D_ROOT_SIGNATURE_VERSION::D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error);
-	
-	OutDebug(L"\nシリアライズ：失敗\n", result);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\nシリアライズ：失敗\n"));
+	}
 
 	return result;
 }
@@ -94,8 +138,29 @@ HRESULT RootSignature::Serialize(void)
 HRESULT RootSignature::Create(void)
 {
 	result = dev.lock()->Get()->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\nルートシグネチャの生成：失敗\n"));
+	}
 
-	OutDebug(L"\nルートシグネチャの生成：失敗\n", result);
+	return result;
+}
+
+// ルートシグネチャの生成
+HRESULT RootSignature::CreateSignature(void)
+{
+	//シェーダからのフェッチ
+	result = D3DGetBlobPart(vertex->GetBufferPointer(), vertex->GetBufferSize(), D3D_BLOB_ROOT_SIGNATURE, 0, &signature);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\nシェーダからのフェッチ：失敗\n"));
+	}
+
+	result = dev.lock()->Get()->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\nルートシグネチャの生成：失敗\n"));
+	}
 
 	return result;
 }

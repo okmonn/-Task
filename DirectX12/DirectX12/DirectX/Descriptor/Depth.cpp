@@ -2,6 +2,7 @@
 #include "../../Window/Window.h"
 #include "../Device.h"
 #include "../Swap.h"
+#include <tchar.h>
 
 // コンストラクタ
 Depth::Depth(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap) : win(win)
@@ -60,8 +61,10 @@ HRESULT Depth::CreateResource(void)
 	resource.resize(sizeof(BYTE));
 
 	result = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_DEPTH_WRITE, &clear, IID_PPV_ARGS(&resource[0]));
-
-	OutDebug(L"\n深度ステンシルリソースの生成：失敗\n", result);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\n深度ステンシルリソースの生成：失敗\n"));
+	}
 
 	return result;
 }
