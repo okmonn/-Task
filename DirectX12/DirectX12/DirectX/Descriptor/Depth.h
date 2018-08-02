@@ -8,9 +8,12 @@ class Depth :
 {
 public:
 	// コンストラクタ
-	Depth(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap);
+	Depth(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Swap>swap);
 	// デストラクタ
 	~Depth();
+
+	// 深度ステンシルのセット
+	void SetDepth(UINT index = 0);
 
 private:
 	// リソース生成

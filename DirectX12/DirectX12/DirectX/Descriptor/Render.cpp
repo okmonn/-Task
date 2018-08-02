@@ -1,12 +1,22 @@
 #include "Render.h"
 #include "../Device.h"
+#include "../Command/List.h"
 #include "../Swap.h"
 #include <tchar.h>
 
+//クリアカラー
+const FLOAT color[] = {
+	1.0f, 
+	0.0f, 
+	0.0f,
+	0.0f
+};
+
 // コンストラクタ
-Render::Render(std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap)
+Render::Render(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Swap>swap)
 {
 	this->dev = dev;
+	this->list = list;
 	this->swap = swap;
 
 
@@ -61,4 +71,18 @@ HRESULT Render::Create(void)
 	}
 
 	return result;
+}
+
+// レンダーターゲットのセット
+void Render::SetRender(ID3D12DescriptorHeap* depth, UINT index)
+{
+	//頂点ヒープの先頭ハンドルの取得
+	D3D12_CPU_DESCRIPTOR_HANDLE handle = heap[index]->GetCPUDescriptorHandleForHeapStart();
+	handle.ptr += size * swap.lock()->Get()->GetCurrentBackBufferIndex();
+
+	//レンダーターゲットのセット
+	list.lock()->GetList()->OMSetRenderTargets(1, &handle, false, &depth->GetCPUDescriptorHandleForHeapStart());
+
+	//レンダーターゲットのクリア
+	list.lock()->GetList()->ClearRenderTargetView(handle, color, 0, nullptr);
 }

@@ -4,6 +4,7 @@
 #include <memory>
 
 class Device;
+class List;
 class Swap;
 
 class Descriptor : 
@@ -56,6 +57,9 @@ protected:
 
 	// デバイス
 	std::weak_ptr<Device>dev;
+
+	// コマンドリスト
+	std::weak_ptr<List>list;
 
 	// スワップチェイン
 	std::weak_ptr<Swap>swap;

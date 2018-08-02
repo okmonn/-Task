@@ -12,7 +12,9 @@ int main()
 	
 	while (Union::Get().CheckMsg())
 	{
+		Union::Get().Set();
 
+		Union::Get().Do();
 	}
 
 	return 0;

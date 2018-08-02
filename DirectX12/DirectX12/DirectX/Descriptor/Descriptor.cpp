@@ -1,5 +1,6 @@
 #include "Descriptor.h"
 #include "../Device.h"
+#include "../Command/List.h"
 #include "../Swap.h"
 #include <tchar.h>
 

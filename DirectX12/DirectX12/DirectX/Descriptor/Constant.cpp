@@ -1,13 +1,15 @@
 #include "Constant.h"
 #include "../../Window/Window.h"
 #include "../Device.h"
+#include "../Command/List.h"
 #include "../Swap.h"
 #include <tchar.h>
 
 // コンストラクタ
-Constant::Constant(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap) : win(win)
+Constant::Constant(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Swap>swap) : win(win)
 {
 	this->dev = dev;
+	this->list = list;
 	this->swap = swap;
 	wvp = {};
 	data = nullptr;
@@ -114,4 +116,24 @@ HRESULT Constant::CreateView(void)
 	memcpy(data, &wvp, sizeof(DirectX::XMMATRIX));
 
 	return result;
+}
+
+// WVPの更新
+void Constant::UpDataWVP(void)
+{
+	//行列データ更新
+	memcpy(data, &wvp, sizeof(WVP));
+}
+
+// 定数バッファのセット
+void Constant::SetConstant(UINT index, UINT table)
+{
+	//定数バッファヒープの先頭ハンドルを取得
+	D3D12_GPU_DESCRIPTOR_HANDLE handle = heap[index]->GetGPUDescriptorHandleForHeapStart();
+
+	//定数バッファヒープのセット
+	list.lock()->GetList()->SetDescriptorHeaps(1, &heap[index]);
+
+	//定数バッファディスクラプターテーブルのセット
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(table, handle);
 }

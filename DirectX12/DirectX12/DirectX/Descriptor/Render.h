@@ -6,9 +6,12 @@ class Render :
 {
 public:
 	// コンストラクタ
-	Render(std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap);
+	Render(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Swap>swap);
 	// デストラクタ
 	~Render();
+
+	// レンダーターゲットのセット
+	void SetRender(ID3D12DescriptorHeap* depth, UINT index = 0);
 
 private:
 	// リソースの生成

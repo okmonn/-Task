@@ -11,6 +11,9 @@
 #include "Descriptor/Depth.h"
 #include "Descriptor/Constant.h"
 #include "RootSignature.h"
+#include "Pipe.h"
+#include "Fence.h"
+#include "Barrier.h"
 #include <tchar.h>
 
 #pragma comment (lib, "d3d12.lib")
@@ -19,6 +22,8 @@
 Union::Union() : x(x), y(y)
 {
 	msg = {};
+	viewPort = {};
+	scissor = {};
 }
 
 // デストラクタ
@@ -37,14 +42,22 @@ void Union::Create(void)
 	queue    = std::make_shared<Queue>(dev);
 	list     = std::make_shared<List>(dev);
 	swap     = std::make_shared<Swap>(win, queue);
-	render   = std::make_shared<Render>(dev, swap);
-	depth    = std::make_shared<Depth>(win, dev, swap);
-	constant = std::make_shared<Constant>(win, dev, swap);
-	root     = std::make_shared<RootSignature>(dev, _T("Shader2D.hlsl"), "BasicVS", "BasicPS");
+	render   = std::make_shared<Render>(dev, list, swap);
+	depth    = std::make_shared<Depth>(win, dev, list, swap);
+	constant = std::make_shared<Constant>(win, dev, list, swap);
+	root     = std::make_shared<RootSignature>(dev/*, _T("Shader2D.hlsl"), "BasicVS", "BasicPS"*/);
+	root->ComVer(_T("Shader2D.hlsl"), "BasicVS");
+	root->ComPix(_T("Shader2D.hlsl"), "BasicPS");
+	pipe     = std::make_shared<Pipe>(dev, swap, root);
+	fence    = std::make_shared<Fence>(dev, queue);
+	barrier  = std::make_shared<Barrier>(list, swap, render);
+
+	viewPort = { 0, 0, (FLOAT)this->win->GetX(), (FLOAT)this->win->GetY(), 0, 1 };
+	scissor  = { 0, 0, static_cast<LONG>(this->win->GetX()), static_cast<LONG>(this->win->GetY()) };
 }
 
 // ウィンドウのサイズセット
-void Union::ChangeWindowSize(unsigned int x, unsigned int y)
+void Union::ChangeWindowSize(UINT x, UINT y)
 {
 	this->x = x;
 	this->y = y;
@@ -70,4 +83,65 @@ bool Union::CheckMsg(void)
 	}
 
 	return true;
+}
+
+// 描画準備
+void Union::Set(void)
+{
+	//WVP更新
+	constant->UpDataWVP();
+
+	//リセット
+	{
+		list->GetAllo()->Reset();
+		list->GetList()->Reset(list->GetAllo(), pipe->Get());
+	}
+
+	//ルートシグネチャのセット
+	list->GetList()->SetGraphicsRootSignature(root->Get());
+
+	//パイプラインのセット
+	list->GetList()->SetPipelineState(pipe->Get());
+
+	//定数バッファのセット
+	constant->SetConstant();
+
+	//ビューのセット
+	list->GetList()->RSSetViewports(1, &viewPort);
+
+	//シザーのセット
+	list->GetList()->RSSetScissorRects(1, &scissor);
+
+	//バリアの設置
+	barrier->SetBarrier(D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+	//レンダーターゲットのセット
+	render->SetRender(depth->GetHeap());
+
+	//深度ステンシルのセット
+	depth->SetDepth();
+}
+
+// 実行
+void Union::Do(void)
+{
+	//バリアの設置
+	barrier->SetBarrier(D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+
+	//コマンドリストの記録終了
+	list->GetList()->Close();
+
+	//コマンドリストの実行
+	{
+		//リストの配列
+		ID3D12CommandList *commandList[] = { list->GetList() };
+		//配列でない場合：queue->ExecuteCommandLists(1, (ID3D12CommandList*const*)&list);
+		queue->Get()->ExecuteCommandLists(_countof(commandList), commandList);
+	}
+
+	//裏、表画面を反転
+	swap->Get()->Present(1, 0);
+
+	//待機
+	fence->Wait();
 }

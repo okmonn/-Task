@@ -1,13 +1,15 @@
 #include "Depth.h"
 #include "../../Window/Window.h"
 #include "../Device.h"
+#include "../Command/List.h"
 #include "../Swap.h"
 #include <tchar.h>
 
 // コンストラクタ
-Depth::Depth(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap) : win(win)
+Depth::Depth(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Swap>swap) : win(win)
 {
 	this->dev = dev;
+	this->list = list;
 	this->swap = swap;
 
 
@@ -83,3 +85,14 @@ HRESULT Depth::CreateView(void)
 
 	return result;
 }
+
+// 深度ステンシルのセット
+void Depth::SetDepth(UINT index)
+{
+	//深度ステンシルヒープの先頭ハンドルの取得
+	D3D12_CPU_DESCRIPTOR_HANDLE d_handle = heap[index]->GetCPUDescriptorHandleForHeapStart();
+
+	//深度ステンシルビューのクリア
+	list.lock()->GetList()->ClearDepthStencilView(d_handle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+}
+

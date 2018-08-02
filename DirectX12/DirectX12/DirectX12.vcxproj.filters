@@ -46,6 +46,18 @@
     <Filter Include="DirectX12\Root">
       <UniqueIdentifier>{1737d082-ae69-40de-8d1a-865fbef7468d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DirectX12\Pipe">
+      <UniqueIdentifier>{035e4096-4219-4e43-bad2-fa7446c2745f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Fence">
+      <UniqueIdentifier>{e8c648d8-ef50-47ff-bdbf-d642d1357909}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Barrier">
+      <UniqueIdentifier>{38fa5835-f17f-4d28-9c49-e9f831d71a8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX12\Texture">
+      <UniqueIdentifier>{cda9012b-e2c1-43ac-8fff-11c1b204aa03}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -92,6 +104,21 @@
     </ClCompile>
     <ClCompile Include="DirectX\RootSignature.cpp">
       <Filter>DirectX12\Root</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Pipe.cpp">
+      <Filter>DirectX12\Pipe</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Fence.cpp">
+      <Filter>DirectX12\Fence</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Barrier.cpp">
+      <Filter>DirectX12\Barrier</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Texture\Texture.cpp">
+      <Filter>DirectX12\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Texture\WICTextureLoader12.cpp">
+      <Filter>DirectX12\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +172,21 @@
     </ClInclude>
     <ClInclude Include="DirectX\RootSignature.h">
       <Filter>DirectX12\Root</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Pipe.h">
+      <Filter>DirectX12\Pipe</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Fence.h">
+      <Filter>DirectX12\Fence</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Barrier.h">
+      <Filter>DirectX12\Barrier</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Texture\Texture.h">
+      <Filter>DirectX12\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Texture\WICTextureLoader12.h">
+      <Filter>DirectX12\Texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

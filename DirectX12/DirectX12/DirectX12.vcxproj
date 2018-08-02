@@ -126,6 +126,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DirectX\Barrier.cpp" />
     <ClCompile Include="DirectX\Command\Command.cpp" />
     <ClCompile Include="DirectX\Command\List.cpp" />
     <ClCompile Include="DirectX\Command\Queue.cpp" />
@@ -135,14 +136,19 @@
     <ClCompile Include="DirectX\Descriptor\Descriptor.cpp" />
     <ClCompile Include="DirectX\Descriptor\Render.cpp" />
     <ClCompile Include="DirectX\Device.cpp" />
+    <ClCompile Include="DirectX\Fence.cpp" />
     <ClCompile Include="DirectX\Obj.cpp" />
+    <ClCompile Include="DirectX\Pipe.cpp" />
     <ClCompile Include="DirectX\RootSignature.cpp" />
     <ClCompile Include="DirectX\Swap.cpp" />
+    <ClCompile Include="DirectX\Texture\Texture.cpp" />
+    <ClCompile Include="DirectX\Texture\WICTextureLoader12.cpp" />
     <ClCompile Include="DirectX\Union.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DirectX\Barrier.h" />
     <ClInclude Include="DirectX\Command\Command.h" />
     <ClInclude Include="DirectX\Command\List.h" />
     <ClInclude Include="DirectX\Command\Queue.h" />
@@ -152,9 +158,13 @@
     <ClInclude Include="DirectX\Descriptor\Descriptor.h" />
     <ClInclude Include="DirectX\Descriptor\Render.h" />
     <ClInclude Include="DirectX\Device.h" />
+    <ClInclude Include="DirectX\Fence.h" />
     <ClInclude Include="DirectX\Obj.h" />
+    <ClInclude Include="DirectX\Pipe.h" />
     <ClInclude Include="DirectX\RootSignature.h" />
     <ClInclude Include="DirectX\Swap.h" />
+    <ClInclude Include="DirectX\Texture\Texture.h" />
+    <ClInclude Include="DirectX\Texture\WICTextureLoader12.h" />
     <ClInclude Include="DirectX\Union.h" />
     <ClInclude Include="etc\Tstring.h" />
     <ClInclude Include="etc\Typedef.h" />
@@ -182,6 +192,8 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </EntryPointName>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
