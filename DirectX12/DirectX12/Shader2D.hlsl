@@ -98,12 +98,12 @@ Out BasicVS(VSInput input)
 float4 BasicPS(Out o) : SV_TARGET
 {
 	//return float4(tex.Sample(smp, o.uv).rgb, 0);
+	float bright = 1.5f;
     float4 t = tex.Sample(smp, o.uv);
-    /*if (t.a <= 0.0)
+    if (t.a <= 0.0)
     {
         discard;
     }
-*/
-	return float4(1, 1, 1, 1);
+
     return t;
 }

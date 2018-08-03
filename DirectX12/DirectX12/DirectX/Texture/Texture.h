@@ -3,57 +3,36 @@
 #include "../../etc/Typedef.h"
 #include <memory>
 #include <map>
+#include <string>
 
 class Window;
 class Device;
 class List;
 class Swap;
 
-class Texture : 
+#define VERTEX_MAX 4
+
+class Texture :
 	public Obj
 {
-	//頂点データ
+	// 頂点データ
 	struct VertexData {
 		//頂点
-		Vertex vertex[4];
+		Vertex vertex[VERTEX_MAX];
 		//リソース
 		ID3D12Resource* resource;
-		//送信
+		//送信データ
 		UINT* data;
 		//頂点バッファビュー
 		D3D12_VERTEX_BUFFER_VIEW view;
 	};
 
-	//画像データ
-	struct Image {
-		//画面サイズ
-		DirectX::XMFLOAT2 window;
-		//画像サイズ
-		DirectX::XMFLOAT2 size;
-		//画像UV
-		DirectX::XMFLOAT2 uv;
-	};
-
-	//定数バッファ
-	struct Constant {
+	// WICデータ
+	struct WIC {
+		//頂点データ
+		VertexData v;
 		//ヒープ
 		ID3D12DescriptorHeap* heap;
-		//リソース
-		ID3D12Resource* resource;
-		//送信データ
-		UINT8* data;
-		//サイズ
-		UINT size;
-	};
-
-	//WICデータ
-	struct WIC {
-		//画像データ
-		Image image;
-		//頂点データ
-		VertexData vertex;
-		//定数バッファ
-		Constant constant;
 		//リソース
 		ID3D12Resource* resource;
 		//デコード
@@ -61,8 +40,6 @@ class Texture :
 		//サブ
 		D3D12_SUBRESOURCE_DATA sub;
 	};
-
-	
 
 public:
 	// コンストラクタ
@@ -73,29 +50,27 @@ public:
 	// WIC読み込み
 	HRESULT LoadWIC(UINT& index, std::string fileName);
 
-	// ヒープのセット
-	void SetHeap(UINT* index, UINT i = 2);
-
 	// 描画準備
 	void SetDraw(UINT* index);
 
-	void DrawGraph(UINT& index, FLOAT x, FLOAT y, BOOL turn = FALSE);
+	// ヒープのセット
+	void SetHeap(UINT* index, UINT table = 2);
+
+	// 描画
+	void Draw(UINT& index);
 
 private:
 	// ヒープの生成
 	HRESULT CreateHeap(UINT* index);
 
 	// リソースの生成
-	HRESULT CreateResourcce(UINT* index);
+	HRESULT CreateResourceView(UINT* index);
 
-	// バッファビューの生成
-	HRESULT CreateView(UINT* index);
+	// 頂点バッファの生成
+	HRESULT CreateVertex(UINT* index);
 
-	// シェーダリソースビューの生成
-	HRESULT CreateShaderView(UINT* index);
-
-	// 頂点リソースの生成
-	HRESULT CreateVertexResource(UINT* index);
+	// 解放
+	void Liberation(void);
 
 
 	// ウィンドウ
@@ -114,7 +89,8 @@ private:
 	std::map<UINT*, WIC>wic;
 };
 
-namespace okmonn {
+namespace func {
 	// ユニコード変換
 	std::wstring ChangeUnicode(const CHAR* str);
 }
+

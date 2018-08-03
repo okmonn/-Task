@@ -14,9 +14,12 @@
 #include "Pipe.h"
 #include "Fence.h"
 #include "Barrier.h"
+#include "Texture\Texture.h"
 #include <tchar.h>
 
 #pragma comment (lib, "d3d12.lib")
+
+UINT m = 0;
 
 // コンストラクタ
 Union::Union() : x(x), y(y)
@@ -51,6 +54,8 @@ void Union::Create(void)
 	pipe     = std::make_shared<Pipe>(dev, swap, root);
 	fence    = std::make_shared<Fence>(dev, queue);
 	barrier  = std::make_shared<Barrier>(list, swap, render);
+	tex = std::make_shared<Texture>(win, dev, list, swap);
+	tex->LoadWIC(m, "img/sample.png");
 
 	viewPort = { 0, 0, (FLOAT)this->win->GetX(), (FLOAT)this->win->GetY(), 0, 1 };
 	scissor  = { 0, 0, static_cast<LONG>(this->win->GetX()), static_cast<LONG>(this->win->GetY()) };
@@ -120,6 +125,8 @@ void Union::Set(void)
 
 	//深度ステンシルのセット
 	depth->SetDepth();
+
+	tex->Draw(m);
 }
 
 // 実行

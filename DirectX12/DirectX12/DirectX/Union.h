@@ -18,6 +18,7 @@ class Compiler;
 class Pipe;
 class Fence;
 class Barrier;
+class Texture;
 
 class Union
 {
@@ -87,5 +88,6 @@ private:
 	std::shared_ptr<Pipe>pipe;
 	std::shared_ptr<Fence>fence;
 	std::shared_ptr<Barrier>barrier;
+	std::shared_ptr<Texture>tex;
 };
 

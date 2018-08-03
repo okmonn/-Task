@@ -114,10 +114,10 @@
     <ClCompile Include="DirectX\Barrier.cpp">
       <Filter>DirectX12\Barrier</Filter>
     </ClCompile>
-    <ClCompile Include="DirectX\Texture\Texture.cpp">
+    <ClCompile Include="DirectX\Texture\WICTextureLoader12.cpp">
       <Filter>DirectX12\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="DirectX\Texture\WICTextureLoader12.cpp">
+    <ClCompile Include="DirectX\Texture\Texture.cpp">
       <Filter>DirectX12\Texture</Filter>
     </ClCompile>
   </ItemGroup>
@@ -182,10 +182,10 @@
     <ClInclude Include="DirectX\Barrier.h">
       <Filter>DirectX12\Barrier</Filter>
     </ClInclude>
-    <ClInclude Include="DirectX\Texture\Texture.h">
+    <ClInclude Include="DirectX\Texture\WICTextureLoader12.h">
       <Filter>DirectX12\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="DirectX\Texture\WICTextureLoader12.h">
+    <ClInclude Include="DirectX\Texture\Texture.h">
       <Filter>DirectX12\Texture</Filter>
     </ClInclude>
   </ItemGroup>
