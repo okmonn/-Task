@@ -18,4 +18,3 @@ protected:
 	// QÆŒ‹‰Ê
 	HRESULT result;
 };
-

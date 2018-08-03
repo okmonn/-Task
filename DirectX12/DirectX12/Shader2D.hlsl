@@ -17,22 +17,6 @@
 //space = 0,\
 //visibility = SHADER_VISIBILITY_ALL)"
 
-#define RS "RootFlags(ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT),\
-CBV(b0, space = 0, flags = DATA_STATIC),\
-DescriptorTable(SRV(t0, numDescriptors = 1, space = 0), visibility = SHADER_VISIBILITY_ALL),\
-StaticSampler(s0, filter = FILTER_MIN_MAG_MIP_LINEAR,\
-addressU = TEXTURE_ADDRESS_WRAP,\
-addressV = TEXTURE_ADDRESS_WRAP,\
-addressW = TEXTURE_ADDRESS_WRAP,\
-mipLodBias = 0.0f,\
-maxAnisotropy = 16,\
-comparisonFunc = COMPARISON_NEVER,\
-borderColor = STATIC_BORDER_COLOR_TRANSPARENT_BLACK,\
-minLOD = 0.0f,\
-maxLOD = 3.402823466e+38f,\
-space = 0,\
-visibility = SHADER_VISIBILITY_ALL)"
-
 //テクスチャ
 Texture2D<float4> tex : register(t0);
 //サンプラー
@@ -48,14 +32,10 @@ cbuffer wvp : register(b0)
 }
 
 //ウィンドウサイズ・画像サイズ
-cbuffer size : register(b1)
+cbuffer image : register(b1)
 {
 	//ウィンドウサイズ
 	float2 window;
-	//画像サイズ
-	float2 imageSize;
-	//画像UV
-	float2 imageUv;
 }
 
 //出力
@@ -79,11 +59,12 @@ struct VSInput
 };
 
 //頂点シェーダ
-[RootSignature(RS)]
+//[RootSignature(RS)]
 Out BasicVS(VSInput input)
 {
-	/*座標補正
-	pos.xy = float2(-1, 1) + (pos.xy / float2((640 / 2), -(480 / 2)));*/
+    //座標補正
+    //input.pos.xy = float2(-1, 1) + (input.pos.xy / float2((640 / 2.0f), -(480 / 2.0f)));
+    //input.pos = mul(mul(viewProjection, world), input.pos);
 
     Out o;
     o.svpos = input.pos;
@@ -94,16 +75,19 @@ Out BasicVS(VSInput input)
 }
 
 //ピクセルシェーダ
-[RootSignature(RS)]
+//[RootSignature(RS)]
 float4 BasicPS(Out o) : SV_TARGET
 {
 	//return float4(tex.Sample(smp, o.uv).rgb, 0);
-	float bright = 1.5f;
     float4 t = tex.Sample(smp, o.uv);
     if (t.a <= 0.0)
     {
         discard;
     }
+
+    float bright = 2.5f;
+
+    t.rgb *= float3(bright, bright, bright);
 
     return t;
 }

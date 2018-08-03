@@ -71,7 +71,7 @@ HRESULT Constant::CreateResource(void)
 	//リソース設定用構造体の設定
 	D3D12_RESOURCE_DESC desc = {};
 	desc.Dimension        = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_BUFFER;
-	desc.Width            = ((sizeof(WVP) + 0xff) &~0xff);
+	desc.Width            = (sizeof(WVP) + 0xff) &~0xff;
 	desc.Height           = 1;
 	desc.DepthOrArraySize = 1;
 	desc.MipLevels        = 1;
@@ -121,6 +121,12 @@ HRESULT Constant::CreateView(void)
 // WVPの更新
 void Constant::UpDataWVP(void)
 {
+	static float angle = 0.0f;
+	//回転
+	angle++;
+	//行列更新
+	wvp.world = DirectX::XMMatrixRotationY(RAD(angle));
+
 	//行列データ更新
 	memcpy(data, &wvp, sizeof(WVP));
 }

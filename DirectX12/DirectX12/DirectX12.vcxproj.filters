@@ -78,9 +78,6 @@
     <ClCompile Include="DirectX\Device.cpp">
       <Filter>DirectX12\Device</Filter>
     </ClCompile>
-    <ClCompile Include="DirectX\Obj.cpp">
-      <Filter>DirectX12\Obj</Filter>
-    </ClCompile>
     <ClCompile Include="DirectX\Union.cpp">
       <Filter>DirectX12\Union</Filter>
     </ClCompile>
@@ -95,9 +92,6 @@
     </ClCompile>
     <ClCompile Include="DirectX\Descriptor\Depth.cpp">
       <Filter>DirectX12\Descriptor</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectX\Command\Command.cpp">
-      <Filter>DirectX12\Command</Filter>
     </ClCompile>
     <ClCompile Include="DirectX\Descriptor\Constant.cpp">
       <Filter>DirectX12\Descriptor</Filter>
@@ -187,6 +181,12 @@
     </ClInclude>
     <ClInclude Include="DirectX\Texture\Texture.h">
       <Filter>DirectX12\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="etc\Vector2.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="etc\Vector3.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

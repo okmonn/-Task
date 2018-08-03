@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Window">
+      <UniqueIdentifier>{d98417b4-9cc8-4a73-b3d8-c834f0560700}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Icon">
+      <UniqueIdentifier>{2ff7de56-a1d4-4e9b-bbb5-6bdaed00c639}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Union">
+      <UniqueIdentifier>{30f1bc43-dae7-4520-b846-706c7da656bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{36fbf9fc-cfe8-4c1a-8280-fc210afb4fb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Obj">
+      <UniqueIdentifier>{42b12cbb-1124-4ea2-bfd8-d544e856dcd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device">
+      <UniqueIdentifier>{124577db-9d0b-4542-a1ac-44b7c7696a5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Command">
+      <UniqueIdentifier>{200fe930-c5e5-4598-b7b2-0a0516a87e31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Swap">
+      <UniqueIdentifier>{688d223c-01f7-4551-aafc-c668864b211f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Descriptor">
+      <UniqueIdentifier>{1929cbc7-71b2-43bb-899f-7838f4b5c712}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fence">
+      <UniqueIdentifier>{ca5b48c1-76b5-4e3b-b856-575a7823fea5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Window\Window.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Icon\Icon.h">
+      <Filter>Icon</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Union.h">
+      <Filter>Union</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Obj.h">
+      <Filter>Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Device.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Debug.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Command\Command.h">
+      <Filter>Command</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Command\Queue.h">
+      <Filter>Command</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Command\List.h">
+      <Filter>Command</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Swap.h">
+      <Filter>Swap</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Descriptor\Descriptor.h">
+      <Filter>Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Descriptor\Render.h">
+      <Filter>Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Descriptor\Depth.h">
+      <Filter>Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Fence.h">
+      <Filter>Fence</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Window\Window.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Union.cpp">
+      <Filter>Union</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Device.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Debug.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Command\Queue.cpp">
+      <Filter>Command</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Command\List.cpp">
+      <Filter>Command</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Swap.cpp">
+      <Filter>Swap</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Descriptor\Descriptor.cpp">
+      <Filter>Descriptor</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Descriptor\Render.cpp">
+      <Filter>Descriptor</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Descriptor\Depth.cpp">
+      <Filter>Descriptor</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Fence.cpp">
+      <Filter>Fence</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Icon\Icon.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

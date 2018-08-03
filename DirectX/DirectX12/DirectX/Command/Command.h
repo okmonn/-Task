@@ -4,14 +4,12 @@
 
 class Device;
 
-class Command :
+class Command : 
 	public Obj
 {
 public:
-	// コンストラクタ
 	Command() {
 	};
-	// デストラクタ
 	virtual ~Command() {
 	};
 

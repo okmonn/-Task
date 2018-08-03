@@ -18,9 +18,42 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DirectX\Command\List.cpp" />
+    <ClCompile Include="DirectX\Command\Queue.cpp" />
+    <ClCompile Include="DirectX\Debug.cpp" />
+    <ClCompile Include="DirectX\Descriptor\Depth.cpp" />
+    <ClCompile Include="DirectX\Descriptor\Descriptor.cpp" />
+    <ClCompile Include="DirectX\Descriptor\Render.cpp" />
+    <ClCompile Include="DirectX\Device.cpp" />
+    <ClCompile Include="DirectX\Fence.cpp" />
+    <ClCompile Include="DirectX\Swap.cpp" />
+    <ClCompile Include="DirectX\Union.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Window\Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DirectX\Command\Command.h" />
+    <ClInclude Include="DirectX\Command\List.h" />
+    <ClInclude Include="DirectX\Command\Queue.h" />
+    <ClInclude Include="DirectX\Debug.h" />
+    <ClInclude Include="DirectX\Descriptor\Depth.h" />
+    <ClInclude Include="DirectX\Descriptor\Descriptor.h" />
+    <ClInclude Include="DirectX\Descriptor\Render.h" />
+    <ClInclude Include="DirectX\Device.h" />
+    <ClInclude Include="DirectX\Fence.h" />
+    <ClInclude Include="DirectX\Obj.h" />
+    <ClInclude Include="DirectX\Swap.h" />
+    <ClInclude Include="DirectX\Union.h" />
+    <ClInclude Include="Icon\Icon.h" />
+    <ClInclude Include="Window\Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Icon\Icon.rc" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{5D5995A2-4D37-429C-B396-AA2B91B78677}</ProjectGuid>
+    <ProjectGuid>{55898161-DE99-4772-B798-66FBB4AB770B}</ProjectGuid>
     <RootNamespace>DirectX12</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -29,27 +62,27 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -69,14 +102,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.17134.0\shared;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.17134.0\um;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Windows Kits\10\Lib\10.0.17134.0\um\x64;C:\Program Files %28x86%29\Windows Kits\10\Lib\10.0.17134.0\ucrt\x64;$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.17134.0\shared;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.17134.0\um;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Windows Kits\10\Lib\10.0.17134.0\um\x64;C:\Program Files %28x86%29\Windows Kits\10\Lib\10.0.17134.0\ucrt\x64;$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -92,7 +118,6 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -118,84 +143,12 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="DirectX\Barrier.cpp" />
-    <ClCompile Include="DirectX\Command\List.cpp" />
-    <ClCompile Include="DirectX\Command\Queue.cpp" />
-    <ClCompile Include="DirectX\Debug.cpp" />
-    <ClCompile Include="DirectX\Descriptor\Constant.cpp" />
-    <ClCompile Include="DirectX\Descriptor\Depth.cpp" />
-    <ClCompile Include="DirectX\Descriptor\Descriptor.cpp" />
-    <ClCompile Include="DirectX\Descriptor\Render.cpp" />
-    <ClCompile Include="DirectX\Device.cpp" />
-    <ClCompile Include="DirectX\Fence.cpp" />
-    <ClCompile Include="DirectX\Pipe.cpp" />
-    <ClCompile Include="DirectX\RootSignature.cpp" />
-    <ClCompile Include="DirectX\Swap.cpp" />
-    <ClCompile Include="DirectX\Texture\Texture.cpp" />
-    <ClCompile Include="DirectX\Texture\WICTextureLoader12.cpp" />
-    <ClCompile Include="DirectX\Union.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Window\Window.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="DirectX\Barrier.h" />
-    <ClInclude Include="DirectX\Command\Command.h" />
-    <ClInclude Include="DirectX\Command\List.h" />
-    <ClInclude Include="DirectX\Command\Queue.h" />
-    <ClInclude Include="DirectX\Debug.h" />
-    <ClInclude Include="DirectX\Descriptor\Constant.h" />
-    <ClInclude Include="DirectX\Descriptor\Depth.h" />
-    <ClInclude Include="DirectX\Descriptor\Descriptor.h" />
-    <ClInclude Include="DirectX\Descriptor\Render.h" />
-    <ClInclude Include="DirectX\Device.h" />
-    <ClInclude Include="DirectX\Fence.h" />
-    <ClInclude Include="DirectX\Obj.h" />
-    <ClInclude Include="DirectX\Pipe.h" />
-    <ClInclude Include="DirectX\RootSignature.h" />
-    <ClInclude Include="DirectX\Swap.h" />
-    <ClInclude Include="DirectX\Texture\Texture.h" />
-    <ClInclude Include="DirectX\Texture\WICTextureLoader12.h" />
-    <ClInclude Include="DirectX\Union.h" />
-    <ClInclude Include="etc\Tstring.h" />
-    <ClInclude Include="etc\Typedef.h" />
-    <ClInclude Include="etc\Vector2.h" />
-    <ClInclude Include="etc\Vector3.h" />
-    <ClInclude Include="Icon\Icon.h" />
-    <ClInclude Include="Window\Window.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Icon\Icon.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Shader2D.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </EntryPointName>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </EntryPointName>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </EntryPointName>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </EntryPointName>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </FxCompile>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

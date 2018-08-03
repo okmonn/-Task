@@ -126,7 +126,7 @@ void Union::Set(void)
 	//深度ステンシルのセット
 	depth->SetDepth();
 
-	tex->Draw(m);
+	tex->Draw(m/*, Vec2f(0,0), Vec2f(100,100)*/);
 }
 
 // 実行

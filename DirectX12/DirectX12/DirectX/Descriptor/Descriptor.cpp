@@ -40,9 +40,6 @@ HRESULT Descriptor::CreateHeap(const D3D12_DESCRIPTOR_HEAP_TYPE& type, const D3D
 	//ヒープサイズの更新
 	size = dev.lock()->Get()->GetDescriptorHandleIncrementSize(type);
 
-	//ダミーの解放
-	//Release(dummy);
-
 	return result;
 }
 
