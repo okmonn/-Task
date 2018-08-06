@@ -20,6 +20,7 @@
 #pragma comment (lib, "d3d12.lib")
 
 UINT m = 0;
+UINT n = 0;
 
 // コンストラクタ
 Union::Union() : x(x), y(y)
@@ -56,6 +57,7 @@ void Union::Create(void)
 	barrier  = std::make_shared<Barrier>(list, swap, render);
 	tex = std::make_shared<Texture>(win, dev, list, swap);
 	tex->LoadWIC(m, "img/sample.png");
+	tex->LoadWIC(n, "img/sample.png");
 
 	viewPort = { 0, 0, (FLOAT)this->win->GetX(), (FLOAT)this->win->GetY(), 0, 1 };
 	scissor  = { 0, 0, static_cast<LONG>(this->win->GetX()), static_cast<LONG>(this->win->GetY()) };
@@ -127,6 +129,9 @@ void Union::Set(void)
 	depth->SetDepth();
 
 	tex->Draw(m/*, Vec2f(0,0), Vec2f(100,100)*/);
+
+	tex->Draw(n
+);
 }
 
 // 実行

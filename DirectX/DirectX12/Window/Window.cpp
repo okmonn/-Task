@@ -51,7 +51,7 @@ void Window::SetWindow(void)
 	window.lpfnWndProc   = (WNDPROC)WindowProcedure;
 	window.lpszClassName = _T("DirectX12");
 	window.lpszMenuName  = _T("DirectX12");
-	window.style         = CS_HREDRAW;
+	window.style         = CS_HREDRAW | CS_VREDRAW;
 
 	// ウィンドウの登録
 	RegisterClassEx(&window);

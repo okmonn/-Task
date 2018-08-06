@@ -13,6 +13,11 @@ class Swap;
 class Render;
 class Depth;
 class Fence;
+class Root;
+class Pipe;
+class Triangle;
+class Constant;
+class Texture;
 
 class Union
 {
@@ -49,6 +54,15 @@ private:
 	void operator=(const Union&) {
 	}
 
+	// ビューポートのセット
+	void ViewPort(void);
+
+	// シザーのセット
+	void Scissor(void);
+
+	// バリアのセット
+	void Barrier(D3D12_RESOURCE_STATES befor, D3D12_RESOURCE_STATES affter);
+
 	// 画面サイズX
 	UINT x;
 
@@ -63,6 +77,9 @@ private:
 
 	// シザー
 	RECT scissor;
+
+	// バリア
+	D3D12_RESOURCE_BARRIER barrier;
 
 	// ウィンドウ
 	std::shared_ptr<Window>win;
@@ -91,5 +108,19 @@ private:
 
 	// フェンス
 	std::shared_ptr<Fence>fence;
-};
 
+	// ルートシグネチャ
+	std::shared_ptr<Root>root;
+
+	// パイプライン
+	std::shared_ptr<Pipe>pipe;
+
+	// 三角形
+	std::shared_ptr<Triangle>tri;
+
+	// 定数バッファ
+	std::shared_ptr<Constant>constant;
+
+	// テクスチャ
+	std::shared_ptr<Texture>tex;
+};

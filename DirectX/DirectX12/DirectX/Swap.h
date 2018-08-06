@@ -15,6 +15,9 @@ public:
 	// デストラクタ
 	~Swap();
 
+	// 裏・表の入れ替え
+	void Present(void);
+
 	// スワップチェインの取得
 	IDXGISwapChain3* Get(void) const {
 		return swap;

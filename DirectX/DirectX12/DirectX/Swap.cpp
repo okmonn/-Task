@@ -61,3 +61,9 @@ HRESULT Swap::CreateSwap(void)
 
 	return result;
 }
+
+// — E•\‚Ì“ü‚ê‘Ö‚¦
+void Swap::Present(void)
+{
+	swap->Present(1, 0);
+}

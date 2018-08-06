@@ -22,12 +22,18 @@
     <ClCompile Include="DirectX\Command\List.cpp" />
     <ClCompile Include="DirectX\Command\Queue.cpp" />
     <ClCompile Include="DirectX\Debug.cpp" />
+    <ClCompile Include="DirectX\Descriptor\Constant.cpp" />
     <ClCompile Include="DirectX\Descriptor\Depth.cpp" />
     <ClCompile Include="DirectX\Descriptor\Descriptor.cpp" />
     <ClCompile Include="DirectX\Descriptor\Render.cpp" />
     <ClCompile Include="DirectX\Device.cpp" />
+    <ClCompile Include="DirectX\Draw\Triangle.cpp" />
     <ClCompile Include="DirectX\Fence.cpp" />
+    <ClCompile Include="DirectX\Pipe.cpp" />
+    <ClCompile Include="DirectX\Root.cpp" />
     <ClCompile Include="DirectX\Swap.cpp" />
+    <ClCompile Include="DirectX\Texture\Texture.cpp" />
+    <ClCompile Include="DirectX\Texture\WICTextureLoader12.cpp" />
     <ClCompile Include="DirectX\Union.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Window\Window.cpp" />
@@ -37,19 +43,42 @@
     <ClInclude Include="DirectX\Command\List.h" />
     <ClInclude Include="DirectX\Command\Queue.h" />
     <ClInclude Include="DirectX\Debug.h" />
+    <ClInclude Include="DirectX\Descriptor\Constant.h" />
     <ClInclude Include="DirectX\Descriptor\Depth.h" />
     <ClInclude Include="DirectX\Descriptor\Descriptor.h" />
     <ClInclude Include="DirectX\Descriptor\Render.h" />
     <ClInclude Include="DirectX\Device.h" />
+    <ClInclude Include="DirectX\Draw\Triangle.h" />
     <ClInclude Include="DirectX\Fence.h" />
     <ClInclude Include="DirectX\Obj.h" />
+    <ClInclude Include="DirectX\Pipe.h" />
+    <ClInclude Include="DirectX\Root.h" />
     <ClInclude Include="DirectX\Swap.h" />
+    <ClInclude Include="DirectX\Texture\Texture.h" />
+    <ClInclude Include="DirectX\Texture\WICTextureLoader12.h" />
     <ClInclude Include="DirectX\Union.h" />
+    <ClInclude Include="etc\Typedef.h" />
+    <ClInclude Include="etc\Vector2.h" />
+    <ClInclude Include="etc\Vector3.h" />
     <ClInclude Include="Icon\Icon.h" />
     <ClInclude Include="Window\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Icon\Icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="BasicShader.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

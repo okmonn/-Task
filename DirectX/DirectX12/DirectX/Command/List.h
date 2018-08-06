@@ -10,6 +10,24 @@ public:
 	// デストラクタ
 	~List();
 
+	// リセット
+	void Reset(ID3D12PipelineState* pipe);
+
+	// ルートシグネチャのセット
+	void SetRoot(ID3D12RootSignature* root);
+
+	// パイプラインのセット
+	void SetPipe(ID3D12PipelineState* pipe);
+
+	// ビューポートのセット
+	void SetViewPort(const D3D12_VIEWPORT & viewport);
+
+	// シザーのセット
+	void SetScissor(const RECT& scissor);
+
+	// コマンドリストのクローズ
+	void Close(void);
+
 	// コマンドアロケータ
 	ID3D12CommandAllocator* GetAllo(void) const {
 		return allo;

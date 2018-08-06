@@ -44,3 +44,43 @@ HRESULT List::CreateList(void)
 
 	return result;
 }
+
+// リセット
+void List::Reset(ID3D12PipelineState * pipe)
+{
+	//コマンドアロケータのリセット
+	allo->Reset();
+
+	//コマンドリストのリセット
+	list->Reset(allo, pipe);
+}
+
+// ルートシグネチャのセット
+void List::SetRoot(ID3D12RootSignature * root)
+{
+	list->SetGraphicsRootSignature(root);
+}
+
+// パイプラインのセット
+void List::SetPipe(ID3D12PipelineState * pipe)
+{
+	list->SetPipelineState(pipe);
+}
+
+// ビューポートのセット
+void List::SetViewPort(const D3D12_VIEWPORT & viewport)
+{
+	list->RSSetViewports(1, &viewport);
+}
+
+// シザーのセット
+void List::SetScissor(const RECT & scissor)
+{
+	list->RSSetScissorRects(1, &scissor);
+}
+
+// コマンドリストのクローズ
+void List::Close(void)
+{
+	list->Close();
+}
