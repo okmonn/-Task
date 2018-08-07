@@ -15,11 +15,9 @@ const FLOAT color[] = {
 // コンストラクタ
 Render::Render(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Swap>swap)
 {
-	this->dev = dev; 
+	this->dev  = dev; 
 	this->list = list;
 	this->swap = swap;
-
-	resource.resize(this->swap.lock()->GetBack());
 
 	CreateResource();
 }
@@ -43,6 +41,9 @@ HRESULT Render::CreateResource(void)
 		return result;
 	}
 
+	//配列のメモリ確保
+	resource.resize(this->swap.lock()->GetBack());
+
 	//レンダーターゲット設定用構造体
 	D3D12_RENDER_TARGET_VIEW_DESC desc = {};
 	desc.Format               = DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -59,10 +60,6 @@ HRESULT Render::CreateResource(void)
 		if (FAILED(result))
 		{
 			OutputDebugString(_T("\nバッファの取得：失敗\n"));
-		}
-
-		if (FAILED(result))
-		{
 			break;
 		}
 

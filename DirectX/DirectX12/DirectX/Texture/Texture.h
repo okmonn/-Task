@@ -10,7 +10,7 @@ class Texture :
 	public Descriptor
 {
 	// 定数バッファ
-	struct Constant {
+	struct Con {
 		//ヒープ
 		ID3D12DescriptorHeap* heap;
 		//リソース
@@ -20,7 +20,7 @@ class Texture :
 	// WICデータ
 	struct WIC {
 		//定数バッファ
-		Constant con;
+		Con con;
 		//頂点データ
 		std::vector<Vertex>vertex;
 		//リソース
@@ -42,17 +42,23 @@ public:
 	~Texture();
 
 	// WIC読み込み
-	HRESULT LoadWIC(UINT& index, std::string fileName);
+	HRESULT LoadWIC(UINT& index, const std::string& fileName);
 
 	// 描画
 	void Draw(UINT& index, const Vec2f& pos);
+
+	// 描画・サイズ指定
+	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size);
+
+	// 描画・サイズ指定・分割
+	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rectPos, const Vec2f& rectSize, UINT turnX = 0, UINT turnY = 0);
 
 private:
 	// 定数バッファヒープの生成
 	HRESULT CreateHeap(UINT* index);
 
-	// 定数バッファビューの生成
-	HRESULT CreateConView(UINT* index);
+	// シェーダリソースビューの生成
+	HRESULT CreateShaderView(UINT* index);
 
 	// 頂点リソースの生成
 	HRESULT CreateResource(UINT* index);

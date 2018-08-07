@@ -10,6 +10,7 @@ Debug::Debug() : debug(nullptr)
 		OutputDebugString(_T("\nデバッグの生成：失敗\n"));
 	}
 
+	//デバッグの表示を許可
 	debug->EnableDebugLayer();
 }
 

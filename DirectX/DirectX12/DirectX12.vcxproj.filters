@@ -61,6 +61,9 @@
     <Filter Include="ヘッダー ファイル\Vector">
       <UniqueIdentifier>{805e1247-f74c-43fe-9f84-0ffeec0fa200}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DirectX\Input">
+      <UniqueIdentifier>{d27a345b-14c2-4663-a09b-97a62e01ac41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window\Window.h">
@@ -132,6 +135,12 @@
     <ClInclude Include="etc\Vector3.h">
       <Filter>ヘッダー ファイル\Vector</Filter>
     </ClInclude>
+    <ClInclude Include="DirectX\Input\Input.h">
+      <Filter>DirectX\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Input\KeyData.h">
+      <Filter>DirectX\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Window\Window.cpp">
@@ -187,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="DirectX\Texture\WICTextureLoader12.cpp">
       <Filter>DirectX\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Input\Input.cpp">
+      <Filter>DirectX\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

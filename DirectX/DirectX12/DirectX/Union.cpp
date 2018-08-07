@@ -1,5 +1,6 @@
 #include "Union.h"
 #include "../Window/Window.h"
+#include "Input/Input.h"
 #ifdef _DEBUG
 #include "Debug.h"
 #endif
@@ -42,29 +43,32 @@ void Union::ChangeWindowSize(UINT x, UINT y)
 }
 
 UINT n = 0;
+UINT m = 0;
 
 // クラスのインスタンス化
 void Union::Create(void)
 {
 	win    = std::make_shared<Window>(x, y);
+	input  = std::make_shared<Input>(win);
 #ifdef _DEBUG
 	debug  = std::make_shared<Debug>();
 #endif
-	dev    = std::make_shared<Device>();
-	queue  = std::make_shared<Queue>(dev);
-	list   = std::make_shared<List>(dev);
-	swap   = std::make_shared<Swap>(win, queue);
-	render = std::make_shared<Render>(dev, list, swap);
-	depth  = std::make_shared<Depth>(win, dev, list, swap);
-	fence  = std::make_shared<Fence>(dev, queue);
-	root   = std::make_shared<Root>(dev);
+	dev      = std::make_shared<Device>();
+	queue    = std::make_shared<Queue>(dev);
+	list     = std::make_shared<List>(dev);
+	swap     = std::make_shared<Swap>(win, queue);
+	render   = std::make_shared<Render>(dev, list, swap);
+	depth    = std::make_shared<Depth>(win, dev, list, swap);
+	fence    = std::make_shared<Fence>(dev, queue);
+	root     = std::make_shared<Root>(dev);
 	root->ComVertex(L"BasicShader.hlsl", "VS");
 	root->ComPixel(L"BasicShader.hlsl", "PS");
-	pipe   = std::make_shared<Pipe>(dev, swap, root);
-	tri    = std::make_shared<Triangle>(dev, list);
+	pipe     = std::make_shared<Pipe>(dev, swap, root);
+	tri      = std::make_shared<Triangle>(dev, list);
 	constant = std::make_shared <Constant>(win, dev, list);
-	tex = std::make_shared<Texture>(dev, list);
-	tex->LoadWIC(n, "img/sample.png");
+	tex      = std::make_shared<Texture>(dev, list);
+	tex->LoadWIC(n, "img/sample2.png");
+	tex->LoadWIC(m, "img/sample1.png");
 
 	ViewPort();
 	Scissor();
@@ -152,8 +156,15 @@ void Union::Set(void)
 	constant->UpDataImage();
 	constant->SetConstant(1, 1);
 
-	static float a = 0;
-	tex->Draw(n, { 100.0f + a++, 100.0f });
+	static float a = 0.0f;
+	if (input->CheckKey(DIK_A))
+	{
+		++a;
+	}
+
+	tex->Draw(n, { 100 + a, 100 }, { 100, 100 }, { 0,0 }, { 512, 512 });
+
+	tex->Draw(m, { 0, 0 }, {200,200});
 }
 
 // 実行

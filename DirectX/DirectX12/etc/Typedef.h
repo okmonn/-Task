@@ -2,7 +2,7 @@
 #include <DirectXMath.h>
 
 // ‰~ü—¦
-#define PI 3.141592f
+#define PI 3.14159265359f
 
 // ƒ‰ƒWƒAƒ“•ÏŠ·
 #define RAD(X) (X) * PI / 180.0f
@@ -11,7 +11,7 @@
 struct Vertex {
 	//À•W
 	DirectX::XMFLOAT3 pos;
-	//‚t‚u
+	//UV
 	DirectX::XMFLOAT2 uv;
 };
 

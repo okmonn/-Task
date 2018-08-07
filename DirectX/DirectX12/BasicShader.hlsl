@@ -40,7 +40,12 @@ struct Input
 // 頂点シェーダ
 Out VS(Input input)
 {
+    //テクスチャサイズの取得
+    float2 size = float2(0.0f, 0.0f);
+    tex.GetDimensions(size.x, size.y);
+
     input.pos.xy = float2(-1, 1) + (input.pos.xy / float2((window.x / 2), -(window.y / 2)));
+    input.uv = input.uv / size;
     //input.pos = mul(mul(viewProjection, world), input.pos);
 	Out o;
 	o.svpos = input.pos;
@@ -53,12 +58,11 @@ Out VS(Input input)
 // ピクセルシェーダ
 float4 PS(Out o) : SV_TARGET
 {
-	return float4(tex.Sample(smp, o.uv).rgb, 0);
-    //float4 t = tex.Sample(smp, o.uv);
-    //if (t.a <= 0.0)
-    //{
-    //    discard;
-    //}
+    float4 ps = tex.Sample(smp, o.uv);
+    if (ps.a <= 0.0)
+    {
+        discard;
+    }
         
-    //return t;
+    return ps;
 }

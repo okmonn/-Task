@@ -32,6 +32,7 @@ HRESULT Descriptor::CreateHeap(const D3D12_DESCRIPTOR_HEAP_TYPE & type, const D3
 		return result;
 	}
 
+	//ヒープサイズの取得
 	size = dev.lock()->Get()->GetDescriptorHandleIncrementSize(type);
 
 	return result;

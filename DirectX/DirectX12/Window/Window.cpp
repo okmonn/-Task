@@ -39,8 +39,7 @@ LRESULT Window::WindowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 // ウィンドウ要素のセット
 void Window::SetWindow(void)
 {
-
-	window.cbClsExtra = 0;
+	window.cbClsExtra    = 0;
 	window.cbSize        = sizeof(WNDCLASSEX);
 	window.cbWndExtra    = 0;
 	window.hbrBackground = CreateSolidBrush(0x000000);

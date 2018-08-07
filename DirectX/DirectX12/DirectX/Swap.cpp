@@ -3,7 +3,7 @@
 #include "Command\Queue.h"
 #include <tchar.h>
 
-#pragma comment (lib, "dxgi.lib")
+#pragma comment(lib, "dxgi.lib")
 
 // コンストラクタ
 Swap::Swap(std::weak_ptr<Window>win, std::weak_ptr<Queue>queue):
@@ -37,7 +37,7 @@ HRESULT Swap::CreateSwap(void)
 {
 	//スワップチェイン設定用構造体
 	DXGI_SWAP_CHAIN_DESC1 desc = {};
-	desc.AlphaMode = DXGI_ALPHA_MODE::DXGI_ALPHA_MODE_UNSPECIFIED;
+	desc.AlphaMode   = DXGI_ALPHA_MODE::DXGI_ALPHA_MODE_UNSPECIFIED;
 	desc.BufferCount = 2;
 	desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	desc.Flags       = 0;
@@ -54,6 +54,7 @@ HRESULT Swap::CreateSwap(void)
 	if (FAILED(result))
 	{
 		OutputDebugString(_T("\nスワップチェインの生成：失敗\n"));
+		return result;
 	}
 
 	//バックバッファ数保存

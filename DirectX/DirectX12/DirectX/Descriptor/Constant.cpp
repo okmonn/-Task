@@ -10,18 +10,22 @@
 Constant::Constant(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<List>list) : 
 	win(win)
 {
-	this->dev = dev;
+	this->dev  = dev;
 	this->list = list;
 
 	resource.clear();
+	resource.resize(RESOURCE_MAX);
+	data.clear();
+	data.resize(RESOURCE_MAX);
 	wvp = {};
 	image.window = {static_cast<FLOAT>(this->win.lock()->GetX()), static_cast<FLOAT>(this->win.lock()->GetY())};
-	data.clear();
-
+	
 	SetWVP();
 	CreateHeap();
-	CreateResource();
-	CreateView();
+	CreateResource(0, ((sizeof(WVP) + 0xff) &~0xff));
+	CreateResource(1, ((sizeof(Image) + 0xff) &~0xff));
+	CreateView(0, (sizeof(WVP) + 0xff) &~0xff, sizeof(WVP));
+	CreateView(1, (sizeof(Image) + 0xff) &~0xff, sizeof(Image));
 }
 
 // デストラクタ
@@ -71,7 +75,7 @@ HRESULT Constant::CreateHeap(void)
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
 	desc.Flags          = D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	desc.NodeMask       = 0;
-	desc.NumDescriptors = 3;
+	desc.NumDescriptors = RESOURCE_MAX;
 	desc.Type           = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 
 	//ヒープ生成
@@ -88,10 +92,8 @@ HRESULT Constant::CreateHeap(void)
 }
 
 // リソースの生成
-HRESULT Constant::CreateResource(void)
+HRESULT Constant::CreateResource(UINT index, UINT64 size)
 {
-	resource.resize(RESOURCE_MAX);
-
 	//プロパティ設定用構造体の設定
 	D3D12_HEAP_PROPERTIES prop = {};
 	prop.Type                 = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_UPLOAD;
@@ -103,7 +105,7 @@ HRESULT Constant::CreateResource(void)
 	//リソース設定用構造体の設定
 	D3D12_RESOURCE_DESC desc = {};
 	desc.Dimension        = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_BUFFER;
-	desc.Width            = ((sizeof(WVP) + 0xff) &~0xff);
+	desc.Width            = size;
 	desc.Height           = 1;
 	desc.DepthOrArraySize = 1;
 	desc.MipLevels        = 1;
@@ -112,15 +114,7 @@ HRESULT Constant::CreateResource(void)
 	desc.Flags            = D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_NONE;
 	desc.Layout           = D3D12_TEXTURE_LAYOUT::D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 
-	result = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&resource[0]));
-	if (FAILED(result))
-	{
-		OutputDebugString(_T("\n定数バッファのリソースの生成：失敗\n"));
-	}
-
-	desc.Width            = ((sizeof(Image) + 0xff) &~0xff);
-
-	result = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&resource[1]));
+	result = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&resource[index]));
 	if (FAILED(result))
 	{
 		OutputDebugString(_T("\n定数バッファのリソースの生成：失敗\n"));
@@ -130,17 +124,16 @@ HRESULT Constant::CreateResource(void)
 }
 
 // リソースビューの生成
-HRESULT Constant::CreateView(void)
+HRESULT Constant::CreateView(UINT index, UINT size, UINT stride)
 {
-	data.resize(RESOURCE_MAX);
-
 	//ハンドル
 	D3D12_CPU_DESCRIPTOR_HANDLE handle = heap->GetCPUDescriptorHandleForHeapStart();
+	handle.ptr += this->size * index;
 
 	//定数バッファビュー設定用構造体の設定
 	D3D12_CONSTANT_BUFFER_VIEW_DESC desc = {};
-	desc.SizeInBytes    = (sizeof(WVP) + 0xff) &~0xff;
-	desc.BufferLocation = resource[0]->GetGPUVirtualAddress();
+	desc.SizeInBytes    = size;
+	desc.BufferLocation = resource[index]->GetGPUVirtualAddress();
 
 	//送信範囲
 	D3D12_RANGE range = { 0, 0 };
@@ -149,7 +142,7 @@ HRESULT Constant::CreateView(void)
 	dev.lock()->Get()->CreateConstantBufferView(&desc, handle);
 
 	//マッピング
-	result = resource[0]->Map(0, &range, (void**)(&data[0]));
+	result = resource[index]->Map(0, &range, (void**)(&data[index]));
 	if (FAILED(result))
 	{
 		OutputDebugString(_T("\n定数バッファのリソースマッピング：失敗\n"));
@@ -157,28 +150,7 @@ HRESULT Constant::CreateView(void)
 	}
 
 	//コピー
-	memcpy(data[0], &wvp, sizeof(WVP));
-
-	//ハンドルの位置を移動
-	handle.ptr += size;
-
-	//定数バッファビュー設定用構造体の設定
-	desc.SizeInBytes    = (sizeof(Image) + 0xff) &~0xff;
-	desc.BufferLocation = resource[1]->GetGPUVirtualAddress();
-
-	//定数バッファビュー生成
-	dev.lock()->Get()->CreateConstantBufferView(&desc, handle);
-
-	//マッピング
-	result = resource[1]->Map(0, &range, (void**)(&data[1]));
-	if (FAILED(result))
-	{
-		OutputDebugString(_T("\n定数バッファのリソースマッピング：失敗\n"));
-		return result;
-	}
-
-	//コピー
-	memcpy(data[1], &image, sizeof(Image));
+	memcpy(data[index], &wvp, stride);
 
 	return result;
 }

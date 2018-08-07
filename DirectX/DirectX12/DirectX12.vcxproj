@@ -29,6 +29,7 @@
     <ClCompile Include="DirectX\Device.cpp" />
     <ClCompile Include="DirectX\Draw\Triangle.cpp" />
     <ClCompile Include="DirectX\Fence.cpp" />
+    <ClCompile Include="DirectX\Input\Input.cpp" />
     <ClCompile Include="DirectX\Pipe.cpp" />
     <ClCompile Include="DirectX\Root.cpp" />
     <ClCompile Include="DirectX\Swap.cpp" />
@@ -50,6 +51,8 @@
     <ClInclude Include="DirectX\Device.h" />
     <ClInclude Include="DirectX\Draw\Triangle.h" />
     <ClInclude Include="DirectX\Fence.h" />
+    <ClInclude Include="DirectX\Input\Input.h" />
+    <ClInclude Include="DirectX\Input\KeyData.h" />
     <ClInclude Include="DirectX\Obj.h" />
     <ClInclude Include="DirectX\Pipe.h" />
     <ClInclude Include="DirectX\Root.h" />

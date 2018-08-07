@@ -38,9 +38,10 @@ HRESULT List::CreateList(void)
 	if (FAILED(result))
 	{
 		OutputDebugString(_T("\nコマンドリストの生成：失敗\n"));
+		return result;
 	}
 
-	list->Close();
+	Close();
 
 	return result;
 }

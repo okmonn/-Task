@@ -3,6 +3,7 @@
 #include <memory>
 
 class Window;
+class Input;
 #ifdef _DEBUG
 class Debug;
 #endif
@@ -83,6 +84,9 @@ private:
 
 	// ウィンドウ
 	std::shared_ptr<Window>win;
+
+	// インプット
+	std::shared_ptr<Input>input;
 
 #ifdef _DEBUG
 	std::shared_ptr<Debug>debug;

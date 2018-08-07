@@ -9,7 +9,7 @@
 Depth::Depth(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Swap>swap) :
 	win(win)
 {
-	this->dev = dev;
+	this->dev  = dev;
 	this->list = list;
 	this->swap = swap;
 

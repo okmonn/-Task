@@ -33,7 +33,7 @@ Texture::~Texture()
 }
 
 // WIC読み込み
-HRESULT Texture::LoadWIC(UINT & index, std::string fileName)
+HRESULT Texture::LoadWIC(UINT & index, const std::string& fileName)
 {
 	UINT* n = &index;
 
@@ -47,7 +47,7 @@ HRESULT Texture::LoadWIC(UINT & index, std::string fileName)
 	}
 
 	result = CreateHeap(n);
-	result = CreateConView(n);
+	result = CreateShaderView(n);
 	result = CreateResource(n);
 
 	return result;
@@ -60,21 +60,21 @@ HRESULT Texture::CreateHeap(UINT * index)
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
 	desc.Flags          = D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	desc.NodeMask       = 0;
-	desc.NumDescriptors = 2;
+	desc.NumDescriptors = 1;
 	desc.Type           = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 
 	//ヒープ生成
 	result = dev.lock()->Get()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&wic[index].con.heap));
 	if (FAILED(result))
 	{
-		OutputDebugString(_T("\nWICの定数バッファのヒープ生成：失敗\n"));
+		OutputDebugString(_T("\nテクスチャの定数ヒープの生成：失敗\n"));
 	}
 
 	return result;
 }
 
-// 定数バッファビューの生成
-HRESULT Texture::CreateConView(UINT * index)
+// シェーダリソースビューの生成
+HRESULT Texture::CreateShaderView(UINT * index)
 {
 	//シェーダリソースビュー設定用構造体の設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC desc = {};
@@ -93,7 +93,7 @@ HRESULT Texture::CreateConView(UINT * index)
 // 頂点リソースの生成
 HRESULT Texture::CreateResource(UINT* index)
 {
-	//頂点の数分メモリ確保
+	//配列のメモリ確保
 	wic[index].vertex.resize(VERTEX_MAX);
 
 	//プロパティ設定用構造体の設定
@@ -120,7 +120,7 @@ HRESULT Texture::CreateResource(UINT* index)
 	result = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&wic[index].resource));
 	if (FAILED(result))
 	{
-		OutputDebugString(_T("\nWICの頂点リソース生成：失敗\n"));
+		OutputDebugString(_T("\nテクスチャの頂点リソースの生成：失敗\n"));
 		return result;
 	}
 
@@ -131,7 +131,7 @@ HRESULT Texture::CreateResource(UINT* index)
 	result = wic[index].resource->Map(0, &range, reinterpret_cast<void**>(&wic[index].data));
 	if (FAILED(result))
 	{
-		OutputDebugString(_T("\nWICの頂点のリソースマッピング：失敗\n"));
+		OutputDebugString(_T("\nテクスチャの頂点マッピング：失敗\n"));
 		return result;
 	}
 
@@ -152,25 +152,19 @@ void Texture::Draw(UINT & index, const Vec2f & pos)
 	UINT* n = &index;
 
 	//リソース設定用構造体
-	D3D12_RESOURCE_DESC desc = {};
-	desc = wic[n].con.resource->GetDesc();
+	D3D12_RESOURCE_DESC desc = wic[n].con.resource->GetDesc();
 
 	//左上
-	wic[n].vertex[0] = { { pos.x,               pos.y,               0.0f }, { 0.0f, 0.0f } };
+	wic[n].vertex[0] = { { pos.x,                                  pos.y,                                   0.0f }, { 0.0f, 0.0f } };
 	//右上
-	wic[n].vertex[1] = { { pos.x + desc.Width,  pos.y,               0.0f }, { 1.0f, 0.0f } };
+	wic[n].vertex[1] = { { pos.x + static_cast<FLOAT>(desc.Width), pos.y,                                   0.0f }, { static_cast<FLOAT>(desc.Width), 0.0f } };
 	//左下
-	wic[n].vertex[2] = { { pos.x,               pos.y + desc.Height, 0.0f }, { 0.0f, 1.0f } };
+	wic[n].vertex[2] = { { pos.x,                                  pos.y + static_cast<FLOAT>(desc.Height), 0.0f }, { 0.0f, static_cast<FLOAT>(desc.Height) } };
 	//右下
-	wic[n].vertex[3] = { { pos.x + desc.Width,  pos.y + desc.Height, 0.0f }, { 1.0f, 1.0f } };
+	wic[n].vertex[3] = { { pos.x + static_cast<FLOAT>(desc.Width), pos.y + static_cast<FLOAT>(desc.Height), 0.0f }, { static_cast<FLOAT>(desc.Width), static_cast<FLOAT>(desc.Height) } };
 
 	//頂点データの更新
 	memcpy(wic[n].data, wic[n].vertex.data(), sizeof(Vertex) * wic[n].vertex.size());
-
-	////頂点バッファ設定用構造体の設定
-	//wic[n].view.BufferLocation = wic[n].resource->GetGPUVirtualAddress();
-	//wic[n].view.SizeInBytes    = sizeof(Vertex) * wic[n].vertex.size();
-	//wic[n].view.StrideInBytes  = sizeof(Vertex);
 
 	//頂点バッファビューのセット
 	list.lock()->GetList()->IASetVertexBuffers(0, 1, &wic[n].view);
@@ -191,7 +185,119 @@ void Texture::Draw(UINT & index, const Vec2f & pos)
 	result = wic[n].con.resource->WriteToSubresource(0, &box, wic[n].decode.get(), wic[n].sub.RowPitch, wic[n].sub.SlicePitch);
 	if (FAILED(result))
 	{
-		OutputDebugString(_T("WICのサブリソースへの書き込み：失敗\n"));
+		OutputDebugString(_T("テクスチャのサブリソース書込み：失敗\n"));
+		return;
+	}
+
+	//ヒープのセット
+	list.lock()->GetList()->SetDescriptorHeaps(1, &wic[n].con.heap);
+
+	//ディスクリプターテーブルのセット
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(2, wic[n].con.heap->GetGPUDescriptorHandleForHeapStart());
+
+	//描画
+	list.lock()->GetList()->DrawInstanced(wic[n].vertex.size(), 1, 0, 0);
+}
+
+// 描画・サイズ指定
+void Texture::Draw(UINT & index, const Vec2f & pos, const Vec2f & size)
+{
+	UINT* n = &index;
+
+	//リソース設定用構造体
+	D3D12_RESOURCE_DESC desc = wic[n].con.resource->GetDesc();
+
+	//左上
+	wic[n].vertex[0] = { { pos.x,           pos.y,          0.0f },{ 0.0f, 0.0f } };
+	//右上
+	wic[n].vertex[1] = { { pos.x + size.x,  pos.y,          0.0f },{ static_cast<FLOAT>(desc.Width), 0.0f } };
+	//左下
+	wic[n].vertex[2] = { { pos.x,           pos.y + size.y, 0.0f },{ 0.0f, static_cast<FLOAT>(desc.Height), } };
+	//右下
+	wic[n].vertex[3] = { { pos.x + size.x,  pos.y + size.y, 0.0f },{ static_cast<FLOAT>(desc.Width), static_cast<FLOAT>(desc.Height) } };
+
+	//頂点データの更新
+	memcpy(wic[n].data, wic[n].vertex.data(), sizeof(Vertex) * wic[n].vertex.size());
+
+	//頂点バッファビューのセット
+	list.lock()->GetList()->IASetVertexBuffers(0, 1, &wic[n].view);
+
+	//トポロジー設定
+	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	//ボックス設定用構造体の設定
+	D3D12_BOX box = {};
+	box.back   = 1;
+	box.bottom = desc.Height;
+	box.front  = 0;
+	box.left   = 0;
+	box.right  = static_cast<UINT>(desc.Width);
+	box.top    = 0;
+
+	//サブリソースに書き込み
+	result = wic[n].con.resource->WriteToSubresource(0, &box, wic[n].decode.get(), wic[n].sub.RowPitch, wic[n].sub.SlicePitch);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("テクスチャのサブリソース書込み：失敗\n"));
+		return;
+	}
+
+	//ヒープのセット
+	list.lock()->GetList()->SetDescriptorHeaps(1, &wic[n].con.heap);
+
+	//ディスクリプターテーブルのセット
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(2, wic[n].con.heap->GetGPUDescriptorHandleForHeapStart());
+
+	//描画
+	list.lock()->GetList()->DrawInstanced(wic[n].vertex.size(), 1, 0, 0);
+}
+
+// 描画・サイズ指定・分割
+void Texture::Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rectPos, const Vec2f& rectSize, UINT turnX, UINT turnY)
+{
+	UINT* n = &index;
+
+	//リソース設定用構造体
+	D3D12_RESOURCE_DESC desc = wic[n].con.resource->GetDesc();
+
+	//UV座標
+	DirectX::XMFLOAT2 leftUp    = { rectPos.x + (rectSize.x * turnX),                rectPos.y + (rectSize.y * turnY) };
+	DirectX::XMFLOAT2 rightUp   = { rectPos.x + (rectSize.x - (rectSize.x * turnX)), rectPos.y + (rectSize.y * turnY) };
+	DirectX::XMFLOAT2 leftDown  = { rectPos.x + (rectSize.x * turnX),                rectPos.y + (rectSize.y - (rectSize.y * turnY)) };
+	DirectX::XMFLOAT2 rightDown = { rectPos.x + (rectSize.x - (rectSize.x * turnX)), rectPos.y + (rectSize.y - (rectSize.y * turnY)) };
+
+	//左上
+	wic[n].vertex[0] = { { pos.x,           pos.y,          0.0f }, leftUp };
+	//右上
+	wic[n].vertex[1] = { { pos.x + size.x,  pos.y,          0.0f }, rightUp };
+	//左下
+	wic[n].vertex[2] = { { pos.x,           pos.y + size.y, 0.0f }, leftDown };
+	//右下
+	wic[n].vertex[3] = { { pos.x + size.x,  pos.y + size.y, 0.0f }, rightDown };
+
+	//頂点データの更新
+	memcpy(wic[n].data, wic[n].vertex.data(), sizeof(Vertex) * wic[n].vertex.size());
+
+	//頂点バッファビューのセット
+	list.lock()->GetList()->IASetVertexBuffers(0, 1, &wic[n].view);
+
+	//トポロジー設定
+	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	//ボックス設定用構造体の設定
+	D3D12_BOX box = {};
+	box.back   = 1;
+	box.bottom = desc.Height;
+	box.front  = 0;
+	box.left   = 0;
+	box.right  = static_cast<UINT>(desc.Width);
+	box.top    = 0;
+
+	//サブリソースに書き込み
+	result = wic[n].con.resource->WriteToSubresource(0, &box, wic[n].decode.get(), wic[n].sub.RowPitch, wic[n].sub.SlicePitch);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("テクスチャのサブリソース書込み：失敗\n"));
 		return;
 	}
 

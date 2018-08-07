@@ -27,6 +27,7 @@ private:
 	// リソースビューの生成
 	HRESULT CreateView(void);
 
+
 	// ウィンドウ
 	std::weak_ptr<Window>win;
 

@@ -40,10 +40,10 @@ private:
 	HRESULT CreateHeap(void);
 
 	// リソースの生成
-	HRESULT CreateResource(void);
+	HRESULT CreateResource(UINT index, UINT64 size);
 
 	// リソースビューの生成
-	HRESULT CreateView(void);
+	HRESULT CreateView(UINT index, UINT size, UINT stride);
 
 
 	// ウィンドウ
@@ -52,13 +52,12 @@ private:
 	// リソース
 	std::vector<ID3D12Resource*> resource;
 
+	// 送信データ
+	std::vector<UINT8*> data;
+
 	// WVP
 	WVP wvp;
 
 	// 画像データ
 	Image image;
-
-	// 送信データ
-	std::vector<UINT8*> data;
 };
-
