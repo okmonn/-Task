@@ -64,6 +64,12 @@
     <Filter Include="DirectX\Input">
       <UniqueIdentifier>{d27a345b-14c2-4663-a09b-97a62e01ac41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{52b60245-9e1d-4490-ac1d-b519000fcf3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound\WAVE">
+      <UniqueIdentifier>{47398656-2309-4b8a-8679-9c8e2bc36292}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window\Window.h">
@@ -141,6 +147,12 @@
     <ClInclude Include="DirectX\Input\KeyData.h">
       <Filter>DirectX\Input</Filter>
     </ClInclude>
+    <ClInclude Include="Sound\Sound.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound\WAVE\WAVE.h">
+      <Filter>Sound\WAVE</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Window\Window.cpp">
@@ -199,6 +211,12 @@
     </ClCompile>
     <ClCompile Include="DirectX\Input\Input.cpp">
       <Filter>DirectX\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound\Sound.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound\WAVE\WAVE.cpp">
+      <Filter>Sound\WAVE</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

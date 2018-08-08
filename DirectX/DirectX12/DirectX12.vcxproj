@@ -37,6 +37,8 @@
     <ClCompile Include="DirectX\Texture\WICTextureLoader12.cpp" />
     <ClCompile Include="DirectX\Union.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Sound\Sound.cpp" />
+    <ClCompile Include="Sound\WAVE\WAVE.cpp" />
     <ClCompile Include="Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +66,8 @@
     <ClInclude Include="etc\Vector2.h" />
     <ClInclude Include="etc\Vector3.h" />
     <ClInclude Include="Icon\Icon.h" />
+    <ClInclude Include="Sound\Sound.h" />
+    <ClInclude Include="Sound\WAVE\WAVE.h" />
     <ClInclude Include="Window\Window.h" />
   </ItemGroup>
   <ItemGroup>
