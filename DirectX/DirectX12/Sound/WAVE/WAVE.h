@@ -26,6 +26,9 @@ public:
 	// 時間
 	int length;
 
+	// 音楽データ
+	//std::vector<double>data;
+
 	// 音楽データ・モノラル
 	std::vector<double>monaural;
 

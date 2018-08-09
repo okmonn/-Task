@@ -1,17 +1,15 @@
 #include "Input.h"
-#include "KeyData.h"
 #include "../../Window/Window.h"
 #include <tchar.h>
 
-// バージョン
-#define VERSION 0x0800
-
 #pragma comment(lib, "dinput8.lib")
-#pragma comment(lib, "dxguid.lib")
+
+// 解放マクロ
+#define Release(X) { if((X) != nullptr) (X)->Release(); (X) = nullptr; }
 
 // コンストラクタ
 Input::Input(std::weak_ptr<Window>win) :
-	win(win), input(nullptr), key(nullptr)
+	win(win), result(S_OK), input(nullptr), key(nullptr)
 {
 	memset(&keys, 0, sizeof(keys));
 	memset(&olds, 0, sizeof(olds));
@@ -32,7 +30,7 @@ Input::~Input()
 // インプットの生成
 HRESULT Input::CreateInput(void)
 {
-	result = DirectInput8Create(GetModuleHandle(0), VERSION, IID_IDirectInput8, (void**)(&input), NULL);
+	result = DirectInput8Create(GetModuleHandle(0), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)(&input), NULL);
 	if (FAILED(result))
 	{
 		OutputDebugString(_T("\nインプットの生成：失敗\n"));

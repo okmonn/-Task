@@ -1,6 +1,6 @@
 #pragma once
-#include <dinput.h>
-#include "../Obj.h"
+#define DIRECTINPUT_VERSION 0x0800
+#include "KeyData.h"
 #include <memory>
 
 // キー最大数
@@ -8,8 +8,7 @@
 
 class Window;
 
-class Input :
-	public Obj
+class Input
 {
 public:
 	// コンストラクタ
@@ -39,6 +38,9 @@ private:
 
 	// ウィンドウ
 	std::weak_ptr<Window>win;
+
+	// 参照結果
+	HRESULT result;
 
 	// インプット
 	LPDIRECTINPUT8 input;

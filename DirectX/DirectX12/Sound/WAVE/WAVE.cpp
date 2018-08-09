@@ -273,9 +273,9 @@ int sound::LoadWave(const std::string & fileName, WAVE & wave)
 	fread(&data.chunkSize, sizeof(data.chunkSize), 1, file);
 
 	wave.channel = fmt.formatChannel;
-	wave.sample = fmt.samplesPerSec;
-	wave.bit = fmt.bitsPerSample;
-	wave.length = data.chunkSize / fmt.blockSize;
+	wave.sample  = fmt.samplesPerSec;
+	wave.bit     = fmt.bitsPerSample;
+	wave.length  = data.chunkSize / fmt.blockSize;
 
 	//ƒ‚ƒmƒ‰ƒ‹
 	if (fmt.formatChannel == 1)

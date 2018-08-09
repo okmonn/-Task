@@ -16,10 +16,10 @@
 #include "Draw/Triangle.h"
 #include "Descriptor/Constant.h"
 #include "Texture/Texture.h"
-
 #include <tchar.h>
+#include "../Sound/WAVE/WAVE.h"
 
-#pragma comment (lib, "d3d12.lib")
+#pragma comment(lib, "d3d12.lib")
 
 // コンストラクタ
 Union::Union()
@@ -44,14 +44,15 @@ void Union::ChangeWindowSize(UINT x, UINT y)
 
 UINT n = 0;
 UINT m = 0;
+WAVE wave;
 
 // クラスのインスタンス化
 void Union::Create(void)
 {
-	win    = std::make_shared<Window>(x, y);
-	input  = std::make_shared<Input>(win);
+	win      = std::make_shared<Window>(x, y);
+	input    = std::make_shared<Input>(win);
 #ifdef _DEBUG
-	debug  = std::make_shared<Debug>();
+	debug    = std::make_shared<Debug>();
 #endif
 	dev      = std::make_shared<Device>();
 	queue    = std::make_shared<Queue>(dev);
@@ -67,9 +68,9 @@ void Union::Create(void)
 	tri      = std::make_shared<Triangle>(dev, list);
 	constant = std::make_shared <Constant>(win, dev, list);
 	tex      = std::make_shared<Texture>(dev, list);
-	tex->LoadWIC(n, "img/sample2.png");
-	tex->LoadWIC(m, "img/sample1.png");
 
+	tex->LoadWIC(n, "img/sample2.png");
+	sound::LoadWave("Wave/sample.wav", wave);
 	ViewPort();
 	Scissor();
 }
@@ -155,16 +156,8 @@ void Union::Set(void)
 
 	constant->UpDataImage();
 	constant->SetConstant(1, 1);
-
-	static float a = 0.0f;
-	if (input->CheckKey(DIK_A))
-	{
-		++a;
-	}
-
-	tex->Draw(n, { 100 + a, 100 }, { 100, 100 }, { 0,0 }, { 512, 512 });
-
-	tex->Draw(m, { 0, 0 }, {200,200});
+	
+	tex->Draw(n, { 100, 100 }, { 100, 100 }, { 0,0 }, { 512, 512 });
 }
 
 // 実行
