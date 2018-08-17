@@ -1,15 +1,13 @@
 #include "Input.h"
-#include "../../Window/Window.h"
+#include "../Window/Window.h"
 #include <tchar.h>
 
 #pragma comment(lib, "dinput8.lib")
-
-// 解放マクロ
-#define Release(X) { if((X) != nullptr) (X)->Release(); (X) = nullptr; }
+#pragma comment(lib, "dxguid.lib")
 
 // コンストラクタ
 Input::Input(std::weak_ptr<Window>win) :
-	win(win), result(S_OK), input(nullptr), key(nullptr)
+	win(win), input(nullptr), key(nullptr)
 {
 	memset(&keys, 0, sizeof(keys));
 	memset(&olds, 0, sizeof(olds));

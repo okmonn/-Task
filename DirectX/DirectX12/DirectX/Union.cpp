@@ -1,6 +1,6 @@
 #include "Union.h"
 #include "../Window/Window.h"
-#include "Input/Input.h"
+#include "../Input/Input.h"
 #ifdef _DEBUG
 #include "Debug.h"
 #endif
@@ -13,11 +13,9 @@
 #include "Fence.h"
 #include "Root.h"
 #include "Pipe.h"
-#include "Draw/Triangle.h"
 #include "Descriptor/Constant.h"
 #include "Texture/Texture.h"
 #include <tchar.h>
-#include "../Sound/WAVE/WAVE.h"
 
 #pragma comment(lib, "d3d12.lib")
 
@@ -44,7 +42,6 @@ void Union::ChangeWindowSize(UINT x, UINT y)
 
 UINT n = 0;
 UINT m = 0;
-WAVE wave;
 
 // クラスのインスタンス化
 void Union::Create(void)
@@ -62,15 +59,13 @@ void Union::Create(void)
 	depth    = std::make_shared<Depth>(win, dev, list, swap);
 	fence    = std::make_shared<Fence>(dev, queue);
 	root     = std::make_shared<Root>(dev);
-	root->ComVertex(L"BasicShader.hlsl", "VS");
-	root->ComPixel(L"BasicShader.hlsl", "PS");
+	root->ComVertex(L"Shader/BasicShader.hlsl", "VS");
+	root->ComPixel(L"Shader/BasicShader.hlsl", "PS");
 	pipe     = std::make_shared<Pipe>(dev, swap, root);
-	tri      = std::make_shared<Triangle>(dev, list);
 	constant = std::make_shared <Constant>(win, dev, list);
 	tex      = std::make_shared<Texture>(dev, list);
 
 	tex->LoadWIC(n, "img/sample2.png");
-	sound::LoadWave("Wave/sample.wav", wave);
 	ViewPort();
 	Scissor();
 }

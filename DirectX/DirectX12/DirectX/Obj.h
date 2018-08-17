@@ -1,5 +1,7 @@
 #pragma once
+#ifndef _NOT_USE_D3D12
 #include <d3d12.h>
+#endif
 
 // リリースマクロ
 #define Release(X) { if((X) != nullptr) (X)->Release(); (X) = nullptr; }

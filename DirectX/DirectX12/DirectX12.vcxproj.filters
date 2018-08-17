@@ -19,9 +19,6 @@
     <Filter Include="Icon">
       <UniqueIdentifier>{2ff7de56-a1d4-4e9b-bbb5-6bdaed00c639}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Draw">
-      <UniqueIdentifier>{ab7eeb39-a6a7-49eb-8ab4-6b35fa101240}</UniqueIdentifier>
-    </Filter>
     <Filter Include="DirectX">
       <UniqueIdentifier>{e14a6d77-30bb-4caa-812c-f8c57e853f2e}</UniqueIdentifier>
     </Filter>
@@ -61,14 +58,14 @@
     <Filter Include="ヘッダー ファイル\Vector">
       <UniqueIdentifier>{805e1247-f74c-43fe-9f84-0ffeec0fa200}</UniqueIdentifier>
     </Filter>
-    <Filter Include="DirectX\Input">
-      <UniqueIdentifier>{d27a345b-14c2-4663-a09b-97a62e01ac41}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sound">
       <UniqueIdentifier>{52b60245-9e1d-4490-ac1d-b519000fcf3e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sound\WAVE">
-      <UniqueIdentifier>{47398656-2309-4b8a-8679-9c8e2bc36292}</UniqueIdentifier>
+    <Filter Include="Input">
+      <UniqueIdentifier>{d27a345b-14c2-4663-a09b-97a62e01ac41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Shader">
+      <UniqueIdentifier>{4574d4b7-421d-4d05-b17c-51518360e122}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -120,9 +117,6 @@
     <ClInclude Include="DirectX\Pipe.h">
       <Filter>DirectX\Pipe</Filter>
     </ClInclude>
-    <ClInclude Include="DirectX\Draw\Triangle.h">
-      <Filter>Draw</Filter>
-    </ClInclude>
     <ClInclude Include="etc\Typedef.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -141,17 +135,11 @@
     <ClInclude Include="etc\Vector3.h">
       <Filter>ヘッダー ファイル\Vector</Filter>
     </ClInclude>
-    <ClInclude Include="DirectX\Input\Input.h">
-      <Filter>DirectX\Input</Filter>
+    <ClInclude Include="Input\Input.h">
+      <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="DirectX\Input\KeyData.h">
-      <Filter>DirectX\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Sound\Sound.h">
-      <Filter>Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="Sound\WAVE\WAVE.h">
-      <Filter>Sound\WAVE</Filter>
+    <ClInclude Include="Input\KeyData.h">
+      <Filter>Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -197,9 +185,6 @@
     <ClCompile Include="DirectX\Pipe.cpp">
       <Filter>DirectX\Pipe</Filter>
     </ClCompile>
-    <ClCompile Include="DirectX\Draw\Triangle.cpp">
-      <Filter>Draw</Filter>
-    </ClCompile>
     <ClCompile Include="DirectX\Descriptor\Constant.cpp">
       <Filter>DirectX\Descriptor</Filter>
     </ClCompile>
@@ -209,14 +194,8 @@
     <ClCompile Include="DirectX\Texture\WICTextureLoader12.cpp">
       <Filter>DirectX\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="DirectX\Input\Input.cpp">
-      <Filter>DirectX\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Sound\Sound.cpp">
-      <Filter>Sound</Filter>
-    </ClCompile>
-    <ClCompile Include="Sound\WAVE\WAVE.cpp">
-      <Filter>Sound\WAVE</Filter>
+    <ClCompile Include="Input\Input.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -225,8 +204,8 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="BasicShader.hlsl">
-      <Filter>リソース ファイル</Filter>
+    <FxCompile Include="Shader\BasicShader.hlsl">
+      <Filter>リソース ファイル\Shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -16,7 +16,6 @@ class Depth;
 class Fence;
 class Root;
 class Pipe;
-class Triangle;
 class Constant;
 class Texture;
 
@@ -118,9 +117,6 @@ private:
 
 	// パイプライン
 	std::shared_ptr<Pipe>pipe;
-
-	// 三角形
-	std::shared_ptr<Triangle>tri;
 
 	// 定数バッファ
 	std::shared_ptr<Constant>constant;
