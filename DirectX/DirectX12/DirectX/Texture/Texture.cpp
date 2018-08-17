@@ -147,21 +147,27 @@ HRESULT Texture::CreateResource(UINT* index)
 }
 
 // 描画
-void Texture::Draw(UINT & index, const Vec2f & pos)
+void Texture::Draw(UINT & index, const Vec2f & pos, UINT turnX, UINT turnY)
 {
 	UINT* n = &index;
 
 	//リソース設定用構造体
 	D3D12_RESOURCE_DESC desc = wic[n].con.resource->GetDesc();
 
+	//UV座標
+	DirectX::XMFLOAT2 leftUp    = { (static_cast<FLOAT>(desc.Width) * turnX),                                    (static_cast<FLOAT>(desc.Height) * turnY) };
+	DirectX::XMFLOAT2 rightUp   = { (static_cast<FLOAT>(desc.Width) - (static_cast<FLOAT>(desc.Width) * turnX)), (static_cast<FLOAT>(desc.Height) * turnY) };
+	DirectX::XMFLOAT2 leftDown  = { (static_cast<FLOAT>(desc.Width) * turnX),                                    (static_cast<FLOAT>(desc.Height) - (static_cast<FLOAT>(desc.Height) * turnY)) };
+	DirectX::XMFLOAT2 rightDown = { (static_cast<FLOAT>(desc.Width) - (static_cast<FLOAT>(desc.Width) * turnX)), (static_cast<FLOAT>(desc.Height) - (static_cast<FLOAT>(desc.Height) * turnY)) };
+
 	//左上
-	wic[n].vertex[0] = { { pos.x,                                  pos.y,                                   0.0f }, { 0.0f, 0.0f } };
+	wic[n].vertex[0] = { { pos.x,                                   pos.y,                                   0.0f }, leftUp };
 	//右上
-	wic[n].vertex[1] = { { pos.x + static_cast<FLOAT>(desc.Width), pos.y,                                   0.0f }, { static_cast<FLOAT>(desc.Width), 0.0f } };
+	wic[n].vertex[1] = { { pos.x + static_cast<FLOAT>(desc.Width),  pos.y,                                   0.0f }, rightUp };
 	//左下
-	wic[n].vertex[2] = { { pos.x,                                  pos.y + static_cast<FLOAT>(desc.Height), 0.0f }, { 0.0f, static_cast<FLOAT>(desc.Height) } };
+	wic[n].vertex[2] = { { pos.x,                                   pos.y + static_cast<FLOAT>(desc.Height), 0.0f }, leftDown };
 	//右下
-	wic[n].vertex[3] = { { pos.x + static_cast<FLOAT>(desc.Width), pos.y + static_cast<FLOAT>(desc.Height), 0.0f }, { static_cast<FLOAT>(desc.Width), static_cast<FLOAT>(desc.Height) } };
+	wic[n].vertex[3] = { { pos.x + static_cast<FLOAT>(desc.Width),  pos.y + static_cast<FLOAT>(desc.Height), 0.0f }, rightDown };
 
 	//頂点データの更新
 	memcpy(wic[n].data, wic[n].vertex.data(), sizeof(Vertex) * wic[n].vertex.size());
@@ -200,21 +206,36 @@ void Texture::Draw(UINT & index, const Vec2f & pos)
 }
 
 // 描画・サイズ指定
-void Texture::Draw(UINT & index, const Vec2f & pos, const Vec2f & size)
+void Texture::Draw(UINT & index, const Vec2f & pos, const Vec2f & size, UINT turnX, UINT turnY)
 {
 	UINT* n = &index;
 
 	//リソース設定用構造体
 	D3D12_RESOURCE_DESC desc = wic[n].con.resource->GetDesc();
 
+	//UV座標
+	DirectX::XMFLOAT2 leftUp    = { (static_cast<FLOAT>(desc.Width) * turnX),                                    (static_cast<FLOAT>(desc.Height) * turnY) };
+	DirectX::XMFLOAT2 rightUp   = { (static_cast<FLOAT>(desc.Width) - (static_cast<FLOAT>(desc.Width) * turnX)), (static_cast<FLOAT>(desc.Height) * turnY) };
+	DirectX::XMFLOAT2 leftDown  = { (static_cast<FLOAT>(desc.Width) * turnX),                                    (static_cast<FLOAT>(desc.Height) - (static_cast<FLOAT>(desc.Height) * turnY)) };
+	DirectX::XMFLOAT2 rightDown = { (static_cast<FLOAT>(desc.Width) - (static_cast<FLOAT>(desc.Width) * turnX)), (static_cast<FLOAT>(desc.Height) - (static_cast<FLOAT>(desc.Height) * turnY)) };
+
 	//左上
-	wic[n].vertex[0] = { { pos.x,           pos.y,          0.0f },{ 0.0f, 0.0f } };
+	wic[n].vertex[0] = { { pos.x,           pos.y,          0.0f }, leftUp };
 	//右上
-	wic[n].vertex[1] = { { pos.x + size.x,  pos.y,          0.0f },{ static_cast<FLOAT>(desc.Width), 0.0f } };
+	wic[n].vertex[1] = { { pos.x + size.x,  pos.y,          0.0f }, rightUp };
 	//左下
-	wic[n].vertex[2] = { { pos.x,           pos.y + size.y, 0.0f },{ 0.0f, static_cast<FLOAT>(desc.Height), } };
+	wic[n].vertex[2] = { { pos.x,           pos.y + size.y, 0.0f }, leftDown };
 	//右下
-	wic[n].vertex[3] = { { pos.x + size.x,  pos.y + size.y, 0.0f },{ static_cast<FLOAT>(desc.Width), static_cast<FLOAT>(desc.Height) } };
+	wic[n].vertex[3] = { { pos.x + size.x,  pos.y + size.y, 0.0f }, rightDown };
+
+	////左上
+	//wic[n].vertex[0] = { { pos.x,           pos.y,          0.0f },{ 0.0f, 0.0f } };
+	////右上
+	//wic[n].vertex[1] = { { pos.x + size.x,  pos.y,          0.0f },{ static_cast<FLOAT>(desc.Width), 0.0f } };
+	////左下
+	//wic[n].vertex[2] = { { pos.x,           pos.y + size.y, 0.0f },{ 0.0f, static_cast<FLOAT>(desc.Height), } };
+	////右下
+	//wic[n].vertex[3] = { { pos.x + size.x,  pos.y + size.y, 0.0f },{ static_cast<FLOAT>(desc.Width), static_cast<FLOAT>(desc.Height) } };
 
 	//頂点データの更新
 	memcpy(wic[n].data, wic[n].vertex.data(), sizeof(Vertex) * wic[n].vertex.size());

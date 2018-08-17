@@ -1,8 +1,11 @@
 #pragma once
+#include "../etc/Vector2.h"
 #include <d3d12.h>
+#include <string>
 #include <memory>
 
 class Window;
+class Xaudio2;
 class Input;
 #ifdef _DEBUG
 class Debug;
@@ -46,6 +49,24 @@ public:
 	// 実行
 	void Do(void);
 
+	// キー入力
+	bool CheckKey(UINT index);
+
+	// トリガーキー入力
+	bool TriggerKey(UINT index);
+
+	// 画像読み込み
+	void LoadImg(UINT& index, const std::string& fileName);
+
+	// 描画
+	void Draw(UINT& index, const Vec2f& pos, UINT turnX = 0, UINT turnY = 0);
+
+	// 描画・サイズ指定
+	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size, UINT turnX = 0, UINT turnY = 0);
+
+	// 描画・サイズ指定・分割
+	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rect, const Vec2f& rectSize, UINT turnX = 0, UINT turnY = 0);
+
 private:
 	// コンストラクタ
 	Union();
@@ -83,6 +104,9 @@ private:
 
 	// ウィンドウ
 	std::shared_ptr<Window>win;
+
+	// オーディオ
+	std::shared_ptr<Xaudio2>audio;
 
 	// インプット
 	std::shared_ptr<Input>input;

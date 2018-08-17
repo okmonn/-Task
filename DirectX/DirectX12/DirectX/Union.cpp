@@ -1,5 +1,6 @@
 #include "Union.h"
 #include "../Window/Window.h"
+#include "../Sound/Xaudio2.h"
 #include "../Input/Input.h"
 #ifdef _DEBUG
 #include "Debug.h"
@@ -40,13 +41,11 @@ void Union::ChangeWindowSize(UINT x, UINT y)
 	this->y = y;
 }
 
-UINT n = 0;
-UINT m = 0;
-
 // クラスのインスタンス化
 void Union::Create(void)
 {
 	win      = std::make_shared<Window>(x, y);
+	audio    = std::make_shared<Xaudio2>();
 	input    = std::make_shared<Input>(win);
 #ifdef _DEBUG
 	debug    = std::make_shared<Debug>();
@@ -65,7 +64,6 @@ void Union::Create(void)
 	constant = std::make_shared <Constant>(win, dev, list);
 	tex      = std::make_shared<Texture>(dev, list);
 
-	tex->LoadWIC(n, "img/sample2.png");
 	ViewPort();
 	Scissor();
 }
@@ -151,8 +149,6 @@ void Union::Set(void)
 
 	constant->UpDataImage();
 	constant->SetConstant(1, 1);
-	
-	tex->Draw(n, { 100, 100 }, { 100, 100 }, { 0,0 }, { 512, 512 });
 }
 
 // 実行
@@ -169,4 +165,40 @@ void Union::Do(void)
 	swap->Present();
 
 	fence->Wait();
+}
+
+// キー入力
+bool Union::CheckKey(UINT index)
+{
+	return input->CheckKey(index);
+}
+
+// トリガーキー入力
+bool Union::TriggerKey(UINT index)
+{
+	return input->TriggerKey(index);
+}
+
+// 画像読み込み
+void Union::LoadImg(UINT & index, const std::string & fileName)
+{
+	tex->LoadWIC(index, fileName);
+}
+
+// 描画
+void Union::Draw(UINT& index, const Vec2f& pos, UINT turnX, UINT turnY)
+{
+	tex->Draw(index, pos, turnX, turnY);
+}
+
+// 描画・サイズ指定
+void Union::Draw(UINT & index, const Vec2f & pos, const Vec2f & size, UINT turnX, UINT turnY)
+{
+	tex->Draw(index, pos, size, turnX, turnY);
+}
+
+// 描画・サイズ指定・分割
+void Union::Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rect, const Vec2f& rectSize, UINT turnX, UINT turnY)
+{
+	tex->Draw(index, pos, size, rect, rectSize, turnX, turnY);
 }

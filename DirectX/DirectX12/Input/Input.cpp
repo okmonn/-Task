@@ -1,5 +1,7 @@
 #include "Input.h"
 #include "../Window/Window.h"
+#define _NOT_USE_D3D12
+#include "../DirectX/Obj.h"
 #include <tchar.h>
 
 #pragma comment(lib, "dinput8.lib")
@@ -7,7 +9,7 @@
 
 // コンストラクタ
 Input::Input(std::weak_ptr<Window>win) :
-	win(win), input(nullptr), key(nullptr)
+	win(win), result(S_OK), input(nullptr), key(nullptr)
 {
 	memset(&keys, 0, sizeof(keys));
 	memset(&olds, 0, sizeof(olds));

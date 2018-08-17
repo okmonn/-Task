@@ -34,8 +34,12 @@
     <ClCompile Include="DirectX\Texture\Texture.cpp" />
     <ClCompile Include="DirectX\Texture\WICTextureLoader12.cpp" />
     <ClCompile Include="DirectX\Union.cpp" />
+    <ClCompile Include="Func.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MIDI\MIDI.cpp" />
+    <ClCompile Include="Sound\WAVE.cpp" />
+    <ClCompile Include="Sound\Xaudio2.cpp" />
     <ClCompile Include="Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -59,9 +63,15 @@
     <ClInclude Include="etc\Typedef.h" />
     <ClInclude Include="etc\Vector2.h" />
     <ClInclude Include="etc\Vector3.h" />
+    <ClInclude Include="Func.h" />
     <ClInclude Include="Icon\Icon.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\KeyData.h" />
+    <ClInclude Include="MIDI\MIDI.h" />
+    <ClInclude Include="MIDI\NoteNomber.h" />
+    <ClInclude Include="Sound\VoiceCallback.h" />
+    <ClInclude Include="Sound\WAVE.h" />
+    <ClInclude Include="Sound\Xaudio2.h" />
     <ClInclude Include="Window\Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -92,14 +102,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>

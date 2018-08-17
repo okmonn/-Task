@@ -45,10 +45,10 @@ public:
 	HRESULT LoadWIC(UINT& index, const std::string& fileName);
 
 	// 描画
-	void Draw(UINT& index, const Vec2f& pos);
+	void Draw(UINT& index, const Vec2f& pos, UINT turnX = 0, UINT turnY = 0);
 
 	// 描画・サイズ指定
-	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size);
+	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size, UINT turnX = 0, UINT turnY = 0);
 
 	// 描画・サイズ指定・分割
 	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rectPos, const Vec2f& rectSize, UINT turnX = 0, UINT turnY = 0);

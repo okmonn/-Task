@@ -11,10 +11,10 @@ class Obj
 public:
 	// コンストラクタ
 	Obj() {
-	};
+	}
 	// デストラクタ
 	virtual ~Obj() {
-	};
+	}
 
 protected:
 	// 参照結果
