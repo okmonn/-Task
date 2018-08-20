@@ -66,3 +66,21 @@ void func::Draw(unsigned int & index, float x, float y, float sizeX, float sizeY
 {
 	Union::Get().Draw(index, { x, y }, { sizeX, sizeY }, { rectX, rectY }, { rectSizeX, rectSizeY }, turnX, turnY);
 }
+
+// WAVEÇÃì«Ç›çûÇ›
+void func::LoadWave(unsigned int& index, const std::string fileName)
+{
+	Union::Get().LoadWave(index, fileName);
+}
+
+// WAVEÇÃçƒê∂
+void func::PlayWave(unsigned int& index)
+{
+	Union::Get().PlayWave(index);
+}
+
+// WAVEÇÃí‚é~
+void func::StopWave(unsigned int& index)
+{
+	Union::Get().StopWave(index);
+}

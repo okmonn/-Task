@@ -2,6 +2,9 @@
 #include <dinput.h>
 #include <string>
 
+typedef unsigned int UINT;
+typedef unsigned char UCHAR;
+
 namespace func {
 	// ウィンドウサイズのセット
 	void SetWindowSize(unsigned int x, unsigned int y);
@@ -36,4 +39,13 @@ namespace func {
 	// 描画・サイズ指定・分割
 	void Draw(unsigned int& index, float x, float y, float sizeX, float sizeY, 
 		float rectX, float rectY, float rectSizeX, float rectSizeY, bool turnX = false, bool turnY = false);
+
+	// WAVEの読み込み
+	void LoadWave(unsigned int& index, const std::string fileName);
+
+	// WAVEの再生
+	void PlayWave(unsigned int& index);
+
+	// WAVEの停止
+	void StopWave(unsigned int& index);
 }

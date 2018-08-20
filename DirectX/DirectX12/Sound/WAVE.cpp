@@ -5,6 +5,9 @@
 // バイト変換
 #define BYTE(X) (X) / 8
 
+// 読み込みデータ配列の最大数
+#define DATA_MAX 2
+
 // RIFFチャンク
 struct RIFF {
 	//チャンクID
@@ -44,11 +47,12 @@ struct DATA {
 };
 
 // コンストラクタ
-WAVE::WAVE() : 
-	file(nullptr)
+WAVE::WAVE() :
+	file(nullptr), index(0), read(0), readMax(0), end(false)
 {
 	format = {};
 	data.clear();
+	data.resize(DATA_MAX);
 }
 
 // デストラクタ
@@ -57,8 +61,8 @@ WAVE::~WAVE()
 	if (file != nullptr)
 	{
 		fclose(file);
+		file = nullptr;
 	}
-	file = nullptr;
 }
 
 // 文字確認
@@ -162,28 +166,54 @@ int WAVE::Load(const std::string & fileName)
 	fread(&data.chunkSize, sizeof(data.chunkSize), 1, file);
 
 	//フォーマットセット
-	format.wFormatTag      = fmt.waveFormatType;
-	format.nChannels       = fmt.formatChannel;
-	format.nSamplesPerSec  = fmt.samplesPerSec;
-	format.wBitsPerSample  = fmt.bitsPerSample;
-	format.nBlockAlign     = format.nChannels * BYTE(format.wBitsPerSample);
+	format.wFormatTag = fmt.waveFormatType;
+	format.nChannels = fmt.formatChannel;
+	format.nSamplesPerSec = fmt.samplesPerSec;
+	format.wBitsPerSample = fmt.bitsPerSample;
+	format.nBlockAlign = format.nChannels * BYTE(format.wBitsPerSample);
 	format.nAvgBytesPerSec = format.nSamplesPerSec * format.nBlockAlign;
 
-	this->data.resize(data.chunkSize);
+	//読み込み最大数のセット
+	readMax = data.chunkSize;
 
-	for (unsigned int i = 0; i < data.chunkSize; ++i)
+	//配列のメモリ確保
+	for (auto& i : this->data)
 	{
-		if (feof(file))
-		{
-			for (unsigned int n = format.nAvgBytesPerSec - i; n < format.nAvgBytesPerSec; ++n)
-			{
-				this->data[n] = 0;
-			}
-			fclose(file);
-			return -1;
-		}
-		fread(&this->data[i], sizeof(char), 1, file);
+		i.resize(format.nAvgBytesPerSec);
 	}
+
+	return 0;
+}
+
+// 音声データの読み込み
+int WAVE::Load(void)
+{
+	if (file == nullptr || end == true)
+	{
+		return -1;
+	}
+
+	for (unsigned int i = 0; i < format.nAvgBytesPerSec; ++i)
+	{
+		if (read <= readMax)
+		{
+			fread(&data[index][i], sizeof(char), 1, file);
+			++read;
+		}
+		else
+		{
+			data[index][i] = 0;
+			if (i + 1 >= format.nAvgBytesPerSec)
+			{
+				end = true;
+				fclose(file);
+			}
+		}
+	}
+
+	//インデックスの更新
+	++index;
+	index %= DATA_MAX;
 
 	return 0;
 }

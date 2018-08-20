@@ -1,15 +1,16 @@
 #include "Xaudio2.h"
 #define _NOT_USE_D3D12
 #include "../DirectX/Obj.h"
+#include "WAVE.h"
 #include <tchar.h>
-#include <thread>
 
 #pragma comment(lib, "xaudio2.lib")
 
 // コンストラクタ
-Xaudio2::Xaudio2() : 
+Xaudio2::Xaudio2() :
 	result(S_OK), audio(nullptr), master(nullptr)
 {
+	wave.clear();
 	voice.clear();
 
 	Init();
@@ -89,11 +90,11 @@ HRESULT Xaudio2::CreateMaster(void)
 }
 
 // 読み込み
-HRESULT Xaudio2::LoadWAVE(const std::string& fileName, WAVE& wave)
+HRESULT Xaudio2::LoadWAVE(UINT& index, const std::string& fileName)
 {
-	wave.Load(fileName);
+	wave[&index].Load(fileName);
 
-	result = audio->CreateSourceVoice(&voice[&wave], &wave.format, 0, 1.0f, &wave.callback);
+	result = audio->CreateSourceVoice(&voice[&wave[&index]], &wave[&index].format, 0, 1.0f, &wave[&index].callback);
 	if (FAILED(result))
 	{
 		OutputDebugString(_T("\nソースボイスの生成：失敗\n"));
@@ -101,45 +102,75 @@ HRESULT Xaudio2::LoadWAVE(const std::string& fileName, WAVE& wave)
 	}
 
 	//再生開始
-	result = voice[&wave]->Start();
+	result = voice[&wave[&index]]->Start();
 	if (FAILED(result))
 	{
 		OutputDebugString(_T("\n再生：失敗\n"));
 		return result;
 	}
 
-	//バッファー設定用構造体
-	XAUDIO2_BUFFER buffer = {};
-	buffer.AudioBytes = wave.data.size();
-	buffer.pAudioData = wave.data.data();
-	buffer.Flags      = XAUDIO2_END_OF_STREAM;
+	return result;
+}
 
-	//バッファーのセット
-	result = voice[&wave]->SubmitSourceBuffer(&buffer);
+// 再生開始
+HRESULT Xaudio2::Play(UINT& index)
+{
+	if (wave[&index].GetEnd() == true)
+	{
+		return S_FALSE;
+	}
+
+	XAUDIO2_VOICE_STATE state = {};
+	voice[&wave[&index]]->GetState(&state);
+	if (state.BuffersQueued <= wave[&index].data.size() - 1)
+	{
+		wave[&index].Load();
+
+		//バッファー設定用構造体
+		XAUDIO2_BUFFER buffer = {};
+		buffer.AudioBytes = wave[&index].data[wave[&index].GetIndex()].size();
+		buffer.pAudioData = wave[&index].data[wave[&index].GetIndex()].data();
+		buffer.Flags = XAUDIO2_END_OF_STREAM;
+
+		//バッファーのセット
+		result = voice[&wave[&index]]->SubmitSourceBuffer(&buffer);
+		if (FAILED(result))
+		{
+			OutputDebugString(_T("\nバッファーのセット：失敗\n"));
+		}
+	}
+
+	return result;
+}
+
+// 再生停止
+HRESULT Xaudio2::Stop(UINT& index)
+{
+	result = voice[&wave[&index]]->Stop();
 	if (FAILED(result))
 	{
-		OutputDebugString(_T("\nバッファーのセット：失敗\n"));
+		OutputDebugString(_T("\n再生停止：失敗\n"));
 	}
-	
+
 	return result;
 }
 
 // ソースボイスの消去
-void Xaudio2::Delete(WAVE & wave)
+void Xaudio2::Delete(UINT& index)
 {
-	if (voice[&wave] != nullptr)
+	if (voice[&wave[&index]] != nullptr)
 	{
-		result = voice[&wave]->Stop();
+		result = voice[&wave[&index]]->Stop();
 		if (FAILED(result))
 		{
 			OutputDebugString(_T("\n再生の停止：失敗\n"));
 		}
-		voice[&wave]->DestroyVoice();
+		voice[&wave[&index]]->DestroyVoice();
 	}
 
 	for (auto itr = voice.begin(); itr != voice.end();)
 	{
-		if (itr->first == &wave)
+		if (itr->first == &wave[&index])
 		{
 			itr = voice.erase(itr);
 			break;

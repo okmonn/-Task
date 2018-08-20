@@ -1,6 +1,8 @@
 #pragma once
-#include "WAVE.h"
+#include <xaudio2.h>
 #include <map>
+
+class WAVE;
 
 class Xaudio2
 {
@@ -11,10 +13,16 @@ public:
 	~Xaudio2();
 
 	// 読み込み
-	HRESULT LoadWAVE(const std::string& fileName, WAVE& wave);
+	HRESULT LoadWAVE(UINT& index, const std::string& fileName);
+
+	// 再生開始
+	HRESULT Play(UINT& index);
+
+	// 再生停止
+	HRESULT Stop(UINT& index);
 
 	// ソースボイスの消去
-	void Delete(WAVE& wave);
+	void Delete(UINT& index);
 
 private:
 	// 初期化
@@ -38,6 +46,9 @@ private:
 
 	// マスターボイス
 	IXAudio2MasteringVoice* master;
+
+	// WAVEデータ
+	std::map<UINT*, WAVE>wave;
 
 	// ソースボイス
 	std::map<WAVE*, IXAudio2SourceVoice*>voice;

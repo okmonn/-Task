@@ -11,22 +11,17 @@ int main()
 	func::SetWindowSize(WINDOW_X, WINDOW_Y);
 	func::Init();
 
-	unsigned int n = 0;
-	func::LoadImg(n, "img/sample.png");
+	UINT n = 0;
+	func::LoadImg(n, "img/avicii.png");
+	UINT w = 0;
+	LoadWave(w, "wave/sample2.wav");
 
-	static float a = 0;
 	while (func::CheckMsg())
 	{
 		func::Set();
-		if (CheckKey(DIK_RIGHT))
-		{
-			++a;
-		}
-		else if (TriggerKey(DIK_LEFT))
-		{
-			--a;
-		}
-		func::Draw(n, 0 + a, 0, 300, 300, false, false);
+		Draw(n, 0, 0);
+	
+		PlayWave(w);
 		func::Do();
 	}
 

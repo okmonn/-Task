@@ -44,25 +44,25 @@ void Union::ChangeWindowSize(UINT x, UINT y)
 // クラスのインスタンス化
 void Union::Create(void)
 {
-	win      = std::make_shared<Window>(x, y);
-	audio    = std::make_shared<Xaudio2>();
-	input    = std::make_shared<Input>(win);
+	win = std::make_shared<Window>(x, y);
+	audio = std::make_shared<Xaudio2>();
+	input = std::make_shared<Input>(win);
 #ifdef _DEBUG
-	debug    = std::make_shared<Debug>();
+	debug = std::make_shared<Debug>();
 #endif
-	dev      = std::make_shared<Device>();
-	queue    = std::make_shared<Queue>(dev);
-	list     = std::make_shared<List>(dev);
-	swap     = std::make_shared<Swap>(win, queue);
-	render   = std::make_shared<Render>(dev, list, swap);
-	depth    = std::make_shared<Depth>(win, dev, list, swap);
-	fence    = std::make_shared<Fence>(dev, queue);
-	root     = std::make_shared<Root>(dev);
+	dev = std::make_shared<Device>();
+	queue = std::make_shared<Queue>(dev);
+	list = std::make_shared<List>(dev);
+	swap = std::make_shared<Swap>(win, queue);
+	render = std::make_shared<Render>(dev, list, swap);
+	depth = std::make_shared<Depth>(win, dev, list, swap);
+	fence = std::make_shared<Fence>(dev, queue);
+	root = std::make_shared<Root>(dev);
 	root->ComVertex(L"Shader/BasicShader.hlsl", "VS");
 	root->ComPixel(L"Shader/BasicShader.hlsl", "PS");
-	pipe     = std::make_shared<Pipe>(dev, swap, root);
+	pipe = std::make_shared<Pipe>(dev, swap, root);
 	constant = std::make_shared <Constant>(win, dev, list);
-	tex      = std::make_shared<Texture>(dev, list);
+	tex = std::make_shared<Texture>(dev, list);
 
 	ViewPort();
 	Scissor();
@@ -71,31 +71,31 @@ void Union::Create(void)
 // ビューポートのセット
 void Union::ViewPort(void)
 {
-	viewPort.Height   = static_cast<FLOAT>(y);
+	viewPort.Height = static_cast<FLOAT>(y);
 	viewPort.MaxDepth = 1.0f;
 	viewPort.MinDepth = 0.0f;
 	viewPort.TopLeftX = 0.0f;
 	viewPort.TopLeftY = 0.0f;
-	viewPort.Width    = static_cast<FLOAT>(x);
+	viewPort.Width = static_cast<FLOAT>(x);
 }
 
 // シザーのセット
 void Union::Scissor(void)
 {
 	scissor.bottom = static_cast<LONG>(y);
-	scissor.left   = 0;
-	scissor.right  = static_cast<LONG>(x);
-	scissor.top    = 0;
+	scissor.left = 0;
+	scissor.right = static_cast<LONG>(x);
+	scissor.top = 0;
 }
 
 // バリアのセット
 void Union::Barrier(D3D12_RESOURCE_STATES befor, D3D12_RESOURCE_STATES affter)
 {
-	barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE::D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	barrier.Transition.pResource   = render->GetResource(swap->Get()->GetCurrentBackBufferIndex());
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE::D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrier.Transition.pResource = render->GetResource(swap->Get()->GetCurrentBackBufferIndex());
 	barrier.Transition.StateBefore = befor;
-	barrier.Transition.StateAfter  = affter;
+	barrier.Transition.StateAfter = affter;
 	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE;
 
 	//バリア設置
@@ -149,6 +149,8 @@ void Union::Set(void)
 
 	constant->UpDataImage();
 	constant->SetConstant(1, 1);
+
+	//audio->Play(w);
 }
 
 // 実行
@@ -201,4 +203,22 @@ void Union::Draw(UINT & index, const Vec2f & pos, const Vec2f & size, UINT turnX
 void Union::Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rect, const Vec2f& rectSize, UINT turnX, UINT turnY)
 {
 	tex->Draw(index, pos, size, rect, rectSize, turnX, turnY);
+}
+
+// WAVE読み込み
+void Union::LoadWave(UINT& index, const std::string & fileName)
+{
+	audio->LoadWAVE(index, fileName);
+}
+
+// WAVEの再生
+void Union::PlayWave(UINT& index)
+{
+	audio->Play(index);
+}
+
+// WAVEの再生停止
+void Union::StopWave(UINT& index)
+{
+	audio->Stop(index);
 }
