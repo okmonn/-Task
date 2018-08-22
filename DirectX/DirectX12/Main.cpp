@@ -14,14 +14,31 @@ int main()
 	UINT n = 0;
 	func::LoadImg(n, "img/avicii.png");
 	UINT w = 0;
-	LoadWave(w, "wave/sample2.wav");
+	LoadWave(w, "wave/sample3.wav");
 
-	while (func::CheckMsg())
+	float a = 0.f;
+
+	while (func::CheckMsg() && CheckKey(DIK_ESCAPE) != true)
 	{
 		func::Set();
-		Draw(n, 0, 0);
+		if (CheckKey(DIK_RIGHT))
+		{
+			++a;
+		}
+		else if (CheckKey(DIK_LEFT))
+		{
+			--a;
+		}
+		Draw(n, 0 + a, 0);
 	
-		PlayWave(w);
+		if (TriggerKey(DIK_RETURN))
+		{
+			PlayWave(w);
+		}
+		else if (TriggerKey(DIK_SPACE))
+		{
+			StopWave(w);
+		}
 		func::Do();
 	}
 

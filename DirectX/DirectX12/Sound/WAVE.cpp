@@ -48,7 +48,7 @@ struct DATA {
 
 // コンストラクタ
 WAVE::WAVE() :
-	file(nullptr), index(0), read(0), readMax(0), end(false)
+	file(nullptr), index(0), read(0), readMax(0), start(false), end(false)
 {
 	format = {};
 	data.clear();

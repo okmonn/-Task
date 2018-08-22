@@ -1,6 +1,7 @@
 #pragma once
 #include <xaudio2.h>
 #include <map>
+#include <thread>
 
 class WAVE;
 
@@ -37,6 +38,9 @@ private:
 	// マスターボイスの生成
 	HRESULT CreateMaster(void);
 
+	// 再生開始
+	void Start(UINT& index);
+
 
 	// 参照結果
 	HRESULT result;
@@ -52,5 +56,8 @@ private:
 
 	// ソースボイス
 	std::map<WAVE*, IXAudio2SourceVoice*>voice;
+
+	// スレッド
+	std::map<WAVE*, std::thread>th;
 };
 

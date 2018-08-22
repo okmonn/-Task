@@ -3,6 +3,7 @@
 #include "../DirectX/Obj.h"
 #include "WAVE.h"
 #include <tchar.h>
+#include <mutex>
 
 #pragma comment(lib, "xaudio2.lib")
 
@@ -12,6 +13,7 @@ Xaudio2::Xaudio2() :
 {
 	wave.clear();
 	voice.clear();
+	th.clear();
 
 	Init();
 	CreateAudio();
@@ -24,6 +26,10 @@ Xaudio2::Xaudio2() :
 // デストラクタ
 Xaudio2::~Xaudio2()
 {
+	for (auto itr = wave.begin(); itr != wave.end(); ++itr)
+	{
+		itr->second.SetEnd(true);
+	}
 	for (auto itr = voice.begin(); itr != voice.end(); ++itr)
 	{
 		if (itr->second != nullptr)
@@ -101,43 +107,59 @@ HRESULT Xaudio2::LoadWAVE(UINT& index, const std::string& fileName)
 		return result;
 	}
 
-	//再生開始
-	result = voice[&wave[&index]]->Start();
-	if (FAILED(result))
-	{
-		OutputDebugString(_T("\n再生：失敗\n"));
-		return result;
-	}
+	th[&wave[&index]] = std::thread(&Xaudio2::Start, this, std::ref(index));
+	th[&wave[&index]].detach();
 
 	return result;
+}
+
+// 別スレッドで読み込み
+void Xaudio2::Start(UINT & index)
+{
+	while (wave[&index].GetEnd() == false)
+	{
+		if (wave[&index].GetStart() == false)
+		{
+			continue;
+		}
+		XAUDIO2_VOICE_STATE state = {};
+		voice[&wave[&index]]->GetState(&state);
+		if (state.BuffersQueued <= wave[&index].data.size() - 1)
+		{
+			std::mutex mtx;
+			std::lock_guard<std::mutex> lock(mtx);
+			wave[&index].Load();
+
+			//バッファー設定用構造体
+			XAUDIO2_BUFFER buffer = {};
+			buffer.AudioBytes = wave[&index].data[wave[&index].GetIndex()].size();
+			buffer.pAudioData = wave[&index].data[wave[&index].GetIndex()].data();
+			buffer.Flags = XAUDIO2_END_OF_STREAM;
+
+			//バッファーのセット
+			result = voice[&wave[&index]]->SubmitSourceBuffer(&buffer);
+			if (FAILED(result))
+			{
+				OutputDebugString(_T("\nバッファーのセット：失敗\n"));
+			}
+		}
+	}
 }
 
 // 再生開始
 HRESULT Xaudio2::Play(UINT& index)
 {
-	if (wave[&index].GetEnd() == true)
+	//再生開始
+	if (wave[&index].GetStart() == false)
 	{
-		return S_FALSE;
-	}
-
-	XAUDIO2_VOICE_STATE state = {};
-	voice[&wave[&index]]->GetState(&state);
-	if (state.BuffersQueued <= wave[&index].data.size() - 1)
-	{
-		wave[&index].Load();
-
-		//バッファー設定用構造体
-		XAUDIO2_BUFFER buffer = {};
-		buffer.AudioBytes = wave[&index].data[wave[&index].GetIndex()].size();
-		buffer.pAudioData = wave[&index].data[wave[&index].GetIndex()].data();
-		buffer.Flags = XAUDIO2_END_OF_STREAM;
-
-		//バッファーのセット
-		result = voice[&wave[&index]]->SubmitSourceBuffer(&buffer);
+		result = voice[&wave[&index]]->Start();
 		if (FAILED(result))
 		{
-			OutputDebugString(_T("\nバッファーのセット：失敗\n"));
+			OutputDebugString(_T("\n再生：失敗\n"));
+			return result;
 		}
+
+		wave[&index].SetStart(true);
 	}
 
 	return result;
@@ -146,10 +168,16 @@ HRESULT Xaudio2::Play(UINT& index)
 // 再生停止
 HRESULT Xaudio2::Stop(UINT& index)
 {
-	result = voice[&wave[&index]]->Stop();
-	if (FAILED(result))
+	if (wave[&index].GetStart() == true)
 	{
-		OutputDebugString(_T("\n再生停止：失敗\n"));
+		result = voice[&wave[&index]]->Stop();
+		if (FAILED(result))
+		{
+			OutputDebugString(_T("\n再生停止：失敗\n"));
+			return result;
+		}
+
+		wave[&index].SetStart(false);
 	}
 
 	return result;
