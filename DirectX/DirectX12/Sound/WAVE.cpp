@@ -166,11 +166,11 @@ int WAVE::Load(const std::string & fileName)
 	fread(&data.chunkSize, sizeof(data.chunkSize), 1, file);
 
 	//フォーマットセット
-	format.wFormatTag = fmt.waveFormatType;
-	format.nChannels = fmt.formatChannel;
-	format.nSamplesPerSec = fmt.samplesPerSec;
-	format.wBitsPerSample = fmt.bitsPerSample;
-	format.nBlockAlign = format.nChannels * BYTE(format.wBitsPerSample);
+	format.wFormatTag      = fmt.waveFormatType;
+	format.nChannels       = fmt.formatChannel;
+	format.nSamplesPerSec  = fmt.samplesPerSec;
+	format.wBitsPerSample  = fmt.bitsPerSample;
+	format.nBlockAlign     = format.nChannels * BYTE(format.wBitsPerSample);
 	format.nAvgBytesPerSec = format.nSamplesPerSec * format.nBlockAlign;
 
 	//読み込み最大数のセット
@@ -190,6 +190,10 @@ int WAVE::Load(void)
 {
 	if (file == nullptr || end == true)
 	{
+		if (file != nullptr)
+		{
+			fclose(file);
+		}
 		return -1;
 	}
 
