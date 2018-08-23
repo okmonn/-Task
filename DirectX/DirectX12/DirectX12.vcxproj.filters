@@ -67,9 +67,6 @@
     <Filter Include="リソース ファイル\Shader">
       <UniqueIdentifier>{4574d4b7-421d-4d05-b17c-51518360e122}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MIDI">
-      <UniqueIdentifier>{eae930ad-a5ea-4e65-8b67-7bde7a0f4d43}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window\Window.h">
@@ -153,14 +150,11 @@
     <ClInclude Include="Sound\Xaudio2.h">
       <Filter>Sound</Filter>
     </ClInclude>
-    <ClInclude Include="MIDI\MIDI.h">
-      <Filter>MIDI</Filter>
-    </ClInclude>
-    <ClInclude Include="MIDI\NoteNomber.h">
-      <Filter>MIDI</Filter>
-    </ClInclude>
     <ClInclude Include="Func.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound\MIDI_IN.h">
+      <Filter>Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -224,11 +218,11 @@
     <ClCompile Include="Sound\Xaudio2.cpp">
       <Filter>Sound</Filter>
     </ClCompile>
-    <ClCompile Include="MIDI\MIDI.cpp">
-      <Filter>MIDI</Filter>
-    </ClCompile>
     <ClCompile Include="Func.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound\MIDI_IN.cpp">
+      <Filter>Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

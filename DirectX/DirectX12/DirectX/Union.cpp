@@ -1,6 +1,7 @@
 #include "Union.h"
 #include "../Window/Window.h"
 #include "../Sound/Xaudio2.h"
+#include "../Sound/MIDI_IN.h"
 #include "../Input/Input.h"
 #ifdef _DEBUG
 #include "Debug.h"
@@ -44,25 +45,26 @@ void Union::ChangeWindowSize(UINT x, UINT y)
 // クラスのインスタンス化
 void Union::Create(void)
 {
-	win = std::make_shared<Window>(x, y);
-	audio = std::make_shared<Xaudio2>();
-	input = std::make_shared<Input>(win);
+	win      = std::make_shared<Window>(x, y);
+	audio    = std::make_shared<Xaudio2>();
+	in       = std::make_shared<MIDI_IN>();
+	input    = std::make_shared<Input>(win);
 #ifdef _DEBUG
-	debug = std::make_shared<Debug>();
+	debug    = std::make_shared<Debug>();
 #endif
-	dev = std::make_shared<Device>();
-	queue = std::make_shared<Queue>(dev);
-	list = std::make_shared<List>(dev);
-	swap = std::make_shared<Swap>(win, queue);
-	render = std::make_shared<Render>(dev, list, swap);
-	depth = std::make_shared<Depth>(win, dev, list, swap);
-	fence = std::make_shared<Fence>(dev, queue);
-	root = std::make_shared<Root>(dev);
+	dev      = std::make_shared<Device>();
+	queue    = std::make_shared<Queue>(dev);
+	list     = std::make_shared<List>(dev);
+	swap     = std::make_shared<Swap>(win, queue);
+	render   = std::make_shared<Render>(dev, list, swap);
+	depth    = std::make_shared<Depth>(win, dev, list, swap);
+	fence    = std::make_shared<Fence>(dev, queue);
+	root     = std::make_shared<Root>(dev);
 	root->ComVertex(L"Shader/BasicShader.hlsl", "VS");
 	root->ComPixel(L"Shader/BasicShader.hlsl", "PS");
-	pipe = std::make_shared<Pipe>(dev, swap, root);
+	pipe     = std::make_shared<Pipe>(dev, swap, root);
 	constant = std::make_shared <Constant>(win, dev, list);
-	tex = std::make_shared<Texture>(dev, list);
+	tex      = std::make_shared<Texture>(dev, list);
 
 	ViewPort();
 	Scissor();
@@ -127,14 +129,13 @@ bool Union::CheckMsg(void)
 // 描画準備
 void Union::Set(void)
 {
-	constant->UpDataWVP();
-
 	list->Reset(pipe->Get());
 
 	list->SetRoot(root->Get());
 
 	list->SetPipe(pipe->Get());
 
+	constant->UpDataWVP();
 	constant->SetConstant();
 
 	list->SetViewPort(viewPort);
@@ -147,10 +148,8 @@ void Union::Set(void)
 
 	depth->SetDepth();
 
-	constant->UpDataImage();
+	constant->UpDataWindow();
 	constant->SetConstant(1, 1);
-
-	//audio->Play(w);
 }
 
 // 実行

@@ -23,9 +23,3 @@ struct WVP
 	//ビュープロジェクション
 	DirectX::XMMATRIX viewProjection;
 };
-
-// 画像データ
-struct Image {
-	//ウィンドウサイズ
-	DirectX::XMFLOAT2 window;
-};

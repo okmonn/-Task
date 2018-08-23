@@ -18,7 +18,7 @@ public:
 	void UpDataWVP(void);
 
 	// Imageの更新
-	void UpDataImage(void);
+	void UpDataWindow(void);
 
 	// 定数バッファのセット
 	void SetConstant(UINT rootIndex = 0, UINT index = 0);
@@ -58,6 +58,6 @@ private:
 	// WVP
 	WVP wvp;
 
-	// 画像データ
-	Image image;
+	// ウィンドウサイズ
+	DirectX::XMFLOAT2 window;
 };

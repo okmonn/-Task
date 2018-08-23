@@ -18,14 +18,14 @@ Constant::Constant(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak
 	data.clear();
 	data.resize(RESOURCE_MAX);
 	wvp = {};
-	image.window = {static_cast<FLOAT>(this->win.lock()->GetX()), static_cast<FLOAT>(this->win.lock()->GetY())};
+	window = {static_cast<FLOAT>(this->win.lock()->GetX()), static_cast<FLOAT>(this->win.lock()->GetY())};
 	
 	SetWVP();
 	CreateHeap();
 	CreateResource(0, ((sizeof(WVP) + 0xff) &~0xff));
-	CreateResource(1, ((sizeof(Image) + 0xff) &~0xff));
+	CreateResource(1, ((sizeof(DirectX::XMFLOAT2) + 0xff) &~0xff));
 	CreateView(0, (sizeof(WVP) + 0xff) &~0xff, sizeof(WVP));
-	CreateView(1, (sizeof(Image) + 0xff) &~0xff, sizeof(Image));
+	CreateView(1, (sizeof(DirectX::XMFLOAT2) + 0xff) &~0xff, sizeof(DirectX::XMFLOAT2));
 }
 
 // デストラクタ
@@ -170,9 +170,9 @@ void Constant::UpDataWVP(void)
 }
 
 // Imageの更新
-void Constant::UpDataImage(void)
+void Constant::UpDataWindow(void)
 {
-	memcpy(data[1], &image, sizeof(Image));
+	memcpy(data[1], &window, sizeof(DirectX::XMFLOAT2));
 }
 
 // 定数バッファのセット

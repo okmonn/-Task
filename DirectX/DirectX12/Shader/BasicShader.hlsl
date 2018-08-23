@@ -46,7 +46,7 @@ Out VS(Input input)
 
     input.pos.xy = float2(-1, 1) + (input.pos.xy / float2((window.x / 2), -(window.y / 2)));
     input.uv = input.uv / size;
-    //input.pos = mul(mul(viewProjection, world), input.pos);
+    input.pos = mul(mul(viewProjection, world), input.pos);
 	Out o;
 	o.svpos = input.pos;
 	o.pos   = input.pos;
@@ -59,7 +59,7 @@ Out VS(Input input)
 float4 PS(Out o) : SV_TARGET
 {
     float4 ps = tex.Sample(smp, o.uv);
-    if (ps.a <= 0.0)
+    if (ps.a <= 0.0f)
     {
         discard;
     }

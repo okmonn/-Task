@@ -6,6 +6,7 @@
 
 class Window;
 class Xaudio2;
+class MIDI_IN;
 class Input;
 #ifdef _DEBUG
 class Debug;
@@ -116,6 +117,9 @@ private:
 
 	// オーディオ
 	std::shared_ptr<Xaudio2>audio;
+
+	// MIDI入力
+	std::shared_ptr<MIDI_IN>in;
 
 	// インプット
 	std::shared_ptr<Input>input;

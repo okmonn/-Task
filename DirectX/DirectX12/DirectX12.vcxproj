@@ -37,7 +37,7 @@
     <ClCompile Include="Func.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MIDI\MIDI.cpp" />
+    <ClCompile Include="Sound\MIDI_IN.cpp" />
     <ClCompile Include="Sound\WAVE.cpp" />
     <ClCompile Include="Sound\Xaudio2.cpp" />
     <ClCompile Include="Window\Window.cpp" />
@@ -67,8 +67,7 @@
     <ClInclude Include="Icon\Icon.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\KeyData.h" />
-    <ClInclude Include="MIDI\MIDI.h" />
-    <ClInclude Include="MIDI\NoteNomber.h" />
+    <ClInclude Include="Sound\MIDI_IN.h" />
     <ClInclude Include="Sound\VoiceCallback.h" />
     <ClInclude Include="Sound\WAVE.h" />
     <ClInclude Include="Sound\Xaudio2.h" />

@@ -17,6 +17,7 @@ int main()
 	LoadWave(w, "wave/sample3.wav");
 
 	float a = 0.f;
+	float b = 0.f;
 
 	while (func::CheckMsg() && CheckKey(DIK_ESCAPE) != true)
 	{
@@ -29,7 +30,16 @@ int main()
 		{
 			--a;
 		}
-		Draw(n, 0 + a, 0);
+		else if (CheckKey(DIK_DOWN))
+		{
+			++b;
+		}
+		else if (CheckKey(DIK_UP))
+		{
+			--b;
+		}
+
+		Draw(n, 0 + a, 0 + b);
 	
 		if (TriggerKey(DIK_RETURN))
 		{

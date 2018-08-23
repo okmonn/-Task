@@ -116,13 +116,13 @@ HRESULT Xaudio2::LoadWAVE(UINT& index, const std::string& fileName)
 // 別スレッドで読み込み
 void Xaudio2::Start(UINT & index)
 {
+	XAUDIO2_VOICE_STATE state = {};
 	while (wave[&index].GetEnd() == false)
 	{
 		if (wave[&index].GetStart() == false)
 		{
 			continue;
 		}
-		XAUDIO2_VOICE_STATE state = {};
 		voice[&wave[&index]]->GetState(&state);
 		if (state.BuffersQueued <= wave[&index].data.size() - 1)
 		{
@@ -143,6 +143,12 @@ void Xaudio2::Start(UINT & index)
 				OutputDebugString(_T("\nバッファーのセット：失敗\n"));
 			}
 		}
+	}
+
+	//キューに何かはいていたら
+	if (state.BuffersQueued > 0)
+	{
+		state.BuffersQueued = 0;
 	}
 }
 

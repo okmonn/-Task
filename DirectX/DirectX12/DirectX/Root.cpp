@@ -58,7 +58,7 @@ HRESULT Root::Serialize(void)
 	D3D12_ROOT_PARAMETER param[3];
 	SecureZeroMemory(&param, sizeof(param));
 
-	//定数バッファ用
+	//定数バッファ用・WVP
 	range[0].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	range[0].NumDescriptors                    = 1;
 	range[0].BaseShaderRegister                = 0;
@@ -70,7 +70,7 @@ HRESULT Root::Serialize(void)
 	param[0].DescriptorTable.NumDescriptorRanges = 1;
 	param[0].DescriptorTable.pDescriptorRanges   = &range[0];
 
-	//定数バッファ用
+	//定数バッファ用・ウィンドウ
 	range[1].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	range[1].NumDescriptors                    = 1;
 	range[1].BaseShaderRegister                = 1;
