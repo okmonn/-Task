@@ -1,6 +1,6 @@
 #include "MIDI.h"
+
 #pragma comment(lib, "winmm.lib")
-#include <tchar.h>
 
 BYTE GMSystemOn[] = { 0xf0, 0x7e, 0x7f, 0x09, 0x01, 0xf7 };
 
@@ -72,6 +72,14 @@ void MIDI_IN::SetMidiCaps(void)
 		if (result != MMSYSERR_NOERROR)
 		{
 			Error("キャプチャー失敗");
+		}
+		else
+		{
+			printf("[%d]\n", i + 1);
+			printf("      manufacturer ID : %d\n" , caps[i].wMid);
+			printf("           product ID : %d\n" , caps[i].wPid);
+			printf("version of the driver : %d\n" , caps[i].vDriverVersion);
+			printf("         product name : %ls\n", caps[i].szPname);
 		}
 	}
 }
@@ -175,7 +183,7 @@ bool MIDI_IN::Open(UINT index)
 // SysExのバッファ登録
 bool MIDI_IN::SetSysExBuffer(void)
 {
-	header.lpData = (char*)malloc(BUFFER_SIZE);
+	header.lpData = new char[BUFFER_SIZE];
 	header.dwBufferLength = BUFFER_SIZE;
 	header.dwFlags = 0;
 
@@ -245,7 +253,7 @@ bool MIDI_IN::ClearHdr(void)
 		return false;
 	}
 
-	free(header.lpData);
+	delete header.lpData;
 
 	return true;
 }
