@@ -15,6 +15,18 @@ public:
 	UINT GetDevNum(void) const {
 		return devNum;
 	}
+	// ステータスバイトの取得
+	static UCHAR GetState(void) {
+		return state;
+	}
+	// データバイト1・ノートナンバー
+	static UCHAR GetData1(void) {
+		return data1;
+	}
+	// データバイト2・ベロシティー
+	static UCHAR GetData2(void) {
+		return data2;
+	}
 
 private:
 	// MIDIメッセージの確認

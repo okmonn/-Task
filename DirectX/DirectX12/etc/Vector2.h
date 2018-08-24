@@ -1,7 +1,6 @@
 #pragma once
 #include <complex>
 
-/* ‚QŽŸŒ³ƒxƒNƒgƒ‹ */
 template<typename T>
 class Vector2
 {

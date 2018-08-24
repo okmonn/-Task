@@ -1,4 +1,6 @@
 #pragma once
+#include "etc/Vector2.h"
+#include "etc/Vector3.h"
 #include <dinput.h>
 #include <string>
 
