@@ -6,8 +6,10 @@ cbuffer wvp : register(b0)
 {
 	//ワールド行列
 	float4x4 world;
-	//ビュープロジェクション行列
-	float4x4 viewProjection;
+	//ビュー行列
+	float4x4 view;
+    //プロジェクション行列
+    float4x4 projection;
 }
 
 //画像データ
@@ -46,7 +48,11 @@ Out VS(Input input)
 
     input.pos.xy = float2(-1, 1) + (input.pos.xy / float2((window.x / 2), -(window.y / 2)));
     input.uv = input.uv / size;
-    input.pos = mul(mul(viewProjection, world), input.pos);
+
+    input.pos = mul(world, input.pos);
+    input.pos = mul(view, input.pos);
+    input.pos = mul(projection, input.pos);
+
 	Out o;
 	o.svpos = input.pos;
 	o.pos   = input.pos;

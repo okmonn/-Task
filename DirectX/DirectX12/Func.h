@@ -48,4 +48,7 @@ namespace func {
 
 	// WAVEの停止
 	void StopWave(unsigned int& index);
+
+	// MIDIデバイスの数取得
+	unsigned int GetMidiDevNum(void);
 }

@@ -20,6 +20,8 @@ struct WVP
 {
 	//ワールド
 	DirectX::XMMATRIX world;
-	//ビュープロジェクション
-	DirectX::XMMATRIX viewProjection;
+	//ビュー
+	DirectX::XMMATRIX view;
+	//プロジェクション
+	DirectX::XMMATRIX projection;
 };

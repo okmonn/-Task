@@ -77,6 +77,9 @@ public:
 	// WAVEの再生停止
 	void StopWave(UINT& index);
 
+	// MIDIデバイス数の取得
+	UINT GetMidiNum(void);
+
 private:
 	// コンストラクタ
 	Union();

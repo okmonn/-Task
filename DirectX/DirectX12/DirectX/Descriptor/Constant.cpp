@@ -56,16 +56,12 @@ void Constant::SetWVP(void)
 	//カメラの上方向
 	DirectX::XMVECTOR upper  = { 0, 1,     0 };
 
-	view = DirectX::XMMatrixLookAtLH(eye, target, upper);
+	wvp.view = DirectX::XMMatrixLookAtLH(eye, target, upper);
 
-	//ダミー宣言
-	DirectX::XMMATRIX projection = DirectX::XMMatrixIdentity();
-
-	projection = DirectX::XMMatrixPerspectiveFovLH(RAD(90.0f), ((static_cast<FLOAT>(win.lock()->GetX()) / static_cast<FLOAT>(win.lock()->GetY()))), 0.5f, 500.0f);
+	wvp.projection = DirectX::XMMatrixPerspectiveFovLH(RAD(90.0f), ((static_cast<FLOAT>(win.lock()->GetX()) / static_cast<FLOAT>(win.lock()->GetY()))), 0.5f, 500.0f);
 
 	//更新
 	wvp.world          = DirectX::XMMatrixIdentity();
-	wvp.viewProjection = view * projection;
 }
 
 // ヒープの生成

@@ -84,3 +84,9 @@ void func::StopWave(unsigned int& index)
 {
 	Union::Get().StopWave(index);
 }
+
+// MIDIデバイスの数取得
+unsigned int func::GetMidiDevNum(void)
+{
+	return Union::Get().GetMidiNum();
+}

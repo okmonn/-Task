@@ -221,3 +221,9 @@ void Union::StopWave(UINT& index)
 {
 	audio->Stop(index);
 }
+
+// MIDIデバイス数の取得
+UINT Union::GetMidiNum(void)
+{
+	return in->GetDevNum();
+}
