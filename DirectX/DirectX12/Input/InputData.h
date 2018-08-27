@@ -90,6 +90,7 @@
 #define INPUT_NOCONVERT  0x7b
 #define INPUT_YEN        0x7d
 #define INPUT_CIRCUMFLEX 0x90
+#define INPUT_COLON      0x92
 #define INPUT_KANJI      0x94
 #define INPUT_NUMENTER   0x9c
 #define INPUT_RCON       0x9d
