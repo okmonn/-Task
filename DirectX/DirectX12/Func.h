@@ -1,7 +1,7 @@
 #pragma once
 #include "etc/Vector2.h"
 #include "etc/Vector3.h"
-#include <dinput.h>
+#include "Input/InputData.h"
 #include <string>
 
 typedef unsigned int UINT;
@@ -53,4 +53,13 @@ namespace func {
 
 	// MIDIデバイスの数取得
 	unsigned int GetMidiDevNum(void);
+
+	// MIDIステータスバイトの取得
+	unsigned char GetMidiState(void);
+
+	// MIDIデータバイト1の取得
+	unsigned char GetMidiData1(void);
+
+	// MIDIデータバイト2の取得
+	unsigned char GetMidiData2(void);
 }

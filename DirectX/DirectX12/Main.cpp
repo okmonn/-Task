@@ -19,33 +19,33 @@ int main()
 	float a = 0.f;
 	float b = 0.f;
 
-	while (func::CheckMsg() && CheckKey(DIK_ESCAPE) != true)
+	while (func::CheckMsg() && CheckKey(INPUT_ESCAPE) != true)
 	{
 		func::Set();
-		if (CheckKey(DIK_RIGHT))
+		if (CheckKey(INPUT_RIGHT))
 		{
 			++a;
 		}
-		else if (CheckKey(DIK_LEFT))
+		else if (CheckKey(INPUT_LEFT))
 		{
 			--a;
 		}
-		else if (CheckKey(DIK_DOWN))
+		else if (CheckKey(INPUT_DOWN))
 		{
 			++b;
 		}
-		else if (CheckKey(DIK_UP))
+		else if (CheckKey(INPUT_UP))
 		{
 			--b;
 		}
 
 		Draw(n, 0 + a, 0 + b);
 	
-		if (TriggerKey(DIK_RETURN))
+		if (TriggerKey(INPUT_RETURN))
 		{
 			PlayWave(w);
 		}
-		else if (TriggerKey(DIK_SPACE))
+		else if (TriggerKey(INPUT_SPACE))
 		{
 			StopWave(w);
 		}

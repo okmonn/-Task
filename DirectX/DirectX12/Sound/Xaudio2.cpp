@@ -53,7 +53,7 @@ Xaudio2::~Xaudio2()
 // ‰Šú‰»
 HRESULT Xaudio2::Init(void)
 {
-	result = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+	result = CoInitialize(nullptr);
 	if (FAILED(result))
 	{
 		OutputDebugString(_T("\nCOM‚Ì‰Šú‰»F¸”s\n"));

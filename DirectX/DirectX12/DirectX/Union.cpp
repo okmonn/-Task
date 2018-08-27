@@ -227,3 +227,21 @@ UINT Union::GetMidiNum(void)
 {
 	return in->GetDevNum();
 }
+
+// MIDIステータスバイトの取得
+UCHAR Union::GetMidiState(void)
+{
+	return in->GetState();
+}
+
+// MIDIデータバイト1の取得
+UCHAR Union::GetMidiData1(void)
+{
+	return in->GetData1();
+}
+
+// MIDIデータバイト2の取得
+UCHAR Union::GetMidiData2(void)
+{
+	return in->GetData2();
+}

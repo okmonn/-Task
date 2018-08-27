@@ -1,4 +1,6 @@
 #pragma once
+// バージョン
+#define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
 //キーボードテーブル

@@ -90,3 +90,21 @@ unsigned int func::GetMidiDevNum(void)
 {
 	return Union::Get().GetMidiNum();
 }
+
+// MIDIステータスバイトの取得
+unsigned char func::GetMidiState(void)
+{
+	return Union::Get().GetMidiState();
+}
+
+// MIDIデータバイト1の取得
+unsigned char func::GetMidiData1(void)
+{
+	return Union::Get().GetMidiData1();
+}
+
+// MIDIデータバイト2の取得
+unsigned char func::GetMidiData2(void)
+{
+	return Union::Get().GetMidiData2();
+}
