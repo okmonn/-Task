@@ -10,12 +10,7 @@ cbuffer wvp : register(b0)
 	float4x4 view;
     //プロジェクション行列
     float4x4 projection;
-}
-
-//画像データ
-cbuffer image : register(b1)
-{
-    //ウィンドウサイズ
+     //ウィンドウサイズ
     float2 window;
 }
 
@@ -28,6 +23,8 @@ struct Out
 	float4 pos    : POSITION;
 	//uv値
 	float2 uv     : TEXCOORD;
+    //色
+    float4 color  : COLOR;
 };
 
 //入力
@@ -37,6 +34,8 @@ struct Input
 	float4 pos : POSITION;
 	//uv
 	float2 uv  : TEXCOORD;
+    //色
+    float4 color : COLOR;
 };
 
 // 頂点シェーダ
@@ -46,7 +45,7 @@ Out VS(Input input)
     float2 size = float2(0.0f, 0.0f);
     tex.GetDimensions(size.x, size.y);
 
-    input.pos.xy = float2(-1, 1) + (input.pos.xy / float2((window.x / 2), -(window.y / 2)));
+    input.pos.xy = float2(-1.0f, 1.0f) + (input.pos.xy / float2((window.x / 2.0f), -(window.y / 2.0f)));
     input.uv = input.uv / size;
 
     input.pos = mul(world, input.pos);
@@ -57,6 +56,7 @@ Out VS(Input input)
 	o.svpos = input.pos;
 	o.pos   = input.pos;
 	o.uv    = input.uv;
+    o.color = input.color;
 
 	return o;
 }
@@ -65,7 +65,7 @@ Out VS(Input input)
 float4 PS(Out o) : SV_TARGET
 {
     float4 ps = tex.Sample(smp, o.uv);
-    if (ps.a <= 0.0f)
+    if (ps.a < 0.0f)
     {
         discard;
     }

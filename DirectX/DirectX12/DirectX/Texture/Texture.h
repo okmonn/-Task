@@ -45,13 +45,13 @@ public:
 	HRESULT LoadWIC(UINT& index, const std::string& fileName);
 
 	// 描画
-	void Draw(UINT& index, const Vec2f& pos, UINT turnX = 0, UINT turnY = 0);
+	void Draw(UINT& index, const Vec2f& pos, float alpha = 1.0f, UINT turnX = 0, UINT turnY = 0);
 
 	// 描画・サイズ指定
-	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size, UINT turnX = 0, UINT turnY = 0);
+	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size, float alpha = 1.0f, UINT turnX = 0, UINT turnY = 0);
 
 	// 描画・サイズ指定・分割
-	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rectPos, const Vec2f& rectSize, UINT turnX = 0, UINT turnY = 0);
+	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rectPos, const Vec2f& rectSize, float alpha = 1.0f, UINT turnX = 0, UINT turnY = 0);
 
 private:
 	// 定数バッファヒープの生成

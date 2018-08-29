@@ -13,6 +13,8 @@ struct Vertex {
 	DirectX::XMFLOAT3 pos;
 	//UV
 	DirectX::XMFLOAT2 uv;
+	//色
+	DirectX::XMFLOAT4 color;
 };
 
 // 空間行列
@@ -24,4 +26,6 @@ struct WVP
 	DirectX::XMMATRIX view;
 	//プロジェクション
 	DirectX::XMMATRIX projection;
+	// ウィンドウサイズ
+	DirectX::XMFLOAT2 window;
 };

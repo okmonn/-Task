@@ -1,5 +1,6 @@
 #pragma once
 #include "../etc/Vector2.h"
+#include "../etc/Vector3.h"
 #include <d3d12.h>
 #include <string>
 #include <vector>
@@ -60,6 +61,9 @@ public:
 
 	// トリガーキー入力
 	bool TriggerKey(UINT index);
+
+	// 点の描画
+	void DrawPoint(const Vec2f& pos, const Vec3f& color);
 
 	// 画像読み込み
 	void LoadImg(UINT& index, const std::string& fileName);
@@ -124,6 +128,9 @@ private:
 	// 画面サイズY
 	UINT y;
 
+	// アルファ値
+	float alpha;
+
 	// メッセージ
 	MSG msg;
 
@@ -181,7 +188,7 @@ private:
 
 	// パイプライン
 	std::shared_ptr<Pipe>pipe;
-
+	
 	// 定数バッファ
 	std::shared_ptr<Constant>constant;
 

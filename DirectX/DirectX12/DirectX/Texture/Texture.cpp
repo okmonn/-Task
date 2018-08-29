@@ -147,7 +147,7 @@ HRESULT Texture::CreateResource(UINT* index)
 }
 
 // 描画
-void Texture::Draw(UINT & index, const Vec2f & pos, UINT turnX, UINT turnY)
+void Texture::Draw(UINT & index, const Vec2f & pos, float alpha, UINT turnX, UINT turnY)
 {
 	UINT* n = &index;
 
@@ -161,13 +161,13 @@ void Texture::Draw(UINT & index, const Vec2f & pos, UINT turnX, UINT turnY)
 	DirectX::XMFLOAT2 rightDown = { (static_cast<FLOAT>(desc.Width) - (static_cast<FLOAT>(desc.Width) * turnX)), (static_cast<FLOAT>(desc.Height) - (static_cast<FLOAT>(desc.Height) * turnY)) };
 
 	//左上
-	wic[n].vertex[0] = { { pos.x,                                   pos.y,                                   0.0f }, leftUp };
+	wic[n].vertex[0] = { { pos.x,                                   pos.y,                                   0.0f }, leftUp,    { 0.0f, 0.0f, 0.0f, alpha } };
 	//右上
-	wic[n].vertex[1] = { { pos.x + static_cast<FLOAT>(desc.Width),  pos.y,                                   0.0f }, rightUp };
+	wic[n].vertex[1] = { { pos.x + static_cast<FLOAT>(desc.Width),  pos.y,                                   0.0f }, rightUp,   { 0.0f, 0.0f, 0.0f, alpha } };
 	//左下
-	wic[n].vertex[2] = { { pos.x,                                   pos.y + static_cast<FLOAT>(desc.Height), 0.0f }, leftDown };
+	wic[n].vertex[2] = { { pos.x,                                   pos.y + static_cast<FLOAT>(desc.Height), 0.0f }, leftDown,  { 0.0f, 0.0f, 0.0f, alpha } };
 	//右下
-	wic[n].vertex[3] = { { pos.x + static_cast<FLOAT>(desc.Width),  pos.y + static_cast<FLOAT>(desc.Height), 0.0f }, rightDown };
+	wic[n].vertex[3] = { { pos.x + static_cast<FLOAT>(desc.Width),  pos.y + static_cast<FLOAT>(desc.Height), 0.0f }, rightDown, { 0.0f, 0.0f, 0.0f, alpha } };
 
 	//頂点データの更新
 	memcpy(wic[n].data, wic[n].vertex.data(), sizeof(Vertex) * wic[n].vertex.size());
@@ -199,14 +199,14 @@ void Texture::Draw(UINT & index, const Vec2f & pos, UINT turnX, UINT turnY)
 	list.lock()->GetList()->SetDescriptorHeaps(1, &wic[n].con.heap);
 
 	//ディスクリプターテーブルのセット
-	list.lock()->GetList()->SetGraphicsRootDescriptorTable(2, wic[n].con.heap->GetGPUDescriptorHandleForHeapStart());
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(1, wic[n].con.heap->GetGPUDescriptorHandleForHeapStart());
 
 	//描画
 	list.lock()->GetList()->DrawInstanced(wic[n].vertex.size(), 1, 0, 0);
 }
 
 // 描画・サイズ指定
-void Texture::Draw(UINT & index, const Vec2f & pos, const Vec2f & size, UINT turnX, UINT turnY)
+void Texture::Draw(UINT & index, const Vec2f & pos, const Vec2f & size, float alpha, UINT turnX, UINT turnY)
 {
 	UINT* n = &index;
 
@@ -220,22 +220,13 @@ void Texture::Draw(UINT & index, const Vec2f & pos, const Vec2f & size, UINT tur
 	DirectX::XMFLOAT2 rightDown = { (static_cast<FLOAT>(desc.Width) - (static_cast<FLOAT>(desc.Width) * turnX)), (static_cast<FLOAT>(desc.Height) - (static_cast<FLOAT>(desc.Height) * turnY)) };
 
 	//左上
-	wic[n].vertex[0] = { { pos.x,           pos.y,          0.0f }, leftUp };
+	wic[n].vertex[0] = { { pos.x,           pos.y,          0.0f }, leftUp,   { 0.0f, 0.0f, 0.0f, alpha } };
 	//右上
-	wic[n].vertex[1] = { { pos.x + size.x,  pos.y,          0.0f }, rightUp };
+	wic[n].vertex[1] = { { pos.x + size.x,  pos.y,          0.0f }, rightUp,  { 0.0f, 0.0f, 0.0f, alpha } };
 	//左下
-	wic[n].vertex[2] = { { pos.x,           pos.y + size.y, 0.0f }, leftDown };
+	wic[n].vertex[2] = { { pos.x,           pos.y + size.y, 0.0f }, leftDown, { 0.0f, 0.0f, 0.0f, alpha } };
 	//右下
-	wic[n].vertex[3] = { { pos.x + size.x,  pos.y + size.y, 0.0f }, rightDown };
-
-	////左上
-	//wic[n].vertex[0] = { { pos.x,           pos.y,          0.0f },{ 0.0f, 0.0f } };
-	////右上
-	//wic[n].vertex[1] = { { pos.x + size.x,  pos.y,          0.0f },{ static_cast<FLOAT>(desc.Width), 0.0f } };
-	////左下
-	//wic[n].vertex[2] = { { pos.x,           pos.y + size.y, 0.0f },{ 0.0f, static_cast<FLOAT>(desc.Height), } };
-	////右下
-	//wic[n].vertex[3] = { { pos.x + size.x,  pos.y + size.y, 0.0f },{ static_cast<FLOAT>(desc.Width), static_cast<FLOAT>(desc.Height) } };
+	wic[n].vertex[3] = { { pos.x + size.x,  pos.y + size.y, 0.0f }, rightDown,{ 0.0f, 0.0f, 0.0f, alpha } };
 
 	//頂点データの更新
 	memcpy(wic[n].data, wic[n].vertex.data(), sizeof(Vertex) * wic[n].vertex.size());
@@ -267,14 +258,14 @@ void Texture::Draw(UINT & index, const Vec2f & pos, const Vec2f & size, UINT tur
 	list.lock()->GetList()->SetDescriptorHeaps(1, &wic[n].con.heap);
 
 	//ディスクリプターテーブルのセット
-	list.lock()->GetList()->SetGraphicsRootDescriptorTable(2, wic[n].con.heap->GetGPUDescriptorHandleForHeapStart());
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(1, wic[n].con.heap->GetGPUDescriptorHandleForHeapStart());
 
 	//描画
 	list.lock()->GetList()->DrawInstanced(wic[n].vertex.size(), 1, 0, 0);
 }
 
 // 描画・サイズ指定・分割
-void Texture::Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rectPos, const Vec2f& rectSize, UINT turnX, UINT turnY)
+void Texture::Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rectPos, const Vec2f& rectSize, float alpha, UINT turnX, UINT turnY)
 {
 	UINT* n = &index;
 
@@ -288,13 +279,13 @@ void Texture::Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f
 	DirectX::XMFLOAT2 rightDown = { rectPos.x + (rectSize.x - (rectSize.x * turnX)), rectPos.y + (rectSize.y - (rectSize.y * turnY)) };
 
 	//左上
-	wic[n].vertex[0] = { { pos.x,           pos.y,          0.0f }, leftUp };
+	wic[n].vertex[0] = { { pos.x,           pos.y,          0.0f }, leftUp,    { 0.0f, 0.0f, 0.0f, alpha } };
 	//右上
-	wic[n].vertex[1] = { { pos.x + size.x,  pos.y,          0.0f }, rightUp };
+	wic[n].vertex[1] = { { pos.x + size.x,  pos.y,          0.0f }, rightUp,   { 0.0f, 0.0f, 0.0f, alpha } };
 	//左下
-	wic[n].vertex[2] = { { pos.x,           pos.y + size.y, 0.0f }, leftDown };
+	wic[n].vertex[2] = { { pos.x,           pos.y + size.y, 0.0f }, leftDown,  { 0.0f, 0.0f, 0.0f, alpha } };
 	//右下
-	wic[n].vertex[3] = { { pos.x + size.x,  pos.y + size.y, 0.0f }, rightDown };
+	wic[n].vertex[3] = { { pos.x + size.x,  pos.y + size.y, 0.0f }, rightDown, { 0.0f, 0.0f, 0.0f, alpha } };
 
 	//頂点データの更新
 	memcpy(wic[n].data, wic[n].vertex.data(), sizeof(Vertex) * wic[n].vertex.size());
@@ -326,7 +317,7 @@ void Texture::Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f
 	list.lock()->GetList()->SetDescriptorHeaps(1, &wic[n].con.heap);
 
 	//ディスクリプターテーブルのセット
-	list.lock()->GetList()->SetGraphicsRootDescriptorTable(2, wic[n].con.heap->GetGPUDescriptorHandleForHeapStart());
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(1, wic[n].con.heap->GetGPUDescriptorHandleForHeapStart());
 
 	//描画
 	list.lock()->GetList()->DrawInstanced(wic[n].vertex.size(), 1, 0, 0);

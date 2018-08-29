@@ -12,7 +12,8 @@ class Pipe :
 {
 public:
 	// コンストラクタ
-	Pipe(const LPCWSTR& path, std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap, std::weak_ptr<Root>root, std::weak_ptr<Compiler>com);
+	Pipe(const LPCWSTR& path, std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap, std::weak_ptr<Root>root, std::weak_ptr<Compiler>com, 
+		D3D12_PRIMITIVE_TOPOLOGY_TYPE type = D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	// デストラクタ
 	~Pipe();
 
@@ -43,5 +44,8 @@ private:
 
 	// パイプライン
 	ID3D12PipelineState* pipe;
+
+	// プリミティブタイプ
+	D3D12_PRIMITIVE_TOPOLOGY_TYPE type;
 };
 

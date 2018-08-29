@@ -17,6 +17,7 @@
 #include "Compiler/Compiler.h"
 #include "Pipe.h"
 #include "Descriptor/Constant.h"
+#include "Draw/Point.h"
 #include "Texture/Texture.h"
 #include <tchar.h>
 
@@ -29,6 +30,7 @@ Union::Union()
 	viewPort = {};
 	scissor = {};
 	barrier = {};
+	alpha = 1.0f;
 }
 
 // デストラクタ
@@ -132,9 +134,9 @@ void Union::Set(void)
 	list->Reset(pipe->Get());
 
 	list->SetRoot(root->Get());
-
+	
 	list->SetPipe(pipe->Get());
-
+	
 	constant->UpDataWVP();
 	constant->SetConstant();
 
@@ -147,9 +149,6 @@ void Union::Set(void)
 	render->SetRender(depth->GetHeap());
 
 	depth->SetDepth();
-
-	constant->UpDataWindow();
-	constant->SetConstant(1, 1);
 }
 
 // 実行
@@ -160,7 +159,9 @@ void Union::Do(void)
 	list->Close();
 
 	//コマンド実行.
-	ID3D12CommandList* ppCmdLists[] = { list->GetList() };
+	ID3D12CommandList* ppCmdLists[] = { 
+		list->GetList(),
+	};
 	queue->Get()->ExecuteCommandLists(_countof(ppCmdLists), ppCmdLists);
 
 	swap->Present();
@@ -189,19 +190,19 @@ void Union::LoadImg(UINT & index, const std::string & fileName)
 // 描画
 void Union::Draw(UINT& index, const Vec2f& pos, UINT turnX, UINT turnY)
 {
-	tex->Draw(index, pos, turnX, turnY);
+	tex->Draw(index, pos, alpha, turnX, turnY);
 }
 
 // 描画・サイズ指定
 void Union::Draw(UINT & index, const Vec2f & pos, const Vec2f & size, UINT turnX, UINT turnY)
 {
-	tex->Draw(index, pos, size, turnX, turnY);
+	tex->Draw(index, pos, size, alpha, turnX, turnY);
 }
 
 // 描画・サイズ指定・分割
 void Union::Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rect, const Vec2f& rectSize, UINT turnX, UINT turnY)
 {
-	tex->Draw(index, pos, size, rect, rectSize, turnX, turnY);
+	tex->Draw(index, pos, size, rect, rectSize, alpha, turnX, turnY);
 }
 
 // WAVE読み込み

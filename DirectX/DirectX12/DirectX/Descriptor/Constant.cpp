@@ -4,7 +4,7 @@
 #include "../Command/List.h"
 #include <tchar.h>
 
-#define RESOURCE_MAX 2
+#define RESOURCE_MAX 1
 
 // コンストラクタ
 Constant::Constant(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<List>list) : 
@@ -18,14 +18,11 @@ Constant::Constant(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak
 	data.clear();
 	data.resize(RESOURCE_MAX);
 	wvp = {};
-	window = {static_cast<FLOAT>(this->win.lock()->GetX()), static_cast<FLOAT>(this->win.lock()->GetY())};
 	
 	SetWVP();
 	CreateHeap(RESOURCE_MAX, D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE);
 	CreateResource(0, ((sizeof(WVP) + 0xff) &~0xff));
-	CreateResource(1, ((sizeof(DirectX::XMFLOAT2) + 0xff) &~0xff));
 	CreateView(0, (sizeof(WVP) + 0xff) &~0xff, sizeof(WVP));
-	CreateView(1, (sizeof(DirectX::XMFLOAT2) + 0xff) &~0xff, sizeof(DirectX::XMFLOAT2));
 }
 
 // デストラクタ
@@ -62,6 +59,8 @@ void Constant::SetWVP(void)
 
 	//更新
 	wvp.world          = DirectX::XMMatrixIdentity();
+
+	wvp.window = { static_cast<FLOAT>(this->win.lock()->GetX()), static_cast<FLOAT>(this->win.lock()->GetY()) };
 }
 
 // リソースの生成
@@ -140,12 +139,6 @@ void Constant::UpDataWVP(void)
 	memcpy(data[0], &wvp, sizeof(WVP));
 
 	angle++;
-}
-
-// Imageの更新
-void Constant::UpDataWindow(void)
-{
-	memcpy(data[1], &window, sizeof(DirectX::XMFLOAT2));
 }
 
 // 定数バッファのセット

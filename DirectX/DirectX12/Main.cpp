@@ -12,9 +12,9 @@ int main()
 	func::Init();
 
 	UINT n = 0;
-	func::LoadImg(n, "img/avicii.png");
+	func::LoadImg(n, "img/sample1.png");
 	UINT w = 0;
-	LoadWave(w, "wave/sample3.wav");
+	LoadWave(w, "wave/sample2.wav");
 
 	float a = 0.f;
 	float b = 0.f;

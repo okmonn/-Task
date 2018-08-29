@@ -25,11 +25,11 @@ Root::~Root()
 HRESULT Root::Serialize(void)
 {
 	// ディスクリプタレンジの設定.
-	D3D12_DESCRIPTOR_RANGE range[3];
+	D3D12_DESCRIPTOR_RANGE range[2];
 	SecureZeroMemory(&range, sizeof(range));
 
 	//ルートパラメータの設定.
-	D3D12_ROOT_PARAMETER param[3];
+	D3D12_ROOT_PARAMETER param[2];
 	SecureZeroMemory(&param, sizeof(param));
 
 	//定数バッファ用・WVP
@@ -44,29 +44,17 @@ HRESULT Root::Serialize(void)
 	param[0].DescriptorTable.NumDescriptorRanges = 1;
 	param[0].DescriptorTable.pDescriptorRanges   = &range[0];
 
-	//定数バッファ用・ウィンドウ
-	range[1].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+	//テクスチャ用
+	range[1].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	range[1].NumDescriptors                    = 1;
-	range[1].BaseShaderRegister                = 1;
+	range[1].BaseShaderRegister                = 0;
 	range[1].RegisterSpace                     = 0;
 	range[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	param[1].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	param[1].ShaderVisibility                    = D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_VERTEX;
+	param[1].ShaderVisibility                    = D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_ALL;
 	param[1].DescriptorTable.NumDescriptorRanges = 1;
 	param[1].DescriptorTable.pDescriptorRanges   = &range[1];
-
-	//テクスチャ用
-	range[2].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	range[2].NumDescriptors                    = 1;
-	range[2].BaseShaderRegister                = 0;
-	range[2].RegisterSpace                     = 0;
-	range[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	param[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	param[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_ALL;
-	param[2].DescriptorTable.NumDescriptorRanges = 1;
-	param[2].DescriptorTable.pDescriptorRanges   = &range[2];
 
 	//静的サンプラーの設定
 	D3D12_STATIC_SAMPLER_DESC sampler = {};

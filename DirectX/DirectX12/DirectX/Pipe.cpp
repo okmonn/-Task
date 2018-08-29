@@ -6,8 +6,9 @@
 #include <tchar.h>
 
 // コンストラクタ
-Pipe::Pipe(const LPCWSTR& path, std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap, std::weak_ptr<Root>root, std::weak_ptr<Compiler>com) :
-	path(path), dev(dev), swap(swap), root(root), com(com)
+Pipe::Pipe(const LPCWSTR& path, std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap, std::weak_ptr<Root>root, std::weak_ptr<Compiler>com, 
+	D3D12_PRIMITIVE_TOPOLOGY_TYPE type) :
+	path(path), dev(dev), swap(swap), root(root), com(com), type(type)
 {
 	CreatePipe();
 }
@@ -24,8 +25,10 @@ HRESULT Pipe::CreatePipe(void)
 	//頂点レイアウト設定用構造体の設定
 	D3D12_INPUT_ELEMENT_DESC input[] =
 	{
-		{ "POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT,    0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT,       0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "COLOR",    0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+
 	};
 
 	//ラスタライザーステート設定用構造体の設定
@@ -67,7 +70,7 @@ HRESULT Pipe::CreatePipe(void)
 	//パイプラインステート設定用構造体
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC desc = {};
 	desc.InputLayout                      = { input, _countof(input) };
-	desc.PrimitiveTopologyType            = D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	desc.PrimitiveTopologyType            = type;
 	desc.pRootSignature                   = root.lock()->Get();
 	desc.VS.pShaderBytecode               = com.lock()->GetVertex(path)->GetBufferPointer();
 	desc.VS.BytecodeLength                = com.lock()->GetVertex(path)->GetBufferSize();
