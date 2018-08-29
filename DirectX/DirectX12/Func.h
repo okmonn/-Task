@@ -3,6 +3,7 @@
 #include "etc/Vector3.h"
 #include "Input/InputData.h"
 #include <string>
+#include <vector>
 
 typedef unsigned int UINT;
 typedef unsigned char UCHAR;
@@ -62,4 +63,7 @@ namespace func {
 
 	// MIDIデータバイト2の取得
 	unsigned char GetMidiData2(void);
+
+	// 指定したディレクトリのファイル名取得
+	std::vector<std::string> GetDirFile(const std::string& path);
 }

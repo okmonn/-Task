@@ -108,3 +108,9 @@ unsigned char func::GetMidiData2(void)
 {
 	return Union::Get().GetMidiData2();
 }
+
+// 指定したディレクトリのファイル名取得
+std::vector<std::string> func::GetDirFile(const std::string & path)
+{
+	return Union::Get().GetDirFile(path);
+}

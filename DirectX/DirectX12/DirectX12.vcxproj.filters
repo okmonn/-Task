@@ -67,6 +67,9 @@
     <Filter Include="リソース ファイル\Shader">
       <UniqueIdentifier>{4574d4b7-421d-4d05-b17c-51518360e122}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DirectX\Compiler">
+      <UniqueIdentifier>{92e58113-2508-432d-a474-70ce6fd2bd8c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window\Window.h">
@@ -159,6 +162,9 @@
     <ClInclude Include="Input\InputData.h">
       <Filter>Input</Filter>
     </ClInclude>
+    <ClInclude Include="DirectX\Compiler\Compiler.h">
+      <Filter>DirectX\Compiler</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Window\Window.cpp">
@@ -226,6 +232,9 @@
     </ClCompile>
     <ClCompile Include="Sound\MIDI_IN.cpp">
       <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Compiler\Compiler.cpp">
+      <Filter>DirectX\Compiler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

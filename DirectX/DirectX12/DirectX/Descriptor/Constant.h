@@ -36,9 +36,6 @@ private:
 	// WVPのセット
 	void SetWVP(void);
 
-	// ヒープの生成
-	HRESULT CreateHeap(void);
-
 	// リソースの生成
 	HRESULT CreateResource(UINT index, UINT64 size);
 

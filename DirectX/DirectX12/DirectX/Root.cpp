@@ -7,7 +7,7 @@
 
 // コンストラクタ
 Root::Root(std::weak_ptr<Device>dev) :
-	dev(dev), signature(nullptr), error(nullptr), vertex(nullptr), pixel(nullptr), root(nullptr)
+	dev(dev), signature(nullptr), error(nullptr), root(nullptr)
 {
 	Serialize();
 	CreateRoot();
@@ -17,34 +17,8 @@ Root::Root(std::weak_ptr<Device>dev) :
 Root::~Root()
 {
 	Release(root);
-	Release(pixel);
-	Release(vertex);
 	Release(error);
 	Release(signature);
-}
-
-// 頂点シェーダのコンパイル
-HRESULT Root::ComVertex(LPCWSTR fileName, LPCSTR func, LPCSTR target)
-{
-	result = D3DCompileFromFile(fileName, nullptr, nullptr, func, target, D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &vertex, &error);
-	if (FAILED(result))
-	{
-		OutputDebugString(_T("\n頂点シェーダのコンパイル：失敗\n"));
-	}
-
-	return result;
-}
-
-// ピクセルシェーダのコンパイル
-HRESULT Root::ComPixel(LPCWSTR fileName, LPCSTR func, LPCSTR target)
-{
-	result = D3DCompileFromFile(fileName, nullptr, nullptr, func, target, D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &pixel, &error);
-	if (FAILED(result))
-	{
-		OutputDebugString(_T("\nピクセルシェーダのコンパイル：失敗\n"));
-	}
-	
-	return result;
 }
 
 // シリアライズ

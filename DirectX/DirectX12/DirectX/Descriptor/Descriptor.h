@@ -22,7 +22,7 @@ public:
 
 protected:
 	// ヒープの生成
-	HRESULT CreateHeap(const D3D12_DESCRIPTOR_HEAP_TYPE& type, const D3D12_DESCRIPTOR_HEAP_FLAGS& flag);
+	HRESULT CreateHeap(UINT num, const D3D12_DESCRIPTOR_HEAP_TYPE& type, const D3D12_DESCRIPTOR_HEAP_FLAGS& flag);
 
 
 	// デバイス

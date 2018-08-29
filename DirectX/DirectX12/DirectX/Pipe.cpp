@@ -2,11 +2,12 @@
 #include "Device.h"
 #include "Swap.h"
 #include "Root.h"
+#include "Compiler/Compiler.h"
 #include <tchar.h>
 
 // コンストラクタ
-Pipe::Pipe(std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap, std::weak_ptr<Root>root) :
-	dev(dev), swap(swap), root(root)
+Pipe::Pipe(const LPCWSTR& path, std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap, std::weak_ptr<Root>root, std::weak_ptr<Compiler>com) :
+	path(path), dev(dev), swap(swap), root(root), com(com)
 {
 	CreatePipe();
 }
@@ -68,10 +69,10 @@ HRESULT Pipe::CreatePipe(void)
 	desc.InputLayout                      = { input, _countof(input) };
 	desc.PrimitiveTopologyType            = D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	desc.pRootSignature                   = root.lock()->Get();
-	desc.VS.pShaderBytecode               = root.lock()->GetVertex()->GetBufferPointer();
-	desc.VS.BytecodeLength                = root.lock()->GetVertex()->GetBufferSize();
-	desc.PS.pShaderBytecode               = root.lock()->GetPixel()->GetBufferPointer();
-	desc.PS.BytecodeLength                = root.lock()->GetPixel()->GetBufferSize();
+	desc.VS.pShaderBytecode               = com.lock()->GetVertex(path)->GetBufferPointer();
+	desc.VS.BytecodeLength                = com.lock()->GetVertex(path)->GetBufferSize();
+	desc.PS.pShaderBytecode               = com.lock()->GetPixel(path)->GetBufferPointer();
+	desc.PS.BytecodeLength                = com.lock()->GetPixel(path)->GetBufferSize();
 	desc.RasterizerState                  = rasterizer;
 	desc.BlendState                       = blend;
 	desc.DepthStencilState.DepthEnable    = true;

@@ -2,7 +2,11 @@
 #include "../etc/Vector2.h"
 #include <d3d12.h>
 #include <string>
+#include <vector>
 #include <memory>
+#include <filesystem>
+
+namespace fs = std::experimental::filesystem;
 
 class Window;
 class Xaudio2;
@@ -19,6 +23,7 @@ class Render;
 class Depth;
 class Fence;
 class Root;
+class Compiler;
 class Pipe;
 class Constant;
 class Texture;
@@ -89,6 +94,9 @@ public:
 	// MIDIデータバイト2の取得
 	UCHAR GetMidiData2(void);
 
+	// ディレクトリのファイル列挙
+	std::vector<std::string> GetDirFile(const std::string& point);
+
 private:
 	// コンストラクタ
 	Union();
@@ -105,6 +113,10 @@ private:
 
 	// バリアのセット
 	void Barrier(D3D12_RESOURCE_STATES befor, D3D12_RESOURCE_STATES affter);
+
+	// ファイルを返す
+	std::string GetFile(const fs::path& p);
+
 
 	// 画面サイズX
 	UINT x;
@@ -163,6 +175,9 @@ private:
 
 	// ルートシグネチャ
 	std::shared_ptr<Root>root;
+
+	// シェーダコンパイル
+	std::shared_ptr<Compiler>com;
 
 	// パイプライン
 	std::shared_ptr<Pipe>pipe;

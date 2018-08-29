@@ -14,6 +14,7 @@
 #include "Descriptor/Depth.h"
 #include "Fence.h"
 #include "Root.h"
+#include "Compiler/Compiler.h"
 #include "Pipe.h"
 #include "Descriptor/Constant.h"
 #include "Texture/Texture.h"
@@ -60,9 +61,8 @@ void Union::Create(void)
 	depth    = std::make_shared<Depth>(win, dev, list, swap);
 	fence    = std::make_shared<Fence>(dev, queue);
 	root     = std::make_shared<Root>(dev);
-	root->ComVertex(L"Shader/BasicShader.hlsl", "VS");
-	root->ComPixel(L"Shader/BasicShader.hlsl", "PS");
-	pipe     = std::make_shared<Pipe>(dev, swap, root);
+	com      = std::make_shared<Compiler>();
+	pipe     = std::make_shared<Pipe>(L"Shader/BasicShader.hlsl", dev, swap, root, com);
 	constant = std::make_shared <Constant>(win, dev, list);
 	tex      = std::make_shared<Texture>(dev, list);
 
@@ -244,4 +244,37 @@ UCHAR Union::GetMidiData1(void)
 UCHAR Union::GetMidiData2(void)
 {
 	return in->GetData2();
+}
+
+// ファイルを返す
+std::string Union::GetFile(const fs::path & p)
+{
+	std::string m;
+	//ファイルの場合
+	if (fs::is_regular_file(p))
+	{
+		m = p.filename().string();
+	}
+	else if (fs::is_directory(p))
+	{
+		m = p.string();
+	}
+
+	return m;
+}
+
+// ディレクトリのファイル列挙
+std::vector<std::string> Union::GetDirFile(const std::string & point)
+{
+	//列挙の起点
+	fs::path p(point.c_str());
+
+	std::vector<std::string>fileName;
+
+	for (auto& i : fs::recursive_directory_iterator(p))
+	{
+		fileName.push_back(GetFile(i));
+	}
+
+	return fileName;
 }

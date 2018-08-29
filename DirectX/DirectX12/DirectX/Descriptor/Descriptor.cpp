@@ -16,13 +16,13 @@ Descriptor::~Descriptor()
 }
 
 // ヒープの生成
-HRESULT Descriptor::CreateHeap(const D3D12_DESCRIPTOR_HEAP_TYPE & type, const D3D12_DESCRIPTOR_HEAP_FLAGS & flag)
+HRESULT Descriptor::CreateHeap(UINT num, const D3D12_DESCRIPTOR_HEAP_TYPE & type, const D3D12_DESCRIPTOR_HEAP_FLAGS & flag)
 {
 	//ヒープ設定用構造体
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
 	desc.Flags          = flag;
 	desc.NodeMask       = 0;
-	desc.NumDescriptors = swap.lock()->GetBack();
+	desc.NumDescriptors = num;
 	desc.Type           = type;
 
 	result = dev.lock()->Get()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&heap));

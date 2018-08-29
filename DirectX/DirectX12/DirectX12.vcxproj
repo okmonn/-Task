@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="DirectX\Command\List.cpp" />
     <ClCompile Include="DirectX\Command\Queue.cpp" />
+    <ClCompile Include="DirectX\Compiler\Compiler.cpp" />
     <ClCompile Include="DirectX\Debug.cpp" />
     <ClCompile Include="DirectX\Descriptor\Constant.cpp" />
     <ClCompile Include="DirectX\Descriptor\Depth.cpp" />
@@ -46,6 +47,7 @@
     <ClInclude Include="DirectX\Command\Command.h" />
     <ClInclude Include="DirectX\Command\List.h" />
     <ClInclude Include="DirectX\Command\Queue.h" />
+    <ClInclude Include="DirectX\Compiler\Compiler.h" />
     <ClInclude Include="DirectX\Debug.h" />
     <ClInclude Include="DirectX\Descriptor\Constant.h" />
     <ClInclude Include="DirectX\Descriptor\Depth.h" />
