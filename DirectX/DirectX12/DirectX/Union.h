@@ -101,6 +101,7 @@ public:
 
 	// ディレクトリのファイル列挙
 	std::vector<std::string> GetDirFile(const std::string& point);
+	std::vector<std::wstring> GetDirFile(const std::wstring& point);
 
 private:
 	// コンストラクタ
@@ -121,6 +122,7 @@ private:
 
 	// ファイルを返す
 	std::string GetFile(const fs::path& p);
+	std::wstring GetFileW(const fs::path& p);
 
 
 	// 画面サイズX
@@ -190,7 +192,7 @@ private:
 	// パイプライン
 	std::shared_ptr<Pipe>pipe;
 	std::shared_ptr<Pipe>pointPipe;
-	
+
 	// 定数バッファ
 	std::shared_ptr<Constant>constant;
 

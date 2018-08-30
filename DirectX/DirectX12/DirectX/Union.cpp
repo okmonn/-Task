@@ -48,27 +48,27 @@ void Union::ChangeWindowSize(UINT x, UINT y)
 // クラスのインスタンス化
 void Union::Create(void)
 {
-	win      = std::make_shared<Window>(x, y);
-	audio    = std::make_shared<Xaudio2>();
-	in       = std::make_shared<MIDI_IN>();
-	input    = std::make_shared<Input>(win);
+	win = std::make_shared<Window>(x, y);
+	audio = std::make_shared<Xaudio2>();
+	in = std::make_shared<MIDI_IN>();
+	input = std::make_shared<Input>(win);
 #ifdef _DEBUG
-	debug    = std::make_shared<Debug>();
+	debug = std::make_shared<Debug>();
 #endif
-	dev      = std::make_shared<Device>();
-	queue    = std::make_shared<Queue>(dev);
-	list     = std::make_shared<List>(dev);
-	swap     = std::make_shared<Swap>(win, queue);
-	render   = std::make_shared<Render>(dev, list, swap);
-	depth    = std::make_shared<Depth>(win, dev, list, swap);
-	fence    = std::make_shared<Fence>(dev, queue);
-	root     = std::make_shared<Root>(dev);
-	com      = std::make_shared<Compiler>();
-	pipe     = std::make_shared<Pipe>(L"Shader/BasicShader.hlsl", dev, swap, root, com);
+	dev = std::make_shared<Device>();
+	queue = std::make_shared<Queue>(dev);
+	list = std::make_shared<List>(dev);
+	swap = std::make_shared<Swap>(win, queue);
+	render = std::make_shared<Render>(dev, list, swap);
+	depth = std::make_shared<Depth>(win, dev, list, swap);
+	fence = std::make_shared<Fence>(dev, queue);
+	root = std::make_shared<Root>(dev);
+	com = std::make_shared<Compiler>();
+	pipe = std::make_shared<Pipe>(L"Shader/BasicShader.hlsl", dev, swap, root, com);
 	pointPipe = std::make_shared<Pipe>(L"Shader/PointShader.hlsl", dev, swap, root, com, D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
 	constant = std::make_shared <Constant>(win, dev, list);
-	point    = std::make_shared<Point>(dev, list);
-	tex      = std::make_shared<Texture>(dev, list);
+	point = std::make_shared<Point>(dev, list);
+	tex = std::make_shared<Texture>(dev, list);
 
 	ViewPort();
 	Scissor();
@@ -136,9 +136,9 @@ void Union::Set(void)
 	list->Reset(pipe->Get());
 
 	list->SetRoot(root->Get());
-	
+
 	list->SetPipe(pipe->Get());
-	
+
 	constant->UpDataWVP();
 	constant->SetConstant();
 
@@ -165,7 +165,7 @@ void Union::Do(void)
 	list->Close();
 
 	//コマンド実行.
-	ID3D12CommandList* ppCmdLists[] = { 
+	ID3D12CommandList* ppCmdLists[] = {
 		list->GetList(),
 	};
 	queue->Get()->ExecuteCommandLists(_countof(ppCmdLists), ppCmdLists);
@@ -272,7 +272,24 @@ std::string Union::GetFile(const fs::path & p)
 	}
 	else if (fs::is_directory(p))
 	{
-		m = p.string();
+		//m = p.string();
+	}
+
+	return m;
+}
+
+// ファイルを返す
+std::wstring Union::GetFileW(const fs::path & p)
+{
+	std::wstring m;
+	//ファイルの場合
+	if (fs::is_regular_file(p))
+	{
+		m = p.filename().wstring();
+	}
+	else if (fs::is_directory(p))
+	{
+		//m = p.wstring();
 	}
 
 	return m;
@@ -288,7 +305,31 @@ std::vector<std::string> Union::GetDirFile(const std::string & point)
 
 	for (auto& i : fs::recursive_directory_iterator(p))
 	{
-		fileName.push_back(GetFile(i));
+		auto dummy = GetFile(i);
+		if (dummy.size() > 0)
+		{
+			fileName.push_back(dummy);
+		}
+	}
+
+	return fileName;
+}
+
+// ディレクトリのファイル列挙
+std::vector<std::wstring> Union::GetDirFile(const std::wstring & point)
+{
+	//列挙の起点
+	fs::path p(point.c_str());
+
+	std::vector<std::wstring>fileName;
+
+	for (auto& i : fs::recursive_directory_iterator(p))
+	{
+		auto dummy = GetFileW(i);
+		if (dummy.size() > 0)
+		{
+			fileName.push_back(dummy);
+		}
 	}
 
 	return fileName;

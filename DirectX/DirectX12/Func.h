@@ -43,7 +43,7 @@ namespace func {
 	void Draw(unsigned int& index, float x, float y, float sizeX, float sizeY, bool turnX = false, bool turnY = false);
 
 	// 描画・サイズ指定・分割
-	void Draw(unsigned int& index, float x, float y, float sizeX, float sizeY, 
+	void Draw(unsigned int& index, float x, float y, float sizeX, float sizeY,
 		float rectX, float rectY, float rectSizeX, float rectSizeY, bool turnX = false, bool turnY = false);
 
 	// WAVEの読み込み
@@ -69,4 +69,8 @@ namespace func {
 
 	// 指定したディレクトリのファイル名取得
 	std::vector<std::string> GetDirFile(const std::string& path);
+	std::vector<std::wstring> GetDirFile(const std::wstring& path);
+
+	// ログインユーザーネーム取得
+	std::wstring GetName(void);
 }

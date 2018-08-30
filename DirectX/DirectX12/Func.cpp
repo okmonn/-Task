@@ -1,5 +1,6 @@
 #include "Func.h"
 #include "DirectX/Union.h"
+#include <Windows.h>
 
 // ウィンドウサイズのセット
 void func::SetWindowSize(unsigned int x, unsigned int y)
@@ -119,4 +120,24 @@ unsigned char func::GetMidiData2(void)
 std::vector<std::string> func::GetDirFile(const std::string & path)
 {
 	return Union::Get().GetDirFile(path);
+}
+
+// 指定したディレクトリのファイル名取得
+std::vector<std::wstring> func::GetDirFile(const std::wstring & path)
+{
+	return Union::Get().GetDirFile(path);
+}
+
+// ログインユーザーネーム取得
+std::wstring func::GetName(void)
+{
+	std::wstring name;
+	DWORD size = 0;
+
+	GetUserName(&name[0], &size);
+
+	name.resize(size);
+	GetUserName(&name[0], &size);
+
+	return name;
 }
