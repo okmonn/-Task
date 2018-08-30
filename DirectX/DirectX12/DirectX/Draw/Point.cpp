@@ -4,12 +4,12 @@
 #include <tchar.h>
 
 //コンストラクタ
-Point::Point(std::weak_ptr<Device>dev, std::weak_ptr<List>list, const Vec2f& pos, const Vec3f& color) :
-	resource(nullptr), data(nullptr), pos(pos), color(color)
+Point::Point(std::weak_ptr<Device>dev, std::weak_ptr<List>list, UINT max) :
+	resource(nullptr), data(nullptr), vertexMax(max)
 {
 	this->dev = dev;
 	this->list = list;
-	vertex = {};
+	vertex.clear();
 	view = {};
 
 	CreateResource();
@@ -18,7 +18,10 @@ Point::Point(std::weak_ptr<Device>dev, std::weak_ptr<List>list, const Vec2f& pos
 // デストラクタ
 Point::~Point()
 {
-	resource->Unmap(0, nullptr);
+	if (resource != nullptr)
+	{
+		resource->Unmap(0, nullptr);
+	}
 	Release(resource);
 	Release(heap);
 }
@@ -37,7 +40,7 @@ HRESULT Point::CreateResource(void)
 	//リソース設定用構造体の設定
 	D3D12_RESOURCE_DESC desc = {};
 	desc.Dimension        = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_BUFFER;
-	desc.Width            = (sizeof(vertex));
+	desc.Width            = sizeof(Vertex) * vertexMax;
 	desc.Height           = 1;
 	desc.DepthOrArraySize = 1;
 	desc.MipLevels        = 1;
@@ -65,23 +68,32 @@ HRESULT Point::CreateResource(void)
 	}
 
 	//頂点データのコピー
-	memcpy(data, &vertex, sizeof(vertex));
+	memcpy(data, vertex.data(), sizeof(Vertex) * vertex.size());
 
 	//頂点バッファ設定用構造体の設定
 	view.BufferLocation = resource->GetGPUVirtualAddress();
-	view.SizeInBytes    = sizeof(vertex);
+	view.SizeInBytes    = sizeof(Vertex) * vertex.size();
 	view.StrideInBytes  = sizeof(Vertex);
 
 	return result;
 }
 
-// 描画
-HRESULT Point::Draw(void)
+// 頂点データの追加
+void Point::AddList(const Vec2f& pos, const Vec3f& color)
 {
-	vertex = { { pos.x, pos.y, 0.0f }, { 0.0f, 0.0f }, { color.x, color.y, color.z, 1.0f } };
+	vertex.push_back({ { pos.x, pos.y, 0.0f }, { 0.0f, 0.0f }, { color.x, color.y, color.z, 1.0f } });
+}
 
+// 描画
+void Point::Draw(void)
+{
 	//頂点データの更新
-	memcpy(data, &vertex, sizeof(Vertex));
+	memcpy(data, vertex.data(), sizeof(Vertex) * vertex.size());
+
+	//頂点バッファ設定用構造体の設定
+	view.BufferLocation = resource->GetGPUVirtualAddress();
+	view.SizeInBytes = sizeof(Vertex) * vertex.size();
+	view.StrideInBytes = sizeof(Vertex);
 
 	//頂点バッファビューのセット
 	list.lock()->GetList()->IASetVertexBuffers(0, 1, &view);
@@ -90,7 +102,11 @@ HRESULT Point::Draw(void)
 	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 
 	//描画
-	list.lock()->GetList()->DrawInstanced(1, 1, 0, 0);
+	list.lock()->GetList()->DrawInstanced(vertex.size(), 1, 0, 0);
+}
 
-	return result;
+// 配列のリセット
+void Point::Reset(void)
+{
+	vertex.clear();
 }

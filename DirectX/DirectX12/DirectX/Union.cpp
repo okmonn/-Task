@@ -65,7 +65,9 @@ void Union::Create(void)
 	root     = std::make_shared<Root>(dev);
 	com      = std::make_shared<Compiler>();
 	pipe     = std::make_shared<Pipe>(L"Shader/BasicShader.hlsl", dev, swap, root, com);
+	pointPipe = std::make_shared<Pipe>(L"Shader/PointShader.hlsl", dev, swap, root, com, D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
 	constant = std::make_shared <Constant>(win, dev, list);
+	point    = std::make_shared<Point>(dev, list);
 	tex      = std::make_shared<Texture>(dev, list);
 
 	ViewPort();
@@ -154,6 +156,10 @@ void Union::Set(void)
 // 実行
 void Union::Do(void)
 {
+	list->SetPipe(pointPipe->Get());
+	constant->SetConstant();
+	point->Draw();
+
 	Barrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT);
 
 	list->Close();
@@ -167,6 +173,8 @@ void Union::Do(void)
 	swap->Present();
 
 	fence->Wait();
+
+	point->Reset();
 }
 
 // キー入力
@@ -179,6 +187,12 @@ bool Union::CheckKey(UINT index)
 bool Union::TriggerKey(UINT index)
 {
 	return input->TriggerKey(index);
+}
+
+// 点の描画
+void Union::DrawPoint(const Vec2f & pos, const Vec3f & color)
+{
+	point->AddList(pos, color);
 }
 
 // 画像読み込み

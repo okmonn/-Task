@@ -3,6 +3,7 @@
 #include "../../etc/Typedef.h"
 #include "../../etc/Vector2.h"
 #include "../../etc/Vector3.h"
+#include <vector>
 #include <map>
 
 class Point :
@@ -10,20 +11,23 @@ class Point :
 {
 public:
 	// コンストラクタ
-	Point(std::weak_ptr<Device>dev, std::weak_ptr<List>list, const Vec2f& pos, const Vec3f& color);
+	Point(std::weak_ptr<Device>dev, std::weak_ptr<List>list, UINT max = 100000000000);
 	// デストラクタ
 	~Point();
 
+	// 頂点データの追加
+	void AddList(const Vec2f& pos, const Vec3f& color);
+
 	// 描画
-	HRESULT Draw(void);
+	void Draw(void);
+
+	// 配列のリセット
+	void Reset(void);
 
 private:
 	// リソースの生成
 	HRESULT CreateResource(void);
 
-
-	// 頂点データ
-	Vertex vertex;
 
 	// リソース
 	ID3D12Resource * resource;
@@ -34,10 +38,10 @@ private:
 	//送信データ
 	UINT8* data;
 
-	// 座標
-	Vec2f pos;
+	// 頂点データ
+	std::vector<Vertex>vertex;
 
-	// 色
-	Vec3f color;
+	// 頂点最大数
+	UINT vertexMax;
 };
 

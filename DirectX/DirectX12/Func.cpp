@@ -43,6 +43,12 @@ bool func::TriggerKey(unsigned int index)
 	return Union::Get().TriggerKey(index);
 }
 
+// “_‚Ì•`‰æ
+void func::DrawPoint(float x, float y, float r, float g, float b)
+{
+	Union::Get().DrawPoint({ x, y }, { r, g, b });
+}
+
 // ‰æ‘œ“Ç‚İ‚İ
 void func::LoadImg(unsigned int & index, const std::string & fileName)
 {

@@ -27,6 +27,7 @@ class Root;
 class Compiler;
 class Pipe;
 class Constant;
+class Point;
 class Texture;
 
 class Union
@@ -188,9 +189,13 @@ private:
 
 	// パイプライン
 	std::shared_ptr<Pipe>pipe;
+	std::shared_ptr<Pipe>pointPipe;
 	
 	// 定数バッファ
 	std::shared_ptr<Constant>constant;
+
+	// 点
+	std::shared_ptr<Point>point;
 
 	// テクスチャ
 	std::shared_ptr<Texture>tex;

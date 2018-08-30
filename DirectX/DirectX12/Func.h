@@ -30,6 +30,9 @@ namespace func {
 	// トリガーキー入力
 	bool TriggerKey(unsigned int index);
 
+	// 点の描画
+	void DrawPoint(float x, float y, float r, float g, float b);
+
 	// 画像読み込み
 	void LoadImg(unsigned int& index, const std::string& fileName);
 
