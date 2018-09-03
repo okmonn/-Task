@@ -322,8 +322,6 @@ HRESULT PMD::LoadPMD(UINT & index, const std::string & fileName)
 
 	fclose(file);
 
-	model[n].id.resize(model[n].material.size());
-
 	if (FAILED(LoadTex(n, func::FindFirstString(fileName, '/'))))
 	{
 		return result;

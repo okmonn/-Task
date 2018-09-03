@@ -138,5 +138,5 @@ struct Model {
 	//ボーン座標
 	std::vector<BornPos>pos;
 	//テクスチャアドレス
-	std::vector<UINT>id;
+	std::map<UINT, UINT>id;
 };

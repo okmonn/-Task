@@ -30,10 +30,10 @@ struct Out
     float4 svpos : SV_POSITION;
     //座標
     float4 pos : POSITION;
-    //uv
-    float2 uv : TEXCOORD;
     //法線
     float3 normal : NORMAL;
+    //uv
+    float2 uv : TEXCOORD;
 };
 
 //入力
@@ -41,10 +41,10 @@ struct VSInput
 {
     //座標
     float4 pos : POSITION;
+    //法線
+    float4 normal : NORMAL;
     //uv
     float2 uv : TEXCOORD;
-     //法線
-    float4 normal : NORMAL;
 };
 
 //頂点シェーダ
