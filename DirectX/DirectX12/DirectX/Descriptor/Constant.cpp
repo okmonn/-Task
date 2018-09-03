@@ -44,12 +44,12 @@ Constant::~Constant()
 void Constant::SetWVP(void)
 {
 	//ダミー宣言
-	/*FLOAT pos = 0.0f;*/
-	FLOAT pos = 10.0f;
+	FLOAT pos = 0.0f;
+	//FLOAT pos = 10.0f;
 	DirectX::XMMATRIX view   = DirectX::XMMatrixIdentity();
 	//カメラの位置
-	//DirectX::XMVECTOR eye    = { 0, pos,  -1 };
-	DirectX::XMVECTOR eye = { 0, pos,  -15.0f };
+	DirectX::XMVECTOR eye    = { 0, pos,  -1 };
+	//DirectX::XMVECTOR eye = { 0, pos,  -15.0f };
 	//カメラの焦点
 	DirectX::XMVECTOR target = { 0, pos,   0 };
 	//カメラの上方向
@@ -63,6 +63,18 @@ void Constant::SetWVP(void)
 	wvp.world          = DirectX::XMMatrixIdentity();
 
 	wvp.window = { static_cast<FLOAT>(this->win.lock()->GetX()), static_cast<FLOAT>(this->win.lock()->GetY()) };
+}
+
+// WVPの変更
+void Constant::ChangeView(const Vec3f & pos, const Vec3f & target, const Vec3f & up)
+{
+	DirectX::XMVECTOR eye = { pos.x, pos.y, pos.z };
+	DirectX::XMVECTOR tar = { target.x, target.y, target.z };
+	DirectX::XMVECTOR upr = { up.x, up.y, up.z };
+	wvp.view = DirectX::XMMatrixLookAtLH(eye, tar, upr);
+
+	//行列データ更新
+	memcpy(data[0], &wvp, sizeof(WVP));
 }
 
 // リソースの生成

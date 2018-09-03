@@ -22,7 +22,7 @@ public:
 	}
 
 	// パイプラインの生成
-	HRESULT CreatePipe(D3D12_INPUT_ELEMENT_DESC* input, UINT num, D3D12_PRIMITIVE_TOPOLOGY_TYPE type);
+	HRESULT CreatePipe(const D3D12_INPUT_ELEMENT_DESC* input, UINT num, const D3D12_PRIMITIVE_TOPOLOGY_TYPE& type);
 
 private:
 	// パス

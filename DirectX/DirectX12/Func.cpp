@@ -20,6 +20,12 @@ bool func::CheckMsg(void)
 	return Union::Get().CheckMsg();
 }
 
+// ビュー行列のセット
+void func::ChangeView(const Vec3f & pos, const Vec3f & target, const Vec3f & up)
+{
+	Union::Get().ChangeView(pos, target, up);
+}
+
 // 描画準備
 void func::Set(void)
 {
@@ -72,6 +78,18 @@ void func::Draw(unsigned int & index, float x, float y, float sizeX, float sizeY
 void func::Draw(unsigned int & index, float x, float y, float sizeX, float sizeY, float rectX, float rectY, float rectSizeX, float rectSizeY, bool turnX, bool turnY)
 {
 	Union::Get().Draw(index, { x, y }, { sizeX, sizeY }, { rectX, rectY }, { rectSizeX, rectSizeY }, turnX, turnY);
+}
+
+// PMD読み込み
+void func::LoadPMD(unsigned int & index, const std::string & fileName)
+{
+	Union::Get().LoadPMD(index, fileName);
+}
+
+// PMD描画
+void func::DrawPMD(unsigned int & index)
+{
+	Union::Get().DrawPMD(index);
 }
 
 // WAVEの読み込み

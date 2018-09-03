@@ -18,6 +18,9 @@ namespace func {
 	// メッセージの確認
 	bool CheckMsg(void);
 
+	// ビュー行列のセット
+	void ChangeView(const Vec3f& pos, const Vec3f& target, const Vec3f& up);
+
 	// 描画準備
 	void Set(void);
 
@@ -45,6 +48,12 @@ namespace func {
 	// 描画・サイズ指定・分割
 	void Draw(unsigned int& index, float x, float y, float sizeX, float sizeY,
 		float rectX, float rectY, float rectSizeX, float rectSizeY, bool turnX = false, bool turnY = false);
+
+	// PMD読み込み
+	void LoadPMD(unsigned int& index, const std::string& fileName);
+
+	// PMD描画
+	void DrawPMD(unsigned int& index);
 
 	// WAVEの読み込み
 	void LoadWave(unsigned int& index, const std::string fileName);

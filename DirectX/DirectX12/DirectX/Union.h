@@ -52,6 +52,9 @@ public:
 	// メッセージの確認
 	bool CheckMsg(void);
 
+	// ビュー行列のセット
+	void ChangeView(const Vec3f& pos, const Vec3f& target, const Vec3f& up);
+
 	// 描画準備
 	void Set(void);
 
@@ -78,6 +81,12 @@ public:
 
 	// 描画・サイズ指定・分割
 	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rect, const Vec2f& rectSize, UINT turnX = 0, UINT turnY = 0);
+
+	// PMD読み込み
+	void LoadPMD(UINT& index, const std::string& fileName);
+
+	// PMD描画
+	void DrawPMD(UINT& index);
 
 	// WAVE読み込み
 	void LoadWave(UINT& index, const std::string& fileName);

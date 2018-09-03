@@ -19,7 +19,7 @@ Pipe::~Pipe()
 }
 
 // パイプラインの生成
-HRESULT Pipe::CreatePipe(D3D12_INPUT_ELEMENT_DESC * input, UINT num, D3D12_PRIMITIVE_TOPOLOGY_TYPE type)
+HRESULT Pipe::CreatePipe(const D3D12_INPUT_ELEMENT_DESC * input, UINT num, const D3D12_PRIMITIVE_TOPOLOGY_TYPE& type)
 {
 	//ラスタライザーステート設定用構造体の設定
 	D3D12_RASTERIZER_DESC rasterizer = {};

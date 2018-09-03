@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 
+class Window;
 class Pipe;
 
 class Point :
@@ -13,7 +14,7 @@ class Point :
 {
 public:
 	// コンストラクタ
-	Point(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe, UINT max = 1000000);
+	Point(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe);
 	// デストラクタ
 	~Point();
 
@@ -30,6 +31,9 @@ private:
 	// リソースの生成
 	HRESULT CreateResource(void);
 
+
+	// ウィンドウ
+	std::weak_ptr<Window>win; 
 
 	// パイプライン
 	std::weak_ptr<Pipe>pipe;

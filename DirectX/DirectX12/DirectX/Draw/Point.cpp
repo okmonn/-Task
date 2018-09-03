@@ -1,17 +1,19 @@
 #include "Point.h"
+#include "../../Window/Window.h"
 #include "../Device.h"
 #include "../Command/List.h"
 #include "../PipeLine/Pipe.h"
 #include <tchar.h>
 
 //コンストラクタ
-Point::Point(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe, UINT max) :
-	pipe(pipe), resource(nullptr), data(nullptr), vertexMax(max)
+Point::Point(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe) :
+	win(win), pipe(pipe), resource(nullptr), data(nullptr)
 {
 	this->dev = dev;
 	this->list = list;
 	vertex.clear();
 	view = {};
+	vertexMax = this->win.lock()->GetX() * this->win.lock()->GetY();
 
 	CreateResource();
 }

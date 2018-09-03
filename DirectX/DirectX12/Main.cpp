@@ -10,11 +10,16 @@ int main()
 {
 	func::SetWindowSize(WINDOW_X, WINDOW_Y);
 	func::Init();
+	
+	ChangeView(Vec3f(0, 10, -15), Vec3f(0, 10, 0), Vec3f(0, 1, 0));
+
 
 	UINT n = 0;
 	func::LoadImg(n, "img/sample1.png");
 	UINT w = 0;
 	LoadWave(w, "wave/sample2.wav");
+	UINT q = 0;
+	LoadPMD(q, "Model/èââπÉ~ÉN.pmd");
 
 	float a = 0.f;
 	float b = 0.f;
@@ -48,6 +53,7 @@ int main()
 		}*/
 
 		//Draw(n, 0 + a, 0 + b);
+		DrawPMD(q);
 	
 		if (TriggerKey(INPUT_RETURN))
 		{

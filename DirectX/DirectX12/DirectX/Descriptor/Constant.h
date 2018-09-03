@@ -1,6 +1,7 @@
 #pragma once
 #include "Descriptor.h"
 #include "../../etc/Typedef.h"
+#include "../../etc/Vector3.h"
 #include <vector>
 
 class Window;
@@ -13,6 +14,9 @@ public:
 	Constant(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<List>list);
 	// デストラクタ
 	~Constant();
+
+	// WVPの変更
+	void ChangeView(const Vec3f& pos, const Vec3f& target, const Vec3f& up);
 
 	// WVPの更新
 	void UpDataWVP(void);

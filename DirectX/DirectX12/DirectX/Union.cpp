@@ -25,8 +25,6 @@
 
 #pragma comment(lib, "d3d12.lib")
 
-UINT a = 0;
-
 // コンストラクタ
 Union::Union()
 {
@@ -95,10 +93,9 @@ void Union::Create(void)
 	}
 
 	constant = std::make_shared <Constant>(win, dev, list);
-	point = std::make_shared<Point>(dev, list, pointPipe);
+	point = std::make_shared<Point>(win, dev, list, pointPipe);
 	tex = std::make_shared<Texture>(dev, list, pipe);
 	pmd = std::make_shared<PMD>(dev, list, modelPipe, tex);
-	pmd->LoadPMD(a, "Model/初音ミク.pmd");
 
 	ViewPort();
 	Scissor();
@@ -160,6 +157,12 @@ bool Union::CheckMsg(void)
 	return true;
 }
 
+// ビュー行列のセット
+void Union::ChangeView(const Vec3f & pos, const Vec3f & target, const Vec3f & up)
+{
+	constant->ChangeView(pos, target, up);
+}
+
 // 描画準備
 void Union::Set(void)
 {
@@ -186,8 +189,6 @@ void Union::Set(void)
 // 実行
 void Union::Do(void)
 {
-	pmd->Draw(a);
-
 	constant->SetConstant();
 	point->Draw();
 
@@ -248,6 +249,18 @@ void Union::Draw(UINT & index, const Vec2f & pos, const Vec2f & size, UINT turnX
 void Union::Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rect, const Vec2f& rectSize, UINT turnX, UINT turnY)
 {
 	tex->Draw(index, pos, size, rect, rectSize, alpha, turnX, turnY);
+}
+
+// PMD読み込み
+void Union::LoadPMD(UINT & index, const std::string & fileName)
+{
+	pmd->LoadPMD(index, fileName);
+}
+
+// PMD描画
+void Union::DrawPMD(UINT & index)
+{
+	pmd->Draw(index);
 }
 
 // WAVE読み込み
