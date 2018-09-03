@@ -11,7 +11,7 @@ class Point :
 {
 public:
 	// コンストラクタ
-	Point(std::weak_ptr<Device>dev, std::weak_ptr<List>list, UINT max = 100000000000);
+	Point(std::weak_ptr<Device>dev, std::weak_ptr<List>list, UINT max = 1000000);
 	// デストラクタ
 	~Point();
 

@@ -12,7 +12,7 @@ int main()
 	func::Init();
 
 	UINT n = 0;
-	//func::LoadImg(n, "img/sample1.png");
+	func::LoadImg(n, "img/sample1.png");
 	UINT w = 0;
 	LoadWave(w, "wave/sample2.wav");
 
@@ -39,15 +39,15 @@ int main()
 			--b;
 		}
 
-		for (float y = 0; y < 500; ++y)
+		/*for (float y = 0; y < 500; ++y)
 		{
 			for (float x = 0; x < 500; ++x)
 			{
 				DrawPoint(x, y, 1, 1, 1);
 			}
-		}
+		}*/
 
-		//Draw(n, 0 + a, 0 + b);
+		Draw(n, 0 + a, 0 + b);
 	
 		if (TriggerKey(INPUT_RETURN))
 		{

@@ -1,3 +1,4 @@
+#define _ENABLE_EXTENDED_ALIGNED_STORAGE
 #include "Union.h"
 #include "../Window/Window.h"
 #include "../Sound/Xaudio2.h"
@@ -19,6 +20,7 @@
 #include "Descriptor/Constant.h"
 #include "Draw/Point.h"
 #include "Texture/Texture.h"
+#include "PMD/PMD.h"
 #include <tchar.h>
 
 #pragma comment(lib, "d3d12.lib")
@@ -69,6 +71,7 @@ void Union::Create(void)
 	constant = std::make_shared <Constant>(win, dev, list);
 	point = std::make_shared<Point>(dev, list);
 	tex = std::make_shared<Texture>(dev, list);
+	pmd = std::make_shared<PMD>(dev, list, tex);
 
 	ViewPort();
 	Scissor();

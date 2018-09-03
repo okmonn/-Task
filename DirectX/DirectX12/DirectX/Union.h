@@ -29,6 +29,7 @@ class Pipe;
 class Constant;
 class Point;
 class Texture;
+class PMD;
 
 class Union
 {
@@ -201,4 +202,7 @@ private:
 
 	// テクスチャ
 	std::shared_ptr<Texture>tex;
+
+	// PMD
+	std::shared_ptr<PMD>pmd;
 };

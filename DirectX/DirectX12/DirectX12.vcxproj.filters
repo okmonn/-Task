@@ -73,6 +73,9 @@
     <Filter Include="DirectX\Draw">
       <UniqueIdentifier>{d53e9cbd-2758-4f34-94a6-62739e09aac3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DirectX\PMD">
+      <UniqueIdentifier>{94474990-bd5d-468d-a49a-77e0156cd0a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window\Window.h">
@@ -171,6 +174,12 @@
     <ClInclude Include="DirectX\Draw\Point.h">
       <Filter>DirectX\Draw</Filter>
     </ClInclude>
+    <ClInclude Include="DirectX\PMD\PMD.h">
+      <Filter>DirectX\PMD</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\PMD\PmdData.h">
+      <Filter>DirectX\PMD</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Window\Window.cpp">
@@ -245,6 +254,9 @@
     <ClCompile Include="DirectX\Draw\Point.cpp">
       <Filter>DirectX\Draw</Filter>
     </ClCompile>
+    <ClCompile Include="DirectX\PMD\PMD.cpp">
+      <Filter>DirectX\PMD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Icon\Icon.rc">
@@ -256,6 +268,9 @@
       <Filter>リソース ファイル\Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\PointShader.hlsl">
+      <Filter>リソース ファイル\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="ModelShader.hlsl">
       <Filter>リソース ファイル\Shader</Filter>
     </FxCompile>
   </ItemGroup>

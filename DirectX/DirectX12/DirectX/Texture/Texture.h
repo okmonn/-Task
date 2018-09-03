@@ -44,6 +44,12 @@ public:
 	// WIC読み込み
 	HRESULT LoadWIC(UINT& index, const std::string& fileName);
 
+	// 描画準備
+	HRESULT SetDraw(UINT& index);
+
+	// ディスクリプターのセット
+	void SetDescriptor(UINT& index);
+
 	// 描画
 	void Draw(UINT& index, const Vec2f& pos, float alpha = 1.0f, UINT turnX = 0, UINT turnY = 0);
 

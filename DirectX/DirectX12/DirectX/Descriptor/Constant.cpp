@@ -21,8 +21,8 @@ Constant::Constant(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak
 	
 	SetWVP();
 	CreateHeap(RESOURCE_MAX, D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE);
-	CreateResource(0, ((sizeof(WVP) + 0xff) &~0xff));
-	CreateView(0, (sizeof(WVP) + 0xff) &~0xff, sizeof(WVP));
+	CreateResource(0, sizeof(WVP));
+	CreateView(0, sizeof(WVP));
 }
 
 // デストラクタ
@@ -77,7 +77,7 @@ HRESULT Constant::CreateResource(UINT index, UINT64 size)
 	//リソース設定用構造体の設定
 	D3D12_RESOURCE_DESC desc = {};
 	desc.Dimension        = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_BUFFER;
-	desc.Width            = size;
+	desc.Width            = ((size + 0xff) &~0xff);
 	desc.Height           = 1;
 	desc.DepthOrArraySize = 1;
 	desc.MipLevels        = 1;
@@ -96,7 +96,7 @@ HRESULT Constant::CreateResource(UINT index, UINT64 size)
 }
 
 // リソースビューの生成
-HRESULT Constant::CreateView(UINT index, UINT size, UINT stride)
+HRESULT Constant::CreateView(UINT index, UINT size)
 {
 	//ハンドル
 	D3D12_CPU_DESCRIPTOR_HANDLE handle = heap->GetCPUDescriptorHandleForHeapStart();
@@ -104,7 +104,7 @@ HRESULT Constant::CreateView(UINT index, UINT size, UINT stride)
 
 	//定数バッファビュー設定用構造体の設定
 	D3D12_CONSTANT_BUFFER_VIEW_DESC desc = {};
-	desc.SizeInBytes    = size;
+	desc.SizeInBytes    = (size + 0xff) &~0xff;
 	desc.BufferLocation = resource[index]->GetGPUVirtualAddress();
 
 	//送信範囲
@@ -122,7 +122,7 @@ HRESULT Constant::CreateView(UINT index, UINT size, UINT stride)
 	}
 
 	//コピー
-	memcpy(data[index], &wvp, stride);
+	memcpy(data[index], &wvp, size);
 
 	return result;
 }

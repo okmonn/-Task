@@ -37,7 +37,7 @@ private:
 	HRESULT CreateResource(UINT index, UINT64 size);
 
 	// リソースビューの生成
-	HRESULT CreateView(UINT index, UINT size, UINT stride);
+	HRESULT CreateView(UINT index, UINT size);
 
 
 	// ウィンドウ

@@ -146,6 +146,44 @@ HRESULT Texture::CreateResource(UINT* index)
 	return result;
 }
 
+// 描画準備
+HRESULT Texture::SetDraw(UINT & index)
+{
+	//リソース設定用構造体
+	D3D12_RESOURCE_DESC desc = wic[&index].con.resource->GetDesc();
+
+	//ボックス設定用構造体の設定
+	D3D12_BOX box = {};
+	box.back   = 1;
+	box.bottom = desc.Height;
+	box.front  = 0;
+	box.left   = 0;
+	box.right  = static_cast<UINT>(desc.Width);
+	box.top    = 0;
+
+	//サブリソースに書き込み
+	result = wic[&index].con.resource->WriteToSubresource(0, &box, wic[&index].decode.get(), wic[&index].sub.RowPitch, wic[&index].sub.SlicePitch);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("テクスチャのサブリソース書込み：失敗\n"));
+		return result;
+	}
+
+	SetDescriptor(index);
+
+	return result;
+}
+
+// ディスクリプターのセット
+void Texture::SetDescriptor(UINT& index)
+{
+	//ヒープのセット
+	list.lock()->GetList()->SetDescriptorHeaps(1, &wic[&index].con.heap);
+
+	//ディスクリプターテーブルのセット
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(1, wic[&index].con.heap->GetGPUDescriptorHandleForHeapStart());
+}
+
 // 描画
 void Texture::Draw(UINT & index, const Vec2f & pos, float alpha, UINT turnX, UINT turnY)
 {
@@ -178,28 +216,10 @@ void Texture::Draw(UINT & index, const Vec2f & pos, float alpha, UINT turnX, UIN
 	//トポロジー設定
 	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
-	//ボックス設定用構造体の設定
-	D3D12_BOX box = {};
-	box.back   = 1;
-	box.bottom = desc.Height;
-	box.front  = 0;
-	box.left   = 0;
-	box.right  = static_cast<UINT>(desc.Width);
-	box.top    = 0;
-
-	//サブリソースに書き込み
-	result = wic[n].con.resource->WriteToSubresource(0, &box, wic[n].decode.get(), wic[n].sub.RowPitch, wic[n].sub.SlicePitch);
-	if (FAILED(result))
+	if (FAILED(SetDraw(index)))
 	{
-		OutputDebugString(_T("テクスチャのサブリソース書込み：失敗\n"));
 		return;
 	}
-
-	//ヒープのセット
-	list.lock()->GetList()->SetDescriptorHeaps(1, &wic[n].con.heap);
-
-	//ディスクリプターテーブルのセット
-	list.lock()->GetList()->SetGraphicsRootDescriptorTable(1, wic[n].con.heap->GetGPUDescriptorHandleForHeapStart());
 
 	//描画
 	list.lock()->GetList()->DrawInstanced(wic[n].vertex.size(), 1, 0, 0);
@@ -237,28 +257,10 @@ void Texture::Draw(UINT & index, const Vec2f & pos, const Vec2f & size, float al
 	//トポロジー設定
 	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
-	//ボックス設定用構造体の設定
-	D3D12_BOX box = {};
-	box.back   = 1;
-	box.bottom = desc.Height;
-	box.front  = 0;
-	box.left   = 0;
-	box.right  = static_cast<UINT>(desc.Width);
-	box.top    = 0;
-
-	//サブリソースに書き込み
-	result = wic[n].con.resource->WriteToSubresource(0, &box, wic[n].decode.get(), wic[n].sub.RowPitch, wic[n].sub.SlicePitch);
-	if (FAILED(result))
+	if (FAILED(SetDraw(index)))
 	{
-		OutputDebugString(_T("テクスチャのサブリソース書込み：失敗\n"));
 		return;
 	}
-
-	//ヒープのセット
-	list.lock()->GetList()->SetDescriptorHeaps(1, &wic[n].con.heap);
-
-	//ディスクリプターテーブルのセット
-	list.lock()->GetList()->SetGraphicsRootDescriptorTable(1, wic[n].con.heap->GetGPUDescriptorHandleForHeapStart());
 
 	//描画
 	list.lock()->GetList()->DrawInstanced(wic[n].vertex.size(), 1, 0, 0);
@@ -296,28 +298,10 @@ void Texture::Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f
 	//トポロジー設定
 	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
-	//ボックス設定用構造体の設定
-	D3D12_BOX box = {};
-	box.back   = 1;
-	box.bottom = desc.Height;
-	box.front  = 0;
-	box.left   = 0;
-	box.right  = static_cast<UINT>(desc.Width);
-	box.top    = 0;
-
-	//サブリソースに書き込み
-	result = wic[n].con.resource->WriteToSubresource(0, &box, wic[n].decode.get(), wic[n].sub.RowPitch, wic[n].sub.SlicePitch);
-	if (FAILED(result))
+	if (FAILED(SetDraw(index)))
 	{
-		OutputDebugString(_T("テクスチャのサブリソース書込み：失敗\n"));
 		return;
 	}
-
-	//ヒープのセット
-	list.lock()->GetList()->SetDescriptorHeaps(1, &wic[n].con.heap);
-
-	//ディスクリプターテーブルのセット
-	list.lock()->GetList()->SetGraphicsRootDescriptorTable(1, wic[n].con.heap->GetGPUDescriptorHandleForHeapStart());
 
 	//描画
 	list.lock()->GetList()->DrawInstanced(wic[n].vertex.size(), 1, 0, 0);
