@@ -2,13 +2,15 @@
 #include "WICTextureLoader12.h"
 #include "../Device.h"
 #include "../Command/List.h"
+#include "../PipeLine/Pipe.h"
 #include <tchar.h>
 
 // 頂点の最大数
 #define VERTEX_MAX 4
 
 // コンストラクタ
-Texture::Texture(std::weak_ptr<Device>dev, std::weak_ptr<List>list)
+Texture::Texture(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe) :
+	pipe(pipe)
 {
 	this->dev = dev;
 	this->list = list;
@@ -189,6 +191,8 @@ void Texture::Draw(UINT & index, const Vec2f & pos, float alpha, UINT turnX, UIN
 {
 	UINT* n = &index;
 
+	list.lock()->GetList()->SetPipelineState(pipe.lock()->Get());
+
 	//リソース設定用構造体
 	D3D12_RESOURCE_DESC desc = wic[n].con.resource->GetDesc();
 
@@ -230,6 +234,8 @@ void Texture::Draw(UINT & index, const Vec2f & pos, const Vec2f & size, float al
 {
 	UINT* n = &index;
 
+	list.lock()->GetList()->SetPipelineState(pipe.lock()->Get());
+
 	//リソース設定用構造体
 	D3D12_RESOURCE_DESC desc = wic[n].con.resource->GetDesc();
 
@@ -270,6 +276,8 @@ void Texture::Draw(UINT & index, const Vec2f & pos, const Vec2f & size, float al
 void Texture::Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rectPos, const Vec2f& rectSize, float alpha, UINT turnX, UINT turnY)
 {
 	UINT* n = &index;
+
+	list.lock()->GetList()->SetPipelineState(pipe.lock()->Get());
 
 	//リソース設定用構造体
 	D3D12_RESOURCE_DESC desc = wic[n].con.resource->GetDesc();

@@ -6,12 +6,14 @@
 #include <vector>
 #include <map>
 
+class Pipe;
+
 class Point :
 	public Descriptor
 {
 public:
 	// コンストラクタ
-	Point(std::weak_ptr<Device>dev, std::weak_ptr<List>list, UINT max = 1000000);
+	Point(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe, UINT max = 1000000);
 	// デストラクタ
 	~Point();
 
@@ -28,6 +30,9 @@ private:
 	// リソースの生成
 	HRESULT CreateResource(void);
 
+
+	// パイプライン
+	std::weak_ptr<Pipe>pipe;
 
 	// リソース
 	ID3D12Resource * resource;

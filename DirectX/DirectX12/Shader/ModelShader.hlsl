@@ -57,8 +57,8 @@ Out VS(VSInput input)
     Out o;
     o.svpos  = input.pos;
     o.pos    = input.pos;
-    o.normal = (float3) mul(world, input.normal);
     o.uv     = input.uv;
+    o.normal = mul(world, input.normal);
 
     return o;
 }
@@ -67,7 +67,7 @@ Out VS(VSInput input)
 float4 PS(Out o) : SV_TARGET
 {
     //åıåπÉxÉNÉgÉã
-    float3 light = normalize(float3(-1, 1, -1));
+    float3 light = normalize(float3(-1.0f, 1.0f, -1.0f));
 
     //ì‡êœ
     float bright = dot(o.normal, light);

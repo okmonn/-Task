@@ -123,9 +123,6 @@
     <ClInclude Include="DirectX\Root.h">
       <Filter>DirectX\Root</Filter>
     </ClInclude>
-    <ClInclude Include="DirectX\Pipe.h">
-      <Filter>DirectX\Pipe</Filter>
-    </ClInclude>
     <ClInclude Include="etc\Typedef.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -180,6 +177,9 @@
     <ClInclude Include="DirectX\PMD\PmdData.h">
       <Filter>DirectX\PMD</Filter>
     </ClInclude>
+    <ClInclude Include="DirectX\PipeLine\Pipe.h">
+      <Filter>DirectX\Pipe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Window\Window.cpp">
@@ -221,9 +221,6 @@
     <ClCompile Include="DirectX\Root.cpp">
       <Filter>DirectX\Root</Filter>
     </ClCompile>
-    <ClCompile Include="DirectX\Pipe.cpp">
-      <Filter>DirectX\Pipe</Filter>
-    </ClCompile>
     <ClCompile Include="DirectX\Descriptor\Constant.cpp">
       <Filter>DirectX\Descriptor</Filter>
     </ClCompile>
@@ -257,6 +254,9 @@
     <ClCompile Include="DirectX\PMD\PMD.cpp">
       <Filter>DirectX\PMD</Filter>
     </ClCompile>
+    <ClCompile Include="DirectX\PipeLine\Pipe.cpp">
+      <Filter>DirectX\Pipe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Icon\Icon.rc">
@@ -270,7 +270,7 @@
     <FxCompile Include="Shader\PointShader.hlsl">
       <Filter>リソース ファイル\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="ModelShader.hlsl">
+    <FxCompile Include="Shader\ModelShader.hlsl">
       <Filter>リソース ファイル\Shader</Filter>
     </FxCompile>
   </ItemGroup>

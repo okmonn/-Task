@@ -1,11 +1,12 @@
 #include "Point.h"
 #include "../Device.h"
 #include "../Command/List.h"
+#include "../PipeLine/Pipe.h"
 #include <tchar.h>
 
 //コンストラクタ
-Point::Point(std::weak_ptr<Device>dev, std::weak_ptr<List>list, UINT max) :
-	resource(nullptr), data(nullptr), vertexMax(max)
+Point::Point(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe, UINT max) :
+	pipe(pipe), resource(nullptr), data(nullptr), vertexMax(max)
 {
 	this->dev = dev;
 	this->list = list;
@@ -87,6 +88,8 @@ void Point::AddList(const Vec2f& pos, const Vec3f& color)
 // 描画
 void Point::Draw(void)
 {
+	list.lock()->GetList()->SetPipelineState(pipe.lock()->Get());
+
 	//頂点データの更新
 	memcpy(data, vertex.data(), sizeof(Vertex) * vertex.size());
 

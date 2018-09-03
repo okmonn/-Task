@@ -47,7 +47,7 @@ int main()
 			}
 		}*/
 
-		Draw(n, 0 + a, 0 + b);
+		//Draw(n, 0 + a, 0 + b);
 	
 		if (TriggerKey(INPUT_RETURN))
 		{

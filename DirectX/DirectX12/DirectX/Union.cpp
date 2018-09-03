@@ -16,7 +16,7 @@
 #include "Fence.h"
 #include "Root.h"
 #include "Compiler/Compiler.h"
-#include "Pipe.h"
+#include "PipeLine/Pipe.h"
 #include "Descriptor/Constant.h"
 #include "Draw/Point.h"
 #include "Texture/Texture.h"
@@ -24,6 +24,8 @@
 #include <tchar.h>
 
 #pragma comment(lib, "d3d12.lib")
+
+UINT a = 0;
 
 // コンストラクタ
 Union::Union()
@@ -66,12 +68,37 @@ void Union::Create(void)
 	fence = std::make_shared<Fence>(dev, queue);
 	root = std::make_shared<Root>(dev);
 	com = std::make_shared<Compiler>();
-	pipe = std::make_shared<Pipe>(L"Shader/BasicShader.hlsl", dev, swap, root, com);
-	pointPipe = std::make_shared<Pipe>(L"Shader/PointShader.hlsl", dev, swap, root, com, D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
+	//パイプライン生成
+	{
+		pipe = std::make_shared<Pipe>(L"Shader/BasicShader.hlsl", dev, swap, root, com);
+		pointPipe = std::make_shared<Pipe>(L"Shader/PointShader.hlsl", dev, swap, root, com);
+		//頂点レイアウト設定用構造体の設定
+		D3D12_INPUT_ELEMENT_DESC input[] =
+		{
+			{ "POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT,       0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "COLOR",    0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		};
+		pipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+		pointPipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
+	}
+	{
+		modelPipe = std::make_shared <Pipe>(L"Shader/ModelShader.hlsl", dev, swap, root, com);
+		//頂点レイアウト設定用構造体の設定
+		D3D12_INPUT_ELEMENT_DESC input[] =
+		{
+			{ "POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT,       0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "NORMAL",   0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		};
+		modelPipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+	}
+
 	constant = std::make_shared <Constant>(win, dev, list);
-	point = std::make_shared<Point>(dev, list);
-	tex = std::make_shared<Texture>(dev, list);
-	pmd = std::make_shared<PMD>(dev, list, tex);
+	point = std::make_shared<Point>(dev, list, pointPipe);
+	tex = std::make_shared<Texture>(dev, list, pipe);
+	pmd = std::make_shared<PMD>(dev, list, modelPipe, tex);
+	pmd->LoadPMD(a, "Model/初音ミク.pmd");
 
 	ViewPort();
 	Scissor();
@@ -159,7 +186,8 @@ void Union::Set(void)
 // 実行
 void Union::Do(void)
 {
-	list->SetPipe(pointPipe->Get());
+	pmd->Draw(a);
+
 	constant->SetConstant();
 	point->Draw();
 

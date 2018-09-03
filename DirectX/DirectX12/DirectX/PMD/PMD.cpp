@@ -1,13 +1,11 @@
 #include "PMD.h"
 #include "../Device.h"
 #include "../Command/List.h"
-#include "../Pipe.h"
+#include "../PipeLine/Pipe.h"
 #include "../Texture/Texture.h"
 #include "PmdData.h"
 #include <algorithm>
 #include <tchar.h>
-
-UINT n = 0;
 
 // コンストラクタ
 PMD::PMD(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe, std::weak_ptr<Texture>tex) :
@@ -17,8 +15,6 @@ PMD::PMD(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>p
 	this->list = list;
 	size = this->dev.lock()->Get()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	model.clear();
-
-	LoadPMD(n, "Model/初音ミク.pmd");
 }
 
 // デストラクタ
@@ -349,8 +345,55 @@ HRESULT PMD::LoadPMD(UINT & index, const std::string & fileName)
 }
 
 // 描画
-void PMD::Draw(void)
+void PMD::Draw(UINT& index)
 {
+	list.lock()->GetList()->SetPipelineState(pipe.lock()->Get());
+
+	list.lock()->GetList()->IASetVertexBuffers(0, 1, &model[&index].v.view);
+	list.lock()->GetList()->IASetIndexBuffer(&model[&index].i.view);
+	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	UINT* n = &index;
+
+	UINT offset = 0;
+
+	//送信用データ
+	UINT8* data = model[n].c.data;
+
+	//ヒープの先頭ハンドル
+	D3D12_GPU_DESCRIPTOR_HANDLE handle = model[n].c.heap->GetGPUDescriptorHandleForHeapStart();
+
+	for (UINT i = 0; i < model[n].material.size(); ++i)
+	{
+		mat.diffuse = model[n].material[i].diffuse;
+
+		mat.flag = (model[n].material[i].texPath[0] != '\0');
+		if (mat.flag == TRUE)
+		{
+			tex.lock()->SetDraw(model[n].id[i]);
+		}
+
+		//定数ヒープのセット
+		list.lock()->GetList()->SetDescriptorHeaps(1, &model[n].c.heap);
+
+		//ディスクリプターテーブルのセット
+		list.lock()->GetList()->SetGraphicsRootDescriptorTable(2, handle);
+
+		//コピー
+		memcpy(data, &mat, sizeof(Mat));
+
+		//描画
+		list.lock()->GetList()->DrawIndexedInstanced(model[n].material[i].indexNum, 1, offset, 0, 0);
+
+		//ハンドル更新
+		handle.ptr += size;
+
+		//データ更新
+		data = (UINT8*)(((sizeof(Mat) + 0xff) &~0xff) + (CHAR*)(data));
+
+		//オフセット更新
+		offset += model[n].material[i].indexNum;
+	}
 }
 
 // 文字列の検索・先頭から抜き出し

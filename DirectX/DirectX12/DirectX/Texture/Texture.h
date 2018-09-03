@@ -6,6 +6,8 @@
 #include <map>
 #include <string>
 
+class Pipe;
+
 class Texture :
 	public Descriptor
 {
@@ -37,7 +39,7 @@ class Texture :
 
 public:
 	// コンストラクタ
-	Texture(std::weak_ptr<Device>dev, std::weak_ptr<List>list);
+	Texture(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe);
 	// デストラクタ
 	~Texture();
 
@@ -69,6 +71,9 @@ private:
 	// 頂点リソースの生成
 	HRESULT CreateResource(UINT* index);
 
+
+	// パイプライン
+	std::weak_ptr<Pipe>pipe;
 
 	// WICデータ
 	std::map<UINT*, WIC>wic;

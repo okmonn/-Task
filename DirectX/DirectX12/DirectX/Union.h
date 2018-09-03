@@ -193,6 +193,7 @@ private:
 	// パイプライン
 	std::shared_ptr<Pipe>pipe;
 	std::shared_ptr<Pipe>pointPipe;
+	std::shared_ptr<Pipe>modelPipe;
 
 	// 定数バッファ
 	std::shared_ptr<Constant>constant;

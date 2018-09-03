@@ -30,7 +30,7 @@ public:
 	HRESULT LoadPMD(UINT& index, const std::string& fileName);
 
 	// 描画
-	void Draw(void);
+	void Draw(UINT& index);
 
 private:
 	// テクスチャの読み込み

@@ -44,10 +44,12 @@ Constant::~Constant()
 void Constant::SetWVP(void)
 {
 	//ダミー宣言
-	FLOAT pos = 0.0f;
+	/*FLOAT pos = 0.0f;*/
+	FLOAT pos = 10.0f;
 	DirectX::XMMATRIX view   = DirectX::XMMatrixIdentity();
 	//カメラの位置
-	DirectX::XMVECTOR eye    = { 0, pos,  -1 };
+	//DirectX::XMVECTOR eye    = { 0, pos,  -1 };
+	DirectX::XMVECTOR eye = { 0, pos,  -15.0f };
 	//カメラの焦点
 	DirectX::XMVECTOR target = { 0, pos,   0 };
 	//カメラの上方向

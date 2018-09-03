@@ -25,11 +25,11 @@ Root::~Root()
 HRESULT Root::Serialize(void)
 {
 	// ディスクリプタレンジの設定.
-	D3D12_DESCRIPTOR_RANGE range[2];
+	D3D12_DESCRIPTOR_RANGE range[3];
 	SecureZeroMemory(&range, sizeof(range));
 
 	//ルートパラメータの設定.
-	D3D12_ROOT_PARAMETER param[2];
+	D3D12_ROOT_PARAMETER param[3];
 	SecureZeroMemory(&param, sizeof(param));
 
 	//定数バッファ用・WVP
@@ -55,6 +55,18 @@ HRESULT Root::Serialize(void)
 	param[1].ShaderVisibility                    = D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_ALL;
 	param[1].DescriptorTable.NumDescriptorRanges = 1;
 	param[1].DescriptorTable.pDescriptorRanges   = &range[1];
+
+	//マテリアル用
+	range[2].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+	range[2].NumDescriptors                    = 1;
+	range[2].BaseShaderRegister                = 1;
+	range[2].RegisterSpace                     = 0;
+	range[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	param[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	param[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_ALL;
+	param[2].DescriptorTable.NumDescriptorRanges = 1;
+	param[2].DescriptorTable.pDescriptorRanges   = &range[2];
 
 	//静的サンプラーの設定
 	D3D12_STATIC_SAMPLER_DESC sampler = {};
