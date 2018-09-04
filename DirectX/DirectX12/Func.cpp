@@ -50,6 +50,12 @@ bool func::TriggerKey(unsigned int index)
 	return Union::Get().TriggerKey(index);
 }
 
+// ƒ¿’l‚Ìİ’è
+void func::SetAlpha(float alpha)
+{
+	Union::Get().SetAlpha(alpha);
+}
+
 // “_‚Ì•`‰æ
 void func::DrawPoint(float x, float y, float r, float g, float b)
 {

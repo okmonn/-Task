@@ -37,7 +37,7 @@ HRESULT Pipe::CreatePipe(const D3D12_INPUT_ELEMENT_DESC * input, UINT num, const
 
 	//レンダーターゲットブレンド設定用構造体
 	D3D12_RENDER_TARGET_BLEND_DESC renderBlend = {};
-	renderBlend.BlendEnable           = FALSE;
+	renderBlend.BlendEnable           = TRUE;
 	renderBlend.BlendOp               = D3D12_BLEND_OP::D3D12_BLEND_OP_ADD;
 	renderBlend.BlendOpAlpha          = D3D12_BLEND_OP::D3D12_BLEND_OP_ADD;
 	renderBlend.DestBlend             = D3D12_BLEND::D3D12_BLEND_ZERO;

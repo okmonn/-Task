@@ -246,13 +246,13 @@ void Texture::Draw(UINT & index, const Vec2f & pos, const Vec2f & size, float al
 	DirectX::XMFLOAT2 rightDown = { (static_cast<FLOAT>(desc.Width) - (static_cast<FLOAT>(desc.Width) * turnX)), (static_cast<FLOAT>(desc.Height) - (static_cast<FLOAT>(desc.Height) * turnY)) };
 
 	//左上
-	wic[n].vertex[0] = { { pos.x,           pos.y,          0.0f }, leftUp,   { 0.0f, 0.0f, 0.0f, alpha } };
+	wic[n].vertex[0] = { { pos.x,           pos.y,          0.0f }, leftUp,   { 1.0f, 1.0f, 1.0f, alpha } };
 	//右上
-	wic[n].vertex[1] = { { pos.x + size.x,  pos.y,          0.0f }, rightUp,  { 0.0f, 0.0f, 0.0f, alpha } };
+	wic[n].vertex[1] = { { pos.x + size.x,  pos.y,          0.0f }, rightUp,  { 1.0f, 1.0f, 1.0f, alpha } };
 	//左下
-	wic[n].vertex[2] = { { pos.x,           pos.y + size.y, 0.0f }, leftDown, { 0.0f, 0.0f, 0.0f, alpha } };
+	wic[n].vertex[2] = { { pos.x,           pos.y + size.y, 0.0f }, leftDown, { 1.0f, 1.0f, 1.0f, alpha } };
 	//右下
-	wic[n].vertex[3] = { { pos.x + size.x,  pos.y + size.y, 0.0f }, rightDown,{ 0.0f, 0.0f, 0.0f, alpha } };
+	wic[n].vertex[3] = { { pos.x + size.x,  pos.y + size.y, 0.0f }, rightDown,{ 1.0f, 1.0f, 1.0f, alpha } };
 
 	//頂点データの更新
 	memcpy(wic[n].data, wic[n].vertex.data(), sizeof(Vertex) * wic[n].vertex.size());

@@ -33,6 +33,9 @@ namespace func {
 	// トリガーキー入力
 	bool TriggerKey(unsigned int index);
 
+	// α値の設定
+	void SetAlpha(float alpha);
+
 	// 点の描画
 	void DrawPoint(float x, float y, float r, float g, float b);
 

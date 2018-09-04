@@ -67,6 +67,11 @@ public:
 	// トリガーキー入力
 	bool TriggerKey(UINT index);
 
+	// α値の変更
+	void SetAlpha(float alpha) {
+		this->alpha = alpha;
+	}
+
 	// 点の描画
 	void DrawPoint(const Vec2f& pos, const Vec3f& color);
 

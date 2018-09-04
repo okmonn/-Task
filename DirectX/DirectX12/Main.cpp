@@ -16,6 +16,8 @@ int main()
 
 	UINT n = 0;
 	func::LoadImg(n, "img/sample1.png");
+	UINT m = 0;
+	func::LoadImg(m, "img/sample1.png");
 	UINT w = 0;
 	LoadWave(w, "wave/sample2.wav");
 	UINT q = 0;
@@ -52,7 +54,9 @@ int main()
 			}
 		}*/
 
-		//Draw(n, 0 + a, 0 + b);
+		Draw(n, 0 + a, 0 + b);
+		SetAlpha(0.5f);
+		Draw(m, 100, 100);
 		DrawPMD(q);
 	
 		if (TriggerKey(INPUT_RETURN))
