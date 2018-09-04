@@ -62,6 +62,12 @@ void func::DrawPoint(float x, float y, float r, float g, float b)
 	Union::Get().DrawPoint({ x, y }, { r, g, b });
 }
 
+// ボックスの描画
+void func::DrawBox(float x, float y, float sizeX, float sizeY, float r, float g, float b)
+{
+	Union::Get().DrawBox({ x, y }, { sizeX, sizeY },  { r, g, b });
+}
+
 // 画像読み込み
 void func::LoadImg(unsigned int & index, const std::string & fileName)
 {

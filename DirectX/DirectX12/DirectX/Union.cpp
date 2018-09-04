@@ -27,13 +27,13 @@
 #pragma comment(lib, "d3d12.lib")
 
 // コンストラクタ
-Union::Union()
+Union::Union() : 
+	alpha(1.0f)
 {
 	msg = {};
 	viewPort = {};
 	scissor = {};
 	barrier = {};
-	alpha = 1.0f;
 }
 
 // デストラクタ
@@ -51,58 +51,74 @@ void Union::ChangeWindowSize(UINT x, UINT y)
 // クラスのインスタンス化
 void Union::Create(void)
 {
-	win = std::make_shared<Window>(x, y);
+	win   = std::make_shared<Window>(x, y);
 	audio = std::make_shared<Xaudio2>();
-	in = std::make_shared<MIDI_IN>();
+	in    = std::make_shared<MIDI_IN>();
 	input = std::make_shared<Input>(win);
 #ifdef _DEBUG
 	debug = std::make_shared<Debug>();
 #endif
-	dev = std::make_shared<Device>();
-	queue = std::make_shared<Queue>(dev);
-	list = std::make_shared<List>(dev);
-	swap = std::make_shared<Swap>(win, queue);
+	dev    = std::make_shared<Device>();
+	queue  = std::make_shared<Queue>(dev);
+	list   = std::make_shared<List>(dev);
+	swap   = std::make_shared<Swap>(win, queue);
 	render = std::make_shared<Render>(dev, list, swap);
-	depth = std::make_shared<Depth>(win, dev, list, swap);
-	fence = std::make_shared<Fence>(dev, queue);
-	root = std::make_shared<Root>(dev);
-	com = std::make_shared<Compiler>();
+	depth  = std::make_shared<Depth>(win, dev, list, swap);
+	fence  = std::make_shared<Fence>(dev, queue);
+	root   = std::make_shared<Root>(dev);
+	com    = std::make_shared<Compiler>();
 	//パイプライン生成
+	CreatePipeLine();
+
+	constant = std::make_shared <Constant>(win, dev, list);
+	point    = std::make_shared<Point>(win, dev, list, pointPipe);
+	box      = std::make_shared<Box>(dev, list, boxPipe);
+	tex      = std::make_shared<Texture>(dev, list, pipe);
+	pmd      = std::make_shared<PMD>(dev, list, modelPipe, tex);
+
+	ViewPort();
+	Scissor();
+}
+
+// パイプラインの生成
+void Union::CreatePipeLine(void)
+{
+	pipe      = std::make_shared<Pipe>(L"Shader/BasicShader.hlsl", dev, swap, root, com);
 	{
-		pipe = std::make_shared<Pipe>(L"Shader/BasicShader.hlsl", dev, swap, root, com);
-		pointPipe = std::make_shared<Pipe>(L"Shader/PointShader.hlsl", dev, swap, root, com);
-		boxPipe = std::make_shared<Pipe>(L"Shader/PointShader.hlsl", dev, swap, root, com);
-		//頂点レイアウト設定用構造体の設定
+		D3D12_INPUT_ELEMENT_DESC input[] =
+		{
+			{ "POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT,    0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "ALPHA",    0, DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT,       0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		};
+
+		pipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+	}
+
+	pointPipe = std::make_shared<Pipe>(L"Shader/PointShader.hlsl", dev, swap, root, com);
+	boxPipe   = std::make_shared<Pipe>(L"Shader/PointShader.hlsl", dev, swap, root, com);
+	{
 		D3D12_INPUT_ELEMENT_DESC input[] =
 		{
 			{ "POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT,       0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 			{ "COLOR",    0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		};
-		pipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+
 		pointPipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
 		boxPipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	}
+
+	modelPipe = std::make_shared <Pipe>(L"Shader/ModelShader.hlsl", dev, swap, root, com);
 	{
-		modelPipe = std::make_shared <Pipe>(L"Shader/ModelShader.hlsl", dev, swap, root, com);
-		//頂点レイアウト設定用構造体の設定
 		D3D12_INPUT_ELEMENT_DESC input[] =
 		{
 			{ "POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 			{ "NORMAL",   0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 			{ "TEXCOORD", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT,       0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		};
+
 		modelPipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	}
-
-	constant = std::make_shared <Constant>(win, dev, list);
-	point = std::make_shared<Point>(win, dev, list, pointPipe);
-	box = std::make_shared<Box>();
-	tex = std::make_shared<Texture>(dev, list, pipe);
-	pmd = std::make_shared<PMD>(dev, list, modelPipe, tex);
-
-	ViewPort();
-	Scissor();
 }
 
 // ビューポートのセット
@@ -195,6 +211,7 @@ void Union::Do(void)
 {
 	constant->SetConstant();
 	point->Draw();
+	box->Draw();
 
 	Barrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT);
 
@@ -211,6 +228,7 @@ void Union::Do(void)
 	fence->Wait();
 
 	point->Reset();
+	box->Reset();
 }
 
 // キー入力
@@ -229,6 +247,12 @@ bool Union::TriggerKey(UINT index)
 void Union::DrawPoint(const Vec2f & pos, const Vec3f & color)
 {
 	point->AddList(pos, color, alpha);
+}
+
+// ボックスの描画
+void Union::DrawBox(const Vec2f & pos, const Vec2f & size, const Vec3f & color)
+{
+	box->AddList(pos, size, color, alpha);
 }
 
 // 画像読み込み

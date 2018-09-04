@@ -15,9 +15,9 @@ int main()
 
 
 	UINT n = 0;
-	func::LoadImg(n, "img/sample1.png");
+	func::LoadImg(n, "img/avicii.png");
 	UINT m = 0;
-	func::LoadImg(m, "img/sample1.png");
+	func::LoadImg(m, "img/sample3.png");
 	UINT w = 0;
 	LoadWave(w, "wave/sample2.wav");
 	UINT q = 0;
@@ -29,34 +29,7 @@ int main()
 	while (func::CheckMsg() && CheckKey(INPUT_ESCAPE) != true)
 	{
 		func::Set();
-		if (CheckKey(INPUT_RIGHT))
-		{
-			++a;
-		}
-		else if (CheckKey(INPUT_LEFT))
-		{
-			--a;
-		}
-		else if (CheckKey(INPUT_DOWN))
-		{
-			++b;
-		}
-		else if (CheckKey(INPUT_UP))
-		{
-			--b;
-		}
-
-		/*for (float y = 0; y < 500; ++y)
-		{
-			for (float x = 0; x < 500; ++x)
-			{
-				DrawPoint(x, y, 1, 1, 1);
-			}
-		}*/
-
-		
-		
-
+		//Draw(n, 0, 0);
 		DrawPMD(q);
 	
 		if (TriggerKey(INPUT_RETURN))

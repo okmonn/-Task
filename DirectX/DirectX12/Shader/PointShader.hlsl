@@ -21,8 +21,6 @@ struct Out
     float4 svpos : SV_POSITION;
 	//座標
     float4 pos : POSITION;
-	//uv値
-    float2 uv : TEXCOORD;
     //色
     float4 color : COLOR;
 };
@@ -32,8 +30,6 @@ struct Input
 {
 	//座標
     float4 pos : POSITION;
-	//uv
-    float2 uv : TEXCOORD;
     //色
     float4 color : COLOR;
 };
@@ -50,7 +46,6 @@ Out VS(Input input)
     Out o;
     o.svpos = input.pos;
     o.pos   = input.pos;
-    o.uv    = input.uv;
     o.color = input.color;
 
     return o;
@@ -59,5 +54,10 @@ Out VS(Input input)
 // ピクセルシェーダ
 float4 PS(Out o) : SV_TARGET
 {
+    if(o.color.a <= 0.0f)
+    {
+        discard;
+    }
+
     return o.color;
 }

@@ -23,19 +23,19 @@ struct Out
 	float4 pos    : POSITION;
 	//uv値
 	float2 uv     : TEXCOORD;
-    //色
-    float4 color  : COLOR;
+    //α
+    float alpha   : ALPHA;
 };
 
 //入力
 struct Input
 {
 	//座標
-	float4 pos : POSITION;
+	float4 pos  : POSITION;
 	//uv
-	float2 uv  : TEXCOORD;
+	float2 uv   : TEXCOORD;
     //色
-    float4 color : COLOR;
+    float alpha : ALPHA;
 };
 
 // 頂点シェーダ
@@ -56,7 +56,7 @@ Out VS(Input input)
 	o.svpos = input.pos;
 	o.pos   = input.pos;
 	o.uv    = input.uv;
-    o.color = input.color;
+    o.alpha = input.alpha;
 
 	return o;
 }
@@ -65,10 +65,13 @@ Out VS(Input input)
 float4 PS(Out o) : SV_TARGET
 {
     float4 ps = tex.Sample(smp, o.uv);
-    if (ps.a < 0.0f)
+    ps.a *= o.alpha;
+    if (ps.a <= 0.0f)
     {
         discard;
     }
+    
+    
    
     return ps;
 }

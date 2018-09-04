@@ -39,6 +39,9 @@ namespace func {
 	// 点の描画
 	void DrawPoint(float x, float y, float r, float g, float b);
 
+	// ボックスの描画
+	void DrawBox(float x, float y, float sizeX, float sizeY, float r, float g, float b);
+
 	// 画像読み込み
 	void LoadImg(unsigned int& index, const std::string& fileName);
 

@@ -109,7 +109,7 @@ HRESULT Texture::CreateResource(UINT* index)
 	//リソース設定用構造体の設定
 	D3D12_RESOURCE_DESC desc = {};
 	desc.Dimension        = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_BUFFER;
-	desc.Width            = sizeof(Vertex) * wic[index].vertex.size();
+	desc.Width            = sizeof(TexVertex) * wic[index].vertex.size();
 	desc.Height           = 1;
 	desc.DepthOrArraySize = 1;
 	desc.MipLevels        = 1;
@@ -138,12 +138,12 @@ HRESULT Texture::CreateResource(UINT* index)
 	}
 
 	//頂点データのコピー
-	memcpy(wic[index].data, wic[index].vertex.data(), sizeof(Vertex) * wic[index].vertex.size());
+	memcpy(wic[index].data, wic[index].vertex.data(), sizeof(TexVertex) * wic[index].vertex.size());
 
 	//頂点バッファ設定用構造体の設定
 	wic[index].view.BufferLocation = wic[index].resource->GetGPUVirtualAddress();
-	wic[index].view.SizeInBytes    = sizeof(Vertex) * wic[index].vertex.size();
-	wic[index].view.StrideInBytes  = sizeof(Vertex);
+	wic[index].view.SizeInBytes    = sizeof(TexVertex) * wic[index].vertex.size();
+	wic[index].view.StrideInBytes  = sizeof(TexVertex);
 
 	return result;
 }
@@ -203,16 +203,16 @@ void Texture::Draw(UINT & index, const Vec2f & pos, float alpha, UINT turnX, UIN
 	DirectX::XMFLOAT2 rightDown = { (static_cast<FLOAT>(desc.Width) - (static_cast<FLOAT>(desc.Width) * turnX)), (static_cast<FLOAT>(desc.Height) - (static_cast<FLOAT>(desc.Height) * turnY)) };
 
 	//左上
-	wic[n].vertex[0] = { { pos.x,                                   pos.y,                                   0.0f }, leftUp,    { 0.0f, 0.0f, 0.0f, alpha } };
+	wic[n].vertex[0] = { { pos.x,                                   pos.y,                                   0.0f }, leftUp,    alpha };
 	//右上
-	wic[n].vertex[1] = { { pos.x + static_cast<FLOAT>(desc.Width),  pos.y,                                   0.0f }, rightUp,   { 0.0f, 0.0f, 0.0f, alpha } };
+	wic[n].vertex[1] = { { pos.x + static_cast<FLOAT>(desc.Width),  pos.y,                                   0.0f }, rightUp,   alpha };
 	//左下
-	wic[n].vertex[2] = { { pos.x,                                   pos.y + static_cast<FLOAT>(desc.Height), 0.0f }, leftDown,  { 0.0f, 0.0f, 0.0f, alpha } };
+	wic[n].vertex[2] = { { pos.x,                                   pos.y + static_cast<FLOAT>(desc.Height), 0.0f }, leftDown,  alpha };
 	//右下
-	wic[n].vertex[3] = { { pos.x + static_cast<FLOAT>(desc.Width),  pos.y + static_cast<FLOAT>(desc.Height), 0.0f }, rightDown, { 0.0f, 0.0f, 0.0f, alpha } };
+	wic[n].vertex[3] = { { pos.x + static_cast<FLOAT>(desc.Width),  pos.y + static_cast<FLOAT>(desc.Height), 0.0f }, rightDown, alpha };
 
 	//頂点データの更新
-	memcpy(wic[n].data, wic[n].vertex.data(), sizeof(Vertex) * wic[n].vertex.size());
+	memcpy(wic[n].data, wic[n].vertex.data(), sizeof(TexVertex) * wic[n].vertex.size());
 
 	//頂点バッファビューのセット
 	list.lock()->GetList()->IASetVertexBuffers(0, 1, &wic[n].view);
@@ -246,16 +246,16 @@ void Texture::Draw(UINT & index, const Vec2f & pos, const Vec2f & size, float al
 	DirectX::XMFLOAT2 rightDown = { (static_cast<FLOAT>(desc.Width) - (static_cast<FLOAT>(desc.Width) * turnX)), (static_cast<FLOAT>(desc.Height) - (static_cast<FLOAT>(desc.Height) * turnY)) };
 
 	//左上
-	wic[n].vertex[0] = { { pos.x,           pos.y,          0.0f }, leftUp,   { 1.0f, 1.0f, 1.0f, alpha } };
+	wic[n].vertex[0] = { { pos.x,           pos.y,          0.0f }, leftUp,   alpha };
 	//右上
-	wic[n].vertex[1] = { { pos.x + size.x,  pos.y,          0.0f }, rightUp,  { 1.0f, 1.0f, 1.0f, alpha } };
+	wic[n].vertex[1] = { { pos.x + size.x,  pos.y,          0.0f }, rightUp,  alpha };
 	//左下
-	wic[n].vertex[2] = { { pos.x,           pos.y + size.y, 0.0f }, leftDown, { 1.0f, 1.0f, 1.0f, alpha } };
+	wic[n].vertex[2] = { { pos.x,           pos.y + size.y, 0.0f }, leftDown, alpha };
 	//右下
-	wic[n].vertex[3] = { { pos.x + size.x,  pos.y + size.y, 0.0f }, rightDown,{ 1.0f, 1.0f, 1.0f, alpha } };
+	wic[n].vertex[3] = { { pos.x + size.x,  pos.y + size.y, 0.0f }, rightDown,alpha };
 
 	//頂点データの更新
-	memcpy(wic[n].data, wic[n].vertex.data(), sizeof(Vertex) * wic[n].vertex.size());
+	memcpy(wic[n].data, wic[n].vertex.data(), sizeof(TexVertex) * wic[n].vertex.size());
 
 	//頂点バッファビューのセット
 	list.lock()->GetList()->IASetVertexBuffers(0, 1, &wic[n].view);
@@ -289,16 +289,16 @@ void Texture::Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f
 	DirectX::XMFLOAT2 rightDown = { rectPos.x + (rectSize.x - (rectSize.x * turnX)), rectPos.y + (rectSize.y - (rectSize.y * turnY)) };
 
 	//左上
-	wic[n].vertex[0] = { { pos.x,           pos.y,          0.0f }, leftUp,    { 0.0f, 0.0f, 0.0f, alpha } };
+	wic[n].vertex[0] = { { pos.x,           pos.y,          0.0f }, leftUp,    alpha };
 	//右上
-	wic[n].vertex[1] = { { pos.x + size.x,  pos.y,          0.0f }, rightUp,   { 0.0f, 0.0f, 0.0f, alpha } };
+	wic[n].vertex[1] = { { pos.x + size.x,  pos.y,          0.0f }, rightUp,   alpha };
 	//左下
-	wic[n].vertex[2] = { { pos.x,           pos.y + size.y, 0.0f }, leftDown,  { 0.0f, 0.0f, 0.0f, alpha } };
+	wic[n].vertex[2] = { { pos.x,           pos.y + size.y, 0.0f }, leftDown,  alpha };
 	//右下
-	wic[n].vertex[3] = { { pos.x + size.x,  pos.y + size.y, 0.0f }, rightDown, { 0.0f, 0.0f, 0.0f, alpha } };
+	wic[n].vertex[3] = { { pos.x + size.x,  pos.y + size.y, 0.0f }, rightDown, alpha };
 
 	//頂点データの更新
-	memcpy(wic[n].data, wic[n].vertex.data(), sizeof(Vertex) * wic[n].vertex.size());
+	memcpy(wic[n].data, wic[n].vertex.data(), sizeof(TexVertex) * wic[n].vertex.size());
 
 	//頂点バッファビューのセット
 	list.lock()->GetList()->IASetVertexBuffers(0, 1, &wic[n].view);

@@ -44,7 +44,7 @@ private:
 	UINT8* data;
 
 	// 頂点データ
-	std::vector<Vertex>vertex;
+	std::vector<PointVertex>vertex;
 
 	// 頂点最大数
 	UINT vertexMax;

@@ -43,7 +43,7 @@ HRESULT Point::CreateResource(void)
 	//リソース設定用構造体の設定
 	D3D12_RESOURCE_DESC desc = {};
 	desc.Dimension        = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_BUFFER;
-	desc.Width            = sizeof(Vertex) * vertexMax;
+	desc.Width            = sizeof(PointVertex) * vertexMax;
 	desc.Height           = 1;
 	desc.DepthOrArraySize = 1;
 	desc.MipLevels        = 1;
@@ -71,12 +71,12 @@ HRESULT Point::CreateResource(void)
 	}
 
 	//頂点データのコピー
-	memcpy(data, vertex.data(), sizeof(Vertex) * vertex.size());
+	memcpy(data, vertex.data(), sizeof(PointVertex) * vertex.size());
 
 	//頂点バッファ設定用構造体の設定
 	view.BufferLocation = resource->GetGPUVirtualAddress();
-	view.SizeInBytes    = sizeof(Vertex) * vertex.size();
-	view.StrideInBytes  = sizeof(Vertex);
+	view.SizeInBytes    = sizeof(PointVertex) * vertex.size();
+	view.StrideInBytes  = sizeof(PointVertex);
 
 	return result;
 }
@@ -84,21 +84,26 @@ HRESULT Point::CreateResource(void)
 // 頂点データの追加
 void Point::AddList(const Vec2f& pos, const Vec3f& color, float alpha)
 {
-	vertex.push_back({ { pos.x, pos.y, 0.0f }, { 0.0f, 0.0f }, { color.x, color.y, color.z, alpha } });
+	vertex.push_back({ { pos.x, pos.y, 0.0f }, { color.x, color.y, color.z, alpha } });
 }
 
 // 描画
 void Point::Draw(void)
 {
+	if (vertex.size() <= 0)
+	{
+		return;
+	}
+
 	list.lock()->GetList()->SetPipelineState(pipe.lock()->Get());
 
 	//頂点データの更新
-	memcpy(data, vertex.data(), sizeof(Vertex) * vertex.size());
+	memcpy(data, vertex.data(), sizeof(PointVertex) * vertex.size());
 
 	//頂点バッファ設定用構造体の設定
 	view.BufferLocation = resource->GetGPUVirtualAddress();
-	view.SizeInBytes = sizeof(Vertex) * vertex.size();
-	view.StrideInBytes = sizeof(Vertex);
+	view.SizeInBytes    = sizeof(PointVertex) * vertex.size();
+	view.StrideInBytes  = sizeof(PointVertex);
 
 	//頂点バッファビューのセット
 	list.lock()->GetList()->IASetVertexBuffers(0, 1, &view);

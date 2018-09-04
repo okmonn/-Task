@@ -24,7 +24,7 @@ class Texture :
 		//定数バッファ
 		Con con;
 		//頂点データ
-		std::vector<Vertex>vertex;
+		std::vector<TexVertex>vertex;
 		//リソース
 		ID3D12Resource* resource;
 		//デコード

@@ -76,6 +76,9 @@ public:
 	// 点の描画
 	void DrawPoint(const Vec2f& pos, const Vec3f& color);
 
+	// ボックスの描画
+	void DrawBox(const Vec2f& pos, const Vec2f& size, const Vec3f& color);
+
 	// 画像読み込み
 	void LoadImg(UINT& index, const std::string& fileName);
 
@@ -126,6 +129,9 @@ private:
 	}
 	void operator=(const Union&) {
 	}
+
+	// パイプラインの生成
+	void CreatePipeLine(void);
 
 	// ビューポートのセット
 	void ViewPort(void);

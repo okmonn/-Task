@@ -5,7 +5,7 @@
 #include <tchar.h>
 
 // 一個の頂点数
-#define BOX_VERTEX 4
+#define BOX_VERTEX 6
 
 // コンストラクタ
 Box::Box(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe, UINT max) :
@@ -15,6 +15,8 @@ Box::Box(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>p
 	this->list = list;
 	vertex.clear();
 	view = {};
+
+	CreateResource();
 }
 
 // デストラクタ
@@ -22,7 +24,7 @@ Box::~Box()
 {
 	if (resource != nullptr)
 	{
-		resource->Unmap(0, nullptr);
+		//resource->Unmap(0, nullptr);
 	}
 	Release(resource);
 	Release(heap);
@@ -42,7 +44,7 @@ HRESULT Box::CreateResource(void)
 	//リソース設定用構造体の設定
 	D3D12_RESOURCE_DESC desc = {};
 	desc.Dimension        = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_BUFFER;
-	desc.Width            = sizeof(Vertex) * vertexMax;
+	desc.Width            = sizeof(PointVertex) * vertexMax;
 	desc.Height           = 1;
 	desc.DepthOrArraySize = 1;
 	desc.MipLevels        = 1;
@@ -70,12 +72,12 @@ HRESULT Box::CreateResource(void)
 	}
 
 	//頂点データのコピー
-	memcpy(data, vertex.data(), sizeof(Vertex) * vertex.size());
+	memcpy(data, vertex.data(), sizeof(PointVertex) * vertex.size());
 
 	//頂点バッファ設定用構造体の設定
 	view.BufferLocation = resource->GetGPUVirtualAddress();
-	view.SizeInBytes    = sizeof(Vertex) * vertex.size();
-	view.StrideInBytes  = sizeof(Vertex);
+	view.SizeInBytes    = sizeof(PointVertex) * vertex.size();
+	view.StrideInBytes  = sizeof(PointVertex);
 
 	return result;
 }
@@ -83,31 +85,37 @@ HRESULT Box::CreateResource(void)
 // 頂点データの追加
 void Box::AddList(const Vec2f& pos, const Vec2f& size, const Vec3f& color, float alpha)
 {
-	for (int i = 0; i < BOX_VERTEX; ++i)
-	{
-		vertex.push_back({ { pos.x + (size.x * (i % (BOX_VERTEX / 2))), pos.y + (size.y * (i / (BOX_VERTEX / 2))),0.0f }, 
-			{ 0.0f, 0.0f }, { color.x, color.y, color.z, alpha } });
-	}
+	vertex.push_back({ { pos.x,          pos.y,          0.0f }, { color.x, color.y, color.z, alpha } });
+	vertex.push_back({ { pos.x + size.x, pos.y,          0.0f }, { color.x, color.y, color.z, alpha } });
+	vertex.push_back({ { pos.x + size.x, pos.y + size.y, 0.0f }, { color.x, color.y, color.z, alpha } });
+	vertex.push_back({ { pos.x + size.x, pos.y + size.y, 0.0f }, { color.x, color.y, color.z, alpha } });
+	vertex.push_back({ { pos.x,          pos.y + size.y, 0.0f }, { color.x, color.y, color.z, alpha } });
+	vertex.push_back({ { pos.x,          pos.y,          0.0f }, { color.x, color.y, color.z, alpha } });
 }
 
 // 描画
 void Box::Draw(void)
 {
+	if (vertex.size() <= 0)
+	{
+		return;
+	}
+
 	list.lock()->GetList()->SetPipelineState(pipe.lock()->Get());
 
 	//頂点データの更新
-	memcpy(data, vertex.data(), sizeof(Vertex) * vertex.size());
+	memcpy(data, vertex.data(), sizeof(PointVertex) * vertex.size());
 
 	//頂点バッファ設定用構造体の設定
 	view.BufferLocation = resource->GetGPUVirtualAddress();
-	view.SizeInBytes    = sizeof(Vertex) * vertex.size();
-	view.StrideInBytes  = sizeof(Vertex);
+	view.SizeInBytes    = sizeof(PointVertex) * vertex.size();
+	view.StrideInBytes  = sizeof(PointVertex);
 
 	//頂点バッファビューのセット
 	list.lock()->GetList()->IASetVertexBuffers(0, 1, &view);
 
 	//トポロジー設定
-	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	//描画
 	list.lock()->GetList()->DrawInstanced(vertex.size(), 1, 0, 0);

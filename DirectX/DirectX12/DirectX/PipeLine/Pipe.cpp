@@ -40,17 +40,17 @@ HRESULT Pipe::CreatePipe(const D3D12_INPUT_ELEMENT_DESC * input, UINT num, const
 	renderBlend.BlendEnable           = TRUE;
 	renderBlend.BlendOp               = D3D12_BLEND_OP::D3D12_BLEND_OP_ADD;
 	renderBlend.BlendOpAlpha          = D3D12_BLEND_OP::D3D12_BLEND_OP_ADD;
-	renderBlend.DestBlend             = D3D12_BLEND::D3D12_BLEND_ZERO;
+	renderBlend.DestBlend             = D3D12_BLEND::D3D12_BLEND_INV_SRC_ALPHA;
 	renderBlend.DestBlendAlpha        = D3D12_BLEND::D3D12_BLEND_ZERO;
 	renderBlend.LogicOp               = D3D12_LOGIC_OP::D3D12_LOGIC_OP_NOOP;
 	renderBlend.LogicOpEnable         = FALSE;
 	renderBlend.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE::D3D12_COLOR_WRITE_ENABLE_ALL;
-	renderBlend.SrcBlend              = D3D12_BLEND::D3D12_BLEND_ONE;
+	renderBlend.SrcBlend              = D3D12_BLEND::D3D12_BLEND_SRC_ALPHA;
 	renderBlend.SrcBlendAlpha         = D3D12_BLEND::D3D12_BLEND_ONE;
 
 	//ブレンドステート設定用構造体
 	D3D12_BLEND_DESC blend = {};
-	blend.AlphaToCoverageEnable  = TRUE;
+	blend.AlphaToCoverageEnable  = FALSE;
 	blend.IndependentBlendEnable = FALSE;
 	for (UINT i = 0; i < swap.lock()->GetBack(); i++)
 	{
