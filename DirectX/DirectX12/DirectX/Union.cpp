@@ -19,6 +19,7 @@
 #include "PipeLine/Pipe.h"
 #include "Descriptor/Constant.h"
 #include "Draw/Point.h"
+#include "Draw/Box.h"
 #include "Texture/Texture.h"
 #include "PMD/PMD.h"
 #include <tchar.h>
@@ -70,6 +71,7 @@ void Union::Create(void)
 	{
 		pipe = std::make_shared<Pipe>(L"Shader/BasicShader.hlsl", dev, swap, root, com);
 		pointPipe = std::make_shared<Pipe>(L"Shader/PointShader.hlsl", dev, swap, root, com);
+		boxPipe = std::make_shared<Pipe>(L"Shader/PointShader.hlsl", dev, swap, root, com);
 		//頂点レイアウト設定用構造体の設定
 		D3D12_INPUT_ELEMENT_DESC input[] =
 		{
@@ -79,6 +81,7 @@ void Union::Create(void)
 		};
 		pipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 		pointPipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
+		boxPipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	}
 	{
 		modelPipe = std::make_shared <Pipe>(L"Shader/ModelShader.hlsl", dev, swap, root, com);
@@ -94,6 +97,7 @@ void Union::Create(void)
 
 	constant = std::make_shared <Constant>(win, dev, list);
 	point = std::make_shared<Point>(win, dev, list, pointPipe);
+	box = std::make_shared<Box>();
 	tex = std::make_shared<Texture>(dev, list, pipe);
 	pmd = std::make_shared<PMD>(dev, list, modelPipe, tex);
 
@@ -224,7 +228,7 @@ bool Union::TriggerKey(UINT index)
 // 点の描画
 void Union::DrawPoint(const Vec2f & pos, const Vec3f & color)
 {
-	point->AddList(pos, color);
+	point->AddList(pos, color, alpha);
 }
 
 // 画像読み込み

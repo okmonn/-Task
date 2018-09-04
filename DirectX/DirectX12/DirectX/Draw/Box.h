@@ -6,20 +6,19 @@
 #include <vector>
 #include <map>
 
-class Window;
 class Pipe;
 
-class Point :
+class Box :
 	public Descriptor
 {
 public:
 	// コンストラクタ
-	Point(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe);
+	Box(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe, UINT max = 4 * 100);
 	// デストラクタ
-	~Point();
+	~Box();
 
 	// 頂点データの追加
-	void AddList(const Vec2f& pos, const Vec3f& color, float alpha = 1.0f);
+	void AddList(const Vec2f& pos, const Vec2f& size, const Vec3f& color, float alpha = 1.0f);
 
 	// 描画
 	void Draw(void);
@@ -31,9 +30,6 @@ private:
 	// リソースの生成
 	HRESULT CreateResource(void);
 
-
-	// ウィンドウ
-	std::weak_ptr<Window>win; 
 
 	// パイプライン
 	std::weak_ptr<Pipe>pipe;

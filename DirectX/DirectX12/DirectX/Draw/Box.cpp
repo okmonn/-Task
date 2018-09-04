@@ -1,25 +1,24 @@
-#include "Point.h"
-#include "../../Window/Window.h"
+#include "Box.h"
 #include "../Device.h"
 #include "../Command/List.h"
 #include "../PipeLine/Pipe.h"
 #include <tchar.h>
 
-//コンストラクタ
-Point::Point(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe) :
-	win(win), pipe(pipe), resource(nullptr), data(nullptr)
+// 一個の頂点数
+#define BOX_VERTEX 4
+
+// コンストラクタ
+Box::Box(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe, UINT max) :
+	pipe(pipe), vertexMax(max)
 {
 	this->dev = dev;
 	this->list = list;
 	vertex.clear();
 	view = {};
-	vertexMax = this->win.lock()->GetX() * this->win.lock()->GetY();
-
-	CreateResource();
 }
 
 // デストラクタ
-Point::~Point()
+Box::~Box()
 {
 	if (resource != nullptr)
 	{
@@ -30,7 +29,7 @@ Point::~Point()
 }
 
 // リソースの生成
-HRESULT Point::CreateResource(void)
+HRESULT Box::CreateResource(void)
 {
 	//プロパティ設定用構造体の設定
 	D3D12_HEAP_PROPERTIES prop = {};
@@ -55,7 +54,7 @@ HRESULT Point::CreateResource(void)
 	result = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&resource));
 	if (FAILED(result))
 	{
-		OutputDebugString(_T("\nポイント用リソースの生成：失敗\n"));
+		OutputDebugString(_T("\nボックス用リソースの生成：失敗\n"));
 		return result;
 	}
 
@@ -66,7 +65,7 @@ HRESULT Point::CreateResource(void)
 	result = resource->Map(0, &range, reinterpret_cast<void**>(&data));
 	if (FAILED(result))
 	{
-		OutputDebugString(_T("\nポイント用リソースのマッピング：失敗\n"));
+		OutputDebugString(_T("\nボックス用リソースのマッピング：失敗\n"));
 		return result;
 	}
 
@@ -82,13 +81,17 @@ HRESULT Point::CreateResource(void)
 }
 
 // 頂点データの追加
-void Point::AddList(const Vec2f& pos, const Vec3f& color, float alpha)
+void Box::AddList(const Vec2f& pos, const Vec2f& size, const Vec3f& color, float alpha)
 {
-	vertex.push_back({ { pos.x, pos.y, 0.0f }, { 0.0f, 0.0f }, { color.x, color.y, color.z, alpha } });
+	for (int i = 0; i < BOX_VERTEX; ++i)
+	{
+		vertex.push_back({ { pos.x + (size.x * (i % (BOX_VERTEX / 2))), pos.y + (size.y * (i / (BOX_VERTEX / 2))),0.0f }, 
+			{ 0.0f, 0.0f }, { color.x, color.y, color.z, alpha } });
+	}
 }
 
 // 描画
-void Point::Draw(void)
+void Box::Draw(void)
 {
 	list.lock()->GetList()->SetPipelineState(pipe.lock()->Get());
 
@@ -97,21 +100,21 @@ void Point::Draw(void)
 
 	//頂点バッファ設定用構造体の設定
 	view.BufferLocation = resource->GetGPUVirtualAddress();
-	view.SizeInBytes = sizeof(Vertex) * vertex.size();
-	view.StrideInBytes = sizeof(Vertex);
+	view.SizeInBytes    = sizeof(Vertex) * vertex.size();
+	view.StrideInBytes  = sizeof(Vertex);
 
 	//頂点バッファビューのセット
 	list.lock()->GetList()->IASetVertexBuffers(0, 1, &view);
 
 	//トポロジー設定
-	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
+	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	//描画
 	list.lock()->GetList()->DrawInstanced(vertex.size(), 1, 0, 0);
 }
 
 // 配列のリセット
-void Point::Reset(void)
+void Box::Reset(void)
 {
 	vertex.clear();
 }

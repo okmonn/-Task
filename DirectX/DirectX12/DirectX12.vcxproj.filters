@@ -180,6 +180,9 @@
     <ClInclude Include="DirectX\PipeLine\Pipe.h">
       <Filter>DirectX\Pipe</Filter>
     </ClInclude>
+    <ClInclude Include="DirectX\Draw\Box.h">
+      <Filter>DirectX\Draw</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Window\Window.cpp">
@@ -256,6 +259,9 @@
     </ClCompile>
     <ClCompile Include="DirectX\PipeLine\Pipe.cpp">
       <Filter>DirectX\Pipe</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Draw\Box.cpp">
+      <Filter>DirectX\Draw</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

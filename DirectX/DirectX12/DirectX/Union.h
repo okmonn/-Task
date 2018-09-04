@@ -28,6 +28,7 @@ class Compiler;
 class Pipe;
 class Constant;
 class Point;
+class Box;
 class Texture;
 class PMD;
 
@@ -207,6 +208,7 @@ private:
 	// パイプライン
 	std::shared_ptr<Pipe>pipe;
 	std::shared_ptr<Pipe>pointPipe;
+	std::shared_ptr<Pipe>boxPipe;
 	std::shared_ptr<Pipe>modelPipe;
 
 	// 定数バッファ
@@ -214,6 +216,9 @@ private:
 
 	// 点
 	std::shared_ptr<Point>point;
+
+	// ボックス
+	std::shared_ptr<Box>box;
 
 	// テクスチャ
 	std::shared_ptr<Texture>tex;
