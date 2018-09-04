@@ -69,6 +69,6 @@ float4 PS(Out o) : SV_TARGET
     {
         discard;
     }
-        
+   
     return ps;
 }

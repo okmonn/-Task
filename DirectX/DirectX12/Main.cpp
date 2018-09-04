@@ -54,9 +54,9 @@ int main()
 			}
 		}*/
 
-		Draw(n, 0 + a, 0 + b);
-		SetAlpha(0.5f);
-		Draw(m, 100, 100);
+		
+		
+
 		DrawPMD(q);
 	
 		if (TriggerKey(INPUT_RETURN))
