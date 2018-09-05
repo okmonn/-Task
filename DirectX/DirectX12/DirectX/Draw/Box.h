@@ -6,14 +6,16 @@
 #include <vector>
 #include <map>
 
+class Root;
 class Pipe;
+class Constant;
 
 class Box :
 	public Descriptor
 {
 public:
 	// コンストラクタ
-	Box(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe, UINT max = 4 * 100);
+	Box(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe, std::weak_ptr<Constant>con, UINT max = 4 * 100);
 	// デストラクタ
 	~Box();
 
@@ -31,8 +33,14 @@ private:
 	HRESULT CreateResource(void);
 
 
+	// ルートシグネチャ
+	std::weak_ptr<Root>root;
+
 	// パイプライン
 	std::weak_ptr<Pipe>pipe;
+
+	// 定数バッファ
+	std::weak_ptr<Constant>con;
 
 	// リソース
 	ID3D12Resource * resource;

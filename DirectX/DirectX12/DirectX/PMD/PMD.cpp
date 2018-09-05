@@ -1,15 +1,17 @@
 #include "PMD.h"
 #include "../Device.h"
 #include "../Command/List.h"
+#include "../Root.h"
 #include "../PipeLine/Pipe.h"
+#include "../Descriptor/Constant.h"
 #include "../Texture/Texture.h"
 #include "PmdData.h"
 #include <algorithm>
 #include <tchar.h>
 
 // コンストラクタ
-PMD::PMD(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe, std::weak_ptr<Texture>tex) :
-	pipe(pipe), tex(tex), mat({})
+PMD::PMD(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe, std::weak_ptr<Constant>con, std::weak_ptr<Texture>tex) :
+	root(root), pipe(pipe), con(con), tex(tex), mat({})
 {
 	this->dev = dev;
 	this->list = list;
@@ -345,7 +347,10 @@ HRESULT PMD::LoadPMD(UINT & index, const std::string & fileName)
 // 描画
 void PMD::Draw(UINT& index)
 {
+	list.lock()->GetList()->SetGraphicsRootSignature(root.lock()->Get());
 	list.lock()->GetList()->SetPipelineState(pipe.lock()->Get());
+
+	con.lock()->SetConstant();
 
 	list.lock()->GetList()->IASetVertexBuffers(0, 1, &model[&index].v.view);
 	list.lock()->GetList()->IASetIndexBuffer(&model[&index].i.view);

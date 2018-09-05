@@ -25,7 +25,7 @@ struct VertexIndex {
 };
 
 // 定数バッファ
-struct Constant {
+struct Con {
 	//ヒープ
 	ID3D12DescriptorHeap* heap;
 	//リソース
@@ -121,7 +121,7 @@ struct Model {
 	//頂点インデックス
 	VertexIndex i;
 	//定数バッファ
-	Constant c;
+	Con c;
 
 	//ヘッダー
 	Header header;

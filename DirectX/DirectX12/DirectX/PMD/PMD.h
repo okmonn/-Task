@@ -5,7 +5,9 @@
 #include <vector>
 #include <map>
 
+class Root;
 class Pipe;
+class Constant;
 class Texture;
 struct Model;
 
@@ -22,7 +24,8 @@ class PMD :
 
 public:
 	// コンストラクタ
-	PMD(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe, std::weak_ptr<Texture>tex);
+	PMD(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Root>root, 
+		std::weak_ptr<Pipe>pipe, std::weak_ptr<Constant>con, std::weak_ptr<Texture>tex);
 	// デストラクタ
 	~PMD();
 
@@ -52,8 +55,14 @@ private:
 	HRESULT CreateIndexBuffer(UINT* index);
 
 
+	// ルートシグネチャ
+	std::weak_ptr<Root>root;
+
 	// パイプライン
 	std::weak_ptr<Pipe>pipe;
+
+	// 定数バッファ
+	std::weak_ptr<Constant>con;
 
 	// テクスチャ
 	std::weak_ptr<Texture>tex;

@@ -2,11 +2,9 @@
 #include "etc/Vector2.h"
 #include "etc/Vector3.h"
 #include "Input/InputData.h"
+#include <Windows.h>
 #include <string>
 #include <vector>
-
-typedef unsigned int UINT;
-typedef unsigned char UCHAR;
 
 namespace func {
 	// ウィンドウサイズのセット

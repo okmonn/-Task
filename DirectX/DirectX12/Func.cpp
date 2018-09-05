@@ -1,6 +1,5 @@
 #include "Func.h"
 #include "DirectX/Union.h"
-#include <Windows.h>
 
 // ウィンドウサイズのセット
 void func::SetWindowSize(unsigned int x, unsigned int y)

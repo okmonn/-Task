@@ -51,52 +51,93 @@ void Union::ChangeWindowSize(UINT x, UINT y)
 // クラスのインスタンス化
 void Union::Create(void)
 {
-	win   = std::make_shared<Window>(x, y);
+	win   = std::make_shared<Window> (x, y);
 	audio = std::make_shared<Xaudio2>();
 	in    = std::make_shared<MIDI_IN>();
-	input = std::make_shared<Input>(win);
+	input = std::make_shared<Input>  (win);
 #ifdef _DEBUG
 	debug = std::make_shared<Debug>();
 #endif
 	dev    = std::make_shared<Device>();
-	queue  = std::make_shared<Queue>(dev);
-	list   = std::make_shared<List>(dev);
-	swap   = std::make_shared<Swap>(win, queue);
+	queue  = std::make_shared<Queue> (dev);
+	list   = std::make_shared<List>  (dev);
+	swap   = std::make_shared<Swap>  (win, queue);
 	render = std::make_shared<Render>(dev, list, swap);
-	depth  = std::make_shared<Depth>(win, dev, list, swap);
-	fence  = std::make_shared<Fence>(dev, queue);
-	root   = std::make_shared<Root>(dev);
+	depth  = std::make_shared<Depth> (win, dev,  list, swap);
+	fence  = std::make_shared<Fence> (dev, queue);
+	//ルートシグネチャ生成
+	CreateRoot();
 	com    = std::make_shared<Compiler>();
 	//パイプライン生成
 	CreatePipeLine();
 
-	constant = std::make_shared <Constant>(win, dev, list);
-	point    = std::make_shared<Point>(win, dev, list, pointPipe);
-	box      = std::make_shared<Box>(dev, list, boxPipe);
-	tex      = std::make_shared<Texture>(dev, list, pipe);
-	pmd      = std::make_shared<PMD>(dev, list, modelPipe, tex);
+	constant = std::make_shared<Constant>(win, dev,  list);
+	point    = std::make_shared<Point>   (win, dev,  list,      pointRoot, pointPipe, constant);
+	box      = std::make_shared<Box>     (dev, list, pointRoot, boxPipe,   constant);
+	tex      = std::make_shared<Texture> (dev, list, texRoot,   texPipe,   constant);
+	pmd      = std::make_shared<PMD>     (dev, list, modelRoot, modelPipe, constant,  tex);
 
 	ViewPort();
 	Scissor();
 }
 
+// ルートシグネチャの生成
+void Union::CreateRoot(void)
+{
+	pointRoot = std::make_shared<Root>(dev);
+	{
+		//ディスクリプタレンジ設定用構造体
+		D3D12_DESCRIPTOR_RANGE range[] = {
+			{ D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND },
+		};
+		//パラメータ設定用構造体
+		D3D12_ROOT_PARAMETER param[] = {
+			{ D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE, { 1, &range[0] }, D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_VERTEX },
+		};
+
+		pointRoot->CreateRoot(param, _countof(param));
+	}
+
+	texRoot = std::make_shared<Root>(dev);
+	{
+		//ディスクリプタレンジ設定用構造体
+		D3D12_DESCRIPTOR_RANGE range[] = {
+			{ D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND },
+			{ D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND },
+		};
+		//パラメータ設定用構造体
+		D3D12_ROOT_PARAMETER param[] = {
+			{ D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE, { 1, &range[0] }, D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_VERTEX },
+			{ D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE, { 1, &range[1] }, D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_ALL },
+		};
+
+		texRoot->CreateRoot(param, _countof(param));
+	}
+
+	modelRoot = std::make_shared<Root>(dev);
+	{
+		//ディスクリプタレンジ設定用構造体
+		D3D12_DESCRIPTOR_RANGE range[] = {
+			{ D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND },
+			{ D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND },
+			{ D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 1, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND },
+		};
+		//パラメータ設定用構造体
+		D3D12_ROOT_PARAMETER param[] = {
+			{ D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE, { 1, &range[0] }, D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_VERTEX },
+			{ D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE, { 1, &range[1] }, D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_ALL },
+			{ D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE, { 1, &range[2] }, D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_ALL },
+		};
+
+		modelRoot->CreateRoot(param, _countof(param));
+	}
+}
+
 // パイプラインの生成
 void Union::CreatePipeLine(void)
 {
-	pipe      = std::make_shared<Pipe>(L"Shader/BasicShader.hlsl", dev, swap, root, com);
-	{
-		D3D12_INPUT_ELEMENT_DESC input[] =
-		{
-			{ "POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT,    0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-			{ "ALPHA",    0, DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT,       0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		};
-
-		pipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
-	}
-
-	pointPipe = std::make_shared<Pipe>(L"Shader/PointShader.hlsl", dev, swap, root, com);
-	boxPipe   = std::make_shared<Pipe>(L"Shader/PointShader.hlsl", dev, swap, root, com);
+	pointPipe = std::make_shared<Pipe>(L"Shader/PointShader.hlsl", dev, swap, pointRoot, com);
+	boxPipe   = std::make_shared<Pipe>(L"Shader/PointShader.hlsl", dev, swap, pointRoot, com);
 	{
 		D3D12_INPUT_ELEMENT_DESC input[] =
 		{
@@ -105,10 +146,22 @@ void Union::CreatePipeLine(void)
 		};
 
 		pointPipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
-		boxPipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+		boxPipe->CreatePipe(  input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	}
 
-	modelPipe = std::make_shared <Pipe>(L"Shader/ModelShader.hlsl", dev, swap, root, com);
+	texPipe = std::make_shared<Pipe>(L"Shader/BasicShader.hlsl", dev, swap, texRoot, com);
+	{
+		D3D12_INPUT_ELEMENT_DESC input[] =
+		{
+			{ "POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT,    0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "ALPHA",    0, DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT,       0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		};
+
+		texPipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+	}
+
+	modelPipe = std::make_shared <Pipe>(L"Shader/ModelShader.hlsl", dev, swap, modelRoot, com);
 	{
 		D3D12_INPUT_ELEMENT_DESC input[] =
 		{
@@ -124,31 +177,31 @@ void Union::CreatePipeLine(void)
 // ビューポートのセット
 void Union::ViewPort(void)
 {
-	viewPort.Height = static_cast<FLOAT>(y);
+	viewPort.Height   = static_cast<FLOAT>(y);
 	viewPort.MaxDepth = 1.0f;
 	viewPort.MinDepth = 0.0f;
 	viewPort.TopLeftX = 0.0f;
 	viewPort.TopLeftY = 0.0f;
-	viewPort.Width = static_cast<FLOAT>(x);
+	viewPort.Width    = static_cast<FLOAT>(x);
 }
 
 // シザーのセット
 void Union::Scissor(void)
 {
 	scissor.bottom = static_cast<LONG>(y);
-	scissor.left = 0;
-	scissor.right = static_cast<LONG>(x);
-	scissor.top = 0;
+	scissor.left   = 0;
+	scissor.right  = static_cast<LONG>(x);
+	scissor.top    = 0;
 }
 
 // バリアのセット
 void Union::Barrier(D3D12_RESOURCE_STATES befor, D3D12_RESOURCE_STATES affter)
 {
-	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE::D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	barrier.Transition.pResource = render->GetResource(swap->Get()->GetCurrentBackBufferIndex());
+	barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE::D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrier.Transition.pResource   = render->GetResource(swap->Get()->GetCurrentBackBufferIndex());
 	barrier.Transition.StateBefore = befor;
-	barrier.Transition.StateAfter = affter;
+	barrier.Transition.StateAfter  = affter;
 	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE;
 
 	//バリア設置
@@ -186,14 +239,13 @@ void Union::ChangeView(const Vec3f & pos, const Vec3f & target, const Vec3f & up
 // 描画準備
 void Union::Set(void)
 {
-	list->Reset(pipe->Get());
+	list->Reset(pointPipe->Get());
 
-	list->SetRoot(root->Get());
+	list->SetRoot(pointRoot->Get());
 
-	list->SetPipe(pipe->Get());
+	list->SetPipe(pointPipe->Get());
 
 	constant->UpDataWVP();
-	constant->SetConstant();
 
 	list->SetViewPort(viewPort);
 
@@ -209,7 +261,6 @@ void Union::Set(void)
 // 実行
 void Union::Do(void)
 {
-	constant->SetConstant();
 	point->Draw();
 	box->Draw();
 

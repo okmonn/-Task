@@ -2,15 +2,17 @@
 #include "WICTextureLoader12.h"
 #include "../Device.h"
 #include "../Command/List.h"
+#include "../Root.h"
 #include "../PipeLine/Pipe.h"
+#include "../Descriptor/Constant.h"
 #include <tchar.h>
 
 // 頂点の最大数
 #define VERTEX_MAX 4
 
 // コンストラクタ
-Texture::Texture(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe) :
-	pipe(pipe)
+Texture::Texture(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe, std::weak_ptr<Constant>con) :
+	root(root), pipe(pipe), con(con)
 {
 	this->dev = dev;
 	this->list = list;
@@ -191,7 +193,10 @@ void Texture::Draw(UINT & index, const Vec2f & pos, float alpha, UINT turnX, UIN
 {
 	UINT* n = &index;
 
+	list.lock()->GetList()->SetGraphicsRootSignature(root.lock()->Get());
 	list.lock()->GetList()->SetPipelineState(pipe.lock()->Get());
+
+	con.lock()->SetConstant();
 
 	//リソース設定用構造体
 	D3D12_RESOURCE_DESC desc = wic[n].con.resource->GetDesc();
@@ -234,7 +239,10 @@ void Texture::Draw(UINT & index, const Vec2f & pos, const Vec2f & size, float al
 {
 	UINT* n = &index;
 
+	list.lock()->GetList()->SetGraphicsRootSignature(root.lock()->Get());
 	list.lock()->GetList()->SetPipelineState(pipe.lock()->Get());
+
+	con.lock()->SetConstant();
 
 	//リソース設定用構造体
 	D3D12_RESOURCE_DESC desc = wic[n].con.resource->GetDesc();
@@ -277,7 +285,10 @@ void Texture::Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f
 {
 	UINT* n = &index;
 
+	list.lock()->GetList()->SetGraphicsRootSignature(root.lock()->Get());
 	list.lock()->GetList()->SetPipelineState(pipe.lock()->Get());
+
+	con.lock()->SetConstant();
 
 	//リソース設定用構造体
 	D3D12_RESOURCE_DESC desc = wic[n].con.resource->GetDesc();

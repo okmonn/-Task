@@ -13,25 +13,23 @@ public:
 	// デストラクタ
 	~Root();
 
+	// ルートシグネチャの生成
+	HRESULT CreateRoot(const D3D12_ROOT_PARAMETER* range, UINT num);
+
 	// メッセージの取得
 	ID3DBlob* GetMsg(void) const {
 		return signature;
 	}
-
 	// エラーメッセージの取得
 	ID3DBlob* GetError(void) const {
 		return error;
 	}
-
 	// ルートシグネチャの取得
 	ID3D12RootSignature* Get(void) const {
 		return root;
 	}
 
 private:
-	// シリアライズ
-	HRESULT Serialize(void);
-
 	// ルートシグネチャの生成
 	HRESULT CreateRoot(void);
 

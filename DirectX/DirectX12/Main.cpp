@@ -6,7 +6,11 @@ using namespace func;
 #define WINDOW_Y 480
 
 // エントリーポイント
+#ifdef _DEBUG
 int main()
+#else
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+#endif
 {
 	func::SetWindowSize(WINDOW_X, WINDOW_Y);
 	func::Init();

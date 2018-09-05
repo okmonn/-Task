@@ -1,15 +1,17 @@
 #include "Box.h"
 #include "../Device.h"
 #include "../Command/List.h"
+#include "../Root.h"
 #include "../PipeLine/Pipe.h"
+#include "../Descriptor/Constant.h"
 #include <tchar.h>
 
 // 一個の頂点数
 #define BOX_VERTEX 6
 
 // コンストラクタ
-Box::Box(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe, UINT max) :
-	pipe(pipe), vertexMax(max)
+Box::Box(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe, std::weak_ptr<Constant>con, UINT max) :
+	root(root), pipe(pipe), con(con), vertexMax(max)
 {
 	this->dev = dev;
 	this->list = list;
@@ -101,7 +103,10 @@ void Box::Draw(void)
 		return;
 	}
 
+	list.lock()->GetList()->SetGraphicsRootSignature(root.lock()->Get());
 	list.lock()->GetList()->SetPipelineState(pipe.lock()->Get());
+
+	con.lock()->SetConstant();
 
 	//頂点データの更新
 	memcpy(data, vertex.data(), sizeof(PointVertex) * vertex.size());

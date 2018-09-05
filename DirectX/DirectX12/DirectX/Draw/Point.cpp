@@ -2,12 +2,14 @@
 #include "../../Window/Window.h"
 #include "../Device.h"
 #include "../Command/List.h"
+#include "../Root.h"
 #include "../PipeLine/Pipe.h"
+#include "../Descriptor/Constant.h"
 #include <tchar.h>
 
 //コンストラクタ
-Point::Point(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe) :
-	win(win), pipe(pipe), resource(nullptr), data(nullptr)
+Point::Point(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe, std::weak_ptr<Constant>con) :
+	win(win), root(root), pipe(pipe), con(con), resource(nullptr), data(nullptr)
 {
 	this->dev = dev;
 	this->list = list;
@@ -95,7 +97,10 @@ void Point::Draw(void)
 		return;
 	}
 
+	list.lock()->GetList()->SetGraphicsRootSignature(root.lock()->Get());
 	list.lock()->GetList()->SetPipelineState(pipe.lock()->Get());
+
+	con.lock()->SetConstant();
 
 	//頂点データの更新
 	memcpy(data, vertex.data(), sizeof(PointVertex) * vertex.size());

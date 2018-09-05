@@ -3,14 +3,10 @@
 #include "Device.h"
 #include <tchar.h>
 
-#pragma comment (lib, "d3dcompiler.lib")
-
 // コンストラクタ
 Root::Root(std::weak_ptr<Device>dev) :
 	dev(dev), signature(nullptr), error(nullptr), root(nullptr)
 {
-	Serialize();
-	CreateRoot();
 }
 
 // デストラクタ
@@ -21,53 +17,9 @@ Root::~Root()
 	Release(signature);
 }
 
-// シリアライズ
-HRESULT Root::Serialize(void)
+// ルートシグネチャの生成
+HRESULT Root::CreateRoot(const D3D12_ROOT_PARAMETER * param, UINT num)
 {
-	// ディスクリプタレンジの設定.
-	D3D12_DESCRIPTOR_RANGE range[3];
-	SecureZeroMemory(&range, sizeof(range));
-
-	//ルートパラメータの設定.
-	D3D12_ROOT_PARAMETER param[3];
-	SecureZeroMemory(&param, sizeof(param));
-
-	//定数バッファ用・WVP
-	range[0].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-	range[0].NumDescriptors                    = 1;
-	range[0].BaseShaderRegister                = 0;
-	range[0].RegisterSpace                     = 0;
-	range[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	param[0].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	param[0].ShaderVisibility                    = D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_VERTEX;
-	param[0].DescriptorTable.NumDescriptorRanges = 1;
-	param[0].DescriptorTable.pDescriptorRanges   = &range[0];
-
-	//テクスチャ用
-	range[1].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	range[1].NumDescriptors                    = 1;
-	range[1].BaseShaderRegister                = 0;
-	range[1].RegisterSpace                     = 0;
-	range[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	param[1].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	param[1].ShaderVisibility                    = D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_ALL;
-	param[1].DescriptorTable.NumDescriptorRanges = 1;
-	param[1].DescriptorTable.pDescriptorRanges   = &range[1];
-
-	//マテリアル用
-	range[2].RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-	range[2].NumDescriptors                    = 1;
-	range[2].BaseShaderRegister                = 1;
-	range[2].RegisterSpace                     = 0;
-	range[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	param[2].ParameterType                       = D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	param[2].ShaderVisibility                    = D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_ALL;
-	param[2].DescriptorTable.NumDescriptorRanges = 1;
-	param[2].DescriptorTable.pDescriptorRanges   = &range[2];
-
 	//静的サンプラーの設定
 	D3D12_STATIC_SAMPLER_DESC sampler = {};
 	sampler.Filter           = D3D12_FILTER::D3D12_FILTER_MIN_MAG_MIP_LINEAR;
@@ -86,7 +38,7 @@ HRESULT Root::Serialize(void)
 
 	//ルートシグネチャ設定用構造体の設定
 	D3D12_ROOT_SIGNATURE_DESC desc = {};
-	desc.NumParameters     = _countof(param);
+	desc.NumParameters     = num;
 	desc.pParameters       = param;
 	desc.NumStaticSamplers = 1;
 	desc.pStaticSamplers   = &sampler;
@@ -96,7 +48,10 @@ HRESULT Root::Serialize(void)
 	if (FAILED(result))
 	{
 		OutputDebugString(_T("\nシリアライズ：失敗\n"));
+		return result;
 	}
+
+	result = CreateRoot();
 
 	return result;
 }

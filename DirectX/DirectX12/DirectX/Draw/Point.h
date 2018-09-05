@@ -7,14 +7,16 @@
 #include <map>
 
 class Window;
+class Root;
 class Pipe;
+class Constant;
 
 class Point :
 	public Descriptor
 {
 public:
 	// コンストラクタ
-	Point(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Pipe>pipe);
+	Point(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe, std::weak_ptr<Constant>con);
 	// デストラクタ
 	~Point();
 
@@ -33,10 +35,16 @@ private:
 
 
 	// ウィンドウ
-	std::weak_ptr<Window>win; 
+	std::weak_ptr<Window>win;
+
+	// ルートシグネチャ
+	std::weak_ptr<Root>root;
 
 	// パイプライン
 	std::weak_ptr<Pipe>pipe;
+
+	// 定数バッファ
+	std::weak_ptr<Constant>con;
 
 	// リソース
 	ID3D12Resource * resource;

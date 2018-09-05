@@ -130,6 +130,9 @@ private:
 	void operator=(const Union&) {
 	}
 
+	// ルートシグネチャの生成
+	void CreateRoot(void);
+
 	// パイプラインの生成
 	void CreatePipeLine(void);
 
@@ -206,15 +209,17 @@ private:
 	std::shared_ptr<Fence>fence;
 
 	// ルートシグネチャ
-	std::shared_ptr<Root>root;
+	std::shared_ptr<Root>pointRoot;
+	std::shared_ptr<Root>texRoot;
+	std::shared_ptr<Root>modelRoot;
 
 	// シェーダコンパイル
 	std::shared_ptr<Compiler>com;
 
 	// パイプライン
-	std::shared_ptr<Pipe>pipe;
 	std::shared_ptr<Pipe>pointPipe;
 	std::shared_ptr<Pipe>boxPipe;
+	std::shared_ptr<Pipe>texPipe;
 	std::shared_ptr<Pipe>modelPipe;
 
 	// 定数バッファ
