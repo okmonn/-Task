@@ -35,6 +35,9 @@ public:
 	// 描画
 	void Draw(UINT& index);
 
+	// PMDの消去
+	void Delete(UINT& index);
+
 private:
 	// テクスチャの読み込み
 	HRESULT LoadTex(UINT* index, const std::string& fileName);

@@ -91,6 +91,12 @@ void func::Draw(unsigned int & index, float x, float y, float sizeX, float sizeY
 	Union::Get().Draw(index, { x, y }, { sizeX, sizeY }, { rectX, rectY }, { rectSizeX, rectSizeY }, turnX, turnY);
 }
 
+// 画像の消去
+void func::DeleteImg(unsigned int & index)
+{
+	Union::Get().DeleteImg(index);
+}
+
 // PMD読み込み
 void func::LoadPMD(unsigned int & index, const std::string & fileName)
 {
@@ -101,6 +107,12 @@ void func::LoadPMD(unsigned int & index, const std::string & fileName)
 void func::DrawPMD(unsigned int & index)
 {
 	Union::Get().DrawPMD(index);
+}
+
+// PMDの消去
+void func::DeletePMD(unsigned int & index)
+{
+	Union::Get().DeletePMD(index);
 }
 
 // WAVEの読み込み
@@ -119,6 +131,12 @@ void func::PlayWave(unsigned int& index)
 void func::StopWave(unsigned int& index)
 {
 	Union::Get().StopWave(index);
+}
+
+// WAVEの消去
+void func::DeleteWAVE(unsigned int & index)
+{
+	Union::Get().DeleteWAVE(index);
 }
 
 // MIDIデバイスの数取得

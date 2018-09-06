@@ -18,6 +18,9 @@ public:
 	// 音声データの読み込み
 	int Load(void);
 
+	// ファイルを閉じる
+	void Close(void);
+
 	// インデックスの取得
 	int GetIndex(void) const {
 		return index == 0 ? 1 : 0;

@@ -15,6 +15,9 @@ public:
 	Vector2() {
 	}
 	// コンストラクタ
+	constexpr Vector2(T i) : x(i), y(i) {
+	}
+	// コンストラクタ
 	constexpr Vector2(T x, T y) : x(x), y(y) {
 	}
 

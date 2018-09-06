@@ -399,6 +399,33 @@ void PMD::Draw(UINT& index)
 	}
 }
 
+// PMD‚ÌÁ‹
+void PMD::Delete(UINT & index)
+{
+	if (model.find(&index) != model.end())
+	{
+		for (auto itr = model[&index].id.begin(); itr != model[&index].id.end(); ++itr)
+		{
+			tex.lock()->Delete(itr->second);
+		}
+
+		if (model[&index].v.resource != nullptr)
+		{
+			model[&index].v.resource->Unmap(0, nullptr);
+		}
+		if (model[&index].c.resource != nullptr)
+		{
+			model[&index].c.resource->Unmap(0, nullptr);
+		}
+		Release(model[&index].v.resource);
+		Release(model[&index].i.resource);
+		Release(model[&index].c.resource);
+		Release(model[&index].c.heap);
+
+		model.erase(model.find(&index));
+	}
+}
+
 // •¶š—ñ‚ÌŒŸõEæ“ª‚©‚ç”²‚«o‚µ
 std::string func::FindFirstString(const std::string & path, const CHAR & find, UINT offset, bool end)
 {

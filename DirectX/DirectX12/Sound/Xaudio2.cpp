@@ -192,26 +192,26 @@ HRESULT Xaudio2::Stop(UINT& index)
 // ソースボイスの消去
 void Xaudio2::Delete(UINT& index)
 {
-	if (voice[&wave[&index]] != nullptr)
+	if (wave.find(&index) != wave.end())
 	{
-		result = voice[&wave[&index]]->Stop();
-		if (FAILED(result))
-		{
-			OutputDebugString(_T("\n再生の停止：失敗\n"));
-		}
-		voice[&wave[&index]]->DestroyVoice();
-	}
+		wave[&index].SetEnd(true);
 
-	for (auto itr = voice.begin(); itr != voice.end();)
-	{
-		if (itr->first == &wave[&index])
+		if (voice.find(&wave[&index]) != voice.end())
 		{
-			itr = voice.erase(itr);
-			break;
+			Stop(index);
+
+			voice[&wave[&index]]->DestroyVoice();
+
+			voice.erase(voice.find(&wave[&index]));
 		}
-		else
+
+		if (th.find(&wave[&index]) != th.end())
 		{
-			++itr;
+			th.erase(th.find(&wave[&index]));
 		}
+
+		wave[&index].Close();
+
+		wave.erase(wave.find(&index));
 	}
 }

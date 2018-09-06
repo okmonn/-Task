@@ -63,6 +63,9 @@ public:
 	// 描画・サイズ指定・分割
 	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rectPos, const Vec2f& rectSize, float alpha = 1.0f, UINT turnX = 0, UINT turnY = 0);
 
+	// 削除
+	void Delete(UINT& index);
+
 private:
 	// 定数バッファヒープの生成
 	HRESULT CreateHeap(UINT* index);

@@ -130,4 +130,5 @@ void Box::Draw(void)
 void Box::Reset(void)
 {
 	vertex.clear();
+	vertex.shrink_to_fit();
 }

@@ -19,6 +19,9 @@ public:
 	Vector3() {
 	};
 	// コンストラクタ
+	constexpr Vector3(T i) : x(i), y(i), z(i) {
+	}
+	// コンストラクタ
 	constexpr Vector3(T x, T y, T z) : x(x), y(y), z(z) {
 	};
 

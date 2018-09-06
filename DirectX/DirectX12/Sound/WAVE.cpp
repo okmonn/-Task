@@ -221,3 +221,12 @@ int WAVE::Load(void)
 
 	return 0;
 }
+
+// ƒtƒ@ƒCƒ‹‚ð•Â‚¶‚é
+void WAVE::Close(void)
+{
+	if (file != nullptr)
+	{
+		fclose(file);
+	}
+}

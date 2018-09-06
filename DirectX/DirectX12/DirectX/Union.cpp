@@ -239,11 +239,11 @@ void Union::ChangeView(const Vec3f & pos, const Vec3f & target, const Vec3f & up
 // 描画準備
 void Union::Set(void)
 {
-	list->Reset(pointPipe->Get());
+	list->Reset(nullptr);
 
-	list->SetRoot(pointRoot->Get());
+	/*list->SetRoot(pointRoot->Get());
 
-	list->SetPipe(pointPipe->Get());
+	list->SetPipe(pointPipe->Get());*/
 
 	constant->UpDataWVP();
 
@@ -330,6 +330,12 @@ void Union::Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& 
 	tex->Draw(index, pos, size, rect, rectSize, alpha, turnX, turnY);
 }
 
+// 画像の消去
+void Union::DeleteImg(UINT & index)
+{
+	tex->Delete(index);
+}
+
 // PMD読み込み
 void Union::LoadPMD(UINT & index, const std::string & fileName)
 {
@@ -340,6 +346,12 @@ void Union::LoadPMD(UINT & index, const std::string & fileName)
 void Union::DrawPMD(UINT & index)
 {
 	pmd->Draw(index);
+}
+
+// PMDの消去
+void Union::DeletePMD(UINT & index)
+{
+	pmd->Delete(index);
 }
 
 // WAVE読み込み
@@ -358,6 +370,12 @@ void Union::PlayWave(UINT& index)
 void Union::StopWave(UINT& index)
 {
 	audio->Stop(index);
+}
+
+// WAVEの消去
+void Union::DeleteWAVE(UINT & index)
+{
+	audio->Delete(index);
 }
 
 // MIDIデバイス数の取得

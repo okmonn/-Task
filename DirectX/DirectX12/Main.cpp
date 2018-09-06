@@ -9,7 +9,7 @@ using namespace func;
 #ifdef _DEBUG
 int main()
 #else
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, INT nCmdShow)
 #endif
 {
 	func::SetWindowSize(WINDOW_X, WINDOW_Y);
@@ -33,12 +33,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	while (func::CheckMsg() && CheckKey(INPUT_ESCAPE) != true)
 	{
 		func::Set();
-		//Draw(n, 0, 0);
-		DrawPMD(q);
+		//Draw(m, 0, 0);
+		//DrawPMD(q);
 	
 		if (TriggerKey(INPUT_RETURN))
 		{
-			PlayWave(w);
+			DeletePMD(q);
 		}
 		else if (TriggerKey(INPUT_SPACE))
 		{

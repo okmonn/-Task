@@ -53,11 +53,17 @@ namespace func {
 	void Draw(unsigned int& index, float x, float y, float sizeX, float sizeY,
 		float rectX, float rectY, float rectSizeX, float rectSizeY, bool turnX = false, bool turnY = false);
 
+	// 画像の消去
+	void DeleteImg(unsigned int& index);
+
 	// PMD読み込み
 	void LoadPMD(unsigned int& index, const std::string& fileName);
 
 	// PMD描画
 	void DrawPMD(unsigned int& index);
+
+	// PMDの消去
+	void DeletePMD(unsigned int& index);
 
 	// WAVEの読み込み
 	void LoadWave(unsigned int& index, const std::string fileName);
@@ -67,6 +73,9 @@ namespace func {
 
 	// WAVEの停止
 	void StopWave(unsigned int& index);
+
+	// WAVEの消去
+	void DeleteWAVE(unsigned int& index);
 
 	// MIDIデバイスの数取得
 	unsigned int GetMidiDevNum(void);

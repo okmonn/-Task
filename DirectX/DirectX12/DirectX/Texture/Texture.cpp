@@ -326,6 +326,24 @@ void Texture::Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f
 	list.lock()->GetList()->DrawInstanced(wic[n].vertex.size(), 1, 0, 0);
 }
 
+// 削除
+void Texture::Delete(UINT & index)
+{
+	if (wic.find(&index) != wic.end())
+	{
+		if (wic[&index].resource != nullptr)
+		{
+			wic[&index].resource->Unmap(0, nullptr);
+			wic[&index].decode.release();
+			Release(wic[&index].resource);
+			Release(wic[&index].con.resource);
+			Release(wic[&index].con.heap);
+		}
+
+		wic.erase(wic.find(&index));
+	}
+}
+
 // ユニコード変換
 std::wstring func::ChangeUnicode(const CHAR * str)
 {

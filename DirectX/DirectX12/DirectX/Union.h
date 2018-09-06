@@ -91,11 +91,17 @@ public:
 	// 描画・サイズ指定・分割
 	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rect, const Vec2f& rectSize, UINT turnX = 0, UINT turnY = 0);
 
+	// 画像の消去
+	void DeleteImg(UINT& index);
+
 	// PMD読み込み
 	void LoadPMD(UINT& index, const std::string& fileName);
 
 	// PMD描画
 	void DrawPMD(UINT& index);
+
+	// PMDの消去
+	void DeletePMD(UINT& index);
 
 	// WAVE読み込み
 	void LoadWave(UINT& index, const std::string& fileName);
@@ -105,6 +111,9 @@ public:
 
 	// WAVEの再生停止
 	void StopWave(UINT& index);
+
+	// WAVEの消去
+	void DeleteWAVE(UINT& index);
 
 	// MIDIデバイス数の取得
 	UINT GetMidiNum(void);

@@ -124,4 +124,5 @@ void Point::Draw(void)
 void Point::Reset(void)
 {
 	vertex.clear();
+	vertex.shrink_to_fit();
 }
