@@ -34,8 +34,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	{
 		func::Set();
 		//Draw(m, 0, 0);
-		//DrawPMD(q);
-	
+		DrawPMD(q);
+
 		if (TriggerKey(INPUT_RETURN))
 		{
 			DeletePMD(q);

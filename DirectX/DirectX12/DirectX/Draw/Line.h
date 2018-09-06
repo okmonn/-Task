@@ -5,22 +5,21 @@
 #include "../../etc/Vector3.h"
 #include <vector>
 
-class Window;
 class Root;
 class Pipe;
 class Constant;
 
-class Point :
+class Line :
 	public Descriptor
 {
 public:
 	// コンストラクタ
-	Point(std::weak_ptr<Window>win, std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe, std::weak_ptr<Constant>con);
+	Line(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe, std::weak_ptr<Constant>con, UINT max = 2 * 100);
 	// デストラクタ
-	~Point();
+	~Line();
 
 	// 頂点データの追加
-	void AddList(const Vec2f& pos, const Vec3f& color, float alpha = 1.0f);
+	void AddList(const Vec2f& pos1, const Vec2f& pos2, const Vec3f& color, float alpha = 1.0f);
 
 	// 描画
 	void Draw(void);
@@ -32,9 +31,6 @@ private:
 	// リソースの生成
 	HRESULT CreateResource(void);
 
-
-	// ウィンドウ
-	std::weak_ptr<Window>win;
 
 	// ルートシグネチャ
 	std::weak_ptr<Root>root;

@@ -19,6 +19,7 @@
 #include "PipeLine/Pipe.h"
 #include "Descriptor/Constant.h"
 #include "Draw/Point.h"
+#include "Draw/Line.h"
 #include "Draw/Box.h"
 #include "Texture/Texture.h"
 #include "PMD/PMD.h"
@@ -73,6 +74,7 @@ void Union::Create(void)
 
 	constant = std::make_shared<Constant>(win, dev,  list);
 	point    = std::make_shared<Point>   (win, dev,  list,      pointRoot, pointPipe, constant);
+	line     = std::make_shared<Line>    (dev, list, pointRoot, linePipe,  constant);
 	box      = std::make_shared<Box>     (dev, list, pointRoot, boxPipe,   constant);
 	tex      = std::make_shared<Texture> (dev, list, texRoot,   texPipe,   constant);
 	pmd      = std::make_shared<PMD>     (dev, list, modelRoot, modelPipe, constant,  tex);
@@ -137,6 +139,7 @@ void Union::CreateRoot(void)
 void Union::CreatePipeLine(void)
 {
 	pointPipe = std::make_shared<Pipe>(L"Shader/PointShader.hlsl", dev, swap, pointRoot, com);
+	linePipe  = std::make_shared<Pipe>(L"Shader/PointShader.hlsl", dev, swap, pointRoot, com);
 	boxPipe   = std::make_shared<Pipe>(L"Shader/PointShader.hlsl", dev, swap, pointRoot, com);
 	{
 		D3D12_INPUT_ELEMENT_DESC input[] =
@@ -146,6 +149,7 @@ void Union::CreatePipeLine(void)
 		};
 
 		pointPipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
+		linePipe->CreatePipe( input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE);
 		boxPipe->CreatePipe(  input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	}
 
@@ -262,6 +266,7 @@ void Union::Set(void)
 void Union::Do(void)
 {
 	point->Draw();
+	line->Draw();
 	box->Draw();
 
 	Barrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT);
@@ -279,6 +284,7 @@ void Union::Do(void)
 	fence->Wait();
 
 	point->Reset();
+	line->Reset();
 	box->Reset();
 }
 
@@ -298,6 +304,12 @@ bool Union::TriggerKey(UINT index)
 void Union::DrawPoint(const Vec2f & pos, const Vec3f & color)
 {
 	point->AddList(pos, color, alpha);
+}
+
+// ラインの描画
+void Union::DrawLine(const Vec2f & pos1, const Vec2f & pos2, const Vec3f & color)
+{
+	line->AddList(pos1, pos2, color, alpha);
 }
 
 // ボックスの描画

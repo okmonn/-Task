@@ -28,6 +28,7 @@ class Compiler;
 class Pipe;
 class Constant;
 class Point;
+class Line;
 class Box;
 class Texture;
 class PMD;
@@ -75,6 +76,9 @@ public:
 
 	// 点の描画
 	void DrawPoint(const Vec2f& pos, const Vec3f& color);
+
+	// ラインの描画
+	void DrawLine(const Vec2f& pos1, const Vec2f& pos2, const Vec3f& color);
 
 	// ボックスの描画
 	void DrawBox(const Vec2f& pos, const Vec2f& size, const Vec3f& color);
@@ -227,6 +231,7 @@ private:
 
 	// パイプライン
 	std::shared_ptr<Pipe>pointPipe;
+	std::shared_ptr<Pipe>linePipe;
 	std::shared_ptr<Pipe>boxPipe;
 	std::shared_ptr<Pipe>texPipe;
 	std::shared_ptr<Pipe>modelPipe;
@@ -236,6 +241,9 @@ private:
 
 	// 点
 	std::shared_ptr<Point>point;
+
+	// ライン
+	std::shared_ptr<Line>line;
 
 	// ボックス
 	std::shared_ptr<Box>box;

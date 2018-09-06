@@ -37,6 +37,9 @@ namespace func {
 	// 点の描画
 	void DrawPoint(float x, float y, float r, float g, float b);
 
+	// ラインの描画
+	void DrawLine(float x1, float y1, float x2, float y2, float r, float g, float b);
+
 	// ボックスの描画
 	void DrawBox(float x, float y, float sizeX, float sizeY, float r, float g, float b);
 

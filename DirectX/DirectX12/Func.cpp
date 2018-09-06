@@ -61,6 +61,12 @@ void func::DrawPoint(float x, float y, float r, float g, float b)
 	Union::Get().DrawPoint({ x, y }, { r, g, b });
 }
 
+// ラインの描画
+void func::DrawLine(float x1, float y1, float x2, float y2, float r, float g, float b)
+{
+	Union::Get().DrawLine({ x1, y1 }, { x2, y2 }, { r, g, b });
+}
+
 // ボックスの描画
 void func::DrawBox(float x, float y, float sizeX, float sizeY, float r, float g, float b)
 {

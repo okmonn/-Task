@@ -183,6 +183,9 @@
     <ClInclude Include="DirectX\Draw\Box.h">
       <Filter>DirectX\Draw</Filter>
     </ClInclude>
+    <ClInclude Include="DirectX\Draw\Line.h">
+      <Filter>DirectX\Draw</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Window\Window.cpp">
@@ -261,6 +264,9 @@
       <Filter>DirectX\Pipe</Filter>
     </ClCompile>
     <ClCompile Include="DirectX\Draw\Box.cpp">
+      <Filter>DirectX\Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Draw\Line.cpp">
       <Filter>DirectX\Draw</Filter>
     </ClCompile>
   </ItemGroup>

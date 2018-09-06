@@ -375,6 +375,10 @@ void PMD::Draw(UINT& index)
 		{
 			tex.lock()->SetDraw(model[n].id[i]);
 		}
+		else
+		{
+			tex.lock()->SetDraw(model[n].id.begin()->second);
+		}
 
 		//定数ヒープのセット
 		list.lock()->GetList()->SetDescriptorHeaps(1, &model[n].c.heap);
