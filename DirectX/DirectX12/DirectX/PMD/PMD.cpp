@@ -28,12 +28,18 @@ PMD::~PMD()
 		{
 			itr->second.v.resource->Unmap(0, nullptr);
 		}
+		if (itr->second.cB.resource != nullptr)
+		{
+			itr->second.cB.resource->Unmap(0, nullptr);
+		}
 		if (itr->second.c.resource != nullptr)
 		{
 			itr->second.c.resource->Unmap(0, nullptr);
 		}
 		Release(itr->second.v.resource);
 		Release(itr->second.i.resource);
+		Release(itr->second.cB.resource);
+		Release(itr->second.cB.heap);
 		Release(itr->second.c.resource);
 		Release(itr->second.c.heap);
 	}
@@ -158,6 +164,94 @@ HRESULT PMD::CreateConView(UINT * index)
 	return result;
 }
 
+// ボーン用定数バッファヒープの生成
+HRESULT PMD::CreateBornHeap(UINT * index)
+{
+	//ヒープ設定用構造体
+	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
+	desc.Flags          = D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	desc.NodeMask       = 0;
+	desc.NumDescriptors = 1;
+	desc.Type           = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+
+	result = dev.lock()->Get()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&model[index].cB.heap));
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\nPMDのボーン用定数バッファ用ヒープの生成：失敗\n"));
+	}
+
+	return result;
+}
+
+// ボーン用定数バッファリソースの生成
+HRESULT PMD::CreateBornResource(UINT * index)
+{
+	if (FAILED(CreateBornHeap(index)))
+	{
+		return result;
+	}
+
+	//プロパティ設定用構造体の設定
+	D3D12_HEAP_PROPERTIES prop = {};
+	prop.Type                 = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_UPLOAD;
+	prop.CPUPageProperty      = D3D12_CPU_PAGE_PROPERTY::D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+	prop.MemoryPoolPreference = D3D12_MEMORY_POOL::D3D12_MEMORY_POOL_UNKNOWN;
+	prop.CreationNodeMask     = 1;
+	prop.VisibleNodeMask      = 1;
+
+	//リソース設定用構造体の設定
+	D3D12_RESOURCE_DESC desc = {};
+	desc.Dimension        = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_BUFFER;
+	desc.Width            = ((sizeof(DirectX::XMMATRIX) * model[index].matrix.size() + 0xff) &~0xff);
+	desc.Height           = 1;
+	desc.DepthOrArraySize = 1;
+	desc.MipLevels        = 1;
+	desc.Format           = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
+	desc.SampleDesc.Count = 1;
+	desc.Flags            = D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_NONE;
+	desc.Layout           = D3D12_TEXTURE_LAYOUT::D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+
+	result = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&model[index].cB.resource));
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\nPMDの定数バッファ用リソースの生成：失敗\n"));
+	}
+
+	return result;
+}
+
+// ボーン用定数バッファビューの生成
+HRESULT PMD::CreateBornConView(UINT * index)
+{
+	if (FAILED(CreateBornResource(index)))
+	{
+		return result;
+	}
+
+	//定数バッファビュー設定用構造体
+	D3D12_CONSTANT_BUFFER_VIEW_DESC desc = {};
+	desc.BufferLocation = model[index].cB.resource->GetGPUVirtualAddress();
+	desc.SizeInBytes    = ((sizeof(DirectX::XMMATRIX) * model[index].matrix.size() + 0xff) &~0xff);
+
+	dev.lock()->Get()->CreateConstantBufferView(&desc, model[index].cB.heap->GetCPUDescriptorHandleForHeapStart());
+
+	//送信範囲
+	D3D12_RANGE range = { 0, 0 };
+
+	//マッピング
+	result = model[index].cB.resource->Map(0, &range, (void**)(&model[index].cB.data));
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("\nPMDのボーン用定数バッファのマッピング：失敗\n"));
+		return result;
+	}
+
+	//コピー
+	memcpy(model[index].cB.data, model[index].matrix.data(), ((sizeof(DirectX::XMMATRIX) * model[index].matrix.size() + 0xff) &~0xff));
+
+	return result;
+}
+
 // 頂点バッファの生成
 HRESULT PMD::CreateVeretxBuffer(UINT * index)
 {
@@ -267,6 +361,41 @@ HRESULT PMD::CreateIndexBuffer(UINT * index)
 	return result;
 }
 
+// ボーンのセット
+void PMD::SetBorn(UINT * index)
+{
+	//ボーン座標配列のメモリ確保
+	model[index].pos.resize(model[index].born.size());
+
+	//ボーンノード配列のメモリ確保
+	model[index].node.resize(model[index].born.size());
+
+	//ボーン行列配列のメモリ確保
+	model[index].matrix.resize(model[index].born.size());
+
+	//ボーン行列の全配列の初期化
+	std::fill(model[index].matrix.begin(), model[index].matrix.end(), DirectX::XMMatrixIdentity());
+
+	for (UINT i = 0; i < model[index].born.size(); ++i)
+	{
+		model[index].name[model[index].born[i].name] = i;
+
+		if (model[index].born[i].cIndex != 0)
+		{
+			//先頭座標格納
+			model[index].pos[i].head = model[index].born[i].pos;
+
+			//末尾座標格納
+			model[index].pos[i].tail = model[index].born[model[index].born[i].cIndex].pos;
+		}
+
+		if (model[index].born[i].pIndex != 0xffff)
+		{
+			//参照ボーン格納
+			model[index].node[model[index].born[i].pIndex].push_back(i);
+		}
+	}
+}
 
 // PMD読み込み
 HRESULT PMD::LoadPMD(UINT & index, const std::string & fileName)
@@ -324,11 +453,17 @@ HRESULT PMD::LoadPMD(UINT & index, const std::string & fileName)
 
 	fclose(file);
 
+	SetBorn(n);
+
 	if (FAILED(LoadTex(n, func::FindFirstString(fileName, '/'))))
 	{
 		return result;
 	}
 	if (FAILED(CreateConView(n)))
+	{
+		return result;
+	}
+	if (FAILED(CreateBornConView(n)))
 	{
 		return result;
 	}
@@ -344,6 +479,62 @@ HRESULT PMD::LoadPMD(UINT & index, const std::string & fileName)
 	return result;
 }
 
+// ボーンの回転
+void PMD::RotateBorn(UINT& index, const std::string & name, const DirectX::XMMATRIX & matrix)
+{
+	if (model[&index].node.empty())
+	{
+		return;
+	}
+	
+	//ダミー宣言
+	DirectX::XMVECTOR head = DirectX::XMLoadFloat3(&model[&index].pos[model[&index].name[name]].head);
+	DirectX::XMVECTOR tmp  = DirectX::XMVectorSet(-model[&index].pos[model[&index].name[name]].head.x, -model[&index].pos[model[&index].name[name]].head.y, -model[&index].pos[model[&index].name[name]].head.z, 0);
+	DirectX::XMVECTOR tail = DirectX::XMLoadFloat3(&model[&index].pos[model[&index].name[name]].tail);
+	DirectX::XMMATRIX mat  = DirectX::XMMatrixTranslationFromVector(tmp);
+
+	mat *= matrix;
+	mat *= DirectX::XMMatrixTranslationFromVector(head);
+
+	tail = DirectX::XMVector3Transform(tail, mat);
+
+	DirectX::XMStoreFloat3(&model[&index].pos[model[&index].name[name]].tail, tail);
+
+	model[&index].matrix[model[&index].name[name]] = mat;
+
+	for (auto &child : model[&index].node[model[&index].name[name]])
+	{
+		RotateChildBorn(index, child, mat);
+	}
+
+	//ボーン行列の更新
+	memcpy(model[&index].cB.data, model[&index].matrix.data(), ((sizeof(DirectX::XMMATRIX) * model[&index].matrix.size() + 0xff) &~0xff));
+}
+
+// 子ボーンの回転
+void PMD::RotateChildBorn(UINT& index, USHORT id, const DirectX::XMMATRIX & matrix)
+{
+	if (model[&index].node.empty() || id == 0)
+	{
+		return;
+	}
+
+	DirectX::XMVECTOR head = DirectX::XMLoadFloat3(&model[&index].pos[id].head);
+	head = DirectX::XMVector3Transform(head, matrix);
+	DirectX::XMStoreFloat3(&model[&index].pos[id].head, head);
+
+	DirectX::XMVECTOR tail = DirectX::XMLoadFloat3(&model[&index].pos[id].tail);
+	tail = DirectX::XMVector3Transform(tail, matrix);
+	DirectX::XMStoreFloat3(&model[&index].pos[id].tail, tail);
+
+	model[&index].matrix[id] = matrix;
+
+	for (auto& child : model[&index].node[id])
+	{
+		RotateChildBorn(index, child, matrix);
+	}
+}
+
 // 描画
 void PMD::Draw(UINT& index)
 {
@@ -351,6 +542,11 @@ void PMD::Draw(UINT& index)
 	list.lock()->GetList()->SetPipelineState(pipe.lock()->Get());
 
 	con.lock()->SetConstant();
+
+	//定数ヒープのセット
+	list.lock()->GetList()->SetDescriptorHeaps(1, &model[&index].cB.heap);
+	//ディスクリプターテーブルのセット
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(3, model[&index].cB.heap->GetGPUDescriptorHandleForHeapStart());
 
 	list.lock()->GetList()->IASetVertexBuffers(0, 1, &model[&index].v.view);
 	list.lock()->GetList()->IASetIndexBuffer(&model[&index].i.view);

@@ -17,7 +17,7 @@ public:
 	HRESULT LoadWAVE(UINT& index, const std::string& fileName);
 
 	// çƒê∂äJén
-	HRESULT Play(UINT& index);
+	HRESULT Play(UINT& index, bool loop);
 
 	// çƒê∂í‚é~
 	HRESULT Stop(UINT& index);

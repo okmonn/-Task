@@ -20,7 +20,7 @@ public:
 	~Point();
 
 	// 頂点データの追加
-	void AddList(const Vec2f& pos, const Vec3f& color, float alpha = 1.0f);
+	void AddList(const Vec2f& pos, const Vec3f& color, float alpha);
 
 	// 描画
 	void Draw(void);

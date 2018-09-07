@@ -153,7 +153,7 @@ void Xaudio2::Start(UINT & index)
 }
 
 // 再生開始
-HRESULT Xaudio2::Play(UINT& index)
+HRESULT Xaudio2::Play(UINT& index, bool loop)
 {
 	//再生開始
 	if (wave[&index].GetStart() == false)
@@ -165,6 +165,7 @@ HRESULT Xaudio2::Play(UINT& index)
 			return result;
 		}
 
+		wave[&index].SetLoop(loop);
 		wave[&index].SetStart(true);
 	}
 

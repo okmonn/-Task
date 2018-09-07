@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include <string>
 #include <vector>
+#include <DirectXMath.h>
 
 namespace func {
 	// ウィンドウサイズのセット
@@ -65,6 +66,9 @@ namespace func {
 	// PMD描画
 	void DrawPMD(unsigned int& index);
 
+	// PMDのボーン回転
+	void RotateBorn(unsigned int& index, const std::string& name, const DirectX::XMMATRIX& matrix);
+
 	// PMDの消去
 	void DeletePMD(unsigned int& index);
 
@@ -72,7 +76,7 @@ namespace func {
 	void LoadWave(unsigned int& index, const std::string fileName);
 
 	// WAVEの再生
-	void PlayWave(unsigned int& index);
+	void PlayWave(unsigned int& index, bool loop = false);
 
 	// WAVEの停止
 	void StopWave(unsigned int& index);

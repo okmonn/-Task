@@ -2,6 +2,7 @@
 #include "../etc/Vector2.h"
 #include "../etc/Vector3.h"
 #include <d3d12.h>
+#include <DirectXMath.h>
 #include <string>
 #include <vector>
 #include <memory>
@@ -31,6 +32,7 @@ class Point;
 class Line;
 class Box;
 class Texture;
+class VMD;
 class PMD;
 
 class Union
@@ -87,22 +89,28 @@ public:
 	void LoadImg(UINT& index, const std::string& fileName);
 
 	// 描画
-	void Draw(UINT& index, const Vec2f& pos, UINT turnX = 0, UINT turnY = 0);
+	void Draw(UINT& index, const Vec2f& pos, UINT turnX, UINT turnY);
 
 	// 描画・サイズ指定
-	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size, UINT turnX = 0, UINT turnY = 0);
+	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size, UINT turnX, UINT turnY);
 
 	// 描画・サイズ指定・分割
-	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rect, const Vec2f& rectSize, UINT turnX = 0, UINT turnY = 0);
+	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rect, const Vec2f& rectSize, UINT turnX, UINT turnY);
 
 	// 画像の消去
 	void DeleteImg(UINT& index);
+
+	// VMD読み込み
+	void LoadVMD(UINT& index, const std::string& fileName);
 
 	// PMD読み込み
 	void LoadPMD(UINT& index, const std::string& fileName);
 
 	// PMD描画
 	void DrawPMD(UINT& index);
+
+	// PMDのボーン回転
+	void RotateBorn(UINT& index, const std::string& name, const DirectX::XMMATRIX& matrix);
 
 	// PMDの消去
 	void DeletePMD(UINT& index);
@@ -111,7 +119,7 @@ public:
 	void LoadWave(UINT& index, const std::string& fileName);
 
 	// WAVEの再生
-	void PlayWave(UINT& index);
+	void PlayWave(UINT& index, bool loop);
 
 	// WAVEの再生停止
 	void StopWave(UINT& index);
@@ -250,6 +258,9 @@ private:
 
 	// テクスチャ
 	std::shared_ptr<Texture>tex;
+
+	// VMD
+	std::shared_ptr<VMD>vmd;
 
 	// PMD
 	std::shared_ptr<PMD>pmd;

@@ -1,4 +1,5 @@
 #include "WAVE.h"
+#include <iostream>
 
 // IDサイズ
 #define ID_MAX 4
@@ -48,7 +49,7 @@ struct DATA {
 
 // コンストラクタ
 WAVE::WAVE() :
-	file(nullptr), index(0), read(0), readMax(0), start(false), end(false)
+	file(nullptr), offset(0), index(0), read(0), readMax(0), start(false), end(false), loop(false)
 {
 	format = {};
 	data.clear();
@@ -58,6 +59,7 @@ WAVE::WAVE() :
 // デストラクタ
 WAVE::~WAVE()
 {
+	end = true;
 	if (file != nullptr)
 	{
 		fclose(file);
@@ -103,16 +105,20 @@ int WAVE::Load(const std::string & fileName)
 	RIFF riff = {};
 	FMT fmt = {};
 	DATA data = {};
+	offset = 0;
 
 	//RIFF読み込み
 	fread(&riff.chunkID[0], sizeof(riff.chunkID), 1, file);
+	offset += sizeof(riff.chunkID);
 	if (CheckChar(riff.chunkID, ID_MAX, "RIFF") != 0)
 	{
 		fclose(file);
 		return -1;
 	}
 	fread(&riff.chunkSize, sizeof(riff.chunkSize), 1, file);
+	offset += sizeof(riff.chunkSize);
 	fread(&riff.chunkFormatType[0], sizeof(riff.chunkFormatType), 1, file);
+	offset += sizeof(riff.chunkFormatType);
 	if (CheckChar(riff.chunkFormatType, ID_MAX, "WAVE") != 0)
 	{
 		fclose(file);
@@ -121,24 +127,33 @@ int WAVE::Load(const std::string & fileName)
 
 	//FMT読み込み
 	fread(&fmt.chunkID[0], sizeof(fmt.chunkID), 1, file);
+	offset += sizeof(fmt.chunkID);
 	if (CheckChar(fmt.chunkID, ID_MAX, "fmt ") != 0)
 	{
 		fclose(file);
 		return -1;
 	}
 	fread(&fmt.chunkSize, sizeof(fmt.chunkSize), 1, file);
+	offset += sizeof(fmt.chunkSize);
 	fread(&fmt.waveFormatType, sizeof(fmt.waveFormatType), 1, file);
+	offset += sizeof(fmt.waveFormatType);
 	fread(&fmt.formatChannel, sizeof(fmt.formatChannel), 1, file);
+	offset += sizeof(fmt.formatChannel);
 	fread(&fmt.samplesPerSec, sizeof(fmt.samplesPerSec), 1, file);
+	offset += sizeof(fmt.samplesPerSec);
 	fread(&fmt.bytesPerSec, sizeof(fmt.bytesPerSec), 1, file);
+	offset += sizeof(fmt.bytesPerSec);
 	fread(&fmt.blockSize, sizeof(fmt.blockSize), 1, file);
+	offset += sizeof(fmt.blockSize);
 	fread(&fmt.bitsPerSample, sizeof(fmt.bitsPerSample), 1, file);
+	offset += sizeof(fmt.bitsPerSample);
 	//拡張部分
 	std::vector<unsigned char>extended;
 	extended.resize(fmt.chunkSize - (sizeof(fmt) - sizeof(fmt.chunkID) - sizeof(fmt.chunkSize)));
 	if (extended.size() > 0)
 	{
 		fread(&extended[0], sizeof(unsigned char) * extended.size(), 1, file);
+		offset += sizeof(unsigned char) * extended.size();
 	}
 
 	//ダミー宣言
@@ -146,6 +161,7 @@ int WAVE::Load(const std::string & fileName)
 	chunkID.resize(sizeof(unsigned char) * ID_MAX);
 	//ID判別
 	fread(&chunkID[0], sizeof(unsigned char) * ID_MAX, 1, file);
+	offset += sizeof(unsigned char) * ID_MAX;
 
 	//DATA以外の場合
 	while (chunkID != "data")
@@ -153,17 +169,21 @@ int WAVE::Load(const std::string & fileName)
 		//サイズ
 		unsigned long size = 0;
 		fread(&size, sizeof(size), 1, file);
+		offset += sizeof(size);
 		//データ
 		std::vector<unsigned char>data;
 		data.resize(size);
 		fread(&data[0], sizeof(unsigned char) * size, 1, file);
+		offset += sizeof(unsigned char) * size;
 		//ID
 		fread(&chunkID[0], sizeof(unsigned char) * ID_MAX, 1, file);
+		offset += sizeof(unsigned char) * ID_MAX;
 	}
 
 	//DATA読み込み
 	data.chunkID = chunkID;
 	fread(&data.chunkSize, sizeof(data.chunkSize), 1, file);
+	offset += sizeof(data.chunkSize);
 
 	//フォーマットセット
 	format.wFormatTag      = fmt.waveFormatType;
@@ -209,8 +229,17 @@ int WAVE::Load(void)
 			data[index][i] = 0;
 			if (i + 1 >= format.nAvgBytesPerSec)
 			{
-				end = true;
-				fclose(file);
+				if (loop == false)
+				{
+					end = true;
+					fclose(file);
+				}
+				else
+				{
+					read = 0;
+					fseek(file, offset, SEEK_CUR);
+					printf("ループします");
+				}
 			}
 		}
 	}

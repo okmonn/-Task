@@ -34,6 +34,7 @@
     <ClCompile Include="DirectX\Fence.cpp" />
     <ClCompile Include="DirectX\PipeLine\Pipe.cpp" />
     <ClCompile Include="DirectX\PMD\PMD.cpp" />
+    <ClCompile Include="DirectX\PMD\VMD\VMD.cpp" />
     <ClCompile Include="DirectX\Root.cpp" />
     <ClCompile Include="DirectX\Swap.cpp" />
     <ClCompile Include="DirectX\Texture\Texture.cpp" />
@@ -66,6 +67,8 @@
     <ClInclude Include="DirectX\PipeLine\Pipe.h" />
     <ClInclude Include="DirectX\PMD\PMD.h" />
     <ClInclude Include="DirectX\PMD\PmdData.h" />
+    <ClInclude Include="DirectX\PMD\VMD\VMD.h" />
+    <ClInclude Include="DirectX\PMD\VMD\VmdDate.h" />
     <ClInclude Include="DirectX\Root.h" />
     <ClInclude Include="DirectX\Swap.h" />
     <ClInclude Include="DirectX\Texture\Texture.h" />

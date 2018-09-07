@@ -1,6 +1,7 @@
 #pragma once
 #include <d3d12.h>
 #include <DirectXMath.h>
+#include <string>
 #include <vector>
 #include <map>
 
@@ -122,6 +123,8 @@ struct Model {
 	VertexIndex i;
 	//定数バッファ
 	Con c;
+	//ボーン定数バッファ
+	Con cB;
 
 	//ヘッダー
 	Header header;
@@ -137,6 +140,10 @@ struct Model {
 	std::vector<std::vector<USHORT>>node;
 	//ボーン座標
 	std::vector<BornPos>pos;
+	//ボーン名
+	std::map<std::string, UINT>name;
+	//ボーン行列
+	std::vector<DirectX::XMMATRIX>matrix;
 	//テクスチャアドレス
 	std::map<UINT, UINT>id;
 };

@@ -32,6 +32,9 @@ public:
 	// PMD読み込み
 	HRESULT LoadPMD(UINT& index, const std::string& fileName);
 
+	// ボーンの回転
+	void RotateBorn(UINT& index, const std::string& name, const DirectX::XMMATRIX& matrix);
+
 	// 描画
 	void Draw(UINT& index);
 
@@ -51,11 +54,26 @@ private:
 	// 定数バッファビューの生成
 	HRESULT CreateConView(UINT* index);
 
+	// ボーン用定数バッファヒープの生成
+	HRESULT CreateBornHeap(UINT* index);
+
+	// ボーン用定数バッファリソースの生成
+	HRESULT CreateBornResource(UINT* index);
+
+	// ボーン用定数バッファビューの生成
+	HRESULT CreateBornConView(UINT* index);
+
 	// 頂点バッファの生成
 	HRESULT CreateVeretxBuffer(UINT* index);
 
 	// 頂点インデックスの生成
 	HRESULT CreateIndexBuffer(UINT* index);
+
+	// ボーンのセット
+	void SetBorn(UINT* index);
+
+	// 子ボーンの回転
+	void RotateChildBorn(UINT& index, USHORT id, const DirectX::XMMATRIX& matrix);;
 
 
 	// ルートシグネチャ

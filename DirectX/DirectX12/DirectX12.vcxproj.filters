@@ -73,8 +73,14 @@
     <Filter Include="DirectX\Draw">
       <UniqueIdentifier>{d53e9cbd-2758-4f34-94a6-62739e09aac3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="DirectX\PMD">
+    <Filter Include="DirectX\Model">
+      <UniqueIdentifier>{84ed5ea6-658a-4b34-9fdd-6d3172ebbab0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Model\PMD">
       <UniqueIdentifier>{94474990-bd5d-468d-a49a-77e0156cd0a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Model\PMD\VMD">
+      <UniqueIdentifier>{9a6ed621-7c6f-40fd-89a0-c2f4acde5c06}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -172,10 +178,10 @@
       <Filter>DirectX\Draw</Filter>
     </ClInclude>
     <ClInclude Include="DirectX\PMD\PMD.h">
-      <Filter>DirectX\PMD</Filter>
+      <Filter>DirectX\Model\PMD</Filter>
     </ClInclude>
     <ClInclude Include="DirectX\PMD\PmdData.h">
-      <Filter>DirectX\PMD</Filter>
+      <Filter>DirectX\Model\PMD</Filter>
     </ClInclude>
     <ClInclude Include="DirectX\PipeLine\Pipe.h">
       <Filter>DirectX\Pipe</Filter>
@@ -185,6 +191,12 @@
     </ClInclude>
     <ClInclude Include="DirectX\Draw\Line.h">
       <Filter>DirectX\Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\PMD\VMD\VMD.h">
+      <Filter>DirectX\Model\PMD\VMD</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\PMD\VMD\VmdDate.h">
+      <Filter>DirectX\Model\PMD\VMD</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -258,7 +270,7 @@
       <Filter>DirectX\Draw</Filter>
     </ClCompile>
     <ClCompile Include="DirectX\PMD\PMD.cpp">
-      <Filter>DirectX\PMD</Filter>
+      <Filter>DirectX\Model\PMD</Filter>
     </ClCompile>
     <ClCompile Include="DirectX\PipeLine\Pipe.cpp">
       <Filter>DirectX\Pipe</Filter>
@@ -268,6 +280,9 @@
     </ClCompile>
     <ClCompile Include="DirectX\Draw\Line.cpp">
       <Filter>DirectX\Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\PMD\VMD\VMD.cpp">
+      <Filter>DirectX\Model\PMD\VMD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

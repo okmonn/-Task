@@ -115,6 +115,12 @@ void func::DrawPMD(unsigned int & index)
 	Union::Get().DrawPMD(index);
 }
 
+// PMD‚Ìƒ{[ƒ“‰ñ“]
+void func::RotateBorn(unsigned int & index, const std::string & name, const DirectX::XMMATRIX & matrix)
+{
+	Union::Get().RotateBorn(index, name, matrix);
+}
+
 // PMD‚ÌÁ‹
 void func::DeletePMD(unsigned int & index)
 {
@@ -128,9 +134,9 @@ void func::LoadWave(unsigned int& index, const std::string fileName)
 }
 
 // WAVE‚ÌÄ¶
-void func::PlayWave(unsigned int& index)
+void func::PlayWave(unsigned int& index, bool loop)
 {
-	Union::Get().PlayWave(index);
+	Union::Get().PlayWave(index, loop);
 }
 
 // WAVE‚Ì’â~

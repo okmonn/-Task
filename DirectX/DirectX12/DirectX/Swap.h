@@ -1,6 +1,6 @@
 #pragma once
 #include "Obj.h"
-#include <dxgi1_4.h>
+#include <dxgi1_6.h>
 #include <memory>
 
 class Window;
@@ -43,10 +43,10 @@ private:
 	std::weak_ptr<Queue>queue;
 
 	// ファクトリー
-	IDXGIFactory4* factory;
+	IDXGIFactory6* factory;
 
 	// スワップチェイン
-	IDXGISwapChain3* swap;
+	IDXGISwapChain4* swap;
 
 	// バックバッファ数
 	UINT bufferCnt;

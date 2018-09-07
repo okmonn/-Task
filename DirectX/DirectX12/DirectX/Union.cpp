@@ -22,6 +22,7 @@
 #include "Draw/Line.h"
 #include "Draw/Box.h"
 #include "Texture/Texture.h"
+#include "PMD/VMD/VMD.h"
 #include "PMD/PMD.h"
 #include <tchar.h>
 
@@ -77,6 +78,7 @@ void Union::Create(void)
 	line     = std::make_shared<Line>    (dev, list, pointRoot, linePipe,  constant);
 	box      = std::make_shared<Box>     (dev, list, pointRoot, boxPipe,   constant);
 	tex      = std::make_shared<Texture> (dev, list, texRoot,   texPipe,   constant);
+	vmd      = std::make_shared<VMD>();
 	pmd      = std::make_shared<PMD>     (dev, list, modelRoot, modelPipe, constant,  tex);
 
 	ViewPort();
@@ -123,12 +125,14 @@ void Union::CreateRoot(void)
 			{ D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND },
 			{ D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND },
 			{ D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 1, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND },
+			{ D3D12_DESCRIPTOR_RANGE_TYPE::D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 2, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND },
 		};
 		//パラメータ設定用構造体
 		D3D12_ROOT_PARAMETER param[] = {
 			{ D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE, { 1, &range[0] }, D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_VERTEX },
 			{ D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE, { 1, &range[1] }, D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_ALL },
 			{ D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE, { 1, &range[2] }, D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_ALL },
+			{ D3D12_ROOT_PARAMETER_TYPE::D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE, { 1, &range[3] }, D3D12_SHADER_VISIBILITY::D3D12_SHADER_VISIBILITY_ALL },
 		};
 
 		modelRoot->CreateRoot(param, _countof(param));
@@ -169,9 +173,11 @@ void Union::CreatePipeLine(void)
 	{
 		D3D12_INPUT_ELEMENT_DESC input[] =
 		{
-			{ "POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-			{ "NORMAL",   0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT,       0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "NORMAL",   0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT,    0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "BORN",     0, DXGI_FORMAT::DXGI_FORMAT_R16G16_UINT,     0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "WEIGHT",   0, DXGI_FORMAT::DXGI_FORMAT_R8_UINT,         0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION::D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		};
 
 		modelPipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
@@ -348,6 +354,12 @@ void Union::DeleteImg(UINT & index)
 	tex->Delete(index);
 }
 
+// VMD読み込み
+void Union::LoadVMD(UINT & index, const std::string & fileName)
+{
+	vmd->Load(index, fileName);
+}
+
 // PMD読み込み
 void Union::LoadPMD(UINT & index, const std::string & fileName)
 {
@@ -358,6 +370,12 @@ void Union::LoadPMD(UINT & index, const std::string & fileName)
 void Union::DrawPMD(UINT & index)
 {
 	pmd->Draw(index);
+}
+
+// PMDのボーン回転
+void Union::RotateBorn(UINT & index, const std::string & name, const DirectX::XMMATRIX& matrix)
+{
+	pmd->RotateBorn(index, name, matrix);
 }
 
 // PMDの消去
@@ -373,9 +391,9 @@ void Union::LoadWave(UINT& index, const std::string & fileName)
 }
 
 // WAVEの再生
-void Union::PlayWave(UINT& index)
+void Union::PlayWave(UINT& index, bool loop)
 {
-	audio->Play(index);
+	audio->Play(index, loop);
 }
 
 // WAVEの再生停止

@@ -17,33 +17,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	
 	ChangeView(Vec3f(0, 10, -15), Vec3f(0, 10, 0), Vec3f(0, 1, 0));
 
-
-	UINT n = 0;
-	func::LoadImg(n, "img/avicii.png");
-	UINT m = 0;
-	func::LoadImg(m, "img/sample3.png");
-	UINT w = 0;
-	LoadWave(w, "wave/sample2.wav");
 	UINT q = 0;
 	LoadPMD(q, "Model/èââπÉ~ÉN.pmd");
-
-	float a = 0.f;
-	float b = 0.f;
 
 	while (func::CheckMsg() && CheckKey(INPUT_ESCAPE) != true)
 	{
 		func::Set();
-		//Draw(m, 0, 0);
+		
 		DrawPMD(q);
-
-		if (TriggerKey(INPUT_RETURN))
-		{
-			DeletePMD(q);
-		}
-		else if (TriggerKey(INPUT_SPACE))
-		{
-			StopWave(w);
-		}
+		
 		func::Do();
 	}
 
