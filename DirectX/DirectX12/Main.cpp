@@ -20,12 +20,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	UINT q = 0;
 	LoadPMD(q, "Model/èââπÉ~ÉN.pmd");
 
+	UINT a = 0;
+	LoadImg(a, "img/sample.png");
+	UINT b = 0;
+	LoadImg(b, "img/sample1.png");
+
 	while (func::CheckMsg() && CheckKey(INPUT_ESCAPE) != true)
 	{
 		func::Set();
 		
-		DrawPMD(q);
-		
+		//DrawPMD(q);
+
+		Draw(a, 0, 0);
+
 		func::Do();
 	}
 
