@@ -17,8 +17,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	
 	ChangeView(Vec3f(0, 10, -15), Vec3f(0, 10, 0), Vec3f(0, 1, 0));
 
-	/*UINT q = 0;
-	LoadPMD(q, "Material/model/初音ミク.pmd");*/
+	UINT q = 0;
+	LoadPMD(q, "Material/model/初音ミク.pmd");
 	UINT a = 0;
 	LoadImg(a, "Material/img/sample.png");
 	UINT b = 0;
@@ -31,10 +31,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		//DrawPMD(q);
 		
 		static float alpha = 1.0f;
-		SetAlpha(alpha);
-		Draw(b, 0, 0);
 		SetAlpha(1.0f);
 		Draw(a, 0, 0);
+		SetAlpha(alpha);
+		Draw(b, 0, 0);
+		
 		alpha -= 0.01f;
 		
 

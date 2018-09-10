@@ -38,10 +38,10 @@ HRESULT Depth::CreateResource(void)
 	//プロパティ設定用構造体の設定
 	D3D12_HEAP_PROPERTIES prop = {};
 	prop.CPUPageProperty      = D3D12_CPU_PAGE_PROPERTY::D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-	prop.CreationNodeMask     = 1;
+	prop.CreationNodeMask     = 0;
 	prop.MemoryPoolPreference = D3D12_MEMORY_POOL::D3D12_MEMORY_POOL_UNKNOWN;
 	prop.Type                 = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_DEFAULT;
-	prop.VisibleNodeMask      = 1;
+	prop.VisibleNodeMask      = 0;
 
 	//リソース設定用構造体の設定
 	D3D12_RESOURCE_DESC desc = {};
@@ -51,7 +51,7 @@ HRESULT Depth::CreateResource(void)
 	desc.Height             = win.lock()->GetY();
 	desc.DepthOrArraySize   = 1;
 	desc.MipLevels          = 0;
-	desc.Format             = DXGI_FORMAT::DXGI_FORMAT_D32_FLOAT;
+	desc.Format             = DXGI_FORMAT::DXGI_FORMAT_R32_TYPELESS;
 	desc.SampleDesc.Count   = 1;
 	desc.SampleDesc.Quality = 0;
 	desc.Flags              = D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
@@ -79,6 +79,7 @@ HRESULT Depth::CreateView(void)
 	D3D12_DEPTH_STENCIL_VIEW_DESC desc = {};
 	desc.Format        = DXGI_FORMAT::DXGI_FORMAT_D32_FLOAT;
 	desc.ViewDimension = D3D12_DSV_DIMENSION::D3D12_DSV_DIMENSION_TEXTURE2D;
+	desc.Texture2D.MipSlice = 0;
 	desc.Flags         = D3D12_DSV_FLAGS::D3D12_DSV_FLAG_NONE;
 
 	//深度ステンシルビュー生成

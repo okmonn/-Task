@@ -259,9 +259,9 @@ void Union::Set(void)
 
 	Barrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET);
 
-	render->SetRender(depth->GetHeap());
-
 	depth->SetDepth();
+
+	render->SetRender(depth->GetHeap());
 }
 
 // Às

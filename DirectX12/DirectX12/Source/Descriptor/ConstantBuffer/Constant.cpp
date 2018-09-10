@@ -114,7 +114,7 @@ HRESULT Constant::CreateView(UINT index, UINT size)
 
 	//定数バッファビュー設定用構造体の設定
 	D3D12_CONSTANT_BUFFER_VIEW_DESC desc = {};
-	desc.SizeInBytes    = (size + 0xff) &~0xff;
+	desc.SizeInBytes    = ((size + 0xff) &~0xff);
 	desc.BufferLocation = resource[index]->GetGPUVirtualAddress();
 
 	//送信範囲
