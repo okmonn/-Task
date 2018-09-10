@@ -1,0 +1,349 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="BaseObj">
+      <UniqueIdentifier>{709c0769-5f53-48da-aac9-d5ec034ab500}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device">
+      <UniqueIdentifier>{97abe6b7-a8d4-4010-b50f-a0ff5ae4e6ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{89e2e282-35db-41d2-b992-ce7cbf8af106}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Command">
+      <UniqueIdentifier>{81565a5d-858e-476b-9643-514bcc937641}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Command\List">
+      <UniqueIdentifier>{193d19b7-759c-4ebe-9f79-d2bb44b136a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Command\Queue">
+      <UniqueIdentifier>{6afef552-9418-484d-9395-4127bf6d5882}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Compiler">
+      <UniqueIdentifier>{be2cf414-1a7f-4d48-b471-d849e59d6401}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Descriptor">
+      <UniqueIdentifier>{38fe23aa-ddbe-4112-b171-b5cca7d1b070}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Descriptor\ConstantBuffer">
+      <UniqueIdentifier>{d7d161f0-5a02-4192-bcd6-d0e00452f6a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Descriptor\DepthStensil">
+      <UniqueIdentifier>{c8738017-d165-484b-a57c-f48df118dadf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Descriptor\RenderTarget">
+      <UniqueIdentifier>{f2525f4b-f6a2-45f2-8191-4cf4af65b194}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectInput">
+      <UniqueIdentifier>{8d189059-7493-4149-bbdb-1c5ed71becfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Draw">
+      <UniqueIdentifier>{9f50fe6d-ab44-453c-becb-1a87e717cbea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Draw\Box">
+      <UniqueIdentifier>{ed57c0c4-143b-482c-81a2-e64223f3351b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Draw\Line">
+      <UniqueIdentifier>{4abb9817-b211-4fea-88ba-18f7b959d6d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Draw\Point">
+      <UniqueIdentifier>{a7d5f2e5-9ce5-4029-862e-6815d0e5f45f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="etc">
+      <UniqueIdentifier>{ba8b8245-10b7-4236-8ade-c4e5934ed329}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fence">
+      <UniqueIdentifier>{c0b7cd28-cb51-4a6b-aa4a-54ede514d5d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Func">
+      <UniqueIdentifier>{853dad15-d561-4bf9-a25c-eb43451df966}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Icon">
+      <UniqueIdentifier>{8c819d66-fff5-47de-8738-3da3aced17a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MIDI">
+      <UniqueIdentifier>{43a50cb3-bf2f-4f0b-9a09-33807676142c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MIDI\In">
+      <UniqueIdentifier>{5b65c00c-2e53-4583-8356-d3a6e5fe3d64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MIDI\Out">
+      <UniqueIdentifier>{b78eca47-cabd-4d32-9783-648eb9525cd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PipeLine">
+      <UniqueIdentifier>{d88b35f0-8186-4067-93cf-9bd51127579b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PMD">
+      <UniqueIdentifier>{9f7df391-3270-45d1-af88-6a6fc653d49c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RootSignature">
+      <UniqueIdentifier>{56f668a8-9531-4ce5-aa67-f24e62eb4d81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SwapChain">
+      <UniqueIdentifier>{6a0f526a-9501-4fc6-b94d-4a5558796542}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture">
+      <UniqueIdentifier>{e09b0d3d-309a-412c-b51f-096e63beff80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Union">
+      <UniqueIdentifier>{1ab2f037-5530-40de-999a-232be86bf558}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VMD">
+      <UniqueIdentifier>{14826b21-dd3a-4315-b9c1-4901d972b0cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WAVE">
+      <UniqueIdentifier>{21733a2d-3695-403f-9a3b-cf196e16c2f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Window">
+      <UniqueIdentifier>{428b988f-fb61-4689-a9a9-e574367f9c07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Xaudio2">
+      <UniqueIdentifier>{5bf2d283-529d-46e4-b8ae-f212dc14bd43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Shader">
+      <UniqueIdentifier>{83b4158d-b4e3-42c9-a7d0-3c58fb8569d6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\BaseObj\Obj.h">
+      <Filter>BaseObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Device\Device.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Debug\Debug.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Command\Command.h">
+      <Filter>Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Command\List\List.h">
+      <Filter>Command\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Command\Queue\Queue.h">
+      <Filter>Command\Queue</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Compiler\Compiler.h">
+      <Filter>Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Descriptor\ConstantBuffer\Constant.h">
+      <Filter>Descriptor\ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Descriptor\DepthStencil\Depth.h">
+      <Filter>Descriptor\DepthStensil</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Descriptor\RenderTarget\Render.h">
+      <Filter>Descriptor\RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Descriptor\Descriptor.h">
+      <Filter>Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DirectInput\KeyData.h">
+      <Filter>DirectInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DirectInput\Input.h">
+      <Filter>DirectInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DirectInput\InputData.h">
+      <Filter>DirectInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Draw\Box\Box.h">
+      <Filter>Draw\Box</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Draw\Line\Line.h">
+      <Filter>Draw\Line</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Draw\Point\Point.h">
+      <Filter>Draw\Point</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\etc\Vector2.h">
+      <Filter>etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\etc\Vector3.h">
+      <Filter>etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\etc\Typedef.h">
+      <Filter>etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Fence\Fence.h">
+      <Filter>Fence</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Func\Func.h">
+      <Filter>Func</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Icon\Icon.h">
+      <Filter>Icon</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MIDI\In\MIDI_IN.h">
+      <Filter>MIDI\In</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MIDI\NoteNomber.h">
+      <Filter>MIDI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PipeLine\Pipe.h">
+      <Filter>PipeLine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PMD\PMD.h">
+      <Filter>PMD</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PMD\PmdData.h">
+      <Filter>PMD</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RootSignature\Root.h">
+      <Filter>RootSignature</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SwapChain\Swap.h">
+      <Filter>SwapChain</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Texture\WICTextureLoader12.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Texture\Texture.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Union\Union.h">
+      <Filter>Union</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VMD\VmdDate.h">
+      <Filter>VMD</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VMD\VMD.h">
+      <Filter>VMD</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WAVE\WAVE.h">
+      <Filter>WAVE</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Window\Window.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Xaudio2\Xaudio2.h">
+      <Filter>Xaudio2</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Xaudio2\VoiceCallback.h">
+      <Filter>Xaudio2</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\etc\tstring.h">
+      <Filter>etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MIDI\Out\MIDI_OUT.h">
+      <Filter>MIDI\Out</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Device\Device.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Debug\Debug.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Command\List\List.cpp">
+      <Filter>Command\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Command\Queue\Queue.cpp">
+      <Filter>Command\Queue</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Compiler\Compiler.cpp">
+      <Filter>Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Descriptor\ConstantBuffer\Constant.cpp">
+      <Filter>Descriptor\ConstantBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Descriptor\DepthStencil\Depth.cpp">
+      <Filter>Descriptor\DepthStensil</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Descriptor\RenderTarget\Render.cpp">
+      <Filter>Descriptor\RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Descriptor\Descriptor.cpp">
+      <Filter>Descriptor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DirectInput\Input.cpp">
+      <Filter>DirectInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Draw\Box\Box.cpp">
+      <Filter>Draw\Box</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Draw\Line\Line.cpp">
+      <Filter>Draw\Line</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Draw\Point\Point.cpp">
+      <Filter>Draw\Point</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Fence\Fence.cpp">
+      <Filter>Fence</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Func\Func.cpp">
+      <Filter>Func</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MIDI\In\MIDI_IN.cpp">
+      <Filter>MIDI\In</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PipeLine\Pipe.cpp">
+      <Filter>PipeLine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PMD\PMD.cpp">
+      <Filter>PMD</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RootSignature\Root.cpp">
+      <Filter>RootSignature</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SwapChain\Swap.cpp">
+      <Filter>SwapChain</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Texture\Texture.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Texture\WICTextureLoader12.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Union\Union.cpp">
+      <Filter>Union</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VMD\VMD.cpp">
+      <Filter>VMD</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\WAVE\WAVE.cpp">
+      <Filter>WAVE</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Window\Window.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Xaudio2\Xaudio2.cpp">
+      <Filter>Xaudio2</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MIDI\Out\MIDI_OUT.cpp">
+      <Filter>MIDI\Out</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Source\Icon\Icon.rc">
+      <Filter>Icon</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Source\Shader\BasicShader.hlsl">
+      <Filter>リソース ファイル\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Source\Shader\ModelShader.hlsl">
+      <Filter>リソース ファイル\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Source\Shader\PointShader.hlsl">
+      <Filter>リソース ファイル\Shader</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
