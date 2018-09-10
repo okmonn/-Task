@@ -12,7 +12,7 @@ class Pipe :
 {
 public:
 	// コンストラクタ
-	Pipe(const LPCWSTR& path, std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap, std::weak_ptr<Root>root, std::weak_ptr<Compiler>com);
+	Pipe(const LPCWSTR& path, std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap, std::weak_ptr<Root>root, std::weak_ptr<Compiler>com, bool depth = false);
 	// デストラクタ
 	~Pipe();
 
@@ -25,9 +25,6 @@ public:
 	HRESULT CreatePipe(const D3D12_INPUT_ELEMENT_DESC* input, UINT num, const D3D12_PRIMITIVE_TOPOLOGY_TYPE& type);
 
 private:
-	// パス
-	LPCWSTR path;
-
 	// デバイス
 	std::weak_ptr<Device>dev;
 
@@ -42,5 +39,11 @@ private:
 
 	// パイプライン
 	ID3D12PipelineState* pipe;
+
+	// パス
+	LPCWSTR path;
+
+	// 深度ステンシル許可フラグ
+	bool depth;
 };
 

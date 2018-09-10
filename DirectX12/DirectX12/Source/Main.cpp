@@ -28,15 +28,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	{
 		func::Set();
 		
-		//DrawPMD(q);
+		DrawPMD(q);
 		
-		static float alpha = 1.0f;
+		/*static float alpha = 1.0f;
 		SetAlpha(1.0f);
 		Draw(a, 0, 0);
 		SetAlpha(alpha);
 		Draw(b, 0, 0);
 		
-		alpha -= 0.01f;
+		alpha -= 0.005f;*/
 		
 
 		func::Do();

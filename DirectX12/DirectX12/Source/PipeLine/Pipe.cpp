@@ -6,8 +6,8 @@
 #include <tchar.h>
 
 // コンストラクタ
-Pipe::Pipe(const LPCWSTR& path, std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap, std::weak_ptr<Root>root, std::weak_ptr<Compiler>com) :
-	path(path), dev(dev), swap(swap), root(root), com(com)
+Pipe::Pipe(const LPCWSTR& path, std::weak_ptr<Device>dev, std::weak_ptr<Swap>swap, std::weak_ptr<Root>root, std::weak_ptr<Compiler>com, bool depth) :
+	path(path), dev(dev), swap(swap), root(root), com(com), depth(depth)
 {
 	//CreatePipe();
 }
@@ -80,7 +80,7 @@ HRESULT Pipe::CreatePipe(const D3D12_INPUT_ELEMENT_DESC * input, UINT num, const
 	desc.PS.BytecodeLength                = com.lock()->GetPixel(path)->GetBufferSize();
 	desc.RasterizerState                  = rasterizer;
 	desc.BlendState                       = blend;
-	desc.DepthStencilState.DepthEnable    = true;
+	desc.DepthStencilState.DepthEnable    = depth;
 	desc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK::D3D12_DEPTH_WRITE_MASK_ALL;
 	desc.DepthStencilState.DepthFunc      = D3D12_COMPARISON_FUNC::D3D12_COMPARISON_FUNC_LESS;
 	desc.DepthStencilState.StencilEnable  = FALSE;

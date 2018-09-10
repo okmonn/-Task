@@ -73,6 +73,7 @@ void Union::Create(void)
 	//パイプライン生成
 	CreatePipeLine();
 
+	auto n = sizeof(Constant);
 	constant = std::make_shared<Constant>(win, dev,  list);
 	point    = std::make_shared<Point>   (win, dev,  list,      pointRoot, pointPipe, constant);
 	line     = std::make_shared<Line>    (dev, list, pointRoot, linePipe,  constant);
@@ -169,7 +170,7 @@ void Union::CreatePipeLine(void)
 		texPipe->CreatePipe(input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	}
 
-	modelPipe = std::make_shared <Pipe>(L"Source/Shader/ModelShader.hlsl", dev, swap, modelRoot, com);
+	modelPipe = std::make_shared <Pipe>(L"Source/Shader/ModelShader.hlsl", dev, swap, modelRoot, com, true);
 	{
 		D3D12_INPUT_ELEMENT_DESC input[] =
 		{

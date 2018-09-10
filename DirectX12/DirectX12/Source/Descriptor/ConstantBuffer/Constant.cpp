@@ -41,11 +41,8 @@ void Constant::SetWVP(void)
 {
 	//ダミー宣言
 	FLOAT pos = 0.0f;
-	//FLOAT pos = 10.0f;
-	DirectX::XMMATRIX view   = DirectX::XMMatrixIdentity();
 	//カメラの位置
 	DirectX::XMVECTOR eye    = { 0, pos,  -1 };
-	//DirectX::XMVECTOR eye = { 0, pos,  -15.0f };
 	//カメラの焦点
 	DirectX::XMVECTOR target = { 0, pos,   0 };
 	//カメラの上方向
@@ -56,7 +53,7 @@ void Constant::SetWVP(void)
 	wvp.projection = DirectX::XMMatrixPerspectiveFovLH(RAD(90.0f), ((static_cast<FLOAT>(win.lock()->GetX()) / static_cast<FLOAT>(win.lock()->GetY()))), 0.5f, 500.0f);
 
 	//更新
-	wvp.world          = DirectX::XMMatrixIdentity();
+	wvp.world  = DirectX::XMMatrixIdentity();
 
 	wvp.window = { static_cast<FLOAT>(this->win.lock()->GetX()), static_cast<FLOAT>(this->win.lock()->GetY()) };
 }

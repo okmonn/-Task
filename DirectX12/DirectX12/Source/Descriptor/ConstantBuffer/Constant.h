@@ -5,6 +5,8 @@
 #include <vector>
 
 class Window;
+/*
+*/
 
 class Constant :
 	public Descriptor
@@ -32,7 +34,7 @@ public:
 	std::vector<ID3D12Resource*> GetResoure() const {
 		return resource;
 	}
-
+	
 private:
 	// WVP‚ÌƒZƒbƒg
 	void SetWVP(void);
