@@ -80,7 +80,7 @@ void Union::Create(void)
 	box      = std::make_shared<Box>     (dev, list, pointRoot, boxPipe,   constant);
 	tex      = std::make_shared<Texture> (dev, list, texRoot,   texPipe,   constant);
 	vmd      = std::make_shared<VMD>();
-	pmd      = std::make_shared<PMD>     (dev, list, modelRoot, modelPipe, constant,  tex);
+	pmd      = std::make_shared<PMD>     (dev, list, modelRoot, modelPipe, constant,  tex, vmd);
 
 	ViewPort();
 	Scissor();
@@ -373,6 +373,12 @@ void Union::DrawPMD(UINT & index)
 void Union::RotateBorn(UINT & index, const std::string & name, const DirectX::XMMATRIX& matrix)
 {
 	pmd->RotateBorn(index, name, matrix);
+}
+
+// PMDÇÃÉ{Å[ÉìâÒì]
+void Union::RotateBorn(UINT & model, UINT & motion)
+{
+	pmd->RotateBorn(model, motion);
 }
 
 // PMDÇÃè¡ãé

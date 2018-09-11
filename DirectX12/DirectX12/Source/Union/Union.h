@@ -112,6 +112,7 @@ public:
 
 	// PMD‚Ìƒ{[ƒ“‰ñ“]
 	void RotateBorn(UINT& index, const std::string& name, const DirectX::XMMATRIX& matrix);
+	void RotateBorn(UINT& model, UINT& motion);
 
 	// PMD‚ÌÁ‹
 	void DeletePMD(UINT& index);

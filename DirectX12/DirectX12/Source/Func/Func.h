@@ -61,6 +61,9 @@ namespace func {
 	// ‰æ‘œ‚ÌÁ‹
 	void DeleteImg(unsigned int& index);
 
+	// VMD“Ç‚İ‚İ
+	void LoadVMD(unsigned int& index, const std::string& fileName);
+
 	// PMD“Ç‚İ‚İ
 	void LoadPMD(unsigned int& index, const std::string& fileName);
 
@@ -69,6 +72,7 @@ namespace func {
 
 	// PMD‚Ìƒ{[ƒ“‰ñ“]
 	void RotateBorn(unsigned int& index, const std::string& name, const DirectX::XMMATRIX& matrix);
+	void RotateBorn(unsigned int& model, unsigned int& motion);
 
 	// PMD‚ÌÁ‹
 	void DeletePMD(unsigned int& index);

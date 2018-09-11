@@ -9,6 +9,7 @@ class Root;
 class Pipe;
 class Constant;
 class Texture;
+class VMD;
 struct Model;
 
 class PMD :
@@ -25,7 +26,7 @@ class PMD :
 public:
 	// コンストラクタ
 	PMD(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Root>root, 
-		std::weak_ptr<Pipe>pipe, std::weak_ptr<Constant>con, std::weak_ptr<Texture>tex);
+		std::weak_ptr<Pipe>pipe, std::weak_ptr<Constant>con, std::weak_ptr<Texture>tex, std::weak_ptr<VMD>vmd);
 	// デストラクタ
 	~PMD();
 
@@ -34,6 +35,10 @@ public:
 
 	// ボーンの回転
 	void RotateBorn(UINT& index, const std::string& name, const DirectX::XMMATRIX& matrix);
+
+	// ボーンの回転
+	void RotateBorn(UINT& index, UINT& motion);
+
 
 	// 描画
 	void Draw(UINT& index);
@@ -87,6 +92,9 @@ private:
 
 	// テクスチャ
 	std::weak_ptr<Texture>tex;
+
+	// VMD
+	std::weak_ptr<VMD>vmd;
 
 	// モデルデータ
 	std::map<UINT*, Model>model;

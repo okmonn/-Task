@@ -5,17 +5,20 @@
 #include "../PipeLine/Pipe.h"
 #include "../Descriptor/ConstantBuffer/Constant.h"
 #include "../Texture/Texture.h"
+#include "../VMD/VMD.h"
 #include "PmdData.h"
 #include <algorithm>
 #include <tchar.h>
 
 // コンストラクタ
-PMD::PMD(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe, std::weak_ptr<Constant>con, std::weak_ptr<Texture>tex) :
-	root(root), pipe(pipe), con(con), tex(tex), mat({})
+PMD::PMD(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe, 
+	std::weak_ptr<Constant>con, std::weak_ptr<Texture>tex, std::weak_ptr<VMD>vmd) :
+	root(root), pipe(pipe), con(con), tex(tex), vmd(vmd), mat({})
 {
 	this->dev = dev;
 	this->list = list;
 	size = this->dev.lock()->Get()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
 	model.clear();
 }
 
@@ -489,7 +492,7 @@ void PMD::RotateBorn(UINT& index, const std::string & name, const DirectX::XMMAT
 	
 	//ダミー宣言
 	DirectX::XMVECTOR head = DirectX::XMLoadFloat3(&model[&index].pos[model[&index].name[name]].head);
-	DirectX::XMVECTOR tmp  = DirectX::XMVectorSet(-model[&index].pos[model[&index].name[name]].head.x, -model[&index].pos[model[&index].name[name]].head.y, -model[&index].pos[model[&index].name[name]].head.z, 0);
+	DirectX::XMVECTOR tmp  = DirectX::XMVectorSet(-model[&index].pos[model[&index].name[name]].head.x, -model[&index].pos[model[&index].name[name]].head.y, -model[&index].pos[model[&index].name[name]].head.z, 1.0f);
 	DirectX::XMVECTOR tail = DirectX::XMLoadFloat3(&model[&index].pos[model[&index].name[name]].tail);
 	DirectX::XMMATRIX mat  = DirectX::XMMatrixTranslationFromVector(tmp);
 
@@ -511,6 +514,38 @@ void PMD::RotateBorn(UINT& index, const std::string & name, const DirectX::XMMAT
 	memcpy(model[&index].cB.data, model[&index].matrix.data(), ((sizeof(DirectX::XMMATRIX) * model[&index].matrix.size() + 0xff) &~0xff));
 }
 
+// ボーンの回転
+void PMD::RotateBorn(UINT& index, UINT& motion)
+{
+	auto m = vmd.lock()->GetMotion(motion);
+
+	for (auto& i : m)
+	{
+		//ダミー宣言
+		DirectX::XMVECTOR head = DirectX::XMLoadFloat3(&model[&index].pos[model[&index].name[i.name]].head);
+		DirectX::XMVECTOR tmp  = DirectX::XMVectorSet(-model[&index].pos[model[&index].name[i.name]].head.x, -model[&index].pos[model[&index].name[i.name]].head.y, -model[&index].pos[model[&index].name[i.name]].head.z, 1.0f);
+		DirectX::XMVECTOR tail = DirectX::XMLoadFloat3(&model[&index].pos[model[&index].name[i.name]].tail);
+		DirectX::XMMATRIX mat  = DirectX::XMMatrixTranslationFromVector(tmp);
+
+		mat *= DirectX::XMMatrixRotationQuaternion(i.quaternion);
+		mat *= DirectX::XMMatrixTranslationFromVector(head);
+
+		tail = DirectX::XMVector3Transform(tail, mat);
+
+		DirectX::XMStoreFloat3(&model[&index].pos[model[&index].name[i.name]].tail, tail);
+
+		model[&index].matrix[model[&index].name[i.name]] = mat;
+
+		for (auto &child : model[&index].node[model[&index].name[i.name]])
+		{
+			RotateChildBorn(index, child, mat);
+		}
+	}
+
+	//ボーン行列の更新
+	memcpy(model[&index].cB.data, model[&index].matrix.data(), ((sizeof(DirectX::XMMATRIX) * model[&index].matrix.size() + 0xff) &~0xff));
+}
+
 // 子ボーンの回転
 void PMD::RotateChildBorn(UINT& index, USHORT id, const DirectX::XMMATRIX & matrix)
 {
@@ -525,6 +560,7 @@ void PMD::RotateChildBorn(UINT& index, USHORT id, const DirectX::XMMATRIX & matr
 
 	DirectX::XMVECTOR tail = DirectX::XMLoadFloat3(&model[&index].pos[id].tail);
 	tail = DirectX::XMVector3Transform(tail, matrix);
+
 	DirectX::XMStoreFloat3(&model[&index].pos[id].tail, tail);
 
 	model[&index].matrix[id] = matrix;

@@ -103,6 +103,12 @@ void func::DeleteImg(unsigned int & index)
 	Union::Get().DeleteImg(index);
 }
 
+// VMDì«Ç›çûÇ›
+void func::LoadVMD(unsigned int & index, const std::string & fileName)
+{
+	Union::Get().LoadVMD(index, fileName);
+}
+
 // PMDì«Ç›çûÇ›
 void func::LoadPMD(unsigned int & index, const std::string & fileName)
 {
@@ -119,6 +125,12 @@ void func::DrawPMD(unsigned int & index)
 void func::RotateBorn(unsigned int & index, const std::string & name, const DirectX::XMMATRIX & matrix)
 {
 	Union::Get().RotateBorn(index, name, matrix);
+}
+
+// PMDÇÃÉ{Å[ÉìâÒì]
+void func::RotateBorn(unsigned int & model, unsigned int & motion)
+{
+	Union::Get().RotateBorn(model, motion);
 }
 
 // PMDÇÃè¡ãé
