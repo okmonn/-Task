@@ -63,6 +63,12 @@ public:
 	// 描画・サイズ指定・分割
 	void Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& rectPos, const Vec2f& rectSize, float alpha, UINT turnX, UINT turnY);
 
+	// 描画・自由変形
+	void FreelyDraw(UINT& index, const Vec2f& pos1, const Vec2f& pos2, const Vec2f& pos3, const Vec2f& pos4, float alpha, UINT turnX, UINT turnY);
+
+	// 描画・分割・自由変形
+	void FreelyDraw(UINT& index, const Vec2f& rectPos, const Vec2f& rectSize, const Vec2f& pos1, const Vec2f& pos2, const Vec2f& pos3, const Vec2f& pos4, float alpha, UINT turnX, UINT turnY);
+
 	// 削除
 	void Delete(UINT& index);
 

@@ -326,6 +326,98 @@ void Texture::Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f
 	list.lock()->GetList()->DrawInstanced(wic[n].vertex.size(), 1, 0, 0);
 }
 
+// 描画・自由変形
+void Texture::FreelyDraw(UINT & index, const Vec2f & pos1, const Vec2f & pos2, const Vec2f & pos3, const Vec2f & pos4, float alpha, UINT turnX, UINT turnY)
+{
+	UINT* n = &index;
+
+	list.lock()->SetRoot(root.lock()->Get());
+	list.lock()->SetPipe(pipe.lock()->Get());
+
+	con.lock()->SetConstant();
+
+	//リソース設定用構造体
+	D3D12_RESOURCE_DESC desc = wic[n].con.resource->GetDesc();
+
+	//UV座標
+	DirectX::XMFLOAT2 leftUp    = { (static_cast<FLOAT>(desc.Width) * turnX),                                    (static_cast<FLOAT>(desc.Height) * turnY) };
+	DirectX::XMFLOAT2 rightUp   = { (static_cast<FLOAT>(desc.Width) - (static_cast<FLOAT>(desc.Width) * turnX)), (static_cast<FLOAT>(desc.Height) * turnY) };
+	DirectX::XMFLOAT2 leftDown  = { (static_cast<FLOAT>(desc.Width) * turnX),                                    (static_cast<FLOAT>(desc.Height) - (static_cast<FLOAT>(desc.Height) * turnY)) };
+	DirectX::XMFLOAT2 rightDown = { (static_cast<FLOAT>(desc.Width) - (static_cast<FLOAT>(desc.Width) * turnX)), (static_cast<FLOAT>(desc.Height) - (static_cast<FLOAT>(desc.Height) * turnY)) };
+
+	//左上
+	wic[n].vertex[0] = { { pos1.x,  pos1.y, 0.0f }, leftUp,   alpha };
+	//右上
+	wic[n].vertex[1] = { { pos2.x , pos2.y, 0.0f }, rightUp,  alpha };
+	//左下
+	wic[n].vertex[2] = { { pos3.x,  pos3.y, 0.0f }, leftDown, alpha };
+	//右下
+	wic[n].vertex[3] = { { pos4.x,  pos4.y, 0.0f }, rightDown,alpha };
+
+	//頂点データの更新
+	memcpy(wic[n].data, wic[n].vertex.data(), sizeof(TexVertex) * wic[n].vertex.size());
+
+	//頂点バッファビューのセット
+	list.lock()->GetList()->IASetVertexBuffers(0, 1, &wic[n].view);
+
+	//トポロジー設定
+	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	if (FAILED(SetDraw(index)))
+	{
+		return;
+	}
+
+	//描画
+	list.lock()->GetList()->DrawInstanced(wic[n].vertex.size(), 1, 0, 0);
+}
+
+// 描画・分割・自由変形
+void Texture::FreelyDraw(UINT & index, const Vec2f & rectPos, const Vec2f & rectSize, const Vec2f & pos1, const Vec2f & pos2, const Vec2f & pos3, const Vec2f & pos4, float alpha, UINT turnX, UINT turnY)
+{
+	UINT* n = &index;
+
+	list.lock()->SetRoot(root.lock()->Get());
+	list.lock()->SetPipe(pipe.lock()->Get());
+
+	con.lock()->SetConstant();
+
+	//リソース設定用構造体
+	D3D12_RESOURCE_DESC desc = wic[n].con.resource->GetDesc();
+
+	//UV座標
+	DirectX::XMFLOAT2 leftUp    = { rectPos.x + (rectSize.x * turnX),                rectPos.y + (rectSize.y * turnY) };
+	DirectX::XMFLOAT2 rightUp   = { rectPos.x + (rectSize.x - (rectSize.x * turnX)), rectPos.y + (rectSize.y * turnY) };
+	DirectX::XMFLOAT2 leftDown  = { rectPos.x + (rectSize.x * turnX),                rectPos.y + (rectSize.y - (rectSize.y * turnY)) };
+	DirectX::XMFLOAT2 rightDown = { rectPos.x + (rectSize.x - (rectSize.x * turnX)), rectPos.y + (rectSize.y - (rectSize.y * turnY)) };
+
+	//左上
+	wic[n].vertex[0] = { { pos1.x, pos1.y, 0.0f }, leftUp,    alpha };
+	//右上
+	wic[n].vertex[1] = { { pos2.x, pos2.y, 0.0f }, rightUp,   alpha };
+	//左下
+	wic[n].vertex[2] = { { pos3.x, pos3.y, 0.0f }, leftDown,  alpha };
+	//右下
+	wic[n].vertex[3] = { { pos4.x, pos4.y, 0.0f }, rightDown, alpha };
+
+	//頂点データの更新
+	memcpy(wic[n].data, wic[n].vertex.data(), sizeof(TexVertex) * wic[n].vertex.size());
+
+	//頂点バッファビューのセット
+	list.lock()->GetList()->IASetVertexBuffers(0, 1, &wic[n].view);
+
+	//トポロジー設定
+	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	if (FAILED(SetDraw(index)))
+	{
+		return;
+	}
+
+	//描画
+	list.lock()->GetList()->DrawInstanced(wic[n].vertex.size(), 1, 0, 0);
+}
+
 // 削除
 void Texture::Delete(UINT & index)
 {

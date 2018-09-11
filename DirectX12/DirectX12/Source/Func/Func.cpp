@@ -97,6 +97,18 @@ void func::Draw(unsigned int & index, float x, float y, float sizeX, float sizeY
 	Union::Get().Draw(index, { x, y }, { sizeX, sizeY }, { rectX, rectY }, { rectSizeX, rectSizeY }, turnX, turnY);
 }
 
+// 描画・自由変形
+void func::FreelyDraw(unsigned int & index, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, bool turnX, bool turnY)
+{
+	Union::Get().FreelyDraw(index, { x1, y1 }, { x2, y2 }, { x3, y3 }, { x4, y4 }, turnX, turnY);
+}
+
+// 描画・分割・自由変形
+void func::FreelyDraw(unsigned int & index, float rectX, float rectY, float rectSizeX, float rectSizeY, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, bool turnX, bool turnY)
+{
+	Union::Get().FreelyDraw(index, { rectX, rectY }, { rectSizeX, rectSizeY }, { x1, y1 }, { x2, y2 }, { x3, y3 }, { x4, y4 }, turnX, turnY);
+}
+
 // 画像の消去
 void func::DeleteImg(unsigned int & index)
 {

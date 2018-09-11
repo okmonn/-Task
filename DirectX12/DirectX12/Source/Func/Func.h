@@ -58,6 +58,13 @@ namespace func {
 	void Draw(unsigned int& index, float x, float y, float sizeX, float sizeY,
 		float rectX, float rectY, float rectSizeX, float rectSizeY, bool turnX = false, bool turnY = false);
 
+	// 描画・自由変形
+	void FreelyDraw(unsigned int& index, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, bool turnX = false, bool turnY = false);
+
+	// 描画・分割・自由変形
+	void FreelyDraw(unsigned int& index, float rectX, float rectY, float rectSizeX, float rectSizeY,
+		float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, bool turnX = false, bool turnY = false);
+
 	// 画像の消去
 	void DeleteImg(unsigned int& index);
 

@@ -345,6 +345,18 @@ void Union::Draw(UINT& index, const Vec2f& pos, const Vec2f& size, const Vec2f& 
 	tex->Draw(index, pos, size, rect, rectSize, alpha, turnX, turnY);
 }
 
+// 描画・自由変形
+void Union::FreelyDraw(UINT & index, const Vec2f & pos1, const Vec2f & pos2, const Vec2f & pos3, const Vec2f & pos4, UINT turnX, UINT turnY)
+{
+	tex->FreelyDraw(index, pos1, pos2, pos3, pos4, alpha, turnX, turnY);
+}
+
+// 描画・分割・自由変形
+void Union::FreelyDraw(UINT & index, const Vec2f & rectPos, const Vec2f & rectSize, const Vec2f & pos1, const Vec2f & pos2, const Vec2f & pos3, const Vec2f & pos4, UINT turnX, UINT turnY)
+{
+	tex->FreelyDraw(index, rectPos, rectSize, pos1, pos2, pos3, pos4, alpha, turnX, turnY);
+}
+
 // 画像の消去
 void Union::DeleteImg(UINT & index)
 {
