@@ -124,7 +124,7 @@
     <ClInclude Include="Source\Command\List\List.h" />
     <ClInclude Include="Source\Command\Queue\Queue.h" />
     <ClInclude Include="Source\Compiler\Compiler.h" />
-    <ClInclude Include="Source\Debug\Debug.h" />
+    <ClInclude Include="Source\Debuger\Debug.h" />
     <ClInclude Include="Source\Descriptor\ConstantBuffer\Constant.h" />
     <ClInclude Include="Source\Descriptor\DepthStencil\Depth.h" />
     <ClInclude Include="Source\Descriptor\Descriptor.h" />
@@ -165,7 +165,7 @@
     <ClCompile Include="Source\Command\List\List.cpp" />
     <ClCompile Include="Source\Command\Queue\Queue.cpp" />
     <ClCompile Include="Source\Compiler\Compiler.cpp" />
-    <ClCompile Include="Source\Debug\Debug.cpp" />
+    <ClCompile Include="Source\Debuger\Debug.cpp" />
     <ClCompile Include="Source\Descriptor\ConstantBuffer\Constant.cpp" />
     <ClCompile Include="Source\Descriptor\DepthStencil\Depth.cpp" />
     <ClCompile Include="Source\Descriptor\Descriptor.cpp" />

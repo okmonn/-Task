@@ -5,7 +5,7 @@
 #include "../MIDI/In/MIDI_IN.h"
 #include "../DirectInput/Input.h"
 #ifdef _DEBUG
-#include "../Debug/Debug.h"
+#include "../Debuger/Debug.h"
 #endif
 #include "../Device/Device.h"
 #include "../Command/Queue/Queue.h"

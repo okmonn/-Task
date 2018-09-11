@@ -123,9 +123,6 @@
     <ClInclude Include="Source\Device\Device.h">
       <Filter>Device</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Debug\Debug.h">
-      <Filter>Debug</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Command\Command.h">
       <Filter>Command</Filter>
     </ClInclude>
@@ -240,13 +237,13 @@
     <ClInclude Include="Source\MIDI\Out\MIDI_OUT.h">
       <Filter>MIDI\Out</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Debuger\Debug.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Device\Device.cpp">
       <Filter>Device</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Debug\Debug.cpp">
-      <Filter>Debug</Filter>
     </ClCompile>
     <ClCompile Include="Source\Command\List\List.cpp">
       <Filter>Command\List</Filter>
@@ -328,6 +325,9 @@
     </ClCompile>
     <ClCompile Include="Source\MIDI\Out\MIDI_OUT.cpp">
       <Filter>MIDI\Out</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Debuger\Debug.cpp">
+      <Filter>Debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
