@@ -47,6 +47,7 @@ Out VS(Input input)
 
     input.pos.xy = float2(-1.0f, 1.0f) + (input.pos.xy / float2((window.x / 2.0f), -(window.y / 2.0f)));
     input.uv = input.uv / size;
+    input.alpha = (input.alpha > 1.0f) ? 1.0f : input.alpha;
 
     //input.pos = mul(world, input.pos);
     //input.pos = mul(view, input.pos);

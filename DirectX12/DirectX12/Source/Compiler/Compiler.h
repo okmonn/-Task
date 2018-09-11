@@ -14,10 +14,10 @@ public:
 	~Compiler();
 
 	// 頂点シェーダのコンパイル
-	HRESULT ComVertex(const LPCWSTR& fileName, const LPCSTR& func, const LPCSTR& target = "vs_5_0");
+	HRESULT ComVertex(const LPCWSTR& fileName, const LPCSTR& func, const LPCSTR& target = "vs_5_1");
 
 	// ピクセルシェーダのコンパイル
-	HRESULT ComPixel(const LPCWSTR& fileName, const LPCSTR& func, const LPCSTR& target = "ps_5_0");
+	HRESULT ComPixel(const LPCWSTR& fileName, const LPCSTR& func, const LPCSTR& target = "ps_5_1");
 
 	// 頂点シェーダの取得
 	ID3DBlob* GetVertex(const LPCWSTR& path) {
