@@ -28,21 +28,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	UINT b = 0;
 	LoadImg(b, "Material/img/sample2.png");
 
-	//RotateBorn(q, v);
+	RotateBorn(q, v);
 
 	while (func::CheckMsg() && CheckKey(INPUT_ESCAPE) != true)
 	{
 		func::Set();
 		
 		DrawPMD(q);
-
-		//static float alpha = 1.0f;
-		//SetAlpha(1.0f);
-		//Draw(a, 0, 0);
-		//SetAlpha(alpha);
-		//Draw(b, 0, 0);
-		//
-		//alpha -= 0.005f;
 
 		func::Do();
 	}

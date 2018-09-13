@@ -492,22 +492,22 @@ void PMD::RotateBorn(UINT& index, const std::string & name, const DirectX::XMMAT
 	
 	//ダミー宣言
 	DirectX::XMVECTOR head = DirectX::XMLoadFloat3(&model[&index].pos[model[&index].name[name]].head);
-	DirectX::XMVECTOR tmp  = DirectX::XMVectorSet(-model[&index].pos[model[&index].name[name]].head.x, -model[&index].pos[model[&index].name[name]].head.y, -model[&index].pos[model[&index].name[name]].head.z, 1.0f);
+	DirectX::XMVECTOR tmp  = DirectX::XMVectorSet(-model[&index].pos[model[&index].name[name]].head.x, -model[&index].pos[model[&index].name[name]].head.y, -model[&index].pos[model[&index].name[name]].head.z, 0.0f);
 	DirectX::XMVECTOR tail = DirectX::XMLoadFloat3(&model[&index].pos[model[&index].name[name]].tail);
-	DirectX::XMMATRIX mat  = DirectX::XMMatrixTranslationFromVector(tmp);
+	DirectX::XMMATRIX mt   = DirectX::XMMatrixTranslationFromVector(tmp);
 
-	mat *= matrix;
-	mat *= DirectX::XMMatrixTranslationFromVector(head);
+	mt *= matrix;
+	mt *= DirectX::XMMatrixTranslationFromVector(head);
 
-	tail = DirectX::XMVector3Transform(tail, mat);
+	tail = DirectX::XMVector3Transform(tail, mt);
 
 	DirectX::XMStoreFloat3(&model[&index].pos[model[&index].name[name]].tail, tail);
 
-	model[&index].matrix[model[&index].name[name]] = mat;
+	model[&index].matrix[model[&index].name[name]] = mt;
 
 	for (auto &child : model[&index].node[model[&index].name[name]])
 	{
-		RotateChildBorn(index, child, mat);
+		RotateChildBorn(index, child, mt);
 	}
 
 	//ボーン行列の更新
@@ -523,22 +523,22 @@ void PMD::RotateBorn(UINT& index, UINT& motion)
 	{
 		//ダミー宣言
 		DirectX::XMVECTOR head = DirectX::XMLoadFloat3(&model[&index].pos[model[&index].name[i.name]].head);
-		DirectX::XMVECTOR tmp  = DirectX::XMVectorSet(-model[&index].pos[model[&index].name[i.name]].head.x, -model[&index].pos[model[&index].name[i.name]].head.y, -model[&index].pos[model[&index].name[i.name]].head.z, 1.0f);
+		DirectX::XMVECTOR tmp  = DirectX::XMVectorSet(-model[&index].pos[model[&index].name[i.name]].head.x, -model[&index].pos[model[&index].name[i.name]].head.y, -model[&index].pos[model[&index].name[i.name]].head.z, 0.0f);
 		DirectX::XMVECTOR tail = DirectX::XMLoadFloat3(&model[&index].pos[model[&index].name[i.name]].tail);
-		DirectX::XMMATRIX mat  = DirectX::XMMatrixTranslationFromVector(tmp);
+		DirectX::XMMATRIX mt  = DirectX::XMMatrixTranslationFromVector(tmp);
 
-		mat *= DirectX::XMMatrixRotationQuaternion(i.quaternion);
-		mat *= DirectX::XMMatrixTranslationFromVector(head);
+		mt *= DirectX::XMMatrixRotationQuaternion(i.quaternion);
+		mt *= DirectX::XMMatrixTranslationFromVector(head);
 
-		tail = DirectX::XMVector3Transform(tail, mat);
+		tail = DirectX::XMVector3Transform(tail, mt);
 
 		DirectX::XMStoreFloat3(&model[&index].pos[model[&index].name[i.name]].tail, tail);
 
-		model[&index].matrix[model[&index].name[i.name]] = mat;
+		model[&index].matrix[model[&index].name[i.name]] = mt;
 
 		for (auto &child : model[&index].node[model[&index].name[i.name]])
 		{
-			RotateChildBorn(index, child, mat);
+			RotateChildBorn(index, child, mt);
 		}
 	}
 
