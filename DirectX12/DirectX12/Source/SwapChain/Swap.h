@@ -43,7 +43,7 @@ private:
 	std::weak_ptr<Queue>queue;
 
 	// ファクトリー
-	IDXGIFactory6* factory;
+	IDXGIFactory4* factory;
 
 	// スワップチェイン
 	IDXGISwapChain4* swap;
