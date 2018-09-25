@@ -1,3 +1,4 @@
+#include "DirectXTex.h"
 #include "Texture.h"
 #include "WICTextureLoader12.h"
 #include "../Device/Device.h"
@@ -42,7 +43,7 @@ HRESULT Texture::LoadWIC(UINT & index, const std::string& fileName)
 	UINT* n = &index;
 
 	std::wstring path = func::ChangeUnicode(fileName.c_str());
-
+	
 	result = DirectX::LoadWICTextureFromFile(dev.lock()->Get(), path.c_str(), &wic[n].con.resource, wic[n].decode, wic[n].sub);
 	if (FAILED(result))
 	{

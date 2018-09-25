@@ -1,21 +1,22 @@
-// ------------------------------------------------ --------------------------------------
-//ファイル：WICTextureLoader12.h
+//--------------------------------------------------------------------------------------
+// File: WICTextureLoader12.h
 //
-// WICイメージを読み込んでDirect3Dランタイムテクスチャを作成する機能
-//（可能であればミップマップを自動生成する）
+// Function for loading a WIC image and creating a Direct3D runtime texture for it
+// (auto-generating mipmaps if possible)
 //
-//注：アプリケーションがすでにCoInitializeExを呼び出していると仮定します。
+// Note: Assumes application has already called CoInitializeEx
 //
-//これらの関数は、単純な2Dテクスチャとして作成された画像に便利です。 ためにDDSTextureLoaderは優れた軽量ランタイムローダーです。
-//フル装備のDDSファイルリーダー、ライター、およびテクスチャ処理パイプラインについては、
-// 'Texconv'サンプルと 'DirectXTex'ライブラリ。
+// Note these functions are useful for images created as simple 2D textures. For
+// more complex resources, DDSTextureLoader is an excellent light-weight runtime loader.
+// For a full-featured DDS file reader, writer, and texture processing pipeline see
+// the 'Texconv' sample and the 'DirectXTex' library.
 //
-// Copyright（c）Microsoft Corporation。 全著作権所有。
-// MITライセンスでライセンスされています。
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
 //
 // http://go.microsoft.com/fwlink/?LinkId=248926
 // http://go.microsoft.com/fwlink/?LinkID=615561
-// ------------------------------------------------ --------------------------------------
+//--------------------------------------------------------------------------------------
 
 #pragma once
 
@@ -35,7 +36,7 @@ namespace DirectX
 		WIC_LOADER_MIP_RESERVE = 0x8,
 	};
 
-	//標準バージョン
+	// Standard version
 	HRESULT __cdecl LoadWICTextureFromMemory(
 		_In_ ID3D12Device* d3dDevice,
 		_In_reads_bytes_(wicDataSize) const uint8_t* wicData,
@@ -53,7 +54,7 @@ namespace DirectX
 		D3D12_SUBRESOURCE_DATA& subresource,
 		size_t maxsize = 0);
 
-	//拡張版
+	// Extended version
 	HRESULT __cdecl LoadWICTextureFromMemoryEx(
 		_In_ ID3D12Device* d3dDevice,
 		_In_reads_bytes_(wicDataSize) const uint8_t* wicData,
