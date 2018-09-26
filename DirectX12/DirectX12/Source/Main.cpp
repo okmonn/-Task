@@ -36,6 +36,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		
 		DrawPMD(q);
 
+		func::Draw(a, 0, 0, 100.0f, 100.0f, false, false);
+		func::Draw(b, 100, 0, 100.0f, 100.0f, false, false);
+
 		func::Do();
 	}
 
