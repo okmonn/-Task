@@ -42,9 +42,8 @@ PMD::~PMD()
 		Release(itr->second.v.resource);
 		Release(itr->second.i.resource);
 		Release(itr->second.cB.resource);
-		Release(itr->second.cB.heap);
 		Release(itr->second.c.resource);
-		Release(itr->second.c.heap);
+		Release(itr->second.heap);
 	}
 }
 
@@ -74,10 +73,10 @@ HRESULT PMD::CreateHeap(UINT * index)
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
 	desc.Flags          = D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	desc.NodeMask       = 0;
-	desc.NumDescriptors = model[index].material.size();
+	desc.NumDescriptors = model[index].material.size() + 1;
 	desc.Type           = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 
-	result = dev.lock()->Get()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&model[index].c.heap));
+	result = dev.lock()->Get()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&model[index].heap));
 	if (FAILED(result))
 	{
 		OutputDebugString(_T("\nPMDの定数バッファ用ヒープの生成：失敗\n"));
@@ -139,16 +138,16 @@ HRESULT PMD::CreateConView(UINT * index)
 	//GPUアドレス
 	D3D12_GPU_VIRTUAL_ADDRESS address = model[index].c.resource->GetGPUVirtualAddress();
 	//先頭ハンドル
-	D3D12_CPU_DESCRIPTOR_HANDLE handle = model[index].c.heap->GetCPUDescriptorHandleForHeapStart();
+	model[index].handle = model[index].heap->GetCPUDescriptorHandleForHeapStart();
 
 	for (UINT i = 0; i < model[index].material.size(); ++i)
 	{
 		desc.BufferLocation = address;
 
-		dev.lock()->Get()->CreateConstantBufferView(&desc, handle);
+		dev.lock()->Get()->CreateConstantBufferView(&desc, model[index].handle);
 
 		address += desc.SizeInBytes;
-		handle.ptr += size;
+		model[index].handle.ptr += size;
 	}
 
 	//送信範囲
@@ -167,33 +166,9 @@ HRESULT PMD::CreateConView(UINT * index)
 	return result;
 }
 
-// ボーン用定数バッファヒープの生成
-HRESULT PMD::CreateBornHeap(UINT * index)
-{
-	//ヒープ設定用構造体
-	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
-	desc.Flags          = D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	desc.NodeMask       = 0;
-	desc.NumDescriptors = 1;
-	desc.Type           = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-
-	result = dev.lock()->Get()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&model[index].cB.heap));
-	if (FAILED(result))
-	{
-		OutputDebugString(_T("\nPMDのボーン用定数バッファ用ヒープの生成：失敗\n"));
-	}
-
-	return result;
-}
-
 // ボーン用定数バッファリソースの生成
 HRESULT PMD::CreateBornResource(UINT * index)
 {
-	if (FAILED(CreateBornHeap(index)))
-	{
-		return result;
-	}
-
 	//プロパティ設定用構造体の設定
 	D3D12_HEAP_PROPERTIES prop = {};
 	prop.Type                 = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_UPLOAD;
@@ -236,7 +211,7 @@ HRESULT PMD::CreateBornConView(UINT * index)
 	desc.BufferLocation = model[index].cB.resource->GetGPUVirtualAddress();
 	desc.SizeInBytes    = ((sizeof(DirectX::XMMATRIX) * model[index].matrix.size() + 0xff) &~0xff);
 
-	dev.lock()->Get()->CreateConstantBufferView(&desc, model[index].cB.heap->GetCPUDescriptorHandleForHeapStart());
+	dev.lock()->Get()->CreateConstantBufferView(&desc, model[index].handle);
 
 	//送信範囲
 	D3D12_RANGE range = { 0, 0 };
@@ -492,7 +467,7 @@ void PMD::RotateBorn(UINT& index, const std::string & name, const DirectX::XMMAT
 	
 	//ダミー宣言
 	DirectX::XMVECTOR head = DirectX::XMLoadFloat3(&model[&index].pos[model[&index].name[name]].head);
-	DirectX::XMVECTOR tmp  = DirectX::XMVectorSet(-model[&index].pos[model[&index].name[name]].head.x, -model[&index].pos[model[&index].name[name]].head.y, -model[&index].pos[model[&index].name[name]].head.z, 0.0f);
+	DirectX::XMVECTOR tmp  = DirectX::XMVectorSet(-model[&index].pos[model[&index].name[name]].head.x, -model[&index].pos[model[&index].name[name]].head.y, -model[&index].pos[model[&index].name[name]].head.z, 1.0f);
 	DirectX::XMVECTOR tail = DirectX::XMLoadFloat3(&model[&index].pos[model[&index].name[name]].tail);
 	DirectX::XMMATRIX mt   = DirectX::XMMatrixTranslationFromVector(tmp);
 
@@ -523,9 +498,9 @@ void PMD::RotateBorn(UINT& index, UINT& motion)
 	{
 		//ダミー宣言
 		DirectX::XMVECTOR head = DirectX::XMLoadFloat3(&model[&index].pos[model[&index].name[i.name]].head);
-		DirectX::XMVECTOR tmp  = DirectX::XMVectorSet(-model[&index].pos[model[&index].name[i.name]].head.x, -model[&index].pos[model[&index].name[i.name]].head.y, -model[&index].pos[model[&index].name[i.name]].head.z, 0.0f);
+		DirectX::XMVECTOR tmp  = DirectX::XMVectorSet(-model[&index].pos[model[&index].name[i.name]].head.x, -model[&index].pos[model[&index].name[i.name]].head.y, -model[&index].pos[model[&index].name[i.name]].head.z, 1.0f);
 		DirectX::XMVECTOR tail = DirectX::XMLoadFloat3(&model[&index].pos[model[&index].name[i.name]].tail);
-		DirectX::XMMATRIX mt  = DirectX::XMMatrixTranslationFromVector(tmp);
+		DirectX::XMMATRIX mt   = DirectX::XMMatrixTranslationFromVector(tmp);
 
 		mt *= DirectX::XMMatrixRotationQuaternion(i.quaternion);
 		mt *= DirectX::XMMatrixTranslationFromVector(head);
@@ -579,24 +554,28 @@ void PMD::Draw(UINT& index)
 
 	con.lock()->SetConstant();
 
+	UINT* n = &index;
+
+	UINT offset = 0;
+
 	//定数ヒープのセット
-	list.lock()->GetList()->SetDescriptorHeaps(1, &model[&index].cB.heap);
+	list.lock()->GetList()->SetDescriptorHeaps(1, &model[&index].heap);
+
+	//ヒープの先頭ハンドル
+	D3D12_GPU_DESCRIPTOR_HANDLE handle = model[n].heap->GetGPUDescriptorHandleForHeapStart();
+	handle.ptr += size * model[n].material.size();
 	//ディスクリプターテーブルのセット
-	list.lock()->GetList()->SetGraphicsRootDescriptorTable(3, model[&index].cB.heap->GetGPUDescriptorHandleForHeapStart());
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(3, handle);
 
 	list.lock()->GetList()->IASetVertexBuffers(0, 1, &model[&index].v.view);
 	list.lock()->GetList()->IASetIndexBuffer(&model[&index].i.view);
 	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	UINT* n = &index;
-
-	UINT offset = 0;
-
 	//送信用データ
 	UINT8* data = model[n].c.data;
 
 	//ヒープの先頭ハンドル
-	D3D12_GPU_DESCRIPTOR_HANDLE handle = model[n].c.heap->GetGPUDescriptorHandleForHeapStart();
+	handle = model[n].heap->GetGPUDescriptorHandleForHeapStart();
 
 	for (UINT i = 0; i < model[n].material.size(); ++i)
 	{
@@ -613,8 +592,7 @@ void PMD::Draw(UINT& index)
 		}
 
 		//定数ヒープのセット
-		list.lock()->GetList()->SetDescriptorHeaps(1, &model[n].c.heap);
-
+		list.lock()->GetList()->SetDescriptorHeaps(1, &model[&index].heap);
 		//ディスクリプターテーブルのセット
 		list.lock()->GetList()->SetGraphicsRootDescriptorTable(2, handle);
 
@@ -656,7 +634,7 @@ void PMD::Delete(UINT & index)
 		Release(model[&index].v.resource);
 		Release(model[&index].i.resource);
 		Release(model[&index].c.resource);
-		Release(model[&index].c.heap);
+		Release(model[&index].heap);
 
 		model.erase(model.find(&index));
 	}

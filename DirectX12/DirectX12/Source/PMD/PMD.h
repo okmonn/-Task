@@ -59,9 +59,6 @@ private:
 	// 定数バッファビューの生成
 	HRESULT CreateConView(UINT* index);
 
-	// ボーン用定数バッファヒープの生成
-	HRESULT CreateBornHeap(UINT* index);
-
 	// ボーン用定数バッファリソースの生成
 	HRESULT CreateBornResource(UINT* index);
 

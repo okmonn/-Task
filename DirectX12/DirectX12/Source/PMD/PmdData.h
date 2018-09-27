@@ -27,8 +27,6 @@ struct VertexIndex {
 
 // 定数バッファ
 struct Con {
-	//ヒープ
-	ID3D12DescriptorHeap* heap;
 	//リソース
 	ID3D12Resource* resource;
 	//送信データ
@@ -121,10 +119,14 @@ struct Model {
 	VertexData v;
 	//頂点インデックス
 	VertexIndex i;
+	//ヒープ
+	ID3D12DescriptorHeap* heap;
 	//定数バッファ
 	Con c;
 	//ボーン定数バッファ
 	Con cB;
+	//ヒープハンドル
+	D3D12_CPU_DESCRIPTOR_HANDLE handle;
 
 	//ヘッダー
 	Header header;
