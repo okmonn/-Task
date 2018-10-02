@@ -95,7 +95,7 @@ float4 PS(Out o) : SV_TARGET
     //光源ベクトル
     float3 light = normalize(float3(-1.0f, 1.0f, -1.0f));
 
-    //内積
+    //光源ベクトルと法線との内積
     float bright = dot(o.normal, light);
 
     //色

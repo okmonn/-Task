@@ -535,7 +535,6 @@ void PMD::RotateChildBorn(UINT& index, USHORT id, const DirectX::XMMATRIX & matr
 
 	DirectX::XMVECTOR tail = DirectX::XMLoadFloat3(&model[&index].pos[id].tail);
 	tail = DirectX::XMVector3Transform(tail, matrix);
-
 	DirectX::XMStoreFloat3(&model[&index].pos[id].tail, tail);
 
 	model[&index].matrix[id] = matrix;

@@ -28,7 +28,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	UINT b = 0;
 	LoadImg(b, "Material/img/sample2.png");
 
-	//RotateBorn(q, v);
+	RotateBorn(q, v);
 
 	while (func::CheckMsg() && CheckKey(INPUT_ESCAPE) != true)
 	{
