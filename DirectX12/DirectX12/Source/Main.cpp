@@ -28,9 +28,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	UINT b = 0;
 	LoadImg(b, "Material/img/sample2.png");
 
-	RotateBorn(q, v);
-	/*func::RotateBorn(q, "âEòr", DirectX::XMMatrixRotationZ(0.6f));
-	func::RotateBorn(q, "ç∂òr", DirectX::XMMatrixRotationZ(-0.6f));*/
+	//RotateBorn(q, v);
+	func::RotateBorn(q, "âEòr", DirectX::XMMatrixRotationZ(0.6f));
+	func::RotateBorn(q, "ç∂òr", DirectX::XMMatrixRotationZ(-0.6f));
 
 	while (func::CheckMsg() && CheckKey(INPUT_ESCAPE) != true)
 	{
