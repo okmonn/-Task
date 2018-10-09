@@ -96,7 +96,7 @@ float4 PS(Out o) : SV_TARGET
     float3 light = normalize(float3(-1.0f, 1.0f, -1.0f));
 
     //光源ベクトルと法線との内積
-    float bright = dot(o.normal, light);
+    float bright = saturate(dot(o.normal, light) + 0.2f);
 
     //色
     float3 color = (texFlag == true ? tex.Sample(smp, o.uv).rgb : diffuse);
