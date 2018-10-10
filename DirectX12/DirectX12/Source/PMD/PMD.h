@@ -19,6 +19,14 @@ class PMD :
 	struct Mat {
 		//基本色
 		DirectX::XMFLOAT3 diffuse;
+		//透明度
+		FLOAT alpha;
+		//反射強度
+		FLOAT specularity;
+		//反射色
+		DirectX::XMFLOAT3 specula;
+		//環境色
+		DirectX::XMFLOAT3 mirror;
 		//テクスチャフラグ
 		BOOL flag;
 	};

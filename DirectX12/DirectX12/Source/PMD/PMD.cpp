@@ -578,9 +578,14 @@ void PMD::Draw(UINT& index)
 
 	for (UINT i = 0; i < model[n].material.size(); ++i)
 	{
-		mat.diffuse = model[n].material[i].diffuse;
+		//ƒ}ƒeƒŠƒAƒ‹\‘¢‘Ì‚ÉŠi”[
+		mat.diffuse     = model[n].material[i].diffuse;
+		mat.alpha       = model[n].material[i].alpha;
+		mat.specularity = model[n].material[i].specularity;
+		mat.specula     = model[n].material[i].specula;
+		mat.mirror      = model[n].material[i].mirror;
+		mat.flag        = (model[n].material[i].texPath[0] != '\0');
 
-		mat.flag = (model[n].material[i].texPath[0] != '\0');
 		if (mat.flag == TRUE)
 		{
 			tex.lock()->SetDraw(model[n].id[i]);

@@ -20,6 +20,14 @@ cbuffer mat : register(b1)
 {
     //基本色
     float3 diffuse;
+    //透明度
+    float alpha;
+    //反射強度
+    float specularity;
+	//反射色
+    float3 specula;
+    //環境色
+    float3 mirror;
     //テクスチャ対応フラグ
     bool texFlag;
 }
@@ -92,14 +100,24 @@ Out VS(VSInput input)
 //ピクセルシェーダ
 float4 PS(Out o) : SV_TARGET
 {
+    //視線ベクトル
+    float3 eye = float3(0.0f, 10.0f, -15.0f);
+    float3 ray = o.pos.xyz - eye;
+
     //光源ベクトル
     float3 light = normalize(float3(-1.0f, 1.0f, -1.0f));
 
+    //反射ベクトル
+    float3 ref = reflect(light, o.normal);
+
+    //スぺキュラ
+    float spec = pow(saturate(dot(ref, ray)), specularity);
+
     //光源ベクトルと法線との内積
-    float bright = saturate(dot(o.normal, light) + 0.2f);
+    float bright = saturate(dot(light, o.normal));
 
     //色
-    float3 color = (texFlag == true ? tex.Sample(smp, o.uv).rgb : diffuse);
+    float3 color = (texFlag == true ? tex.Sample(smp, o.uv).rgb : saturate(diffuse * bright + specula * spec + mirror));
 
-    return float4(color * bright, 1);
+    return float4(color, alpha);
 }
