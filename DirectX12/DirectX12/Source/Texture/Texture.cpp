@@ -19,6 +19,7 @@ Texture::Texture(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_pt
 	this->list = list;
 
 	wic.clear();
+	white.clear();
 
 	//WICの初期処理
 	CoInitialize(nullptr);
@@ -32,6 +33,12 @@ Texture::~Texture()
 		itr->second.resource->Unmap(0, nullptr);
 		itr->second.decode.release();
 		Release(itr->second.resource);
+		Release(itr->second.con.resource);
+		Release(itr->second.con.heap);
+	}
+
+	for (auto itr = white.begin(); itr != white.end(); ++itr)
+	{
 		Release(itr->second.con.resource);
 		Release(itr->second.con.heap);
 	}
@@ -54,6 +61,74 @@ HRESULT Texture::LoadWIC(UINT & index, const std::string& fileName)
 	result = CreateHeap(n);
 	result = CreateShaderView(n);
 	result = CreateResource(n);
+
+	return result;
+}
+
+// 白テクスチャの作成
+HRESULT Texture::CreateWhiteTex(UINT & index)
+{
+	UINT* n = &index;
+	white[n].image.resize(4 * 4 * 4);
+	std::fill(white[n].image.begin(), white[n].image.end(), 0xff);
+
+	{
+		//ヒープ設定用構造体の設定
+		D3D12_DESCRIPTOR_HEAP_DESC desc = {};
+		desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+		desc.NodeMask = 0;
+		desc.NumDescriptors = 1;
+		desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+
+		//ヒープ生成
+		result = dev.lock()->Get()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&white[n].con.heap));
+		if (FAILED(result))
+		{
+			OutputDebugString(_T("\n白テクスチャの定数ヒープの生成：失敗\n"));
+			return result;
+		}
+	}
+
+	{
+		//プロパティ設定用構造体の設定
+		D3D12_HEAP_PROPERTIES prop = {};
+		prop.Type				  = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_CUSTOM;
+		prop.CPUPageProperty      = D3D12_CPU_PAGE_PROPERTY::D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
+		prop.MemoryPoolPreference = D3D12_MEMORY_POOL::D3D12_MEMORY_POOL_L0;
+		prop.CreationNodeMask     = 1;
+		prop.VisibleNodeMask      = 1;
+
+		//リソース設定用構造体の設定
+		D3D12_RESOURCE_DESC desc = {};
+		desc.Dimension        = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+		desc.Width            = ((size + 0xff) &~0xff);
+		desc.Height           = 1;
+		desc.DepthOrArraySize = 1;
+		desc.MipLevels        = 1;
+		desc.Format           = DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM;
+		desc.SampleDesc.Count = 1;
+		desc.Flags			  = D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_NONE;
+		desc.Layout           = D3D12_TEXTURE_LAYOUT::D3D12_TEXTURE_LAYOUT_UNKNOWN;
+
+		result = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&white[n].con.resource));
+		if (FAILED(result))
+		{
+			OutputDebugString(_T("\n白テクスチャの定数バッファのリソースの生成：失敗\n"));
+		}
+	}
+
+	{
+		//シェーダリソースビュー設定用構造体の設定
+		D3D12_SHADER_RESOURCE_VIEW_DESC desc = {};
+		desc.Format					   = white[n].con.resource->GetDesc().Format;
+		desc.ViewDimension			   = D3D12_SRV_DIMENSION::D3D12_SRV_DIMENSION_TEXTURE2D;
+		desc.Texture2D.MipLevels	   = 1;
+		desc.Texture2D.MostDetailedMip = 0;
+		desc.Shader4ComponentMapping   = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+		//シェーダーリソースビューの生成
+		dev.lock()->Get()->CreateShaderResourceView(white[n].con.resource, &desc, white[n].con.heap->GetCPUDescriptorHandleForHeapStart());
+	}
 
 	return result;
 }

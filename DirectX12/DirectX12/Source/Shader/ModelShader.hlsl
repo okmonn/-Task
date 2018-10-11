@@ -102,13 +102,13 @@ float4 PS(Out o) : SV_TARGET
 {
     //視線ベクトル
     float3 eye = float3(0.0f, 10.0f, -15.0f);
-    float3 ray = o.pos.xyz - eye;
+    float3 ray = normalize(o.pos.xyz - eye);
 
     //光源ベクトル
     float3 light = normalize(float3(-1.0f, 1.0f, -1.0f));
 
     //反射ベクトル
-    float3 ref = reflect(light, o.normal);
+    float3 ref = reflect(-light, o.normal);
 
     //スぺキュラ
     float spec = pow(saturate(dot(ref, ray)), specularity);

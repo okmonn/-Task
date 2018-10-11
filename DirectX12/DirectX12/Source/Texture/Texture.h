@@ -39,6 +39,14 @@ class Texture :
 		UINT8* data;
 	};
 
+	// 白テクスチャ
+	struct White {
+		//画像データ
+		std::vector<UCHAR>image;
+		//定数バッファ
+		Con con;
+	};
+
 public:
 	// コンストラクタ
 	Texture(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe, std::weak_ptr<Constant>con);
@@ -47,6 +55,9 @@ public:
 
 	// WIC読み込み
 	HRESULT LoadWIC(UINT& index, const std::string& fileName);
+
+	// 白テクスチャの作成
+	HRESULT CreateWhiteTex(UINT& index);
 
 	// 描画準備
 	HRESULT SetDraw(UINT& index);
@@ -94,6 +105,9 @@ private:
 
 	// WICデータ
 	std::map<UINT*, WIC>wic;
+
+	// 白テクスチャ
+	std::map<UINT*, White>white;
 };
 
 namespace func {
