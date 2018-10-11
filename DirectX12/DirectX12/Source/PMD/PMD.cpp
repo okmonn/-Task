@@ -54,7 +54,8 @@ HRESULT PMD::LoadTex(UINT * index, const std::string & fileName)
 	{
 		if (model[index].material[i].texPath[0] != '\0')
 		{
-			result = tex.lock()->LoadWIC(model[index].id[i], func::FileLink(fileName, model[index].material[i].texPath).c_str());
+			//result = tex.lock()->LoadWIC(model[index].id[i], func::FileLink(fileName, model[index].material[i].texPath).c_str());
+			result = tex.lock()->CreateWhiteTex(model[index].id[i]);
 			if (FAILED(result))
 			{
 				OutputDebugString(_T("\nPMDテクスチャの読み込み：失敗\n"));
@@ -588,11 +589,13 @@ void PMD::Draw(UINT& index)
 
 		if (mat.flag == TRUE)
 		{
-			tex.lock()->SetDraw(model[n].id[i]);
+			//tex.lock()->SetDraw(model[n].id[i]);
+			tex.lock()->SetWhiteTex(model[n].id[i]);
 		}
 		else
 		{
-			tex.lock()->SetDraw(model[n].id.begin()->second);
+			//tex.lock()->SetDraw(model[n].id.begin()->second);
+			tex.lock()->SetWhiteTex(model[n].id.begin()->second);
 		}
 
 		//定数ヒープのセット

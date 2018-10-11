@@ -78,10 +78,10 @@
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalOptions>-std:c++17 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(DirectXTex)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\1601271\Documents\GitHub\DirectXTex\DirectXTex</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(DirectXTex)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\1601271\Documents\GitHub\DirectXTex\DirectXTex\Bin\Desktop_2017_Win10\Win32\Debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

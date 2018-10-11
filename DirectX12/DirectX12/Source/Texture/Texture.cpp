@@ -75,10 +75,10 @@ HRESULT Texture::CreateWhiteTex(UINT & index)
 	{
 		//ヒープ設定用構造体の設定
 		D3D12_DESCRIPTOR_HEAP_DESC desc = {};
-		desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-		desc.NodeMask = 0;
+		desc.Flags          = D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+		desc.NodeMask       = 0;
 		desc.NumDescriptors = 1;
-		desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+		desc.Type           = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 
 		//ヒープ生成
 		result = dev.lock()->Get()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&white[n].con.heap));
@@ -101,8 +101,8 @@ HRESULT Texture::CreateWhiteTex(UINT & index)
 		//リソース設定用構造体の設定
 		D3D12_RESOURCE_DESC desc = {};
 		desc.Dimension        = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-		desc.Width            = ((size + 0xff) &~0xff);
-		desc.Height           = 1;
+		desc.Width            = white[n].image.size() / 8;
+		desc.Height           = white[n].image.size() / 8;
 		desc.DepthOrArraySize = 1;
 		desc.MipLevels        = 1;
 		desc.Format           = DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -114,6 +114,7 @@ HRESULT Texture::CreateWhiteTex(UINT & index)
 		if (FAILED(result))
 		{
 			OutputDebugString(_T("\n白テクスチャの定数バッファのリソースの生成：失敗\n"));
+			return result;
 		}
 	}
 
@@ -129,6 +130,40 @@ HRESULT Texture::CreateWhiteTex(UINT & index)
 		//シェーダーリソースビューの生成
 		dev.lock()->Get()->CreateShaderResourceView(white[n].con.resource, &desc, white[n].con.heap->GetCPUDescriptorHandleForHeapStart());
 	}
+
+	return result;
+}
+
+// 白テクスチャのセット
+HRESULT Texture::SetWhiteTex(UINT & index)
+{
+	UINT* n = &index;
+
+	//リソース設定用構造体
+	D3D12_RESOURCE_DESC desc = white[&index].con.resource->GetDesc();
+
+	//ボックス設定用構造体の設定
+	D3D12_BOX box = {};
+	box.back   = 1;
+	box.bottom = desc.Height;
+	box.front  = 0;
+	box.left   = 0;
+	box.right  = static_cast<UINT>(desc.Width);
+	box.top    = 0;
+
+	//サブリソースに書き込み
+	result = white[&index].con.resource->WriteToSubresource(0, &box, white[&index].image.data(), box.right - box.left, box.right * box.bottom);
+	if (FAILED(result))
+	{
+		OutputDebugString(_T("テクスチャのサブリソース書込み：失敗\n"));
+		return result;
+	}
+
+	//ヒープのセット
+	list.lock()->GetList()->SetDescriptorHeaps(1, &white[&index].con.heap);
+
+	//ディスクリプターテーブルのセット
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(1, white[&index].con.heap->GetGPUDescriptorHandleForHeapStart());
 
 	return result;
 }

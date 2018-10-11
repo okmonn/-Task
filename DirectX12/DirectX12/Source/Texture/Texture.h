@@ -59,6 +59,9 @@ public:
 	// 白テクスチャの作成
 	HRESULT CreateWhiteTex(UINT& index);
 
+	// 白テクスチャのセット
+	HRESULT SetWhiteTex(UINT& index);
+
 	// 描画準備
 	HRESULT SetDraw(UINT& index);
 
