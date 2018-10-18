@@ -94,14 +94,14 @@ long Render::CreateRsc(void)
 }
 
 // レンダーターゲットのセット
-void Render::SetRender(ID3D12DescriptorHeap * depth)
+void Render::SetRender(ID3D12DescriptorHeap & depth)
 {
 	//ヒープの先頭ハンドルの取得
 	D3D12_CPU_DESCRIPTOR_HANDLE handle = heap->GetCPUDescriptorHandleForHeapStart();
 	handle.ptr += size * swap.lock()->Get()->GetCurrentBackBufferIndex();
 
 	//レンダーターゲットのセット
-	list.lock()->GetList()->OMSetRenderTargets(1, &handle, false, &depth->GetCPUDescriptorHandleForHeapStart());
+	list.lock()->GetList()->OMSetRenderTargets(1, &handle, false, &depth.GetCPUDescriptorHandleForHeapStart());
 
 	//レンダーターゲットのクリア
 	list.lock()->GetList()->ClearRenderTargetView(handle, color, 0, nullptr);

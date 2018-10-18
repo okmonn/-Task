@@ -10,6 +10,8 @@
 List::List(std::weak_ptr<Device>dev) : 
 	un(Union::Get()), dev(dev), allo(nullptr), list(nullptr)
 {
+	CreateAllo();
+	CreateList();
 }
 
 // デストラクタ
@@ -47,23 +49,22 @@ long List::CreateList(void)
 }
 
 // リセット
-void List::Reset(ID3D12PipelineState* pipe)
+void List::Reset(ID3D12PipelineState * pipe)
 {
-	
 	allo->Reset();
 	list->Reset(allo, pipe);
 }
 
 // ルートシグネチャのセット
-void List::SetRoot(ID3D12RootSignature * root)
+void List::SetRoot(ID3D12RootSignature & root)
 {
-	list->SetGraphicsRootSignature(root);
+	list->SetGraphicsRootSignature(&root);
 }
 
 // パイプラインのセット
-void List::SetPipe(ID3D12PipelineState * pipe)
+void List::SetPipe(ID3D12PipelineState & pipe)
 {
-	list->SetPipelineState(pipe);
+	list->SetPipelineState(&pipe);
 }
 
 // ビューポートのセット

@@ -77,14 +77,14 @@ long Constant::CreateRsc(void)
 
 	//リソース設定用構造体の設定
 	D3D12_RESOURCE_DESC desc = {};
-	desc.Alignment = 0;
+	desc.Alignment          = 0;
 	desc.DepthOrArraySize   = 1;
 	desc.Dimension          = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_BUFFER;
 	desc.Flags              = D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_NONE;
 	desc.Format             = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
 	desc.Height             = 1;
 	desc.Layout             = D3D12_TEXTURE_LAYOUT::D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	desc.MipLevels          = 0;
+	desc.MipLevels          = 1;
 	desc.SampleDesc.Count   = 1;
 	desc.SampleDesc.Quality = 0;
 	desc.Width              = (sizeof(WVP) + 0xff) &~ 0xff;

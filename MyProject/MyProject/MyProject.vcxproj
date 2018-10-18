@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{4B2BBBE1-0349-47A6-ADEB-E6789A1C9031}</ProjectGuid>
     <RootNamespace>MyProject</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -125,10 +125,14 @@
     <ClCompile Include="Src\Debuger\Debug.cpp" />
     <ClCompile Include="Src\Depth\Depth.cpp" />
     <ClCompile Include="Src\Device\Device.cpp" />
+    <ClCompile Include="Src\Fence\Fence.cpp" />
     <ClCompile Include="Src\List\List.cpp" />
     <ClCompile Include="Src\Main.cpp" />
+    <ClCompile Include="Src\Pipe\Pipe.cpp" />
+    <ClCompile Include="Src\Point\Point.cpp" />
     <ClCompile Include="Src\Queue\Queue.cpp" />
     <ClCompile Include="Src\Render\Render.cpp" />
+    <ClCompile Include="Src\Root\Root.cpp" />
     <ClCompile Include="Src\Swap\Swap.cpp" />
     <ClCompile Include="Src\Union\Union.cpp" />
     <ClCompile Include="Src\Window\Window.cpp" />
@@ -139,9 +143,14 @@
     <ClInclude Include="Src\Depth\Depth.h" />
     <ClInclude Include="Src\Device\Device.h" />
     <ClInclude Include="Src\etc\Release.h" />
+    <ClInclude Include="Src\etc\VertexData.h" />
+    <ClInclude Include="Src\Fence\Fence.h" />
     <ClInclude Include="Src\List\List.h" />
+    <ClInclude Include="Src\Pipe\Pipe.h" />
+    <ClInclude Include="Src\Point\Point.h" />
     <ClInclude Include="Src\Queue\Queue.h" />
     <ClInclude Include="Src\Render\Render.h" />
+    <ClInclude Include="Src\Root\Root.h" />
     <ClInclude Include="Src\Swap\Swap.h" />
     <ClInclude Include="Src\Union\Union.h" />
     <ClInclude Include="Src\Window\Icon\Icon.h" />
@@ -149,6 +158,52 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Src\Window\Icon\Icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Src\Shader\Draw.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.1</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.1</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.1</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.1</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Src\Shader\Texture.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.1</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.1</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.1</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.1</ShaderModel>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

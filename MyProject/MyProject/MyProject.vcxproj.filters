@@ -55,6 +55,21 @@
     <Filter Include="Descriptor\Constant">
       <UniqueIdentifier>{793968c5-66ed-41e9-9578-2525b2ddca83}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fence">
+      <UniqueIdentifier>{56422517-6433-494a-8d91-55450b43316a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Root">
+      <UniqueIdentifier>{bddac267-caac-4f6c-b066-76d9c95e9517}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pipe">
+      <UniqueIdentifier>{516b9c63-a745-4333-ad44-e5bb48f8a424}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Draw">
+      <UniqueIdentifier>{b17230e5-fdd3-4bb3-8d2e-b6a3a2f542bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Draw\Point">
+      <UniqueIdentifier>{fed62bb1-60c7-40fd-9643-db0a848d3ff3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -89,6 +104,18 @@
     </ClCompile>
     <ClCompile Include="Src\Constant\Constant.cpp">
       <Filter>Descriptor\Constant</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Fence\Fence.cpp">
+      <Filter>Fence</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Root\Root.cpp">
+      <Filter>Root</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Pipe\Pipe.cpp">
+      <Filter>Pipe</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Point\Point.cpp">
+      <Filter>Draw\Point</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,10 +155,33 @@
     <ClInclude Include="Src\Constant\Constant.h">
       <Filter>Descriptor\Constant</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Fence\Fence.h">
+      <Filter>Fence</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Root\Root.h">
+      <Filter>Root</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Pipe\Pipe.h">
+      <Filter>Pipe</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Point\Point.h">
+      <Filter>Draw\Point</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\etc\VertexData.h">
+      <Filter>etc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Src\Window\Icon\Icon.rc">
       <Filter>Window\Icon</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Src\Shader\Texture.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Src\Shader\Draw.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

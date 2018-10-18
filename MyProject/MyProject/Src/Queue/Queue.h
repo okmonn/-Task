@@ -2,6 +2,8 @@
 #include <memory>
 
 struct ID3D12CommandQueue;
+struct ID3D12CommandList;
+
 class Device;
 
 class Queue
@@ -11,6 +13,9 @@ public:
 	Queue(std::weak_ptr<Device>dev);
 	// デストラクタ
 	~Queue();
+
+	// コマンドの実行
+	void Execute(ID3D12CommandList** list, const unsigned int& num = 1);
 
 	// コマンドキューの取得
 	ID3D12CommandQueue* Get(void) const {

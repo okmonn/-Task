@@ -25,10 +25,10 @@ public:
 	void Reset(ID3D12PipelineState* pipe);
 
 	// ルートシグネチャのセット
-	void SetRoot(ID3D12RootSignature* root);
+	void SetRoot(ID3D12RootSignature& root);
 
 	// パイプラインのセット
-	void SetPipe(ID3D12PipelineState* pipe);
+	void SetPipe(ID3D12PipelineState& pipe);
 
 	// ビューポートのセット
 	void SetViewport(void);

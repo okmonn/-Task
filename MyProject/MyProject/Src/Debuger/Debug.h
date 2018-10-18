@@ -4,6 +4,7 @@ struct ID3D12Debug;
 
 class Debug
 {
+public:
 	// コンストラクタ
 	Debug();
 	// デストラクタ

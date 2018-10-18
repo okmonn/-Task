@@ -18,7 +18,7 @@ public:
 	~Render();
 
 	// レンダーターゲットのセット
-	void SetRender(ID3D12DescriptorHeap* depth);
+	void SetRender(ID3D12DescriptorHeap& depth);
 
 	// ヒープの取得
 	ID3D12DescriptorHeap* GetHeap(void) const {

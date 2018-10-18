@@ -33,3 +33,14 @@ long Queue::Create(void)
 
 	return hr;
 }
+
+// コマンドの実行
+void Queue::Execute(ID3D12CommandList ** list, const unsigned int & num)
+{
+	if (list == nullptr)
+	{
+		return;
+	}
+
+	queue->ExecuteCommandLists(num, list);
+}
