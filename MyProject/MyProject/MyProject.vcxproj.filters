@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Window">
+      <UniqueIdentifier>{ec66ba32-1a39-4880-b2dc-822f79e19eaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Window\Icon">
+      <UniqueIdentifier>{9f7af7cd-d378-4b99-a698-69beeeea8b4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device">
+      <UniqueIdentifier>{e9465b1b-c6b7-46c9-807c-d1d296091029}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="etc">
+      <UniqueIdentifier>{c74ab5a2-a26d-432f-a827-4e292118f366}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debuger">
+      <UniqueIdentifier>{2d8ced49-b110-4396-bae3-bc11f1f1d7d5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Src\Main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Window\Window.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Device\Device.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Debuger\Debug.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Src\Window\Window.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Window\Icon\Icon.h">
+      <Filter>Window\Icon</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Device\Device.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\etc\Release.h">
+      <Filter>etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Debuger\Debug.h">
+      <Filter>Debuger</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Src\Window\Icon\Icon.rc">
+      <Filter>Window\Icon</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
