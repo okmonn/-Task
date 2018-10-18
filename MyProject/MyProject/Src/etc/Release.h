@@ -3,3 +3,6 @@
 #include <tchar.h>
 
 #define Release(X) { if((X) != nullptr) (X)->Release(); (X) = nullptr; }
+
+#define UnMap(X) { if((X) != nullptr) (X)->Unmap(0, nullptr); }
+ 

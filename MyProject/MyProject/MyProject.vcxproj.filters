@@ -28,6 +28,33 @@
     <Filter Include="Debuger">
       <UniqueIdentifier>{2d8ced49-b110-4396-bae3-bc11f1f1d7d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Swap">
+      <UniqueIdentifier>{c35e11a9-4b3a-409d-8f93-1c8c3b05b5fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Union">
+      <UniqueIdentifier>{44a82917-d5cd-47ea-80ad-0e78038a5462}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Command">
+      <UniqueIdentifier>{fd785308-d8ba-45f1-b1ad-43c5f0c2af13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Command\List">
+      <UniqueIdentifier>{1b189cfe-31e5-4288-a1d4-2ecffba371c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Command\Queue">
+      <UniqueIdentifier>{d9735a5c-dfc7-4b78-908f-4048da515c9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Descriptor">
+      <UniqueIdentifier>{002e922c-fca4-4099-98e7-bd0e85c326e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Descriptor\Render">
+      <UniqueIdentifier>{cf305e00-5b46-4f53-b8b2-aaaf3c55ea27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Descriptor\Depth">
+      <UniqueIdentifier>{1eccc11e-803d-40ad-9b8b-6d78f6ad8ce0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Descriptor\Constant">
+      <UniqueIdentifier>{793968c5-66ed-41e9-9578-2525b2ddca83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -36,11 +63,32 @@
     <ClCompile Include="Src\Window\Window.cpp">
       <Filter>Window</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Device\Device.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Debuger\Debug.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Debuger</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Device\Device.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Swap\Swap.cpp">
+      <Filter>Swap</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Queue\Queue.cpp">
+      <Filter>Command\Queue</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\List\List.cpp">
+      <Filter>Command\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Union\Union.cpp">
+      <Filter>Union</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Render\Render.cpp">
+      <Filter>Descriptor\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Depth\Depth.cpp">
+      <Filter>Descriptor\Depth</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Constant\Constant.cpp">
+      <Filter>Descriptor\Constant</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +106,27 @@
     </ClInclude>
     <ClInclude Include="Src\Debuger\Debug.h">
       <Filter>Debuger</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Swap\Swap.h">
+      <Filter>Swap</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Queue\Queue.h">
+      <Filter>Command\Queue</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\List\List.h">
+      <Filter>Command\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Union\Union.h">
+      <Filter>Union</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Render\Render.h">
+      <Filter>Descriptor\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Depth\Depth.h">
+      <Filter>Descriptor\Depth</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Constant\Constant.h">
+      <Filter>Descriptor\Constant</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

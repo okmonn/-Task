@@ -121,15 +121,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Constant\Constant.cpp" />
     <ClCompile Include="Src\Debuger\Debug.cpp" />
+    <ClCompile Include="Src\Depth\Depth.cpp" />
     <ClCompile Include="Src\Device\Device.cpp" />
+    <ClCompile Include="Src\List\List.cpp" />
     <ClCompile Include="Src\Main.cpp" />
+    <ClCompile Include="Src\Queue\Queue.cpp" />
+    <ClCompile Include="Src\Render\Render.cpp" />
+    <ClCompile Include="Src\Swap\Swap.cpp" />
+    <ClCompile Include="Src\Union\Union.cpp" />
     <ClCompile Include="Src\Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Constant\Constant.h" />
     <ClInclude Include="Src\Debuger\Debug.h" />
+    <ClInclude Include="Src\Depth\Depth.h" />
     <ClInclude Include="Src\Device\Device.h" />
     <ClInclude Include="Src\etc\Release.h" />
+    <ClInclude Include="Src\List\List.h" />
+    <ClInclude Include="Src\Queue\Queue.h" />
+    <ClInclude Include="Src\Render\Render.h" />
+    <ClInclude Include="Src\Swap\Swap.h" />
+    <ClInclude Include="Src\Union\Union.h" />
     <ClInclude Include="Src\Window\Icon\Icon.h" />
     <ClInclude Include="Src\Window\Window.h" />
   </ItemGroup>
