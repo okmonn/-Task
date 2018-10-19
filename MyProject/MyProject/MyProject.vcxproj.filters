@@ -70,6 +70,18 @@
     <Filter Include="Draw\Point">
       <UniqueIdentifier>{fed62bb1-60c7-40fd-9643-db0a848d3ff3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Draw\Line">
+      <UniqueIdentifier>{c2484a05-78bc-42d3-993a-9038504414ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Draw\Triangle">
+      <UniqueIdentifier>{69a670c1-fb16-408f-91d9-fd938c994ae3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture">
+      <UniqueIdentifier>{ef4f9d0e-3277-4b0c-a390-3c33b2d5ee56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Func">
+      <UniqueIdentifier>{28765fc7-221f-41fb-8b61-c5a3bc32be10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -116,6 +128,21 @@
     </ClCompile>
     <ClCompile Include="Src\Point\Point.cpp">
       <Filter>Draw\Point</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Line\Line.cpp">
+      <Filter>Draw\Line</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Triangle\Triangle.cpp">
+      <Filter>Draw\Triangle</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Func\Func.cpp">
+      <Filter>Func</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Texture\TextureLoader.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Texture\Texture.cpp">
+      <Filter>Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +196,27 @@
     </ClInclude>
     <ClInclude Include="Src\etc\VertexData.h">
       <Filter>etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Line\Line.h">
+      <Filter>Draw\Line</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Triangle\Triangle.h">
+      <Filter>Draw\Triangle</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Texture\TextureData.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Func\Func.h">
+      <Filter>Func</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Texture\LoadTbl.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Texture\TextureLoader.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Texture\Texture.h">
+      <Filter>Texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

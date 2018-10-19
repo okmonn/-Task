@@ -14,6 +14,10 @@ class Constant;
 class Root;
 class Pipe;
 class Point;
+class Line;
+class Triangle;
+class TextureLoader;
+class Texture;
 
 class Union
 {
@@ -112,13 +116,27 @@ private:
 	std::shared_ptr<Constant>con;
 
 	// ルートシグネチャ
-	std::shared_ptr<Root>pntRoot;
+	std::shared_ptr<Root>drwRoot;
 	std::shared_ptr<Root>texRoot;
 
 	// パイプライン
 	std::shared_ptr<Pipe>pntPipe;
+	std::shared_ptr<Pipe>linPipe;
+	std::shared_ptr<Pipe>triPipe;
 	std::shared_ptr<Pipe>texPipe;
 
 	// ポイント
 	std::shared_ptr<Point>pnt;
+
+	// ライン
+	std::shared_ptr<Line>lin;
+
+	// トライアングル
+	std::shared_ptr<Triangle>tri;
+
+	// テクスチャローダー
+	std::shared_ptr<TextureLoader>texLoad;
+
+	// テクスチャ
+	std::shared_ptr<Texture>tex;
 };

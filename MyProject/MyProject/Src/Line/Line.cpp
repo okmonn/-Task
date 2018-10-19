@@ -1,5 +1,4 @@
-#include "Point.h"
-#include "../Union/Union.h"
+#include "Line.h"
 #include "../Device/Device.h"
 #include "../List/List.h"
 #include "../Constant/Constant.h"
@@ -7,9 +6,12 @@
 #include "../Pipe/Pipe.h"
 #include "../etc/Release.h"
 
+// 描画最大数
+#define MAX 2 * 100
+
 // コンストラクタ
-Point::Point(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Constant>con, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe) : 
-	un(Union::Get()), dev(dev), list(list), con(con), root(root), pipe(pipe), rsc(nullptr), data(nullptr)
+Line::Line(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Constant>con, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe) : 
+	dev(dev), list(list), con(con), root(root), pipe(pipe), rsc(nullptr), data(nullptr)
 {
 	vertex.clear();
 
@@ -18,7 +20,7 @@ Point::Point(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Co
 }
 
 // デストラクタ
-Point::~Point()
+Line::~Line()
 {
 	Reset();
 	UnMap(rsc);
@@ -26,7 +28,7 @@ Point::~Point()
 }
 
 // リソースの生成
-long Point::Create(void)
+long Line::Create(void)
 {
 	//プロパティ設定用構造体
 	D3D12_HEAP_PROPERTIES prop = {};
@@ -48,25 +50,25 @@ long Point::Create(void)
 	desc.MipLevels          = 1;
 	desc.SampleDesc.Count   = 1;
 	desc.SampleDesc.Quality = 0;
-	desc.Width              = sizeof(draw::Vertex) * un.GetWinX() * un.GetWinY();
-	
+	desc.Width              = sizeof(draw::Vertex) * MAX;
+
 	auto hr = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&rsc));
 	if (FAILED(hr))
 	{
-		OutputDebugString(_T("\nポイントの頂点リソースの生成：失敗\n"));
+		OutputDebugString(_T("\nラインの頂点リソースの生成：失敗\n"));
 	}
 
 	return hr;
 }
 
 // マップ
-long Point::Map(void)
+long Line::Map(void)
 {
 	//マッピング
 	auto hr = rsc->Map(0, nullptr, (void**)(&data));
 	if (FAILED(hr))
 	{
-		OutputDebugString(_T("\nポイントの頂点マッピング：失敗\n"));
+		OutputDebugString(_T("\nラインの頂点マッピング：失敗\n"));
 		return hr;
 	}
 
@@ -77,18 +79,19 @@ long Point::Map(void)
 }
 
 // 頂点の追加
-void Point::AddVertexPoint(const float & x, const float & y, const float & r, const float & g, const float & b, const float & alpha)
+void Line::AddVertexPoint(const float & x1, const float & y1, const float & x2, const float & y2, const float & r, const float & g, const float & b, const float & alpha)
 {
-	if (vertex.size() >= un.GetWinX() * un.GetWinY())
+	if (vertex.size() >= MAX)
 	{
 		return;
 	}
 
-	vertex.push_back({ { x, y, 0.0f },{ r, g, b, alpha } });
+	vertex.push_back({ { x1, y1, 0.0f },{ r, g, b, alpha } });
+	vertex.push_back({ { x2, y2, 0.0f },{ r, g, b, alpha } });
 }
 
 // 描画
-void Point::Draw(void)
+void Line::Draw(void)
 {
 	if (vertex.size() <= 0)
 	{
@@ -114,13 +117,13 @@ void Point::Draw(void)
 	list.lock()->GetList()->IASetVertexBuffers(0, 1, &view);
 
 	//トポロジー設定
-	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
+	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 
 	list.lock()->GetList()->DrawInstanced(vertex.size(), 1, 0, 0);
 }
 
 // 頂点のリセット
-void Point::Reset(void)
+void Line::Reset(void)
 {
 	vertex.clear();
 	vertex.shrink_to_fit();

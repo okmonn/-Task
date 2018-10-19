@@ -9,3 +9,14 @@ namespace draw {
 		DirectX::XMFLOAT4 color;
 	};
 }
+
+namespace tex {
+	struct Vertex {
+		//座標
+		DirectX::XMFLOAT3 pos;
+		//UV
+		DirectX::XMFLOAT2 uv;
+		//アルファ値
+		float alpha;
+	};
+}

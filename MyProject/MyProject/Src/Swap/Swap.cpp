@@ -3,7 +3,7 @@
 #include "../Window/Window.h"
 #include "../Queue/Queue.h"
 #include "../etc/Release.h"
-#include <dxgi1_4.h>
+#include <dxgi1_6.h>
 
 #pragma comment(lib, "dxgi.lib")
 
@@ -23,7 +23,7 @@ Swap::~Swap()
 // スワップチェインの生成
 long Swap::Create(void)
 {
-	IDXGIFactory4* factory = nullptr;
+	IDXGIFactory6* factory = nullptr;
 
 	//スワップチェイン設定用構造体
 	DXGI_SWAP_CHAIN_DESC1 desc = {};

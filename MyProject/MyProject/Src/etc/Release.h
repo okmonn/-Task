@@ -5,4 +5,6 @@
 #define Release(X) { if((X) != nullptr) (X)->Release(); (X) = nullptr; }
 
 #define UnMap(X) { if((X) != nullptr) (X)->Unmap(0, nullptr); }
+
+#define Delete(X) { if((X) != nullptr) delete (X); (X) = nullptr; }
  

@@ -13,6 +13,10 @@
 #include "../Root/Root.h"
 #include "../Pipe/Pipe.h"
 #include "../Point/Point.h"
+#include "../Line/Line.h"
+#include "../Triangle/Triangle.h"
+#include "../Texture/TextureLoader.h"
+#include "../Texture/Texture.h"
 #include "../etc/Release.h"
 
 #pragma comment(lib, "d3d12.lib")
@@ -57,19 +61,23 @@ void Union::SetWinSize(const unsigned int & x, const unsigned int & y)
 // ルートシグネチャのインスタンス
 void Union::CreateRoot(void)
 {
-	pntRoot = std::make_shared<Root>(dev, L"Src/Shader/Draw.hlsl");
+	drwRoot = std::make_shared<Root>(dev, L"Src/Shader/Draw.hlsl");
 	texRoot = std::make_shared<Root>(dev, L"Src/Shader/Texture.hlsl");
 }
 
 // パイプラインのインスタンス
 void Union::CreatePipe(void)
 {
-	pntPipe = std::make_shared<Pipe>(dev, swap, pntRoot);
+	pntPipe = std::make_shared<Pipe>(dev, swap, drwRoot);
+	linPipe = std::make_shared<Pipe>(dev, swap, drwRoot);
+	triPipe = std::make_shared<Pipe>(dev, swap, drwRoot);
 	{
 		D3D12_INPUT_ELEMENT_DESC input[] = {
 			inputs[0], inputs[3]
 		};
 		pntPipe->CreatePipe(*input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
+		linPipe->CreatePipe(*input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE);
+		triPipe->CreatePipe(*input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	}
 
 	texPipe = std::make_shared<Pipe>(dev, swap, texRoot);
@@ -80,6 +88,7 @@ void Union::CreatePipe(void)
 		texPipe->CreatePipe(*input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	}
 }
+int n = 0;
 
 // クラスのインスタンス
 void Union::Start(void)
@@ -99,7 +108,13 @@ void Union::Start(void)
 
 	CreatePipe();
 
-	pnt = std::make_shared<Point>(dev, list, con, pntRoot, pntPipe);
+	pnt = std::make_shared<Point>(dev, list, con, drwRoot, pntPipe);
+	lin = std::make_shared<Line>(dev, list, con, drwRoot, linPipe);
+	tri = std::make_shared<Triangle>(dev, list, con, drwRoot, triPipe);
+
+	texLoad = std::make_shared<TextureLoader>(dev);
+	tex = std::make_shared<Texture>(dev, list, con, texRoot, texPipe, texLoad);
+	tex->Load("avicii.png", n);
 }
 
 // メッセージの確認
@@ -143,18 +158,24 @@ void Union::Set(void)
 	dep->SetDepth();
 
 	ren->SetRender(*dep->GetHeap());
+
+	tex->Draw(n, 0, 0);
 }
 
 // 描画
 void Union::Draw(void)
 {
 	pnt->Draw();
+	lin->Draw();
+	tri->Draw();
 }
 
 // 頂点のリセット
 void Union::Reset(void)
 {
 	pnt->Reset();
+	lin->Reset();
+	tri->Reset();
 }
 
 // 描画実行
@@ -186,7 +207,7 @@ void Union::End(void)
 	pnt.reset();
 	pntPipe.reset();
 	texPipe.reset();
-	pntRoot.reset();
+	drwRoot.reset();
 	texRoot.reset();
 	con.reset();
 	dep.reset();

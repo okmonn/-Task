@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 
-struct IDXGISwapChain3;
+struct IDXGISwapChain4;
 
 class Union;
 class Window;
@@ -19,7 +19,7 @@ public:
 	void Present(void);
 
 	// スワップチェイン
-	IDXGISwapChain3* Get(void) const {
+	IDXGISwapChain4* Get(void) const {
 		return swap;
 	}
 	// バックバッファ数の取得
@@ -42,7 +42,7 @@ private:
 	std::weak_ptr<Queue>queue;
 
 	// スワップチェイン
-	IDXGISwapChain3* swap;
+	IDXGISwapChain4* swap;
 
 	// バックバッファの数
 	unsigned int cnt;
