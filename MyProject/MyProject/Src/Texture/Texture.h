@@ -30,12 +30,9 @@ public:
 	void SetHeap(int& i, const unsigned int& rootNum = 1);
 
 	// 描画
-	void Draw(int& i, const float& x, const float& y, const float& alpha = 1.0f, const int& turnX = 0, const int& turnY = 0);
+	void Draw(int& i, const float& x, const float& y, const float& alpha, const int& turnX, const int& turnY);
 
 private:
-	// ヒープの生成
-	long CreateHeap(int* i);
-
 	// リソースビューの生成
 	void CreateView(int* i);
 

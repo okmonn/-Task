@@ -21,7 +21,7 @@ public:
 	~Point();
 
 	// ’¸“_‚Ì’Ç‰Á
-	void AddVertexPoint(const float & x, const float & y, const float & r, const float & g, const float & b, const float& alpha = 1.0f);
+	void AddVertexPoint(const float & x, const float & y, const float & r, const float & g, const float & b, const float& alpha);
 	
 	// •`‰æ
 	void Draw(void);

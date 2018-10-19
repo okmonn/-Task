@@ -1,18 +1,25 @@
-#include "Union\Union.h"
+#include "Func/Func.h"
 
 // エントリーポイント
 int main()
 {
-	Union::Get().SetWinSize(640, 480);
-	Union::Get().Start();
+	func::SetWindowSize();
+	func::Start();
 
-	while (Union::Get().CheckMsg())
+	int a = 0;
+
+	func::LoadImg("avicii.png", a);
+
+	while (func::CheckMsg())
 	{
-		Union::Get().Set();
-		Union::Get().Do();
+		func::Set();
+
+		func::DrawImg(a, 0, 0);
+
+		func::Do();
 	}
 
-	Union::Get().End();
+	func::End();
 
 	return 0;
 }

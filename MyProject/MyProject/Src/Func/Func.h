@@ -28,4 +28,42 @@ namespace func {
 
 	// ワイド文字列の変換
 	std::wstring ChangeWString(const std::string& st);
+
+	// ウィンドウサイズのセット
+	void SetWindowSize(const unsigned int& x = 640, const unsigned int& y = 480);
+
+	// 初期化・スタート
+	void Start(void);
+
+	// メッセージの確認
+	bool CheckMsg(void);
+
+	// 画像の読み込み
+	void LoadImg(const std::string& fileName, int& i);
+
+	// 描画準備
+	void Set(void);
+
+	// ポイント描画
+	void DrawPoint(const float& x, const float& y, const float& r, const float& g, const float& b, const float& alpha = 1.0f);
+
+	// ライン描画
+	void DrawLine(const float& x1, const float& y1, const float& x2, const float& y2, const float& r, const float& g, const float& b, const float& alpha = 1.0f);
+
+	// トライアングル描画
+	void DrawTriangle(const float& x1, const float& y1, const float& x2, const float& y2, const float& x3, const float& y3,
+		const float& r, const float& g, const float& b, const float& alpha = 1.0f);
+
+	// ボックス描画
+	void DrawBox(const float& x1, const float& y1, const float& x2, const float& y2, const float& x3, const float& y3, const float& x4, const float& y4,
+		const float& r, const float& g, const float& b, const float& alpha = 1.0f);
+
+	// 画像の描画
+	void DrawImg(int& i, const float& x, const float& y, const float& alpha = 1.0f, const int& turnX = 0, const int& turnY = 0);
+
+	// 描画実行
+	void Do(void);
+
+	// 終了処理
+	void End(void);
 }

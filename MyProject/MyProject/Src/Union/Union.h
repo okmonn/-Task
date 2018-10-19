@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <string>
 
 class Window;
 class Debug;
@@ -40,8 +41,24 @@ public:
 	// メッセージの確認
 	bool CheckMsg(void);
 
+	// 画像の読み込み
+	void LoadImg(const std::string& fileName, int& i);
+
 	// 描画準備
 	void Set(void);
+
+	// ポイント描画
+	void DrawPoint(const float& x, const float& y, const float& r, const float& g, const float& b, const float& alpha);
+
+	// ライン描画
+	void DrawLine(const float& x1, const float& y1,const float& x2, const float& y2,  const float& r, const float& g, const float& b, const float& alpha);
+
+	// トライアングル描画
+	void DrawTriangle(const float& x1, const float& y1, const float& x2, const float& y2, const float& x3, const float& y3,
+		const float& r, const float& g, const float& b, const float& alpha);
+
+	// 画像の描画
+	void DrawImg(int& i, const float& x, const float& y, const float& alpha, const int& turnX, const int& turnY);
 
 	// 描画実行
 	void Do(void);

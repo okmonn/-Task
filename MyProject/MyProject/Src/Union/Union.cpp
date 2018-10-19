@@ -88,7 +88,6 @@ void Union::CreatePipe(void)
 		texPipe->CreatePipe(*input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	}
 }
-int n = 0;
 
 // クラスのインスタンス
 void Union::Start(void)
@@ -113,8 +112,7 @@ void Union::Start(void)
 	tri = std::make_shared<Triangle>(dev, list, con, drwRoot, triPipe);
 
 	texLoad = std::make_shared<TextureLoader>(dev);
-	tex = std::make_shared<Texture>(dev, list, con, texRoot, texPipe, texLoad);
-	tex->Load("avicii.png", n);
+	tex     = std::make_shared<Texture>(dev, list, con, texRoot, texPipe, texLoad);
 }
 
 // メッセージの確認
@@ -141,6 +139,12 @@ bool Union::CheckMsg(void)
 	return true;
 }
 
+// 画像の読み込み
+void Union::LoadImg(const std::string & fileName, int& i)
+{
+	tex->Load(fileName, i);
+}
+
 // 描画準備
 void Union::Set(void)
 {
@@ -158,8 +162,31 @@ void Union::Set(void)
 	dep->SetDepth();
 
 	ren->SetRender(*dep->GetHeap());
+}
 
-	tex->Draw(n, 0, 0);
+// ポイント描画
+void Union::DrawPoint(const float & x, const float & y, const float & r, const float & g, const float & b, const float & alpha)
+{
+	pnt->AddVertexPoint(x, y, r, g, b, alpha);
+}
+
+// ライン描画
+void Union::DrawLine(const float & x1, const float & y1, const float & x2, const float & y2, const float & r, const float & g, const float & b, const float & alpha)
+{
+	lin->AddVertexPoint(x1, y1, x2, y2, r, g, b, alpha);
+}
+
+// トライアングル描画
+void Union::DrawTriangle(const float & x1, const float & y1, const float & x2, const float & y2, const float & x3, const float & y3, 
+	const float & r, const float & g, const float & b, const float & alpha)
+{
+	tri->AddVertexPoint(x1, y1, x2, y2, x3, y3, r, g, b, alpha);
+}
+
+// 画像の描画
+void Union::DrawImg(int& i, const float& x, const float& y, const float& alpha, const int& turnX, const int& turnY)
+{
+	tex->Draw(i, x, y, alpha, turnX, turnY);
 }
 
 // 描画

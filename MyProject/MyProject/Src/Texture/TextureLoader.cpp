@@ -7,6 +7,9 @@
 
 #pragma comment(lib, "DirectXTex.lib")
 
+// 頂点最大数
+#define MAX 4
+
 // コンストラクタ
 TextureLoader::TextureLoader(std::weak_ptr<Device>dev) :
 	dev(dev)
@@ -19,40 +22,29 @@ TextureLoader::~TextureLoader()
 {
 	for (auto itr = origin.begin(); itr != origin.end(); ++itr)
 	{
-		Release(itr->second.rsc);
+		Release(itr->second.c_rsc);
 		Release(itr->second.img);
+		Release(itr->second.heap);
 		Delete(itr->second.img);
 		Delete(itr->second.meta);
 	}
 }
 
-// 読み込み
-long TextureLoader::Load(const std::string & fileName, ID3D12Resource * rsc, DirectX::TexMetadata * meta, DirectX::ScratchImage * img)
+// ヒープの生成
+long TextureLoader::CreateHeap(const std::string & fileName)
 {
-	HRESULT hr = S_OK;
+	//ヒープ設定用構造体
+	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
+	desc.Flags          = D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	desc.NodeMask       = 0;
+	desc.NumDescriptors = 1;
+	desc.Type           = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 
-	if (origin.find(fileName) == origin.end())
+	auto hr = dev.lock()->Get()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&origin[fileName].heap));
+	if (FAILED(hr))
 	{
-		auto pos = fileName.find('.');
-		std::string fmt = fileName.substr(pos + 1, fileName.size());
-
-		origin[fileName].meta = new DirectX::TexMetadata({});
-		origin[fileName].img  = new DirectX::ScratchImage();
-
-		hr = tex::loadTbl[fmt](func::ChangeWString(fileName), origin[fileName].meta, origin[fileName].img);
-		if (FAILED(hr))
-		{
-			OutputDebugString(_T("\nファイルの参照：失敗\n"));
-			return hr;
-		}
-
-		hr = CreateRsc(fileName);
+		OutputDebugString(_T("テクスチャ用ヒープの生成：失敗\n"));
 	}
-
-	//アドレスのコピー
-	&rsc  = &origin[fileName].rsc;
-	meta = &origin[fileName].meta;
-	img  = &origin[fileName].img;
 
 	return hr;
 }
@@ -82,7 +74,7 @@ long TextureLoader::CreateRsc(const std::string& fileName)
 	desc.SampleDesc.Quality = 0;
 	desc.Width              = origin[fileName].meta->width;
 
-	auto hr = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&origin[fileName].rsc));
+	auto hr = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&origin[fileName].c_rsc));
 	if (FAILED(hr))
 	{
 		OutputDebugString(_T("\nテクスチャ用定数リソースの生成：失敗\n"));
@@ -91,3 +83,28 @@ long TextureLoader::CreateRsc(const std::string& fileName)
 	return hr;
 }
 
+// 読み込み
+long TextureLoader::Load(const std::string & fileName)
+{
+	HRESULT hr = S_OK;
+
+	if (origin.find(fileName) == origin.end())
+	{
+		auto pos = fileName.find('.');
+		std::string fmt = fileName.substr(pos + 1, fileName.size());
+
+		origin[fileName].meta = new DirectX::TexMetadata({});
+		origin[fileName].img = new DirectX::ScratchImage();
+
+		hr = tex::loadTbl[fmt](func::ChangeWString(fileName), origin[fileName].meta, origin[fileName].img);
+		if (FAILED(hr))
+		{
+			OutputDebugString(_T("\nファイルの参照：失敗\n"));
+		}
+
+		CreateHeap(fileName);
+		CreateRsc(fileName);
+	}
+
+	return hr;
+}

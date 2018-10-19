@@ -27,27 +27,7 @@ Texture::~Texture()
 	{
 		UnMap(itr->second.v_rsc);
 		Release(itr->second.v_rsc);
-		Release(itr->second.heap);
 	}
-}
-
-// ヒープの生成
-long Texture::CreateHeap(int * i)
-{
-	//ヒープ設定用構造体
-	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
-	desc.Flags          = D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	desc.NodeMask       = 0;
-	desc.NumDescriptors = 1;
-	desc.Type           = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-
-	auto hr = dev.lock()->Get()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&tex[i].heap));
-	if (FAILED(hr))
-	{
-		OutputDebugString(_T("テクスチャ用ヒープの生成：失敗\n"));
-	}
-
-	return hr;
 }
 
 // リソースビューの生成
@@ -104,7 +84,7 @@ long Texture::CreateRsc(int * i)
 // マップ
 long Texture::Map(int * i)
 {
-	auto hr = tex[i].v_rsc->Map(0, nullptr, (void**)(tex[i].data));
+	auto hr = tex[i].v_rsc->Map(0, nullptr, (void**)(&tex[i].data));
 	if (FAILED(hr))
 	{
 		OutputDebugString(_T("\nテクスチャの頂点マッピング：失敗\n"));
@@ -119,18 +99,22 @@ long Texture::Map(int * i)
 // 読み込み
 long Texture::Load(const std::string & fileName, int & i)
 {
-	auto hr = loader.lock()->Load(fileName, tex[&i].c_rsc, tex[&i].meta, tex[&i].img);
-	if (FAILED(hr))
+	if (FAILED(loader.lock()->Load(fileName)))
 	{
-		return hr;
+		return S_FALSE;
 	}
 
-	CreateHeap(&i);
+	//アドレス参照
+	tex[&i].heap  = loader.lock()->GetHeap(fileName);
+	tex[&i].c_rsc = loader.lock()->GetConRsc(fileName);
+	tex[&i].meta  = loader.lock()->GetMeta(fileName);
+	tex[&i].img   = loader.lock()->GetImg(fileName);
+	
 	CreateView(&i);
 	CreateRsc(&i);
 	Map(&i);
 
-	return hr;
+	return S_OK;
 }
 
 // 描画準備

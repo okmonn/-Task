@@ -1,4 +1,5 @@
 #include "Func.h"
+#include "../Union/Union.h"
 #include <Windows.h>
 #include <algorithm>
 #include <tchar.h>
@@ -106,4 +107,79 @@ std::wstring func::ChangeWString(const std::string & st)
 	byteSize = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED | MB_ERR_INVALID_CHARS, st.c_str(), -1, &wstr[0], byteSize);
 
 	return wstr;
+}
+
+// ウィンドウサイズのセット
+void func::SetWindowSize(const unsigned int & x, const unsigned int & y)
+{
+	Union::Get().SetWinSize(x, y);
+}
+
+// 初期化・スタート
+void func::Start(void)
+{
+	Union::Get().Start();
+}
+
+// メッセージの確認
+bool func::CheckMsg(void)
+{
+	return Union::Get().CheckMsg();
+}
+
+// 画像の読み込み
+void func::LoadImg(const std::string & fileName, int & i)
+{
+	Union::Get().LoadImg(fileName, i);
+}
+
+// 描画準備
+void func::Set(void)
+{
+	Union::Get().Set();
+}
+
+// ポイント描画
+void func::DrawPoint(const float & x, const float & y, const float & r, const float & g, const float & b, const float & alpha)
+{
+	Union::Get().DrawPoint(x, y, r, g, b, alpha);
+}
+
+// ライン描画
+void func::DrawLine(const float & x1, const float & y1, const float & x2, const float & y2, const float & r, const float & g, const float & b, const float & alpha)
+{
+	Union::Get().DrawLine(x1, y1, x2, y2, r, g, b, alpha);
+}
+
+// トライアングル描画
+void func::DrawTriangle(const float & x1, const float & y1, const float & x2, const float & y2, const float & x3, const float & y3, 
+	const float & r, const float & g, const float & b, const float & alpha)
+{
+	Union::Get().DrawTriangle(x1, y1, x2, y2, x3, y3, r, g, b, alpha);
+}
+
+// ボックス描画
+void func::DrawBox(const float & x1, const float & y1, const float & x2, const float & y2, const float & x3, const float & y3, const float & x4, const float & y4, 
+	const float & r, const float & g, const float & b, const float & alpha)
+{
+	Union::Get().DrawTriangle(x1, y1, x2, y2, x3, y3, r, g, b, alpha);
+	Union::Get().DrawTriangle(x2, y2, x3, y3, x4, y4, r, g, b, alpha);
+}
+
+// 画像の描画
+void func::DrawImg(int & i, const float & x, const float & y, const float & alpha, const int & turnX, const int & turnY)
+{
+	Union::Get().DrawImg(i, x, y, alpha, turnX, turnY);
+}
+
+// 描画実行
+void func::Do(void)
+{
+	Union::Get().Do();
+}
+
+// 終了処理
+void func::End(void)
+{
+	Union::Get().End();
 }
