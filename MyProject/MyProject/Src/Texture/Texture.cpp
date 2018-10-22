@@ -35,7 +35,7 @@ void Texture::CreateView(int * i)
 {
 	//シェーダリソースビュー設定用構造体
 	D3D12_SHADER_RESOURCE_VIEW_DESC desc = {};
-	desc.Format                    = DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM;
+	desc.Format                    = tex[i].c_rsc->GetDesc().Format;
 	desc.ViewDimension             = D3D12_SRV_DIMENSION::D3D12_SRV_DIMENSION_TEXTURE2D;
 	desc.Texture2D.MipLevels       = 1;
 	desc.Texture2D.MostDetailedMip = 0;
@@ -75,7 +75,7 @@ long Texture::CreateRsc(int * i)
 	auto hr = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&tex[i].v_rsc));
 	if (FAILED(hr))
 	{
-		OutputDebugString(_T("\nポイント用頂点リソースの生成：失敗\n"));
+		OutputDebugString(_T("\nテクスチャ用頂点リソースの生成：失敗\n"));
 	}
 
 	return hr;
@@ -105,16 +105,16 @@ long Texture::Load(const std::string & fileName, int & i)
 	}
 
 	//アドレス参照
-	tex[&i].heap  = loader.lock()->GetHeap(fileName);
-	tex[&i].c_rsc = loader.lock()->GetConRsc(fileName);
-	tex[&i].meta  = loader.lock()->GetMeta(fileName);
-	tex[&i].img   = loader.lock()->GetImg(fileName);
+	tex[&i].heap   = loader.lock()->GetHeap(fileName);
+	tex[&i].c_rsc  = loader.lock()->GetConRsc(fileName);
+	tex[&i].decode = loader.lock()->GetDecode(fileName);
+	tex[&i].sub    = loader.lock()->GetSub(fileName);
 	
 	CreateView(&i);
-	CreateRsc(&i);
-	Map(&i);
+	auto hr = CreateRsc(&i);
+	hr = Map(&i);
 
-	return S_OK;
+	return hr;
 }
 
 // 描画準備
@@ -123,14 +123,14 @@ long Texture::SetDraw(int & i, const unsigned int & rootNum)
 	//ボックス設定用構造体の設定
 	D3D12_BOX box = {};
 	box.back   = 1;
-	box.bottom = tex[&i].meta->height;
+	box.bottom = tex[&i].c_rsc->GetDesc().Height;
 	box.front  = 0;
 	box.left   = 0;
-	box.right  = static_cast<UINT>(tex[&i].meta->width);
+	box.right  = static_cast<UINT>(tex[&i].c_rsc->GetDesc().Width);
 	box.top    = 0;
 
 	//サブリソースに書き込み
-	auto hr = tex[&i].c_rsc->WriteToSubresource(0, &box, tex[&i].img->GetPixels(), tex[&i].meta->width * 4, tex[&i].meta->height * 4);
+	auto hr = tex[&i].c_rsc->WriteToSubresource(0, &box, &tex[&i].decode[0], tex[&i].sub->RowPitch, tex[&i].sub->SlicePitch);
 	if (FAILED(hr))
 	{
 		OutputDebugString(_T("テクスチャのサブリソース書込み：失敗\n"));
@@ -163,20 +163,236 @@ void Texture::Draw(int & i, const float & x, const float & y, const float & alph
 
 	con.lock()->SetConstant();
 
+	auto desc = tex[n].c_rsc->GetDesc();
+
 	//UV座標
-	DirectX::XMFLOAT2 leftUp    = { (static_cast<FLOAT>(tex[n].meta->width) * turnX),                                            (static_cast<FLOAT>(tex[n].meta->height) * turnY) };
-	DirectX::XMFLOAT2 rightUp   = { (static_cast<FLOAT>(tex[n].meta->width) - (static_cast<FLOAT>(tex[n].meta->width) * turnX)), (static_cast<FLOAT>(tex[n].meta->height) * turnY) };
-	DirectX::XMFLOAT2 leftDown  = { (static_cast<FLOAT>(tex[n].meta->width) * turnX),                                            (static_cast<FLOAT>(tex[n].meta->height) - (static_cast<FLOAT>(tex[n].meta->height) * turnY)) };
-	DirectX::XMFLOAT2 rightDown = { (static_cast<FLOAT>(tex[n].meta->width) - (static_cast<FLOAT>(tex[n].meta->width) * turnX)), (static_cast<FLOAT>(tex[n].meta->height) - (static_cast<FLOAT>(tex[n].meta->height) * turnY)) };
+	DirectX::XMFLOAT2 leftUp    = { (static_cast<FLOAT>(desc.Width) * turnX),                                    (static_cast<FLOAT>(desc.Height) * turnY) };
+	DirectX::XMFLOAT2 rightUp   = { (static_cast<FLOAT>(desc.Width) - (static_cast<FLOAT>(desc.Width) * turnX)), (static_cast<FLOAT>(desc.Height) * turnY) };
+	DirectX::XMFLOAT2 leftDown  = { (static_cast<FLOAT>(desc.Width) * turnX),                                    (static_cast<FLOAT>(desc.Height) - (static_cast<FLOAT>(desc.Height) * turnY)) };
+	DirectX::XMFLOAT2 rightDown = { (static_cast<FLOAT>(desc.Width) - (static_cast<FLOAT>(desc.Width) * turnX)), (static_cast<FLOAT>(desc.Height) - (static_cast<FLOAT>(desc.Height) * turnY)) };
 
 	//左上
-	tex[n].vertex[0] = { { x,                                          y,                                           0.0f }, leftUp,    alpha };
+	tex[n].vertex[0] = { { x,                                  y,                                   0.0f }, leftUp,    alpha };
 	//右上
-	tex[n].vertex[1] = { { x + static_cast<FLOAT>(tex[n].meta->width), y,                                           0.0f }, rightUp,   alpha };
+	tex[n].vertex[1] = { { x + static_cast<FLOAT>(desc.Width), y,                                   0.0f }, rightUp,   alpha };
 	//左下
-	tex[n].vertex[2] = { { x,                                          y + static_cast<FLOAT>(tex[n].meta->height), 0.0f }, leftDown,  alpha };
+	tex[n].vertex[2] = { { x,                                  y + static_cast<FLOAT>(desc.Height), 0.0f }, leftDown,  alpha };
 	//右下
-	tex[n].vertex[3] = { { x + static_cast<FLOAT>(tex[n].meta->width), y + static_cast<FLOAT>(tex[n].meta->height), 0.0f }, rightDown, alpha };
+	tex[n].vertex[3] = { { x + static_cast<FLOAT>(desc.Width), y + static_cast<FLOAT>(desc.Height), 0.0f }, rightDown, alpha };
+
+	//頂点データの更新
+	memcpy(tex[n].data, tex[n].vertex.data(), sizeof(tex::Vertex) * tex[n].vertex.size());
+
+	//頂点バッファ設定用構造体の設定
+	D3D12_VERTEX_BUFFER_VIEW view = {};
+	view.BufferLocation = tex[n].v_rsc->GetGPUVirtualAddress();
+	view.SizeInBytes    = sizeof(tex::Vertex) * tex[n].vertex.size();
+	view.StrideInBytes  = sizeof(tex::Vertex);
+
+	//頂点バッファビューのセット
+	list.lock()->GetList()->IASetVertexBuffers(0, 1, &view);
+
+	//トポロジー設定
+	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	if (FAILED(SetDraw(i)))
+	{
+		return;
+	}
+
+	//描画
+	list.lock()->GetList()->DrawInstanced(tex[n].vertex.size(), 1, 0, 0);
+}
+
+// 描画・サイズ指定
+void Texture::DrawSize(int & i, const float & x, const float & y, const float & sizeX, const float & sizeY,
+	const float & alpha, const int & turnX, const int & turnY)
+{
+	int* n = &i;
+
+	//コマンドリストへのセット
+	list.lock()->SetRoot(*root.lock()->Get());
+	list.lock()->SetPipe(*pipe.lock()->Get());
+
+	con.lock()->SetConstant();
+
+	auto desc = tex[n].c_rsc->GetDesc();
+
+	//UV座標
+	DirectX::XMFLOAT2 leftUp    = { (static_cast<FLOAT>(desc.Width) * turnX),                                    (static_cast<FLOAT>(desc.Height) * turnY) };
+	DirectX::XMFLOAT2 rightUp   = { (static_cast<FLOAT>(desc.Width) - (static_cast<FLOAT>(desc.Width) * turnX)), (static_cast<FLOAT>(desc.Height) * turnY) };
+	DirectX::XMFLOAT2 leftDown  = { (static_cast<FLOAT>(desc.Width) * turnX),                                    (static_cast<FLOAT>(desc.Height) - (static_cast<FLOAT>(desc.Height) * turnY)) };
+	DirectX::XMFLOAT2 rightDown = { (static_cast<FLOAT>(desc.Width) - (static_cast<FLOAT>(desc.Width) * turnX)), (static_cast<FLOAT>(desc.Height) - (static_cast<FLOAT>(desc.Height) * turnY)) };
+
+	//左上
+	tex[n].vertex[0] = { { x,         y,         0.0f }, leftUp,    alpha };
+	//右上
+	tex[n].vertex[1] = { { x + sizeX, y,         0.0f }, rightUp,   alpha };
+	//左下
+	tex[n].vertex[2] = { { x,         y + sizeY, 0.0f }, leftDown,  alpha };
+	//右下
+	tex[n].vertex[3] = { { x + sizeX, y + sizeY, 0.0f }, rightDown, alpha };
+
+	//頂点データの更新
+	memcpy(tex[n].data, tex[n].vertex.data(), sizeof(tex::Vertex) * tex[n].vertex.size());
+
+	//頂点バッファ設定用構造体の設定
+	D3D12_VERTEX_BUFFER_VIEW view = {};
+	view.BufferLocation = tex[n].v_rsc->GetGPUVirtualAddress();
+	view.SizeInBytes    = sizeof(tex::Vertex) * tex[n].vertex.size();
+	view.StrideInBytes  = sizeof(tex::Vertex);
+
+	//頂点バッファビューのセット
+	list.lock()->GetList()->IASetVertexBuffers(0, 1, &view);
+
+	//トポロジー設定
+	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	if (FAILED(SetDraw(i)))
+	{
+		return;
+	}
+
+	//描画
+	list.lock()->GetList()->DrawInstanced(tex[n].vertex.size(), 1, 0, 0);
+}
+
+// 描画・サイズ・範囲指定
+void Texture::DrawRectSize(int & i, const float & x, const float & y, const float & sizeX, const float & sizeY, 
+	const float & rectX, const float & rectY, const float & rectSizeX, const float & rectSizeY, const float & alpha, const int & turnX, const int & turnY)
+{
+	int* n = &i;
+
+	//コマンドリストへのセット
+	list.lock()->SetRoot(*root.lock()->Get());
+	list.lock()->SetPipe(*pipe.lock()->Get());
+
+	con.lock()->SetConstant();
+
+	auto desc = tex[n].c_rsc->GetDesc();
+
+	//UV座標
+	//UV座標
+	DirectX::XMFLOAT2 leftUp    = { rectX + (rectSizeX * turnX),               rectY + (rectSizeY * turnY) };
+	DirectX::XMFLOAT2 rightUp   = { rectX + (rectSizeX - (rectSizeX * turnX)), rectY + (rectSizeY * turnY) };
+	DirectX::XMFLOAT2 leftDown  = { rectX + (rectSizeX * turnX),               rectY + (rectSizeY - (rectSizeY * turnY)) };
+	DirectX::XMFLOAT2 rightDown = { rectX + (rectSizeX - (rectSizeX * turnX)), rectY + (rectSizeY - (rectSizeY * turnY)) };
+
+	//左上
+	tex[n].vertex[0] = { { x,         y,         0.0f }, leftUp,    alpha };
+	//右上
+	tex[n].vertex[1] = { { x + sizeX, y,         0.0f }, rightUp,   alpha };
+	//左下
+	tex[n].vertex[2] = { { x,         y + sizeY, 0.0f }, leftDown,  alpha };
+	//右下
+	tex[n].vertex[3] = { { x + sizeX, y + sizeY, 0.0f }, rightDown, alpha };
+
+	//頂点データの更新
+	memcpy(tex[n].data, tex[n].vertex.data(), sizeof(tex::Vertex) * tex[n].vertex.size());
+
+	//頂点バッファ設定用構造体の設定
+	D3D12_VERTEX_BUFFER_VIEW view = {};
+	view.BufferLocation = tex[n].v_rsc->GetGPUVirtualAddress();
+	view.SizeInBytes    = sizeof(tex::Vertex) * tex[n].vertex.size();
+	view.StrideInBytes  = sizeof(tex::Vertex);
+
+	//頂点バッファビューのセット
+	list.lock()->GetList()->IASetVertexBuffers(0, 1, &view);
+
+	//トポロジー設定
+	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	if (FAILED(SetDraw(i)))
+	{
+		return;
+	}
+
+	//描画
+	list.lock()->GetList()->DrawInstanced(tex[n].vertex.size(), 1, 0, 0);
+}
+
+// 描画・座標4点指定
+void Texture::FreelyDraw(int & i, const float & x1, const float & y1, const float & x2, const float & y2, 
+	const float & x3, const float & y3, const float & x4, const float & y4, const float & alpha, const int & turnX, const int & turnY)
+{
+	int* n = &i;
+
+	//コマンドリストへのセット
+	list.lock()->SetRoot(*root.lock()->Get());
+	list.lock()->SetPipe(*pipe.lock()->Get());
+
+	con.lock()->SetConstant();
+
+	auto desc = tex[n].c_rsc->GetDesc();
+
+	//UV座標
+	DirectX::XMFLOAT2 leftUp    = { (static_cast<FLOAT>(desc.Width) * turnX),                                    (static_cast<FLOAT>(desc.Height) * turnY) };
+	DirectX::XMFLOAT2 rightUp   = { (static_cast<FLOAT>(desc.Width) - (static_cast<FLOAT>(desc.Width) * turnX)), (static_cast<FLOAT>(desc.Height) * turnY) };
+	DirectX::XMFLOAT2 leftDown  = { (static_cast<FLOAT>(desc.Width) * turnX),                                    (static_cast<FLOAT>(desc.Height) - (static_cast<FLOAT>(desc.Height) * turnY)) };
+	DirectX::XMFLOAT2 rightDown = { (static_cast<FLOAT>(desc.Width) - (static_cast<FLOAT>(desc.Width) * turnX)), (static_cast<FLOAT>(desc.Height) - (static_cast<FLOAT>(desc.Height) * turnY)) };
+
+	//左上
+	tex[n].vertex[0] = { { x1, y1, 0.0f }, leftUp,    alpha };
+	//右上
+	tex[n].vertex[1] = { { x2, y2, 0.0f }, rightUp,   alpha };
+	//左下
+	tex[n].vertex[2] = { { x3, y3, 0.0f }, leftDown,  alpha };
+	//右下
+	tex[n].vertex[3] = { { x4, y4, 0.0f }, rightDown, alpha };
+
+	//頂点データの更新
+	memcpy(tex[n].data, tex[n].vertex.data(), sizeof(tex::Vertex) * tex[n].vertex.size());
+
+	//頂点バッファ設定用構造体の設定
+	D3D12_VERTEX_BUFFER_VIEW view = {};
+	view.BufferLocation = tex[n].v_rsc->GetGPUVirtualAddress();
+	view.SizeInBytes    = sizeof(tex::Vertex) * tex[n].vertex.size();
+	view.StrideInBytes  = sizeof(tex::Vertex);
+
+	//頂点バッファビューのセット
+	list.lock()->GetList()->IASetVertexBuffers(0, 1, &view);
+
+	//トポロジー設定
+	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	if (FAILED(SetDraw(i)))
+	{
+		return;
+	}
+
+	//描画
+	list.lock()->GetList()->DrawInstanced(tex[n].vertex.size(), 1, 0, 0);
+}
+
+// 描画・座標4点・範囲指定
+void Texture::FreelyDrawRect(int & i, const float & x1, const float & y1, const float & x2, const float & y2, const float & x3, const float & y3, const float & x4, const float & y4, 
+	const float & rectX, const float & rectY, const float & rectSizeX, const float & rectSizeY, const float & alpha, const int & turnX, const int & turnY)
+{
+	int* n = &i;
+
+	//コマンドリストへのセット
+	list.lock()->SetRoot(*root.lock()->Get());
+	list.lock()->SetPipe(*pipe.lock()->Get());
+
+	con.lock()->SetConstant();
+
+	auto desc = tex[n].c_rsc->GetDesc();
+
+	//UV座標
+	//UV座標
+	DirectX::XMFLOAT2 leftUp    = { rectX + (rectSizeX * turnX),               rectY + (rectSizeY * turnY) };
+	DirectX::XMFLOAT2 rightUp   = { rectX + (rectSizeX - (rectSizeX * turnX)), rectY + (rectSizeY * turnY) };
+	DirectX::XMFLOAT2 leftDown  = { rectX + (rectSizeX * turnX),               rectY + (rectSizeY - (rectSizeY * turnY)) };
+	DirectX::XMFLOAT2 rightDown = { rectX + (rectSizeX - (rectSizeX * turnX)), rectY + (rectSizeY - (rectSizeY * turnY)) };
+
+	//左上
+	tex[n].vertex[0] = { { x1, y1, 0.0f }, leftUp,    alpha };
+	//右上
+	tex[n].vertex[1] = { { x2, y2, 0.0f }, rightUp,   alpha };
+	//左下
+	tex[n].vertex[2] = { { x3, y3, 0.0f }, leftDown,  alpha };
+	//右下
+	tex[n].vertex[3] = { { x4, y4, 0.0f }, rightDown, alpha };
 
 	//頂点データの更新
 	memcpy(tex[n].data, tex[n].vertex.data(), sizeof(tex::Vertex) * tex[n].vertex.size());

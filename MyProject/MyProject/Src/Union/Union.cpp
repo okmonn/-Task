@@ -2,6 +2,7 @@
 #include "Union.h"
 #include "../Window/Window.h"
 #include "../Debuger/Debug.h"
+#include "../Input/Input.h"
 #include "../Device/Device.h"
 #include "../Queue/Queue.h"
 #include "../List/List.h"
@@ -92,16 +93,17 @@ void Union::CreatePipe(void)
 // クラスのインスタンス
 void Union::Start(void)
 {
-	win  = std::make_shared<Window>(x, y);
-	deg  = std::make_shared<Debug>();
-	dev  = std::make_shared <Device>();
-	que  = std::make_shared<Queue>(dev);
-	list = std::make_shared<List>(dev);
-	swap = std::make_shared<Swap>(win, que);
-	fen  = std::make_shared<Fence>(dev, que);
-	ren  = std::make_shared<Render>(dev, list, swap);
-	dep  = std::make_shared<Depth>(dev, list);
-	con  = std::make_shared<Constant>(dev, list);
+	win   = std::make_shared<Window>(x, y);
+	deg   = std::make_shared<Debug>();
+	input = std::make_shared<Input>(win);
+	dev   = std::make_shared <Device>();
+	que   = std::make_shared<Queue>(dev);
+	list  = std::make_shared<List>(dev);
+	swap  = std::make_shared<Swap>(win, que);
+	fen   = std::make_shared<Fence>(dev, que);
+	ren   = std::make_shared<Render>(dev, list, swap);
+	dep   = std::make_shared<Depth>(dev, list);
+	con   = std::make_shared<Constant>(dev, list);
 
 	CreateRoot();
 
@@ -137,6 +139,18 @@ bool Union::CheckMsg(void)
 	}
 
 	return true;
+}
+
+// キー入力
+bool Union::CheckKey(const int & i)
+{
+	return input->CheckKey(i);
+}
+
+// トリガー入力
+bool Union::CheckTriger(const int & i)
+{
+	return input->Triger(i);
 }
 
 // 画像の読み込み
@@ -187,6 +201,32 @@ void Union::DrawTriangle(const float & x1, const float & y1, const float & x2, c
 void Union::DrawImg(int& i, const float& x, const float& y, const float& alpha, const int& turnX, const int& turnY)
 {
 	tex->Draw(i, x, y, alpha, turnX, turnY);
+}
+
+// 画像の描画・サイズ指定
+void Union::DrawSizeImg(int & i, const float & x, const float & y, const float & sizeX, const float & sizeY, const float & alpha, const int & turnX, const int & turnY)
+{
+	tex->DrawSize(i, x, y, sizeX, sizeY, alpha, turnX, turnY);
+}
+
+// 画像の描画・サイズ・範囲指定
+void Union::DrawRectImg(int & i, const float & x, const float & y, const float & sizeX, const float & sizeY, 
+	const float & rectX, const float & rectY, const float & rectSizeX, const float & rectSizeY, const float & alpha, const int & turnX, const int & turnY)
+{
+	tex->DrawRectSize(i, x, y, sizeX, sizeY, rectX, rectY, rectSizeX, rectSizeY, alpha, turnX, turnY);
+}
+
+// 画像の描画・4点指定
+void Union::DrawFreelyImg(int & i, const float & x1, const float & y1, const float & x2, const float & y2,
+	const float & x3, const float & y3, const float & x4, const float & y4, const float & alpha, const int & turnX, const int & turnY)
+{
+	tex->FreelyDraw(i, x1, y1, x2, y2, x3, y3, x4, y4, alpha, turnX, turnY);
+}
+
+// 画像の描画・4点・範囲指定
+void Union::DrawFreelyRectImg(int & i, const float & x1, const float & y1, const float & x2, const float & y2, const float & x3, const float & y3, const float & x4, const float & y4, const float & rectX, const float & rectY, const float & rectSizeX, const float & rectSizeY, const float & alpha, const int & turnX, const int & turnY)
+{
+	tex->FreelyDrawRect(i, x1, y1, x2, y2, x3, y3, x4, y4, rectX, rectY, rectSizeX, rectSizeY, alpha, turnX, turnY);
 }
 
 // 描画

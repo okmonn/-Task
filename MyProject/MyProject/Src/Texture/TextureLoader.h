@@ -3,13 +3,9 @@
 #include <map>
 #include <memory>
 
-namespace DirectX {
-	struct TexMetadata;
-	class ScratchImage;
-}
-
 struct ID3D12DescriptorHeap;
 struct ID3D12Resource;
+struct D3D12_SUBRESOURCE_DATA;
 
 class Device;
 
@@ -17,14 +13,14 @@ class TextureLoader
 {
 	// 画像のオリジンデータ
 	struct Origin {
-		//メタデータ
-		DirectX::TexMetadata* meta;
-		//スクラッチイメージ
-		DirectX::ScratchImage* img;
+		//デコードデータ
+		std::unique_ptr<unsigned char[]>decode;
+		//サブデータ
+		D3D12_SUBRESOURCE_DATA* sub;
 		//ヒープ
 		ID3D12DescriptorHeap* heap;
 		//定数リソース
-		ID3D12Resource* c_rsc;
+		ID3D12Resource* rsc;
 	};
 
 public:
@@ -42,16 +38,24 @@ public:
 	}
 	// 定数リソースの取得
 	ID3D12Resource* GetConRsc(const std::string& fileName) {
-		return origin[fileName].c_rsc;
+		return origin[fileName].rsc;
 	}
-	// メタデータの取得
-	DirectX::TexMetadata* GetMeta(const std::string& fileName) {
-		return origin[fileName].meta;
+	// デコードデータの取得
+	unsigned char* GetDecode(const std::string& fileName) {
+		return origin[fileName].decode.get();
 	}
-	// スクラッチイメージの取得
-	DirectX::ScratchImage* GetImg(const std::string& fileName) {
-		return origin[fileName].img;
+	// サブデータの取得
+	D3D12_SUBRESOURCE_DATA* GetSub(const std::string& fileName) {
+		return origin[fileName].sub;
 	}
+	//// メタデータの取得
+	//DirectX::TexMetadata* GetMeta(const std::string& fileName) {
+	//	return origin[fileName].meta;
+	//}
+	//// スクラッチイメージの取得
+	//DirectX::ScratchImage* GetImg(const std::string& fileName) {
+	//	return origin[fileName].img;
+	//}
 
 private:
 	// ヒープの生成

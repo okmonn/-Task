@@ -139,6 +139,7 @@
     <ClCompile Include="Src\Device\Device.cpp" />
     <ClCompile Include="Src\Fence\Fence.cpp" />
     <ClCompile Include="Src\Func\Func.cpp" />
+    <ClCompile Include="Src\Input\Input.cpp" />
     <ClCompile Include="Src\Line\Line.cpp" />
     <ClCompile Include="Src\List\List.cpp" />
     <ClCompile Include="Src\Main.cpp" />
@@ -147,12 +148,16 @@
     <ClCompile Include="Src\Queue\Queue.cpp" />
     <ClCompile Include="Src\Render\Render.cpp" />
     <ClCompile Include="Src\Root\Root.cpp" />
+    <ClCompile Include="Src\Sound\SoundFunc.cpp" />
+    <ClCompile Include="Src\Sound\Wave.cpp" />
     <ClCompile Include="Src\Swap\Swap.cpp" />
     <ClCompile Include="Src\Texture\Texture.cpp" />
     <ClCompile Include="Src\Texture\TextureLoader.cpp" />
+    <ClCompile Include="Src\Texture\WICTextureLoader12.cpp" />
     <ClCompile Include="Src\Triangle\Triangle.cpp" />
     <ClCompile Include="Src\Union\Union.cpp" />
     <ClCompile Include="Src\Window\Window.cpp" />
+    <ClCompile Include="Src\XAudio2\XAudio2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Constant\Constant.h" />
@@ -163,6 +168,9 @@
     <ClInclude Include="Src\etc\VertexData.h" />
     <ClInclude Include="Src\Fence\Fence.h" />
     <ClInclude Include="Src\Func\Func.h" />
+    <ClInclude Include="Src\Func\InputData.h" />
+    <ClInclude Include="Src\Input\Input.h" />
+    <ClInclude Include="Src\Input\KeyData.h" />
     <ClInclude Include="Src\Line\Line.h" />
     <ClInclude Include="Src\List\List.h" />
     <ClInclude Include="Src\Pipe\Pipe.h" />
@@ -170,15 +178,19 @@
     <ClInclude Include="Src\Queue\Queue.h" />
     <ClInclude Include="Src\Render\Render.h" />
     <ClInclude Include="Src\Root\Root.h" />
+    <ClInclude Include="Src\Sound\SoundFunc.h" />
+    <ClInclude Include="Src\Sound\Wave.h" />
     <ClInclude Include="Src\Swap\Swap.h" />
-    <ClInclude Include="Src\Texture\LoadTbl.h" />
     <ClInclude Include="Src\Texture\Texture.h" />
     <ClInclude Include="Src\Texture\TextureLoader.h" />
     <ClInclude Include="Src\Texture\TextureData.h" />
+    <ClInclude Include="Src\Texture\WICTextureLoader12.h" />
     <ClInclude Include="Src\Triangle\Triangle.h" />
     <ClInclude Include="Src\Union\Union.h" />
     <ClInclude Include="Src\Window\Icon\Icon.h" />
     <ClInclude Include="Src\Window\Window.h" />
+    <ClInclude Include="Src\XAudio2\VoiceCallback.h" />
+    <ClInclude Include="Src\XAudio2\XAudio2.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Src\Window\Icon\Icon.rc" />

@@ -2,20 +2,16 @@
 #include "../etc/VertexData.h"
 #include <vector>
 
-namespace DirectX {
-	struct TexMetadata;
-	class ScratchImage;
-}
-
 struct ID3D12DescriptorHeap;
 struct ID3D12Resource;
+struct D3D12_SUBRESOURCE_DATA;
 
 // 画像データ
 struct Tex {
-	//メタデータ
-	DirectX::TexMetadata* meta;
-	//スクラッチイメージ
-	DirectX::ScratchImage* img;
+	// デコードデータ
+	unsigned char* decode;
+	// サブデータ
+	D3D12_SUBRESOURCE_DATA* sub;
 
 	//定数ヒープ
 	ID3D12DescriptorHeap* heap;

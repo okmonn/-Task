@@ -4,6 +4,7 @@
 
 class Window;
 class Debug;
+class Input;
 class Device;
 class Queue;
 class List;
@@ -41,6 +42,12 @@ public:
 	// メッセージの確認
 	bool CheckMsg(void);
 
+	// キー入力
+	bool CheckKey(const int& i);
+
+	// トリガー入力
+	bool CheckTriger(const int& i);
+
 	// 画像の読み込み
 	void LoadImg(const std::string& fileName, int& i);
 
@@ -59,6 +66,21 @@ public:
 
 	// 画像の描画
 	void DrawImg(int& i, const float& x, const float& y, const float& alpha, const int& turnX, const int& turnY);
+
+	// 画像の描画・サイズ指定
+	void DrawSizeImg(int& i, const float& x, const float& y, const float& sizeX, const float& sizeY, const float& alpha, const int& turnX, const int& turnY);
+
+	// 画像の描画・サイズ・範囲指定
+	void DrawRectImg(int& i, const float& x, const float& y, const float& sizeX, const float& sizeY,
+		const float& rectX, const float& rectY, const float& rectSizeX, const float& rectSizeY, const float& alpha, const int& turnX, const int& turnY);
+
+	// 画像の描画・4点指定
+	void DrawFreelyImg(int & i, const float & x1, const float & y1, const float & x2, const float & y2,
+		const float & x3, const float & y3, const float & x4, const float & y4, const float & alpha, const int & turnX, const int & turnY);
+
+	// 画像の描画・4点・範囲指定
+	void DrawFreelyRectImg(int & i, const float & x1, const float & y1, const float & x2, const float & y2, const float & x3, const float & y3, const float & x4, const float & y4,
+		const float& rectX, const float& rectY, const float& rectSizeX, const float& rectSizeY, const float & alpha, const int & turnX, const int & turnY);
 
 	// 描画実行
 	void Do(void);
@@ -107,6 +129,9 @@ private:
 
 	// デバッガ
 	std::shared_ptr<Debug>deg;
+
+	// インプット
+	std::shared_ptr<Input>input;
 
 	// デバイス
 	std::shared_ptr<Device>dev;

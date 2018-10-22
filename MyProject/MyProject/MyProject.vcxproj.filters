@@ -82,6 +82,27 @@
     <Filter Include="Func">
       <UniqueIdentifier>{28765fc7-221f-41fb-8b61-c5a3bc32be10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Texture\Loader">
+      <UniqueIdentifier>{939a329b-8217-4cab-9d75-7a1091f6612d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture\WIC">
+      <UniqueIdentifier>{6912e8d0-4e61-40e9-9c66-accf31ead520}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{f9f73a14-d811-4f6c-bb95-990f8b5097da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XAudio2">
+      <UniqueIdentifier>{4f71ce08-556d-4357-926e-9fe4f3fcc003}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{04e72391-2a9d-4fca-938b-64e8f70642cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound\SoundFunc">
+      <UniqueIdentifier>{45702ce2-d1b9-42cd-a7e9-f145e538ff52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound\WAVE">
+      <UniqueIdentifier>{349c25de-2108-4cd1-a99c-9e4fff161baa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -138,11 +159,26 @@
     <ClCompile Include="Src\Func\Func.cpp">
       <Filter>Func</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Texture\TextureLoader.cpp">
-      <Filter>Texture</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Texture\Texture.cpp">
       <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Texture\TextureLoader.cpp">
+      <Filter>Texture\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Texture\WICTextureLoader12.cpp">
+      <Filter>Texture\WIC</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Input\Input.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\XAudio2\XAudio2.cpp">
+      <Filter>XAudio2</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Sound\Wave.cpp">
+      <Filter>Sound\WAVE</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Sound\SoundFunc.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -209,14 +245,35 @@
     <ClInclude Include="Src\Func\Func.h">
       <Filter>Func</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Texture\LoadTbl.h">
+    <ClInclude Include="Src\Texture\Texture.h">
       <Filter>Texture</Filter>
     </ClInclude>
     <ClInclude Include="Src\Texture\TextureLoader.h">
-      <Filter>Texture</Filter>
+      <Filter>Texture\Loader</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Texture\Texture.h">
-      <Filter>Texture</Filter>
+    <ClInclude Include="Src\Texture\WICTextureLoader12.h">
+      <Filter>Texture\WIC</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Input\Input.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Func\InputData.h">
+      <Filter>Func</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Input\KeyData.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\XAudio2\XAudio2.h">
+      <Filter>XAudio2</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\XAudio2\VoiceCallback.h">
+      <Filter>XAudio2</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Sound\Wave.h">
+      <Filter>Sound\WAVE</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Sound\SoundFunc.h">
+      <Filter>Sound\SoundFunc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
