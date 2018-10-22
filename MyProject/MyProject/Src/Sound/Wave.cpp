@@ -5,6 +5,7 @@
 #include "../Func/Func.h"
 #include <ks.h>
 #include <ksmedia.h>
+#include <mutex>
 #include <tchar.h>
 
 // 解放マクロ
@@ -29,21 +30,17 @@ const DWORD spk[] = {
 // コンストラクタ
 Wave::Wave() : 
 	audio(XAudio2::Get()), back(std::make_unique<VoiceCallback>()), voice(nullptr), file(nullptr), channel(0), sample(0), bit(0), byte(0),
-	index(0), arrival(false), threadFlag(true)
+	index(0), loop(false), play(false), threadFlag(true)
 {
 	data.clear();
-
-	func = &Wave::Loading;
 }
 
 // コンストラクタ
 Wave::Wave(const std::string & fileName) :
 	audio(XAudio2::Get()), back(std::make_unique<VoiceCallback>()), voice(nullptr), file(nullptr), channel(0), sample(0), bit(0), byte(0),
-	index(0), arrival(false), threadFlag(true)
+	index(0), play(false), threadFlag(true)
 {
 	data.clear();
-
-	func = &Wave::Loading;
 
 	Load(fileName);
 }
@@ -69,7 +66,6 @@ void Wave::operator=(const Wave & w)
 	data    = w.data;
 
 	Create();
-	func = &Wave::Loaded;
 	if (th.joinable() == false)
 	{
 		th = std::thread(&Wave::Stream, this);
@@ -86,10 +82,10 @@ long Wave::Create(void)
 	fmt.Format.nSamplesPerSec  = sample;
 	fmt.Format.wBitsPerSample  = func::Bit(sizeof(float));
 	fmt.Format.nBlockAlign     = sizeof(float) * channel;
-	fmt.Format.nAvgBytesPerSec = sample * channel * func::Byte(bit);
+	fmt.Format.nAvgBytesPerSec = sample * fmt.Format.nBlockAlign;
 	fmt.Format.cbSize          = sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
 
-	fmt.Samples.wValidBitsPerSample = sample;
+	fmt.Samples.wValidBitsPerSample = fmt.Format.wBitsPerSample;
 	fmt.dwChannelMask               = spk[channel - 1];
 	fmt.SubFormat                   = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
 
@@ -165,7 +161,7 @@ void Wave::Loading(void)
 
 	XAUDIO2_VOICE_STATE st = {};
 
-	while (std::feof(file) == 0)
+	while (std::feof(file) == 0 && threadFlag == true)
 	{
 		//配列のメモリ確保
 		data[read].resize(byte / (func::Byte(bit) * channel));
@@ -185,6 +181,7 @@ void Wave::Loading(void)
 		//読み込みデータ番号を次に進める
 		++read;
 
+		voice->GetState(&st);
 		if (st.BuffersQueued < BUFFER_NUM)
 		{
 			XAUDIO2_BUFFER buf = {};
@@ -201,7 +198,7 @@ void Wave::Loading(void)
 
 			if (index + 1 >= data.size())
 			{
-				arrival = true;
+				play = loop;
 				index = 0;
 			}
 			else
@@ -212,8 +209,6 @@ void Wave::Loading(void)
 	}
 
 	Close(file);
-
-	func = &Wave::Loaded;
 }
 
 // 波形をすべて読み込み終わっている場合の処理
@@ -223,6 +218,7 @@ void Wave::Loaded(void)
 
 	while (threadFlag)
 	{
+		voice->GetState(&st);
 		if (st.BuffersQueued < BUFFER_NUM)
 		{
 			//バッファに追加
@@ -240,7 +236,10 @@ void Wave::Loaded(void)
 
 			if (index + 1 >= data.size())
 			{
-				arrival = true;
+				if (loop == true)
+				{
+					Stop();
+				}
 				index = 0;
 			}
 			else
@@ -249,22 +248,24 @@ void Wave::Loaded(void)
 			}
 		}
 	}
+
+	st.BuffersQueued = 0;
+
 }
 
 // 非同期
 void Wave::Stream(void)
 {
-	(this->*func)();
+	Loading();
+	Loaded();
 }
 
 // 再生
 long Wave::Play(const bool & loop)
 {
-	if (loop == false && arrival == true)
-	{
-		OutputDebugString(_T("\nStop()を呼び出してください\n"));
-		return S_FALSE;
-	}
+	std::lock_guard<std::mutex>lock(std::mutex());
+
+	this->loop = loop;
 
 	auto hr = voice->Start();
 	if (FAILED(hr))
@@ -278,6 +279,8 @@ long Wave::Play(const bool & loop)
 // 停止
 long Wave::Stop(void)
 {
+	std::lock_guard<std::mutex>lock(std::mutex());
+
 	auto hr = voice->Stop();
 	if (FAILED(hr))
 	{
@@ -285,21 +288,32 @@ long Wave::Stop(void)
 		return hr;
 	}
 
-	arrival = false;
+	play = false;
 
 	return hr;
+}
+
+// リセット
+void Wave::Reset(void)
+{
+	std::lock_guard<std::mutex>lock(std::mutex());
+
+	XAUDIO2_VOICE_STATE st = {};
+	voice->GetState(&st);
+	st.BuffersQueued = 0;
+	index = 0;
 }
 
 // 波形データの削除
 void Wave::Delete(void)
 {
+	Stop();
+
 	threadFlag = false;
 	if (th.joinable() == true)
 	{
 		th.join();
 	}
-
-	Stop();
 
 	Destroy(voice);
 

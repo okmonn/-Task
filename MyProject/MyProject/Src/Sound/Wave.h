@@ -34,6 +34,9 @@ public:
 	// 停止
 	long Stop(void);
 
+	// リセット
+	void Reset(void);
+
 	// 波形データの削除
 	void Delete(void);
 
@@ -55,7 +58,7 @@ public:
 	}
 	// 波形データが終わりに到達したか確認
 	bool GetArrival(void) const {
-		return arrival;
+		return play;
 	}
 
 private:
@@ -99,8 +102,11 @@ private:
 	// 読み込み配列のインデックス
 	unsigned int index;
 
+	// ループフラグ
+	bool loop;
+
 	// 波形データが終わりに到達したかのフラグ
-	bool arrival;
+	bool play;
 
 	// スレッドフラグ
 	bool threadFlag;
@@ -110,7 +116,4 @@ private:
 
 	// スレッド
 	std::thread th;
-
-	// 関数ポインタ
-	void (Wave::*func)(void);
 };
