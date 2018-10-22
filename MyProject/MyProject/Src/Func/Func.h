@@ -1,5 +1,6 @@
 #pragma once
 #include "InputData.h"
+#include "../Sound/Wave.h"
 #include <string>
 
 namespace func {

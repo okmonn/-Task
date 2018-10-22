@@ -28,18 +28,52 @@ const DWORD spk[] = {
 
 // コンストラクタ
 Wave::Wave() : 
-	audio(XAudio2::Get()), back(std::make_unique<VoiceCallback>()), voice(nullptr), file(nullptr), channel(0), sample(0), bit(0), 
-	start(0), index(0)
+	audio(XAudio2::Get()), back(std::make_unique<VoiceCallback>()), voice(nullptr), file(nullptr), channel(0), sample(0), bit(0), byte(0),
+	index(0), arrival(false), threadFlag(true)
 {
 	data.clear();
 
 	func = &Wave::Loading;
 }
 
+// コンストラクタ
+Wave::Wave(const std::string & fileName) :
+	audio(XAudio2::Get()), back(std::make_unique<VoiceCallback>()), voice(nullptr), file(nullptr), channel(0), sample(0), bit(0), byte(0),
+	index(0), arrival(false), threadFlag(true)
+{
+	data.clear();
+
+	func = &Wave::Loading;
+
+	Load(fileName);
+}
+
 // デストラクタ
 Wave::~Wave()
 {
-	Destroy(voice);
+	Delete();
+}
+
+// 代入
+void Wave::operator=(const Wave & w)
+{
+	if (voice != nullptr)
+	{
+		return;
+	}
+
+	channel = w.channel;
+	sample  = sample;
+	bit     = bit;
+	byte    = byte;
+	data    = w.data;
+
+	Create();
+	func = &Wave::Loaded;
+	if (th.joinable() == false)
+	{
+		th = std::thread(&Wave::Stream, this);
+	}
 }
 
 // ソースボイスの生成
@@ -74,7 +108,7 @@ int Wave::Load(const std::string & fileName)
 	if (fopen_s(&file, fileName.c_str(), "rb") != 0)
 	{
 		OutputDebugString(_T("\nファイルの参照：失敗\n"));
-		return;
+		return -1;
 	}
 
 	//チャンク宣言
@@ -104,6 +138,7 @@ int Wave::Load(const std::string & fileName)
 	channel = fmt.channel;
 	sample  = fmt.sample;
 	bit     = fmt.bit;
+	byte    = fmt.byte;
 
 	//ソースボイス生成
 	if (FAILED(Create()))
@@ -112,8 +147,10 @@ int Wave::Load(const std::string & fileName)
 		return -1;
 	}
 
-	//波形データの開始位置取得
-	start = (riff.size + sizeof(riff.id) + sizeof(riff.size)) - data.size;
+	if (th.joinable() == false)
+	{
+		th = std::thread(&Wave::Stream, this);
+	}
 
 	return 0;
 }
@@ -121,79 +158,152 @@ int Wave::Load(const std::string & fileName)
 // 波形をすべて読み込み終わってない場合の処理
 void Wave::Loading(void)
 {
+	//読み込み番号
+	int read = 0;
+
+	int flag = 0;
+
 	XAUDIO2_VOICE_STATE st = {};
 
-	while (true)
+	while (std::feof(file) == 0)
 	{
-		voice->GetState(&st);
+		//配列のメモリ確保
+		data[read].resize(byte / (func::Byte(bit) * channel));
+
+		switch (channel)
+		{
+		case 1:
+			flag = sound::LoadMono(data[read], bit, file);
+			break;
+		case 2:
+			flag = sound::LoadStereo(data[read], bit, file);
+			break;
+		default:
+			break;
+		}
+
+		//読み込みデータ番号を次に進める
+		++read;
+
 		if (st.BuffersQueued < BUFFER_NUM)
 		{
-			//配列のメモリ確保
-			data[index].resize(fmt.byte / (func::Byte(fmt.bit) * fmt.channel));
-
-			int flag = 0;
-			switch (channel)
-			{
-			case 1:
-				flag = sound::LoadMono(data[index], bit, file);
-				break;
-			case 2:
-				flag = sound::LoadStereo(data[index], bit, file);
-				break;
-			default:
-				break;
-			}
-
-			//波形のファイル読み込みが失敗
-			if (flag != 0)
-			{
-				threadFlag = false;
-				Close(file);
-				break;
-			}
-
-			//sound::Delay(stream[index], fmt.Format.nSamplesPerSec, bit, 0.3f, 0.05f, 10);
-
-			//バッファに追加
 			XAUDIO2_BUFFER buf = {};
-			buf.AudioBytes = sizeof(float) * stream[index].size();
-			buf.pAudioData = (BYTE*)(&stream[index][0]);
+			buf.AudioBytes = sizeof(float) * data[index].size();
+			buf.pAudioData = (BYTE*)(&data[index][0]);
 
 			auto hr = voice->SubmitSourceBuffer(&buf);
 			if (FAILED(hr))
 			{
-				OutputDebugString(_T("\nバッファの追加：失敗\n"));
+				OutputDebugString(_T("\n波形データのバッファの追加：失敗\n"));
 				threadFlag = false;
-				Close(file);
 				break;
 			}
 
-			if (feof(file) != 0)
+			if (index + 1 >= data.size())
 			{
-				//ループ
-				if (loop == true)
-				{
-					fseek(file, startPos, SEEK_SET);
-				}
-				else
-				{
-					//バッファが空になったとき
-					if (st.BuffersQueued <= 0)
-					{
-						Stop();
-						fseek(file, startPos, SEEK_SET);
-					}
-				}
+				arrival = true;
+				index = 0;
 			}
-
-			//配列番号の更新
-			index = (index >= stream.size() - 1) ? 0 : 1;
+			else
+			{
+				++index;
+			}
 		}
 	}
+
+	Close(file);
+
+	func = &Wave::Loaded;
 }
 
 // 波形をすべて読み込み終わっている場合の処理
 void Wave::Loaded(void)
 {
+	XAUDIO2_VOICE_STATE st = {};
+
+	while (threadFlag)
+	{
+		if (st.BuffersQueued < BUFFER_NUM)
+		{
+			//バッファに追加
+			XAUDIO2_BUFFER buf = {};
+			buf.AudioBytes = sizeof(float) * data[index].size();
+			buf.pAudioData = (BYTE*)(&data[index][0]);
+
+			auto hr = voice->SubmitSourceBuffer(&buf);
+			if (FAILED(hr))
+			{
+				OutputDebugString(_T("\n波形データのバッファの追加：失敗\n"));
+				threadFlag = false;
+				break;
+			}
+
+			if (index + 1 >= data.size())
+			{
+				arrival = true;
+				index = 0;
+			}
+			else
+			{
+				++index;
+			}
+		}
+	}
 }
 
+// 非同期
+void Wave::Stream(void)
+{
+	(this->*func)();
+}
+
+// 再生
+long Wave::Play(const bool & loop)
+{
+	if (loop == false && arrival == true)
+	{
+		OutputDebugString(_T("\nStop()を呼び出してください\n"));
+		return S_FALSE;
+	}
+
+	auto hr = voice->Start();
+	if (FAILED(hr))
+	{
+		OutputDebugString(_T("\n波形データの再生：失敗\n"));
+	}
+
+	return 0;
+}
+
+// 停止
+long Wave::Stop(void)
+{
+	auto hr = voice->Stop();
+	if (FAILED(hr))
+	{
+		OutputDebugString(_T("\n波形データの停止：失敗\n"));
+		return hr;
+	}
+
+	arrival = false;
+
+	return hr;
+}
+
+// 波形データの削除
+void Wave::Delete(void)
+{
+	threadFlag = false;
+	if (th.joinable() == true)
+	{
+		th.join();
+	}
+
+	Stop();
+
+	Destroy(voice);
+
+	data.clear();
+
+	index = 0;
+}

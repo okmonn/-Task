@@ -178,7 +178,7 @@
       <Filter>Sound\WAVE</Filter>
     </ClCompile>
     <ClCompile Include="Src\Sound\SoundFunc.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Sound\SoundFunc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
