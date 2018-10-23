@@ -89,6 +89,8 @@ void Union::CreatePipe(void)
 	}
 }
 
+int n = 0;
+
 // クラスのインスタンス
 void Union::Start(void)
 {
@@ -111,8 +113,7 @@ void Union::Start(void)
 	pnt = std::make_shared<Point>(dev, list, con, drwRoot, pntPipe);
 	lin = std::make_shared<Line>(dev, list, con, drwRoot, linPipe);
 	tri = std::make_shared<Triangle>(dev, list, con, drwRoot, triPipe);
-
-	tex     = std::make_shared<Texture>(dev, list, con, texRoot, texPipe);
+	tex = std::make_shared<Texture>(dev, list, con, texRoot, texPipe);
 }
 
 // メッセージの確認

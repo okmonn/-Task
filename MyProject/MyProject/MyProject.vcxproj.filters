@@ -73,9 +73,6 @@
     <Filter Include="Dx12\Root">
       <UniqueIdentifier>{bddac267-caac-4f6c-b066-76d9c95e9517}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dx12\Sound">
-      <UniqueIdentifier>{04e72391-2a9d-4fca-938b-64e8f70642cb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Dx12\Swap">
       <UniqueIdentifier>{c35e11a9-4b3a-409d-8f93-1c8c3b05b5fc}</UniqueIdentifier>
     </Filter>
@@ -114,12 +111,6 @@
     </Filter>
     <Filter Include="Game\MapEditor">
       <UniqueIdentifier>{a2a245a2-a3ca-45c0-944c-13032a76547d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Dx12\Sound\SoundLoader">
-      <UniqueIdentifier>{4bf4f2ad-23e3-4f7a-add2-5962ffaa3533}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Dx12\Sound\SoundFunc">
-      <UniqueIdentifier>{bfdc6a39-7cb0-41f9-82e3-6bacb5980339}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -200,15 +191,6 @@
     </ClCompile>
     <ClCompile Include="Src\_GameSrc\MapEditor\MapEditor.cpp">
       <Filter>Game\MapEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Sound\SoundLoader.cpp">
-      <Filter>Dx12\Sound\SoundLoader</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Sound\Sound.cpp">
-      <Filter>Dx12\Sound</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Sound\SoundFunc.cpp">
-      <Filter>Dx12\Sound\SoundFunc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -310,15 +292,6 @@
     </ClInclude>
     <ClInclude Include="Src\_GameSrc\MapEditor\MapEditor.h">
       <Filter>Game\MapEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Sound\SoundLoader.h">
-      <Filter>Dx12\Sound\SoundLoader</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Sound\Sound.h">
-      <Filter>Dx12\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Sound\SoundFunc.h">
-      <Filter>Dx12\Sound\SoundFunc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
