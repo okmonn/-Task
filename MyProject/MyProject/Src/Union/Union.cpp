@@ -16,7 +16,6 @@
 #include "../Point/Point.h"
 #include "../Line/Line.h"
 #include "../Triangle/Triangle.h"
-#include "../Texture/TextureLoader.h"
 #include "../Texture/Texture.h"
 #include "../etc/Release.h"
 
@@ -113,8 +112,7 @@ void Union::Start(void)
 	lin = std::make_shared<Line>(dev, list, con, drwRoot, linPipe);
 	tri = std::make_shared<Triangle>(dev, list, con, drwRoot, triPipe);
 
-	texLoad = std::make_shared<TextureLoader>(dev);
-	tex     = std::make_shared<Texture>(dev, list, con, texRoot, texPipe, texLoad);
+	tex     = std::make_shared<Texture>(dev, list, con, texRoot, texPipe);
 }
 
 // メッセージの確認

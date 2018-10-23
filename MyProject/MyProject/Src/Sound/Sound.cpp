@@ -1,0 +1,173 @@
+#include "Sound.h"
+#include "SoundLoader.h"
+#include "../XAudio2/XAudio2.h"
+#include "../XAudio2/VoiceCallback.h"
+#include "../Func/Func.h"
+#include <ks.h>
+#include <ksmedia.h>
+#include <tchar.h>
+
+// 解放マクロ
+#define Destroy(X) { if((X) != nullptr) (X)->DestroyVoice(); (X) = nullptr; }
+
+// バッファの最大数
+#define BUFFER_NUM 2
+
+// スピーカー設定用配列
+const DWORD spk[] = {
+	KSAUDIO_SPEAKER_MONO,
+	KSAUDIO_SPEAKER_STEREO,
+	KSAUDIO_SPEAKER_STEREO | SPEAKER_LOW_FREQUENCY,
+	KSAUDIO_SPEAKER_QUAD,
+	0,
+	KSAUDIO_SPEAKER_5POINT1,
+	0,
+	KSAUDIO_SPEAKER_7POINT1_SURROUND
+};
+
+// コンストラクタ
+Sound::Sound() : 
+	audio(XAudio2::Get()), loader(std::make_shared<SoundLoader>()), threadFlag(true)
+{
+	snd.clear();
+}
+
+// デストラクタ
+Sound::~Sound()
+{
+	threadFlag = false;
+
+	for (auto itr = snd.begin(); itr != snd.end(); ++itr)
+	{
+		itr->second.th.join();
+	}
+
+	for (auto itr = snd.begin(); itr != snd.end(); ++itr)
+	{
+		Destroy(itr->second.voice);
+	}
+
+	loader.reset();
+}
+
+// ソースボイスの生成
+long Sound::Create(int * i, const int& channel, const int& sample, const int& bit)
+{
+	//フォーマット設定用構造体
+	WAVEFORMATEXTENSIBLE fmt = {};
+	fmt.Format.wFormatTag      = WAVE_FORMAT_EXTENSIBLE;
+	fmt.Format.nChannels       = channel;
+	fmt.Format.nSamplesPerSec  = sample;
+	fmt.Format.wBitsPerSample  = func::Bit(sizeof(float));
+	fmt.Format.nBlockAlign     = sizeof(float) * channel;
+	fmt.Format.nAvgBytesPerSec = sample * fmt.Format.nBlockAlign;
+	fmt.Format.cbSize          = sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
+
+	fmt.Samples.wValidBitsPerSample = fmt.Format.wBitsPerSample;
+	fmt.dwChannelMask               = spk[channel - 1];
+	fmt.SubFormat                   = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
+
+	auto hr = audio.GetAudio()->CreateSourceVoice(&snd[i].voice, (WAVEFORMATEX*)(&fmt), 0, 1.0f, nullptr);
+	if (FAILED(hr))
+	{
+		OutputDebugString(_T("\nソースボイスの生成：失敗\n"));
+	}
+
+	return hr;
+}
+
+// 読み込み
+long Sound::Load(const std::string & fileName, int & i)
+{
+	if (loader->Load(fileName) != 0)
+	{
+		return S_FALSE;
+	}
+
+	auto hr = Create(&i, loader->GetChannel(fileName), loader->GetSample(fileName), loader->GetBit(fileName));
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	snd[&i].data = loader->GetData(fileName);
+
+	snd[&i].th = std::thread(&Sound::Stream, this, &i);
+
+	return hr;
+}
+
+// 非同期処理
+void Sound::Stream(int * i)
+{
+	XAUDIO2_VOICE_STATE st = {};
+
+	while (threadFlag)
+	{
+		if (st.BuffersQueued < BUFFER_NUM)
+		{
+			//バッファに追加
+			XAUDIO2_BUFFER buf = {};
+			buf.AudioBytes = sizeof(float) * snd[i].data[snd[i].index].size();
+			buf.pAudioData = (BYTE*)(&snd[i].data[snd[i].index][0]);
+
+			auto hr = snd[i].voice->SubmitSourceBuffer(&buf);
+			if (FAILED(hr))
+			{
+				OutputDebugString(_T("\n波形データをバッファに追加できませんでした\n"));
+				break;
+			}
+
+			if (snd[i].index + 1 >= snd[i].data->size())
+			{
+				if (snd[i].loop == true)
+				{
+					Stop(*i);
+				}
+				snd[i].index = 0;
+			}
+			else
+			{
+				++snd[i].index;
+			}
+		}
+	}
+}
+
+// 再生
+long Sound::Play(int & i, const bool & loop)
+{
+	auto hr = snd[&i].voice->Start();
+	if (FAILED(hr))
+	{
+		OutputDebugString(_T("\n波形データの再生：失敗\n"));
+		return hr;
+	}
+
+	snd[&i].loop = loop;
+
+	return  hr;
+}
+
+// 停止
+long Sound::Stop(int & i)
+{
+	auto hr = snd[&i].voice->Stop();
+	if (FAILED(hr))
+	{
+		OutputDebugString(_T("\n波形データの停止：失敗\n"));
+	}
+
+	return hr;
+}
+
+// 最初の位置にリセット
+void Sound::ZeroPos(int & i)
+{
+	XAUDIO2_VOICE_STATE st = {};
+	snd[&i].voice->GetState(&st);
+
+	st.BuffersQueued = 0;
+
+	snd[&i].index = 0;
+}

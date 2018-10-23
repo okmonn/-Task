@@ -16,7 +16,7 @@ class Texture
 public:
 	// コンストラクタ
 	Texture(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Constant>con, 
-		std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe, std::weak_ptr<TextureLoader>loader);
+		std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe);
 	// デストラクタ
 	~Texture();
 
@@ -47,6 +47,9 @@ public:
 	void FreelyDrawRect(int & i, const float & x1, const float & y1, const float & x2, const float & y2,const float & x3, const float & y3, const float & x4, const float & y4, 
 		const float& rectX, const float& rectY, const float& rectSizeX, const float& rectSizeY, const float & alpha, const int & turnX, const int & turnY);
 
+	// 削除
+	void DeleteImg(int& i);
+
 private:
 	// リソースビューの生成
 	void CreateView(int* i);
@@ -74,7 +77,7 @@ private:
 	std::weak_ptr<Pipe>pipe;
 
 	// テクスチャローダー
-	std::weak_ptr<TextureLoader>loader;
+	std::shared_ptr<TextureLoader>loader;
 
 	// 画像データ
 	std::map<int*, Tex>tex;

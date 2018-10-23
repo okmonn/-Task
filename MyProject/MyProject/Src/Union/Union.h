@@ -18,7 +18,6 @@ class Pipe;
 class Point;
 class Line;
 class Triangle;
-class TextureLoader;
 class Texture;
 
 class Union
@@ -175,9 +174,6 @@ private:
 
 	// トライアングル
 	std::shared_ptr<Triangle>tri;
-
-	// テクスチャローダー
-	std::shared_ptr<TextureLoader>texLoad;
 
 	// テクスチャ
 	std::shared_ptr<Texture>tex;

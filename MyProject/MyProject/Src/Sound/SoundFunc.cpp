@@ -217,7 +217,7 @@ int sound::LoadStereo8(std::vector<float>& data, FILE * file)
 		}
 
 		//float値に変換・音データを0～2の範囲に正規化
-		data[i]     = static_cast<float>(tmp.left) / OVERFLLOW_CHAR;
+		data[i] = static_cast<float>(tmp.left) / OVERFLLOW_CHAR;
 		data[i + 1] = static_cast<float>(tmp.right) / OVERFLLOW_CHAR;
 	}
 
@@ -246,7 +246,7 @@ int sound::LoadStereo16(std::vector<float>& data, FILE * file)
 		}
 
 		//float値に変換
-		data[i]     = static_cast<float>(tmp.left) / OVERFLLOW_SHORT;
+		data[i] = static_cast<float>(tmp.left) / OVERFLLOW_SHORT;
 		data[i + 1] = static_cast<float>(tmp.right) / OVERFLLOW_SHORT;
 	}
 

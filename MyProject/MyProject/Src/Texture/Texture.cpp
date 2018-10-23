@@ -14,8 +14,8 @@
 
 // コンストラクタ
 Texture::Texture(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Constant>con, 
-	std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe, std::weak_ptr<TextureLoader>loader) :
-	dev(dev), list(list), con(con), root(root), pipe(pipe), loader(loader)
+	std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe) :
+	dev(dev), list(list), con(con), root(root), pipe(pipe), loader(std::make_shared<TextureLoader>(dev))
 {
 	tex.clear();
 }
@@ -28,6 +28,8 @@ Texture::~Texture()
 		UnMap(itr->second.v_rsc);
 		Release(itr->second.v_rsc);
 	}
+
+	loader.reset();
 }
 
 // リソースビューの生成
@@ -99,16 +101,16 @@ long Texture::Map(int * i)
 // 読み込み
 long Texture::Load(const std::string & fileName, int & i)
 {
-	if (FAILED(loader.lock()->Load(fileName)))
+	if (FAILED(loader->Load(fileName)))
 	{
 		return S_FALSE;
 	}
 
 	//アドレス参照
-	tex[&i].heap   = loader.lock()->GetHeap(fileName);
-	tex[&i].c_rsc  = loader.lock()->GetConRsc(fileName);
-	tex[&i].decode = loader.lock()->GetDecode(fileName);
-	tex[&i].sub    = loader.lock()->GetSub(fileName);
+	tex[&i].heap   = loader->GetHeap(fileName);
+	tex[&i].c_rsc  = loader->GetConRsc(fileName);
+	tex[&i].decode = loader->GetDecode(fileName);
+	tex[&i].sub    = loader->GetSub(fileName);
 	
 	CreateView(&i);
 	auto hr = CreateRsc(&i);
@@ -416,4 +418,18 @@ void Texture::FreelyDrawRect(int & i, const float & x1, const float & y1, const 
 
 	//描画
 	list.lock()->GetList()->DrawInstanced(tex[n].vertex.size(), 1, 0, 0);
+}
+
+// 削除
+void Texture::DeleteImg(int & i)
+{
+	if (tex.find(&i) == tex.end())
+	{
+		return;
+	}
+
+	UnMap(tex[&i].v_rsc);
+	Release(tex[&i].v_rsc);
+
+	tex.erase(tex.find(&i));
 }

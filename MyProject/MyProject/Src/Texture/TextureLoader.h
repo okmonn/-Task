@@ -48,21 +48,10 @@ public:
 	D3D12_SUBRESOURCE_DATA* GetSub(const std::string& fileName) {
 		return origin[fileName].sub;
 	}
-	//// メタデータの取得
-	//DirectX::TexMetadata* GetMeta(const std::string& fileName) {
-	//	return origin[fileName].meta;
-	//}
-	//// スクラッチイメージの取得
-	//DirectX::ScratchImage* GetImg(const std::string& fileName) {
-	//	return origin[fileName].img;
-	//}
 
 private:
 	// ヒープの生成
 	long CreateHeap(const std::string& fileName);
-
-	// 定数リソースの生成
-	long CreateRsc(const std::string& fileName);
 
 
 	// デバイス

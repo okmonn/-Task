@@ -148,8 +148,9 @@
     <ClCompile Include="Src\Queue\Queue.cpp" />
     <ClCompile Include="Src\Render\Render.cpp" />
     <ClCompile Include="Src\Root\Root.cpp" />
+    <ClCompile Include="Src\Sound\Sound.cpp" />
     <ClCompile Include="Src\Sound\SoundFunc.cpp" />
-    <ClCompile Include="Src\Sound\Wave.cpp" />
+    <ClCompile Include="Src\Sound\SoundLoader.cpp" />
     <ClCompile Include="Src\Swap\Swap.cpp" />
     <ClCompile Include="Src\Texture\Texture.cpp" />
     <ClCompile Include="Src\Texture\TextureLoader.cpp" />
@@ -181,8 +182,9 @@
     <ClInclude Include="Src\Queue\Queue.h" />
     <ClInclude Include="Src\Render\Render.h" />
     <ClInclude Include="Src\Root\Root.h" />
+    <ClInclude Include="Src\Sound\Sound.h" />
     <ClInclude Include="Src\Sound\SoundFunc.h" />
-    <ClInclude Include="Src\Sound\Wave.h" />
+    <ClInclude Include="Src\Sound\SoundLoader.h" />
     <ClInclude Include="Src\Swap\Swap.h" />
     <ClInclude Include="Src\Texture\Texture.h" />
     <ClInclude Include="Src\Texture\TextureLoader.h" />
