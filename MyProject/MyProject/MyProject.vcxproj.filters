@@ -13,95 +13,113 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Window">
-      <UniqueIdentifier>{ec66ba32-1a39-4880-b2dc-822f79e19eaf}</UniqueIdentifier>
+    <Filter Include="Dx12">
+      <UniqueIdentifier>{8787edcd-17af-4472-885f-af1689540ffc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Window\Icon">
-      <UniqueIdentifier>{9f7af7cd-d378-4b99-a698-69beeeea8b4c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Device">
-      <UniqueIdentifier>{e9465b1b-c6b7-46c9-807c-d1d296091029}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="etc">
-      <UniqueIdentifier>{c74ab5a2-a26d-432f-a827-4e292118f366}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Debuger">
-      <UniqueIdentifier>{2d8ced49-b110-4396-bae3-bc11f1f1d7d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Swap">
-      <UniqueIdentifier>{c35e11a9-4b3a-409d-8f93-1c8c3b05b5fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Union">
-      <UniqueIdentifier>{44a82917-d5cd-47ea-80ad-0e78038a5462}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Command">
+    <Filter Include="Dx12\Command">
       <UniqueIdentifier>{fd785308-d8ba-45f1-b1ad-43c5f0c2af13}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Command\List">
+    <Filter Include="Dx12\Command\List">
       <UniqueIdentifier>{1b189cfe-31e5-4288-a1d4-2ecffba371c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Command\Queue">
+    <Filter Include="Dx12\Command\Queue">
       <UniqueIdentifier>{d9735a5c-dfc7-4b78-908f-4048da515c9f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Descriptor">
+    <Filter Include="Dx12\Debuger">
+      <UniqueIdentifier>{2d8ced49-b110-4396-bae3-bc11f1f1d7d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dx12\Descriptor">
       <UniqueIdentifier>{002e922c-fca4-4099-98e7-bd0e85c326e2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Descriptor\Render">
+    <Filter Include="Dx12\Descriptor\Render">
       <UniqueIdentifier>{cf305e00-5b46-4f53-b8b2-aaaf3c55ea27}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Descriptor\Depth">
+    <Filter Include="Dx12\Descriptor\Depth">
       <UniqueIdentifier>{1eccc11e-803d-40ad-9b8b-6d78f6ad8ce0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Descriptor\Constant">
+    <Filter Include="Dx12\Descriptor\Constant">
       <UniqueIdentifier>{793968c5-66ed-41e9-9578-2525b2ddca83}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fence">
-      <UniqueIdentifier>{56422517-6433-494a-8d91-55450b43316a}</UniqueIdentifier>
+    <Filter Include="Dx12\Device">
+      <UniqueIdentifier>{e9465b1b-c6b7-46c9-807c-d1d296091029}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Root">
-      <UniqueIdentifier>{bddac267-caac-4f6c-b066-76d9c95e9517}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Pipe">
-      <UniqueIdentifier>{516b9c63-a745-4333-ad44-e5bb48f8a424}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Draw">
+    <Filter Include="Dx12\Draw">
       <UniqueIdentifier>{b17230e5-fdd3-4bb3-8d2e-b6a3a2f542bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Draw\Point">
+    <Filter Include="Dx12\Draw\Point">
       <UniqueIdentifier>{fed62bb1-60c7-40fd-9643-db0a848d3ff3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Draw\Line">
+    <Filter Include="Dx12\Draw\Line">
       <UniqueIdentifier>{c2484a05-78bc-42d3-993a-9038504414ac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Draw\Triangle">
+    <Filter Include="Dx12\Draw\Triangle">
       <UniqueIdentifier>{69a670c1-fb16-408f-91d9-fd938c994ae3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Texture">
-      <UniqueIdentifier>{ef4f9d0e-3277-4b0c-a390-3c33b2d5ee56}</UniqueIdentifier>
+    <Filter Include="Dx12\etc">
+      <UniqueIdentifier>{c74ab5a2-a26d-432f-a827-4e292118f366}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Func">
+    <Filter Include="Dx12\Fence">
+      <UniqueIdentifier>{56422517-6433-494a-8d91-55450b43316a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dx12\Func">
       <UniqueIdentifier>{28765fc7-221f-41fb-8b61-c5a3bc32be10}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Texture\Loader">
-      <UniqueIdentifier>{939a329b-8217-4cab-9d75-7a1091f6612d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Texture\WIC">
-      <UniqueIdentifier>{6912e8d0-4e61-40e9-9c66-accf31ead520}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Input">
+    <Filter Include="Dx12\Input">
       <UniqueIdentifier>{f9f73a14-d811-4f6c-bb95-990f8b5097da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="XAudio2">
-      <UniqueIdentifier>{4f71ce08-556d-4357-926e-9fe4f3fcc003}</UniqueIdentifier>
+    <Filter Include="Dx12\Pipe">
+      <UniqueIdentifier>{516b9c63-a745-4333-ad44-e5bb48f8a424}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sound">
+    <Filter Include="Dx12\Root">
+      <UniqueIdentifier>{bddac267-caac-4f6c-b066-76d9c95e9517}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dx12\Sound">
       <UniqueIdentifier>{04e72391-2a9d-4fca-938b-64e8f70642cb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sound\SoundFunc">
+    <Filter Include="Dx12\Sound\SoundFunc">
       <UniqueIdentifier>{45702ce2-d1b9-42cd-a7e9-f145e538ff52}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sound\WAVE">
+    <Filter Include="Dx12\Sound\WAVE">
       <UniqueIdentifier>{349c25de-2108-4cd1-a99c-9e4fff161baa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dx12\Swap">
+      <UniqueIdentifier>{c35e11a9-4b3a-409d-8f93-1c8c3b05b5fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dx12\Texture">
+      <UniqueIdentifier>{ef4f9d0e-3277-4b0c-a390-3c33b2d5ee56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dx12\Texture\Loader">
+      <UniqueIdentifier>{939a329b-8217-4cab-9d75-7a1091f6612d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dx12\Texture\WIC">
+      <UniqueIdentifier>{6912e8d0-4e61-40e9-9c66-accf31ead520}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dx12\Union">
+      <UniqueIdentifier>{44a82917-d5cd-47ea-80ad-0e78038a5462}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dx12\Window">
+      <UniqueIdentifier>{ec66ba32-1a39-4880-b2dc-822f79e19eaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dx12\Window\Icon">
+      <UniqueIdentifier>{9f7af7cd-d378-4b99-a698-69beeeea8b4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dx12\XAudio2">
+      <UniqueIdentifier>{4f71ce08-556d-4357-926e-9fe4f3fcc003}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{55d70f71-485b-496c-8159-c7c14d507e30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameMane">
+      <UniqueIdentifier>{159844ea-b16b-461e-877a-3a71cf6c8b89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene">
+      <UniqueIdentifier>{e22dc148-f76d-4849-a162-32d179a12028}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene\Title">
+      <UniqueIdentifier>{33ad0aea-2d14-485e-a5a9-53d605068b3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\MapEditor">
+      <UniqueIdentifier>{a2a245a2-a3ca-45c0-944c-13032a76547d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -109,176 +127,197 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Src\Window\Window.cpp">
-      <Filter>Window</Filter>
+      <Filter>Dx12\Window</Filter>
     </ClCompile>
     <ClCompile Include="Src\Debuger\Debug.cpp">
-      <Filter>Debuger</Filter>
+      <Filter>Dx12\Debuger</Filter>
     </ClCompile>
     <ClCompile Include="Src\Device\Device.cpp">
-      <Filter>Device</Filter>
+      <Filter>Dx12\Device</Filter>
     </ClCompile>
     <ClCompile Include="Src\Swap\Swap.cpp">
-      <Filter>Swap</Filter>
+      <Filter>Dx12\Swap</Filter>
     </ClCompile>
     <ClCompile Include="Src\Queue\Queue.cpp">
-      <Filter>Command\Queue</Filter>
+      <Filter>Dx12\Command\Queue</Filter>
     </ClCompile>
     <ClCompile Include="Src\List\List.cpp">
-      <Filter>Command\List</Filter>
+      <Filter>Dx12\Command\List</Filter>
     </ClCompile>
     <ClCompile Include="Src\Union\Union.cpp">
-      <Filter>Union</Filter>
+      <Filter>Dx12\Union</Filter>
     </ClCompile>
     <ClCompile Include="Src\Render\Render.cpp">
-      <Filter>Descriptor\Render</Filter>
+      <Filter>Dx12\Descriptor\Render</Filter>
     </ClCompile>
     <ClCompile Include="Src\Depth\Depth.cpp">
-      <Filter>Descriptor\Depth</Filter>
+      <Filter>Dx12\Descriptor\Depth</Filter>
     </ClCompile>
     <ClCompile Include="Src\Constant\Constant.cpp">
-      <Filter>Descriptor\Constant</Filter>
+      <Filter>Dx12\Descriptor\Constant</Filter>
     </ClCompile>
     <ClCompile Include="Src\Fence\Fence.cpp">
-      <Filter>Fence</Filter>
+      <Filter>Dx12\Fence</Filter>
     </ClCompile>
     <ClCompile Include="Src\Root\Root.cpp">
-      <Filter>Root</Filter>
+      <Filter>Dx12\Root</Filter>
     </ClCompile>
     <ClCompile Include="Src\Pipe\Pipe.cpp">
-      <Filter>Pipe</Filter>
+      <Filter>Dx12\Pipe</Filter>
     </ClCompile>
     <ClCompile Include="Src\Point\Point.cpp">
-      <Filter>Draw\Point</Filter>
+      <Filter>Dx12\Draw\Point</Filter>
     </ClCompile>
     <ClCompile Include="Src\Line\Line.cpp">
-      <Filter>Draw\Line</Filter>
+      <Filter>Dx12\Draw\Line</Filter>
     </ClCompile>
     <ClCompile Include="Src\Triangle\Triangle.cpp">
-      <Filter>Draw\Triangle</Filter>
+      <Filter>Dx12\Draw\Triangle</Filter>
     </ClCompile>
     <ClCompile Include="Src\Func\Func.cpp">
-      <Filter>Func</Filter>
+      <Filter>Dx12\Func</Filter>
     </ClCompile>
     <ClCompile Include="Src\Texture\Texture.cpp">
-      <Filter>Texture</Filter>
+      <Filter>Dx12\Texture</Filter>
     </ClCompile>
     <ClCompile Include="Src\Texture\TextureLoader.cpp">
-      <Filter>Texture\Loader</Filter>
+      <Filter>Dx12\Texture\Loader</Filter>
     </ClCompile>
     <ClCompile Include="Src\Texture\WICTextureLoader12.cpp">
-      <Filter>Texture\WIC</Filter>
+      <Filter>Dx12\Texture\WIC</Filter>
     </ClCompile>
     <ClCompile Include="Src\Input\Input.cpp">
-      <Filter>Input</Filter>
+      <Filter>Dx12\Input</Filter>
     </ClCompile>
     <ClCompile Include="Src\XAudio2\XAudio2.cpp">
-      <Filter>XAudio2</Filter>
+      <Filter>Dx12\XAudio2</Filter>
     </ClCompile>
     <ClCompile Include="Src\Sound\Wave.cpp">
-      <Filter>Sound\WAVE</Filter>
+      <Filter>Dx12\Sound\WAVE</Filter>
     </ClCompile>
     <ClCompile Include="Src\Sound\SoundFunc.cpp">
-      <Filter>Sound\SoundFunc</Filter>
+      <Filter>Dx12\Sound\SoundFunc</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\_GameSrc\GameMane\GameMane.cpp">
+      <Filter>Game\GameMane</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\_GameSrc\Scene\Title.cpp">
+      <Filter>Game\Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\_GameSrc\MapEditor\MapEditor.cpp">
+      <Filter>Game\MapEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Window\Window.h">
-      <Filter>Window</Filter>
+      <Filter>Dx12\Window</Filter>
     </ClInclude>
     <ClInclude Include="Src\Window\Icon\Icon.h">
-      <Filter>Window\Icon</Filter>
+      <Filter>Dx12\Window\Icon</Filter>
     </ClInclude>
     <ClInclude Include="Src\Device\Device.h">
-      <Filter>Device</Filter>
+      <Filter>Dx12\Device</Filter>
     </ClInclude>
     <ClInclude Include="Src\etc\Release.h">
-      <Filter>etc</Filter>
+      <Filter>Dx12\etc</Filter>
     </ClInclude>
     <ClInclude Include="Src\Debuger\Debug.h">
-      <Filter>Debuger</Filter>
+      <Filter>Dx12\Debuger</Filter>
     </ClInclude>
     <ClInclude Include="Src\Swap\Swap.h">
-      <Filter>Swap</Filter>
+      <Filter>Dx12\Swap</Filter>
     </ClInclude>
     <ClInclude Include="Src\Queue\Queue.h">
-      <Filter>Command\Queue</Filter>
+      <Filter>Dx12\Command\Queue</Filter>
     </ClInclude>
     <ClInclude Include="Src\List\List.h">
-      <Filter>Command\List</Filter>
+      <Filter>Dx12\Command\List</Filter>
     </ClInclude>
     <ClInclude Include="Src\Union\Union.h">
-      <Filter>Union</Filter>
+      <Filter>Dx12\Union</Filter>
     </ClInclude>
     <ClInclude Include="Src\Render\Render.h">
-      <Filter>Descriptor\Render</Filter>
+      <Filter>Dx12\Descriptor\Render</Filter>
     </ClInclude>
     <ClInclude Include="Src\Depth\Depth.h">
-      <Filter>Descriptor\Depth</Filter>
+      <Filter>Dx12\Descriptor\Depth</Filter>
     </ClInclude>
     <ClInclude Include="Src\Constant\Constant.h">
-      <Filter>Descriptor\Constant</Filter>
+      <Filter>Dx12\Descriptor\Constant</Filter>
     </ClInclude>
     <ClInclude Include="Src\Fence\Fence.h">
-      <Filter>Fence</Filter>
+      <Filter>Dx12\Fence</Filter>
     </ClInclude>
     <ClInclude Include="Src\Root\Root.h">
-      <Filter>Root</Filter>
+      <Filter>Dx12\Root</Filter>
     </ClInclude>
     <ClInclude Include="Src\Pipe\Pipe.h">
-      <Filter>Pipe</Filter>
+      <Filter>Dx12\Pipe</Filter>
     </ClInclude>
     <ClInclude Include="Src\Point\Point.h">
-      <Filter>Draw\Point</Filter>
+      <Filter>Dx12\Draw\Point</Filter>
     </ClInclude>
     <ClInclude Include="Src\etc\VertexData.h">
-      <Filter>etc</Filter>
+      <Filter>Dx12\etc</Filter>
     </ClInclude>
     <ClInclude Include="Src\Line\Line.h">
-      <Filter>Draw\Line</Filter>
+      <Filter>Dx12\Draw\Line</Filter>
     </ClInclude>
     <ClInclude Include="Src\Triangle\Triangle.h">
-      <Filter>Draw\Triangle</Filter>
+      <Filter>Dx12\Draw\Triangle</Filter>
     </ClInclude>
     <ClInclude Include="Src\Texture\TextureData.h">
-      <Filter>Texture</Filter>
+      <Filter>Dx12\Texture</Filter>
     </ClInclude>
     <ClInclude Include="Src\Func\Func.h">
-      <Filter>Func</Filter>
+      <Filter>Dx12\Func</Filter>
     </ClInclude>
     <ClInclude Include="Src\Texture\Texture.h">
-      <Filter>Texture</Filter>
+      <Filter>Dx12\Texture</Filter>
     </ClInclude>
     <ClInclude Include="Src\Texture\TextureLoader.h">
-      <Filter>Texture\Loader</Filter>
+      <Filter>Dx12\Texture\Loader</Filter>
     </ClInclude>
     <ClInclude Include="Src\Texture\WICTextureLoader12.h">
-      <Filter>Texture\WIC</Filter>
+      <Filter>Dx12\Texture\WIC</Filter>
     </ClInclude>
     <ClInclude Include="Src\Input\Input.h">
-      <Filter>Input</Filter>
+      <Filter>Dx12\Input</Filter>
     </ClInclude>
     <ClInclude Include="Src\Func\InputData.h">
-      <Filter>Func</Filter>
+      <Filter>Dx12\Func</Filter>
     </ClInclude>
     <ClInclude Include="Src\Input\KeyData.h">
-      <Filter>Input</Filter>
+      <Filter>Dx12\Input</Filter>
     </ClInclude>
     <ClInclude Include="Src\XAudio2\XAudio2.h">
-      <Filter>XAudio2</Filter>
+      <Filter>Dx12\XAudio2</Filter>
     </ClInclude>
     <ClInclude Include="Src\XAudio2\VoiceCallback.h">
-      <Filter>XAudio2</Filter>
+      <Filter>Dx12\XAudio2</Filter>
     </ClInclude>
     <ClInclude Include="Src\Sound\Wave.h">
-      <Filter>Sound\WAVE</Filter>
+      <Filter>Dx12\Sound\WAVE</Filter>
     </ClInclude>
     <ClInclude Include="Src\Sound\SoundFunc.h">
-      <Filter>Sound\SoundFunc</Filter>
+      <Filter>Dx12\Sound\SoundFunc</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\_GameSrc\GameMane\GameMane.h">
+      <Filter>Game\GameMane</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\_GameSrc\Scene\Scene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\_GameSrc\Scene\Title.h">
+      <Filter>Game\Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\_GameSrc\MapEditor\MapEditor.h">
+      <Filter>Game\MapEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Src\Window\Icon\Icon.rc">
-      <Filter>Window\Icon</Filter>
+      <Filter>Dx12\Window\Icon</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>

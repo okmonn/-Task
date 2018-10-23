@@ -263,7 +263,8 @@ void Wave::Stream(void)
 // çƒê∂
 long Wave::Play(const bool & loop)
 {
-	std::lock_guard<std::mutex>lock(std::mutex());
+	std::mutex mtx;
+	std::lock_guard<std::mutex>lock(mtx);
 
 	this->loop = loop;
 
@@ -279,7 +280,8 @@ long Wave::Play(const bool & loop)
 // í‚é~
 long Wave::Stop(void)
 {
-	std::lock_guard<std::mutex>lock(std::mutex());
+	std::mutex mtx;
+	std::lock_guard<std::mutex>lock(mtx);
 
 	auto hr = voice->Stop();
 	if (FAILED(hr))
@@ -296,7 +298,8 @@ long Wave::Stop(void)
 // ÉäÉZÉbÉg
 void Wave::Reset(void)
 {
-	std::lock_guard<std::mutex>lock(std::mutex());
+	std::mutex mtx;
+	std::lock_guard<std::mutex>lock(mtx);
 
 	XAUDIO2_VOICE_STATE st = {};
 	voice->GetState(&st);
