@@ -90,8 +90,6 @@ void Union::CreatePipe(void)
 	}
 }
 
-int a = 0;
-
 // クラスのインスタンス
 void Union::Start(void)
 {
@@ -116,8 +114,6 @@ void Union::Start(void)
 	lin = std::make_shared<Line>(dev, list, con, drwRoot, linPipe);
 	tri = std::make_shared<Triangle>(dev, list, con, drwRoot, triPipe);
 	tex = std::make_shared<Texture>(dev, list, con, texRoot, texPipe);
-
-	snd->Load("Synchronicity.wav", a);
 }
 
 // メッセージの確認
@@ -156,6 +152,24 @@ bool Union::CheckTriger(const int & i)
 	return input->Triger(i);
 }
 
+// サウンドの読み込み
+void Union::LoadSnd(const std::string & fileName, int & i)
+{
+	snd->Load(fileName, i);
+}
+
+// サウンドの再生
+void Union::Play(int & i, const bool & loop)
+{
+	snd->Play(i, loop);
+}
+
+// サウンドの停止
+void Union::Stop(int & i)
+{
+	snd->Stop(i);
+}
+
 // 画像の読み込み
 void Union::LoadImg(const std::string & fileName, int& i)
 {
@@ -179,7 +193,6 @@ void Union::Set(void)
 	dep->SetDepth();
 
 	ren->SetRender(*dep->GetHeap());
-	snd->Play(a);
 }
 
 // ポイント描画

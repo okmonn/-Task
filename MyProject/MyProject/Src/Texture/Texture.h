@@ -20,6 +20,13 @@ public:
 	// デストラクタ
 	~Texture();
 
+	// 白テクスチャのセット
+	void SetWhite(const unsigned int& rootNum = 1);
+	// 黒テクスチャのセット
+	void SetBlack(const unsigned int& rootNum = 1);
+	// グラデーションテクスチャのセット
+	void SetGrade(const unsigned int& rootNum = 1);
+
 	// 読み込み
 	long Load(const std::string& fileName, int& i);
 
@@ -51,6 +58,21 @@ public:
 	void DeleteImg(int& i);
 
 private:
+	// ヒープの生成
+	long CreateHeap(ID3D12DescriptorHeap** heap);
+
+	// リソースの生成
+	long CreateRsc(ID3D12Resource** rsc, int w, int h);
+
+	// 白テクスチャの生成
+	void CreateWhite(void);
+
+	// 黒テクスチャの生成
+	void CreateBlack(void);
+
+	// グラデーションテクスチャの生成
+	void CreateGrade(void);
+
 	// リソースビューの生成
 	void CreateView(int* i);
 
@@ -79,6 +101,15 @@ private:
 	// テクスチャローダー
 	std::shared_ptr<TextureLoader>loader;
 
+	// 白テクスチャ
+	texture::Dummy white;
+
+	// 黒テクスチャ
+	texture::Dummy black;
+
+	// グラデーションテクスチャ
+	texture::Dummy grade;
+
 	// 画像データ
-	std::map<int*, Tex>tex;
+	std::map<int*, texture::Tex>tex;
 };

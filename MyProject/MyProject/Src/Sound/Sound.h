@@ -36,7 +36,7 @@ public:
 	void Load(const std::string& fileName, int& i);
 
 	// çƒê∂
-	long Play(int& i, const bool& loop = false);
+	long Play(int& i, const bool& loop);
 
 	// í‚é~
 	long Stop(int& i);

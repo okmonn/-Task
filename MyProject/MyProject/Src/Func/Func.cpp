@@ -91,7 +91,7 @@ std::string func::FileLink(const std::string & path1, const std::string & path2)
 
 	std::string folder = path1.substr(0, index) + "/" + path2;
 
-	return folder; return std::string();
+	return folder;
 }
 
 // ワイド文字列の変換
@@ -137,6 +137,24 @@ bool func::CheckKey(const int & i)
 bool func::CheckTriger(const int & i)
 {
 	return Union::Get().CheckTriger(i);
+}
+
+// サウンドの読み込み
+void func::LoadSnd(const std::string & fileName, int & i)
+{
+	Union::Get().LoadSnd(fileName, i);
+}
+
+// サウンドの再生
+void func::Play(int & i, const bool& loop)
+{
+	Union::Get().Play(i, loop);
+}
+
+// サウンドの停止
+void func::Stop(int & i)
+{
+	Union::Get().Stop(i);
 }
 
 // 画像の読み込み

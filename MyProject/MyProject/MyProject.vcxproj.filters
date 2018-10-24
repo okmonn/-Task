@@ -121,6 +121,12 @@
     <Filter Include="Dx12\Sound\SoundFunc">
       <UniqueIdentifier>{0585352a-b82a-469e-8d05-7c65181a377d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dx12\Model">
+      <UniqueIdentifier>{8da58ce4-19fd-4fe3-b325-ece1fb2e33e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dx12\Model\ModelLoader">
+      <UniqueIdentifier>{38fd3841-e5ec-4469-96bf-b14da4b3f2c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -208,7 +214,13 @@
       <Filter>Dx12\Sound\SoundFunc</Filter>
     </ClCompile>
     <ClCompile Include="Src\Sound\Sound.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Dx12\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Model\ModelLoader.cpp">
+      <Filter>Dx12\Model\ModelLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Model\Model.cpp">
+      <Filter>Dx12\Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -322,6 +334,15 @@
     </ClInclude>
     <ClInclude Include="Src\Sound\Sound.h">
       <Filter>Dx12\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Model\ModelLoader.h">
+      <Filter>Dx12\Model\ModelLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Model\PmdData.h">
+      <Filter>Dx12\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Model\Model.h">
+      <Filter>Dx12\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

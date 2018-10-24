@@ -45,6 +45,15 @@ namespace func {
 	// トリガー入力
 	bool CheckTriger(const int& i);
 
+	// サウンドの読み込み
+	void LoadSnd(const std::string& fileName, int& i);
+
+	// サウンドの再生
+	void Play(int& i, const bool& loop = false);
+
+	// サウンドの停止
+	void Stop(int& i);
+
 	// 画像の読み込み
 	void LoadImg(const std::string& fileName, int& i);
 

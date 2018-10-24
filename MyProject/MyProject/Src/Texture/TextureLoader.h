@@ -1,4 +1,5 @@
 #pragma once
+#include "TextureData.h"
 #include <string>
 #include <map>
 #include <memory>

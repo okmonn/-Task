@@ -17,12 +17,26 @@ Texture::Texture(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_pt
 	std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe) :
 	dev(dev), list(list), con(con), root(root), pipe(pipe), loader(std::make_shared<TextureLoader>(dev))
 {
+	white = {};
+	black = {};
+	grade = {};
+
 	tex.clear();
+
+	CreateWhite();
+	CreateBlack();
 }
 
 // デストラクタ
 Texture::~Texture()
 {
+	Release(white.rsc);
+	Release(white.heap);
+	Release(black.heap);
+	Release(black.rsc);
+	Release(grade.rsc);
+	Release(grade.heap);
+
 	for (auto itr = tex.begin(); itr != tex.end(); ++itr)
 	{
 		UnMap(itr->second.v_rsc);
@@ -31,6 +45,127 @@ Texture::~Texture()
 
 	loader.reset();
 }
+
+// ヒープの生成
+long Texture::CreateHeap(ID3D12DescriptorHeap ** heap)
+{
+	//ヒープ設定用構造体
+	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
+	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	desc.NodeMask = 0;
+	desc.NumDescriptors = 1;
+	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+
+	auto hr = dev.lock()->Get()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&(*heap)));
+	if (FAILED(hr))
+	{
+		OutputDebugString(_T("ダミーテクスチャ用ヒープの生成：失敗\n"));
+	}
+
+	return hr;
+}
+
+// リソースの生成
+long Texture::CreateRsc(ID3D12Resource ** rsc, int w, int h)
+{
+	//プロパティ設定用構造体
+	D3D12_HEAP_PROPERTIES prop = {};
+	prop.Type                 = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_CUSTOM;
+	prop.CPUPageProperty      = D3D12_CPU_PAGE_PROPERTY::D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
+	prop.MemoryPoolPreference = D3D12_MEMORY_POOL::D3D12_MEMORY_POOL_L0;
+	prop.CreationNodeMask     = 1;
+	prop.VisibleNodeMask      = 1;
+
+	//リソース設定用構造体
+	D3D12_RESOURCE_DESC desc = {};
+	desc.Dimension        = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	desc.Width            = w;
+	desc.Height           = h;
+	desc.DepthOrArraySize = 1;
+	desc.MipLevels        = 1;
+	desc.Format           = DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM;
+	desc.SampleDesc.Count = 1;
+	desc.Flags            = D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_NONE;
+	desc.Layout           = D3D12_TEXTURE_LAYOUT::D3D12_TEXTURE_LAYOUT_UNKNOWN;
+
+	auto hr = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&(*rsc)));
+	if (FAILED(hr))
+	{
+		OutputDebugString(_T("\nダミーテクスチャの定数バッファのリソースの生成：失敗\n"));
+	}
+
+	return hr;
+}
+
+// 白テクスチャの生成
+void Texture::CreateWhite(void)
+{
+	//白色に染める
+	white.data.resize(4 * 4);
+	std::fill(white.data.begin(), white.data.end(), texture::Color(0xff, 0xff, 0xff, 0xff));
+
+	CreateHeap(&white.heap);
+	CreateRsc(&white.rsc, 4, 4);
+
+	//シェーダリソースビュー設定用構造体の設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC desc = {};
+	desc.Format                    = white.rsc->GetDesc().Format;
+	desc.ViewDimension             = D3D12_SRV_DIMENSION::D3D12_SRV_DIMENSION_TEXTURE2D;
+	desc.Texture2D.MipLevels       = 1;
+	desc.Texture2D.MostDetailedMip = 0;
+	desc.Shader4ComponentMapping   = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+	//シェーダーリソースビューの生成
+	dev.lock()->Get()->CreateShaderResourceView(white.rsc, &desc, white.heap->GetCPUDescriptorHandleForHeapStart());
+}
+
+void Texture::CreateBlack(void)
+{
+	//黒色に染める
+	black.data.resize(4 * 4);
+	std::fill(black.data.begin(), black.data.end(), texture::Color(0, 0, 0, 0xff));
+
+	CreateHeap(&black.heap);
+	CreateRsc(&black.rsc, 4, 4);
+
+	//シェーダリソースビュー設定用構造体の設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC desc = {};
+	desc.Format                    = black.rsc->GetDesc().Format;
+	desc.ViewDimension             = D3D12_SRV_DIMENSION::D3D12_SRV_DIMENSION_TEXTURE2D;
+	desc.Texture2D.MipLevels       = 1;
+	desc.Texture2D.MostDetailedMip = 0;
+	desc.Shader4ComponentMapping   = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+	//シェーダーリソースビューの生成
+	dev.lock()->Get()->CreateShaderResourceView(black.rsc, &desc, black.heap->GetCPUDescriptorHandleForHeapStart());
+}
+
+// グラデーションテクスチャの生成
+void Texture::CreateGrade(void)
+{
+	grade.data.resize(4 * 256);
+	unsigned char bright = 255;
+	for (auto itr = grade.data.begin(); itr != grade.data.end(); itr += 4)
+	{
+		std::fill_n(itr, 4, texture::Color(bright / 128 * 128, bright / 128 * 128, bright / 128 * 128, 0xff));
+		--bright;
+	}
+
+	CreateHeap(&grade.heap);
+	CreateRsc(&grade.rsc, 256, 256);
+
+	//シェーダリソースビュー設定用構造体の設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC desc = {};
+	desc.Format                    = white.rsc->GetDesc().Format;
+	desc.ViewDimension             = D3D12_SRV_DIMENSION::D3D12_SRV_DIMENSION_TEXTURE2D;
+	desc.Texture2D.MipLevels       = 1;
+	desc.Texture2D.MostDetailedMip = 0;
+	desc.Shader4ComponentMapping   = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+	//シェーダーリソースビューの生成
+	dev.lock()->Get()->CreateShaderResourceView(grade.rsc, &desc, grade.heap->GetCPUDescriptorHandleForHeapStart());
+}
+
 
 // リソースビューの生成
 void Texture::CreateView(int * i)
@@ -96,6 +231,69 @@ long Texture::Map(int * i)
 	memcpy(tex[i].data, tex[i].vertex.data(), sizeof(tex::Vertex) * tex[i].vertex.size());
 
 	return 0;
+}
+
+// 白テクスチャのセット
+void Texture::SetWhite(const unsigned int & rootNum)
+{
+	//リソース設定用構造体
+	D3D12_RESOURCE_DESC desc = white.rsc->GetDesc();
+
+	//サブリソースに書き込み
+	auto hr = white.rsc->WriteToSubresource(0, nullptr, white.data.data(), 4 * sizeof(texture::Color), white.data.size() * sizeof(texture::Color));
+	if (FAILED(hr))
+	{
+		OutputDebugString(_T("白テクスチャのサブリソース書込み：失敗\n"));
+		return;
+	}
+
+	//ヒープのセット
+	list.lock()->GetList()->SetDescriptorHeaps(1, &white.heap);
+
+	//ディスクラプターテーブルのセット
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(rootNum, white.heap->GetGPUDescriptorHandleForHeapStart());
+}
+
+// 黒テクスチャのセット
+void Texture::SetBlack(const unsigned int & rootNum)
+{
+	//リソース設定用構造体
+	D3D12_RESOURCE_DESC desc = black.rsc->GetDesc();
+
+	//サブリソースに書き込み
+	auto hr = black.rsc->WriteToSubresource(0, nullptr, black.data.data(), 4 * sizeof(texture::Color), black.data.size() * sizeof(texture::Color));
+	if (FAILED(hr))
+	{
+		OutputDebugString(_T("黒テクスチャのサブリソース書込み：失敗\n"));
+		return;
+	}
+
+	//ヒープのセット
+	list.lock()->GetList()->SetDescriptorHeaps(1, &black.heap);
+
+	//ディスクラプターテーブルのセット
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(rootNum, black.heap->GetGPUDescriptorHandleForHeapStart());
+}
+
+// グラデーションテクスチャのセット
+void Texture::SetGrade(const unsigned int & rootNum)
+{
+	//リソース設定用構造体
+	D3D12_RESOURCE_DESC desc = grade.rsc->GetDesc();
+
+	//サブリソースに書き込み
+	auto hr = grade.rsc->WriteToSubresource(0, nullptr, grade.data.data(), 4 * sizeof(texture::Color), grade.data.size() * sizeof(texture::Color));
+	if (FAILED(hr))
+	{
+		OutputDebugString(_T("グラデーションテクスチャのサブリソース書込み：失敗\n"));
+		return;
+	}
+
+	//ヒープのセット
+	list.lock()->GetList()->SetDescriptorHeaps(1, &grade.heap);
+
+	//ディスクラプターテーブルのセット
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(rootNum, grade.heap->GetGPUDescriptorHandleForHeapStart());
 }
 
 // 読み込み

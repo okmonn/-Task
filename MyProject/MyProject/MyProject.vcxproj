@@ -143,6 +143,8 @@
     <ClCompile Include="Src\Line\Line.cpp" />
     <ClCompile Include="Src\List\List.cpp" />
     <ClCompile Include="Src\Main.cpp" />
+    <ClCompile Include="Src\Model\Model.cpp" />
+    <ClCompile Include="Src\Model\ModelLoader.cpp" />
     <ClCompile Include="Src\Pipe\Pipe.cpp" />
     <ClCompile Include="Src\Point\Point.cpp" />
     <ClCompile Include="Src\Queue\Queue.cpp" />
@@ -177,6 +179,9 @@
     <ClInclude Include="Src\Input\KeyData.h" />
     <ClInclude Include="Src\Line\Line.h" />
     <ClInclude Include="Src\List\List.h" />
+    <ClInclude Include="Src\Model\Model.h" />
+    <ClInclude Include="Src\Model\ModelLoader.h" />
+    <ClInclude Include="Src\Model\PmdData.h" />
     <ClInclude Include="Src\Pipe\Pipe.h" />
     <ClInclude Include="Src\Point\Point.h" />
     <ClInclude Include="Src\Queue\Queue.h" />
