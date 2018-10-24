@@ -23,6 +23,7 @@ TextureLoader::~TextureLoader()
 	for (auto itr = origin.begin(); itr != origin.end(); ++itr)
 	{
 		itr->second.decode.release();
+		itr->second.sub.reset();
 		Release(itr->second.rsc);
 		Release(itr->second.heap);
 	}
@@ -56,7 +57,7 @@ long TextureLoader::Load(const std::string & fileName)
 	{
 		auto path = func::ChangeWString(fileName);
 
-		origin[fileName].sub = new D3D12_SUBRESOURCE_DATA({});
+		origin[fileName].sub = std::make_shared<D3D12_SUBRESOURCE_DATA>();
 
 		hr = DirectX::LoadWICTextureFromFile(dev.lock()->Get(), path.c_str(), &origin[fileName].rsc, origin[fileName].decode, *origin[fileName].sub);
 		if (FAILED(hr))

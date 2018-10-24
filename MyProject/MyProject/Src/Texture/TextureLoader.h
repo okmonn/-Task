@@ -16,7 +16,7 @@ class TextureLoader
 		//デコードデータ
 		std::unique_ptr<unsigned char[]>decode;
 		//サブデータ
-		D3D12_SUBRESOURCE_DATA* sub;
+		std::shared_ptr<D3D12_SUBRESOURCE_DATA>sub;
 		//ヒープ
 		ID3D12DescriptorHeap* heap;
 		//定数リソース
@@ -45,7 +45,7 @@ public:
 		return origin[fileName].decode.get();
 	}
 	// サブデータの取得
-	D3D12_SUBRESOURCE_DATA* GetSub(const std::string& fileName) {
+	std::shared_ptr<D3D12_SUBRESOURCE_DATA> GetSub(const std::string& fileName) {
 		return origin[fileName].sub;
 	}
 

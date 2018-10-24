@@ -132,7 +132,7 @@ long Texture::SetDraw(int & i, const unsigned int & rootNum)
 	box.top    = 0;
 
 	//サブリソースに書き込み
-	auto hr = tex[&i].c_rsc->WriteToSubresource(0, &box, &tex[&i].decode[0], tex[&i].sub->RowPitch, tex[&i].sub->SlicePitch);
+	auto hr = tex[&i].c_rsc->WriteToSubresource(0, &box, &tex[&i].decode[0], tex[&i].sub.lock()->RowPitch, tex[&i].sub.lock()->SlicePitch);
 	if (FAILED(hr))
 	{
 		OutputDebugString(_T("テクスチャのサブリソース書込み：失敗\n"));

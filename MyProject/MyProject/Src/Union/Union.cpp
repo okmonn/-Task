@@ -89,8 +89,6 @@ void Union::CreatePipe(void)
 	}
 }
 
-int n = 0;
-
 // クラスのインスタンス
 void Union::Start(void)
 {

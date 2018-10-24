@@ -1,6 +1,7 @@
 #pragma once
 #include "../etc/VertexData.h"
 #include <vector>
+#include <memory>
 
 struct ID3D12DescriptorHeap;
 struct ID3D12Resource;
@@ -11,7 +12,7 @@ struct Tex {
 	// デコードデータ
 	unsigned char* decode;
 	// サブデータ
-	D3D12_SUBRESOURCE_DATA* sub;
+	std::weak_ptr<D3D12_SUBRESOURCE_DATA>sub;
 
 	//定数ヒープ
 	ID3D12DescriptorHeap* heap;
