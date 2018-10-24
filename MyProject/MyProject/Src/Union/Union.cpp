@@ -3,6 +3,7 @@
 #include "../Window/Window.h"
 #include "../Debuger/Debug.h"
 #include "../Input/Input.h"
+#include "../Sound/Sound.h"
 #include "../Device/Device.h"
 #include "../Queue/Queue.h"
 #include "../List/List.h"
@@ -89,12 +90,15 @@ void Union::CreatePipe(void)
 	}
 }
 
+int a = 0;
+
 // クラスのインスタンス
 void Union::Start(void)
 {
 	win   = std::make_shared<Window>(x, y);
 	deg   = std::make_shared<Debug>();
 	input = std::make_shared<Input>(win);
+	snd   = std::make_shared<Sound>();
 	dev   = std::make_shared <Device>();
 	que   = std::make_shared<Queue>(dev);
 	list  = std::make_shared<List>(dev);
@@ -112,6 +116,8 @@ void Union::Start(void)
 	lin = std::make_shared<Line>(dev, list, con, drwRoot, linPipe);
 	tri = std::make_shared<Triangle>(dev, list, con, drwRoot, triPipe);
 	tex = std::make_shared<Texture>(dev, list, con, texRoot, texPipe);
+
+	snd->Load("Synchronicity.wav", a);
 }
 
 // メッセージの確認
@@ -173,6 +179,7 @@ void Union::Set(void)
 	dep->SetDepth();
 
 	ren->SetRender(*dep->GetHeap());
+	snd->Play(a);
 }
 
 // ポイント描画
@@ -281,6 +288,8 @@ void Union::End(void)
 	list.reset();
 	que.reset();
 	dev.reset();
+	snd.reset();
+	input.reset();
 	deg.reset();
 	win.reset();
 }

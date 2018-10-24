@@ -39,18 +39,18 @@ int SoundLoader::Load(const std::string & fileName)
 {
 	if (snd.find(fileName) != snd.end())
 	{
-		return -1;
+		return 0;
 	}
 
 	if (fopen_s(&snd[fileName].file, fileName.c_str(), "rb") != 0)
 	{
 		OutputDebugString(_T("\nファイルの参照：失敗\n"));
-		return;
+		return -1;
 	}
 
 	//チャンク宣言
 	RIFF riff = {};
-	FMT fmt = {};
+	FMT fmt   = {};
 	DATA data = {};
 
 	//RIFF
@@ -62,7 +62,7 @@ int SoundLoader::Load(const std::string & fileName)
 	//FMT
 	if (sound::LoadFMT(fmt, snd[fileName].file) != 0)
 	{
-		return;
+		return -1;
 	}
 
 	//DATA
@@ -84,6 +84,7 @@ int SoundLoader::Load(const std::string & fileName)
 		{
 			if (itr->joinable() == false)
 			{
+				snd[fileName].wave = std::make_shared<std::map<int, std::vector<float>>>();
 				*itr = std::thread(&SoundLoader::LoadWave, this, fileName);
 				flag = false;
 				break;
@@ -98,7 +99,6 @@ int SoundLoader::Load(const std::string & fileName)
 void SoundLoader::LoadWave(const std::string & fileName)
 {
 	int read = 0;
-	snd[fileName].wave = std::make_shared<std::map<int, std::vector<float>>>();
 	std::vector<float>tmp(snd[fileName].byte / (func::Byte(snd[fileName].bit) * snd[fileName].channel));
 
 	while (std::feof(snd[fileName].file) == 0 && threadFlag == true)

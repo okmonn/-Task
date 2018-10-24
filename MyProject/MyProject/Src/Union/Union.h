@@ -5,6 +5,7 @@
 class Window;
 class Debug;
 class Input;
+class Sound;
 class Device;
 class Queue;
 class List;
@@ -131,6 +132,9 @@ private:
 
 	// インプット
 	std::shared_ptr<Input>input;
+
+	// サウンド
+	std::shared_ptr<Sound>snd;
 
 	// デバイス
 	std::shared_ptr<Device>dev;
