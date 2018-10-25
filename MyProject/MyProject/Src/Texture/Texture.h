@@ -21,11 +21,11 @@ public:
 	~Texture();
 
 	// 白テクスチャのセット
-	void SetWhite(const unsigned int& rootNum = 1);
+	void SetWhite(const unsigned int& rootNum = 4);
 	// 黒テクスチャのセット
-	void SetBlack(const unsigned int& rootNum = 1);
+	void SetBlack(const unsigned int& rootNum = 5);
 	// グラデーションテクスチャのセット
-	void SetGrade(const unsigned int& rootNum = 1);
+	void SetGrade(const unsigned int& rootNum = 6);
 
 	// 読み込み
 	long Load(const std::string& fileName, int& i);
@@ -99,7 +99,7 @@ private:
 	std::weak_ptr<Pipe>pipe;
 
 	// テクスチャローダー
-	std::shared_ptr<TextureLoader>loader;
+	std::unique_ptr<TextureLoader>loader;
 
 	// 白テクスチャ
 	texture::Dummy white;

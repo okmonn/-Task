@@ -357,5 +357,8 @@
     <FxCompile Include="Src\Shader\Draw.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
+    <FxCompile Include="Src\Shader\Model.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

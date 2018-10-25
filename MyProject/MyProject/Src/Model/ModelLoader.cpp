@@ -27,10 +27,12 @@ ModelLoader::~ModelLoader()
 	}
 	for (auto itr = b_rsc.begin(); itr != b_rsc.end(); ++itr)
 	{
+		UnMap(itr->second);
 		Release(itr->second);
 	}
 	for (auto itr = c_rsc.begin(); itr != c_rsc.end(); ++itr)
 	{
+		UnMap(itr->second);
 		Release(itr->second);
 	}
 	for (auto itr = heap.begin(); itr != heap.end(); ++itr)
@@ -175,7 +177,7 @@ long ModelLoader::Load(const std::string & fileName)
 	index[fileName] = std::make_shared<std::vector<unsigned short>>(num);
 	for (auto itr = index[fileName]->begin(); itr != index[fileName]->end(); ++itr)
 	{
-		fread(&itr, sizeof(unsigned short), 1, file);
+		fread(&(*itr), sizeof(unsigned short), 1, file);
 	}
 
 	//ƒ}ƒeƒŠƒAƒ‹“Ç‚İ‚İ

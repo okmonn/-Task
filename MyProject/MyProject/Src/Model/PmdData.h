@@ -95,6 +95,16 @@ namespace pmd {
 		std::vector<unsigned short>child;
 	};
 
+	// ボーンノード
+	struct BornNode {
+		//配列番号
+		unsigned int index;
+		//ボーン始点
+		DirectX::XMFLOAT3 start;
+		//子ボーン
+		std::vector<BornNode*>child;
+	};
+
 	// マテリアル
 	struct Mat {
 		//基本色
@@ -107,11 +117,7 @@ namespace pmd {
 		DirectX::XMFLOAT3 specula;
 		//環境色
 		DirectX::XMFLOAT3 mirror;
-		//乗算テクスチャフラグ
-		int sph;
-		//加算テクスチャフラグ
-		int spa;
 		//テクスチャフラグ
-		int tex;
+		int flag;
 	};
 };

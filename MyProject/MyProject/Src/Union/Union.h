@@ -20,6 +20,7 @@ class Point;
 class Line;
 class Triangle;
 class Texture;
+class Model;
 
 class Union
 {
@@ -41,6 +42,10 @@ public:
 
 	// メッセージの確認
 	bool CheckMsg(void);
+
+	// WVPの更新
+	void ChangeWVP(const float& eyeX, const float& eyeY, const float& eyeZ,
+		const float& targetX, const float& targetY, const float& targetZ, const float& upX = 0.0f, const float& upY = 1.0f, const float& upZ = 0.0f);
 
 	// キー入力
 	bool CheckKey(const int& i);
@@ -172,12 +177,14 @@ private:
 	// ルートシグネチャ
 	std::shared_ptr<Root>drwRoot;
 	std::shared_ptr<Root>texRoot;
+	std::shared_ptr<Root>mdlRoot;
 
 	// パイプライン
 	std::shared_ptr<Pipe>pntPipe;
 	std::shared_ptr<Pipe>linPipe;
 	std::shared_ptr<Pipe>triPipe;
 	std::shared_ptr<Pipe>texPipe;
+	std::shared_ptr<Pipe>mdlPipe;
 
 	// ポイント
 	std::shared_ptr<Point>pnt;
@@ -190,4 +197,7 @@ private:
 
 	// テクスチャ
 	std::shared_ptr<Texture>tex;
+
+	// モデル
+	std::shared_ptr<Model>model;
 };

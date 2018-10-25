@@ -27,7 +27,7 @@ public:
 
 	// WVP‚Ì•ÏX
 	void ChangeWvp(const float& eyeX, const float& eyeY, const float& eyeZ,
-		const float& targetX, const float& targetY, const float& targetZ, const float& upX = 0.0f, const float& upY = 1.0f, const float& upZ = 0.0f);
+		const float& targetX, const float& targetY, const float& targetZ, const float& upX, const float& upY, const float& upZ);
 
 	// WVP‚ÌXV
 	void UpDataWvp(const float& angle);

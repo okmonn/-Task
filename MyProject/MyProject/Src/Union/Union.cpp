@@ -18,6 +18,7 @@
 #include "../Line/Line.h"
 #include "../Triangle/Triangle.h"
 #include "../Texture/Texture.h"
+#include "../Model/Model.h"
 #include "../etc/Release.h"
 
 #pragma comment(lib, "d3d12.lib")
@@ -64,6 +65,7 @@ void Union::CreateRoot(void)
 {
 	drwRoot = std::make_shared<Root>(dev, L"Src/Shader/Draw.hlsl");
 	texRoot = std::make_shared<Root>(dev, L"Src/Shader/Texture.hlsl");
+	mdlRoot = std::make_shared<Root>(dev, L"Src/Shader/Model.hlsl");
 }
 
 // パイプラインのインスタンス
@@ -88,7 +90,17 @@ void Union::CreatePipe(void)
 		};
 		texPipe->CreatePipe(*input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	}
+
+	mdlPipe = std::make_shared<Pipe>(dev, swap, mdlRoot);
+	{
+		D3D12_INPUT_ELEMENT_DESC input[] = {
+			inputs[0], inputs[1], inputs[2], inputs[5], inputs[6]
+		};
+		mdlPipe->CreatePipe(*input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, true);
+	}
 }
+
+int n = 0;
 
 // クラスのインスタンス
 void Union::Start(void)
@@ -114,6 +126,9 @@ void Union::Start(void)
 	lin = std::make_shared<Line>(dev, list, con, drwRoot, linPipe);
 	tri = std::make_shared<Triangle>(dev, list, con, drwRoot, triPipe);
 	tex = std::make_shared<Texture>(dev, list, con, texRoot, texPipe);
+
+	model = std::make_shared<Model>(dev, list, con, mdlRoot, mdlPipe, tex);
+	model->Load("Model/鏡音リン.pmd", n);
 }
 
 // メッセージの確認
@@ -138,6 +153,13 @@ bool Union::CheckMsg(void)
 	}
 
 	return true;
+}
+
+// WVPの更新
+void Union::ChangeWVP(const float & eyeX, const float & eyeY, const float & eyeZ, const float & targetX, const float & targetY, 
+	const float & targetZ, const float & upX, const float & upY, const float & upZ)
+{
+	con->ChangeWvp(eyeX, eyeY, eyeZ, targetX, targetY, targetZ, upX, upY, upZ);
 }
 
 // キー入力
@@ -181,7 +203,9 @@ void Union::Set(void)
 {
 	list->Reset(nullptr);
 
-	con->UpDataWvp(0.0f);
+	static float angle = 0.0f;
+	con->UpDataWvp(angle);
+	++angle;
 
 	list->SetViewport();
 
@@ -193,6 +217,10 @@ void Union::Set(void)
 	dep->SetDepth();
 
 	ren->SetRender(*dep->GetHeap());
+
+	ChangeWVP(0, 10, -15, 0, 10, 0);
+
+	model->Draw(n);
 }
 
 // ポイント描画

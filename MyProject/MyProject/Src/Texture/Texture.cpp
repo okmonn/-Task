@@ -15,7 +15,7 @@
 // コンストラクタ
 Texture::Texture(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Constant>con, 
 	std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe) :
-	dev(dev), list(list), con(con), root(root), pipe(pipe), loader(std::make_shared<TextureLoader>(dev))
+	dev(dev), list(list), con(con), root(root), pipe(pipe), loader(std::make_unique<TextureLoader>(dev))
 {
 	white = {};
 	black = {};
