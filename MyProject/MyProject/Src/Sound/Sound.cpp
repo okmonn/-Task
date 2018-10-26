@@ -27,7 +27,7 @@ const DWORD spk[] = {
 
 // コンストラクタ
 Sound::Sound() : 
-	audio(XAudio2::Get()), loader(std::make_shared<SoundLoader>()), threadFlag(true)
+	audio(std::make_unique<XAudio2>()), loader(std::make_unique<SoundLoader>()), threadFlag(true)
 {
 	snd.clear();
 }
@@ -50,6 +50,7 @@ Sound::~Sound()
 	}
 
 	loader.reset();
+	audio.reset();
 }
 
 // ソースボイスの生成
@@ -69,7 +70,7 @@ long Sound::Create(int* i, const int channel, const int sample, const int bit)
 	fmt.dwChannelMask               = spk[channel - 1];
 	fmt.SubFormat                   = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
 
-	auto hr = audio.GetAudio()->CreateSourceVoice(&snd[i].voice, (WAVEFORMATEX*)(&fmt), 0, 1.0f, nullptr);
+	auto hr = audio->GetAudio()->CreateSourceVoice(&snd[i].voice, (WAVEFORMATEX*)(&fmt), 0, 1.0f, nullptr);
 	if (FAILED(hr))
 	{
 		OutputDebugString(_T("\nソースボイスの生成：失敗\n"));

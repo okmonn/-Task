@@ -50,10 +50,10 @@ private:
 
 
 	// XAudio2
-	XAudio2& audio;
+	std::unique_ptr<XAudio2>audio;
 
 	// サウンドローダー
-	std::shared_ptr<SoundLoader>loader;
+	std::unique_ptr<SoundLoader>loader;
 
 	// スレッドフラグ
 	bool threadFlag;

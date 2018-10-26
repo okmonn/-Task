@@ -61,6 +61,10 @@ cbuffer mat : register(b1)
     float3 specula;
     //環境色
     float3 mirror;
+    //乗算テクスチャ対応フラグ
+    bool sphFlag;
+    //加算テクスチャ対応フラグ
+    bool spaFlag;
     //テクスチャ対応フラグ
     bool texFlag;
 }
@@ -118,11 +122,11 @@ Out VS(VSInput input)
     input.pos = mul(m, input.pos);
 
     Out o;
-    o.svpos = input.pos;
-    o.pos = input.pos;
+    o.svpos  = input.pos;
+    o.pos    = input.pos;
     o.normal = mul(world, input.normal);
-    o.uv = input.uv;
-    o.born = input.born;
+    o.uv     = input.uv;
+    o.born   = input.born;
     o.weight = input.weight;
 
     return o;
@@ -158,8 +162,8 @@ float4 PS(Out o) : SV_TARGET
 
     //色
     float3 color = (texFlag == true ? tex.Sample(smp, o.uv).rgb : saturate(diffuse * bright + specula * spec + mirror * lightCol));
-    color *= sph.Sample(smp, o.uv).rgb;
-    color += spa.Sample(smp, o.uv).rgb;
+    color = (sphFlag == true ? color * sph.Sample(smp, o.uv).rgb : color);
+    color = (spaFlag == true ? color + spa.Sample(smp, o.uv).rgb : color);
 
     return float4(color, alpha);
 }

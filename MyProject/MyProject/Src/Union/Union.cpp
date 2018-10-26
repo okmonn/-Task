@@ -128,7 +128,7 @@ void Union::Start(void)
 	tex = std::make_shared<Texture>(dev, list, con, texRoot, texPipe);
 
 	model = std::make_shared<Model>(dev, list, con, mdlRoot, mdlPipe, tex);
-	model->Load("Model/鏡音リン.pmd", n);
+	model->Load("Model/巡音ルカ.pmd", n);
 }
 
 // メッセージの確認

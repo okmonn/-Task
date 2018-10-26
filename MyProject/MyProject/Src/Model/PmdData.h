@@ -117,7 +117,11 @@ namespace pmd {
 		DirectX::XMFLOAT3 specula;
 		//環境色
 		DirectX::XMFLOAT3 mirror;
+		//乗算テクスチャフラグ
+		int sphFlag;
+		//加算テクスチャフラグ
+		int spaFlag;
 		//テクスチャフラグ
-		int flag;
+		int texFlag;
 	};
 };

@@ -25,6 +25,7 @@ Texture::Texture(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_pt
 
 	CreateWhite();
 	CreateBlack();
+	CreateGrade();
 }
 
 // デストラクタ
@@ -32,8 +33,8 @@ Texture::~Texture()
 {
 	Release(white.rsc);
 	Release(white.heap);
-	Release(black.heap);
 	Release(black.rsc);
+	Release(black.heap);
 	Release(grade.rsc);
 	Release(grade.heap);
 
@@ -236,9 +237,6 @@ long Texture::Map(int * i)
 // 白テクスチャのセット
 void Texture::SetWhite(const unsigned int & rootNum)
 {
-	//リソース設定用構造体
-	D3D12_RESOURCE_DESC desc = white.rsc->GetDesc();
-
 	//サブリソースに書き込み
 	auto hr = white.rsc->WriteToSubresource(0, nullptr, white.data.data(), 4 * sizeof(texture::Color), white.data.size() * sizeof(texture::Color));
 	if (FAILED(hr))
@@ -257,9 +255,6 @@ void Texture::SetWhite(const unsigned int & rootNum)
 // 黒テクスチャのセット
 void Texture::SetBlack(const unsigned int & rootNum)
 {
-	//リソース設定用構造体
-	D3D12_RESOURCE_DESC desc = black.rsc->GetDesc();
-
 	//サブリソースに書き込み
 	auto hr = black.rsc->WriteToSubresource(0, nullptr, black.data.data(), 4 * sizeof(texture::Color), black.data.size() * sizeof(texture::Color));
 	if (FAILED(hr))
@@ -278,9 +273,6 @@ void Texture::SetBlack(const unsigned int & rootNum)
 // グラデーションテクスチャのセット
 void Texture::SetGrade(const unsigned int & rootNum)
 {
-	//リソース設定用構造体
-	D3D12_RESOURCE_DESC desc = grade.rsc->GetDesc();
-
 	//サブリソースに書き込み
 	auto hr = grade.rsc->WriteToSubresource(0, nullptr, grade.data.data(), 4 * sizeof(texture::Color), grade.data.size() * sizeof(texture::Color));
 	if (FAILED(hr))

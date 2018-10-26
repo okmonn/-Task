@@ -40,6 +40,10 @@ long Model::LoadTexture(const std::string& fileName, int * i)
 		if (pmd[i].material.lock()->at(n).texPath[0] != '\0')
 		{
 			std::string tmp = (char*)pmd[i].material.lock()->at(n).texPath;
+			if (func::CheckChar("a3.spa", pmd[i].material.lock()->at(n).texPath, 20) == true)
+			{
+				continue;
+			}
 			//乗算テクスチャ
 			if (func::CheckChar("*", pmd[i].material.lock()->at(n).texPath, 20) == true)
 			{
@@ -53,8 +57,14 @@ long Model::LoadTexture(const std::string& fileName, int * i)
 			}
 			else
 			{
+				//乗算テクスチャ
+				if (func::CheckChar("sph", pmd[i].material.lock()->at(n).texPath, 20) == true)
+				{
+					path = fileName + tmp;
+					hr = tex.lock()->Load(path, pmd[i].sph[n]);
+				}
 				//加算テクスチャ
-				if (func::CheckChar("spa", pmd[i].material.lock()->at(n).texPath, 20) == true)
+				else if (func::CheckChar("spa", pmd[i].material.lock()->at(n).texPath, 20) == true)
 				{
 					path = fileName + tmp;
 					hr = tex.lock()->Load(path, pmd[i].spa[n]);
@@ -69,7 +79,7 @@ long Model::LoadTexture(const std::string& fileName, int * i)
 		}
 	}
 
-	return 0;
+	return hr;
 }
 
 // マテリアル用シェーダビューの生成
@@ -278,6 +288,8 @@ void Model::Draw(int & i)
 
 	for (unsigned int i = 0; i < pmd[n].material.lock()->size(); ++i)
 	{
+		pmd[n].mat = {};
+
 		//マテリアル構造体に格納
 		pmd[n].mat.diffuse     = pmd[n].material.lock()->at(i).diffuse;
 		pmd[n].mat.alpha       = pmd[n].material.lock()->at(i).alpha;
@@ -288,6 +300,7 @@ void Model::Draw(int & i)
 		//sph
 		if (pmd[n].sph.find(i) != pmd[n].sph.end())
 		{
+			pmd[n].mat.sphFlag = TRUE;
 			tex.lock()->SetDraw(pmd[n].sph[i], 4);
 		}
 		else
@@ -298,6 +311,7 @@ void Model::Draw(int & i)
 		//spa
 		if (pmd[n].spa.find(i) != pmd[n].spa.end())
 		{
+			pmd[n].mat.spaFlag = TRUE;
 			tex.lock()->SetDraw(pmd[n].spa[i], 5);
 		}
 		else
@@ -308,17 +322,16 @@ void Model::Draw(int & i)
 		//通常テクスチャ
 		if (pmd[n].tex.find(i) != pmd[n].tex.end())
 		{
-			pmd[n].mat.flag = TRUE;
+			pmd[n].mat.texFlag = TRUE;
 			tex.lock()->SetDraw(pmd[n].tex[i]);
 		}
 		else
 		{
-			pmd[n].mat.flag = FALSE;
 			tex.lock()->SetDraw(pmd[n].tex.begin()->second);
 		}
 
 		//tex.lock()->SetDraw(pmd[n].toon[model[n].material[i].toonIndex], 6);
-		////tex.lock()->SetGrade();
+		tex.lock()->SetGrade();
 
 		//(mat.flag == TRUE) ? tex.lock()->SetDraw(model[n].tex[i]) : tex.lock()->SetDraw(model[n].tex.begin()->second);
 
