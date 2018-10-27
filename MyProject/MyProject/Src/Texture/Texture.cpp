@@ -1,4 +1,3 @@
-#include <DirectXTex.h>
 #include "Texture.h"
 #include "../Device/Device.h"
 #include "../List/List.h"

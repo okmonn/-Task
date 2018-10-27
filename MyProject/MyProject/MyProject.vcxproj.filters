@@ -127,6 +127,9 @@
     <Filter Include="Dx12\Model\ModelLoader">
       <UniqueIdentifier>{38fd3841-e5ec-4469-96bf-b14da4b3f2c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dx12\Model\Motion">
+      <UniqueIdentifier>{0afdd3a4-c6bc-47ad-a2ee-8ae24bba8837}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -221,6 +224,9 @@
     </ClCompile>
     <ClCompile Include="Src\Model\Model.cpp">
       <Filter>Dx12\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Model\MotionLoader.cpp">
+      <Filter>Dx12\Model\Motion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -343,6 +349,9 @@
     </ClInclude>
     <ClInclude Include="Src\Model\Model.h">
       <Filter>Dx12\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Model\MotionLoader.h">
+      <Filter>Dx12\Model\Motion</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

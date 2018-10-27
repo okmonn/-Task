@@ -9,6 +9,7 @@ class Root;
 class Pipe;
 class Texture;
 class ModelLoader;
+class MotionLoader;
 
 class Model
 {
@@ -34,6 +35,7 @@ class Model
 
 		//頂点用リソース
 		ID3D12Resource* v_rsc;
+
 		//マテリアルデータ送信
 		unsigned char* c_data;
 		//ボーン行列データ送信
@@ -57,6 +59,9 @@ class Model
 		pmd::Mat mat;
 		//送信ボーン行列データ
 		std::vector<DirectX::XMMATRIX>bornMtx;
+
+		// モーション
+		std::weak_ptr<std::map<std::string, std::vector<vmd::Motion>>>motion;
 	};
 
 public:
@@ -68,6 +73,12 @@ public:
 
 	// 読み込み
 	long Load(const std::string& fileName, int& i);
+
+	// モーションの適応
+	int Attach(const std::string& fileName, int& i);
+
+	// アニメーション
+	void Animation(int& i, const unsigned int& flam);
 
 	// 描画
 	void Draw(int& i);
@@ -87,6 +98,12 @@ private:
 
 	// 頂点バッファの生成
 	long CreateVertex(int* i);
+
+	// ボーンの回転
+	void RotateBorn(int& i, const std::string& name, const DirectX::XMMATRIX& mtx);
+
+	// ボーンの再帰処理
+	void RecursiveBorn(int* i, pmd::BornNode& node, const DirectX::XMMATRIX& mtx);
 
 
 	// デバイス
@@ -109,6 +126,9 @@ private:
 
 	// モデルローダー
 	std::unique_ptr<ModelLoader>loader;
+
+	// モーションローダー
+	std::unique_ptr<MotionLoader>motion;
 
 	// PMD情報
 	std::map<int*, Pmd>pmd;

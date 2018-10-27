@@ -125,3 +125,11 @@ namespace pmd {
 		int texFlag;
 	};
 };
+
+namespace vmd {
+	// モーションデータ
+	struct Motion {
+		unsigned long flam;
+		DirectX::XMFLOAT4 rotation;
+	};
+};

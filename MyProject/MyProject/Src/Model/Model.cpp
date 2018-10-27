@@ -1,5 +1,6 @@
 #include "Model.h"
 #include "ModelLoader.h"
+#include "MotionLoader.h"
 #include "../Func/Func.h"
 #include "../Device/Device.h"
 #include "../List/List.h"
@@ -13,7 +14,8 @@
 // コンストラクタ
 Model::Model(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Constant>con,
 	std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe, std::weak_ptr<Texture>tex) :
-	dev(dev), list(list), con(con), root(root), pipe(pipe), tex(tex), loader(std::make_unique<ModelLoader>(dev))
+	dev(dev), list(list), con(con), root(root), pipe(pipe), tex(tex), 
+	loader(std::make_unique<ModelLoader>(dev)), motion(std::make_unique<MotionLoader>())
 {
 	pmd.clear();
 }
@@ -28,6 +30,7 @@ Model::~Model()
 	}
 
 	loader.reset();
+	motion.reset();
 }
 
 // テクスチャの読み込み
@@ -240,12 +243,83 @@ long Model::Load(const std::string & fileName, int & i)
 	hr = CreateBornView(&i);
 	hr = CreateVertex(&i);
 
+	Attach("first.vmd", i);
+
 	return hr;
+}
+
+// モーションの適応
+int Model::Attach(const std::string & fileName, int & i)
+{
+	if (motion->Load(fileName) != 0)
+	{
+		return -1;
+	}
+
+	pmd[&i].motion = motion->Get(fileName);
+
+	return 0;
+}
+
+// ボーンの回転
+void Model::RotateBorn(int & i, const std::string & name, const DirectX::XMMATRIX & mtx)
+{
+	auto vec = DirectX::XMLoadFloat3(&pmd[&i].node[name].start);
+
+	pmd[&i].bornMtx[pmd[&i].node[name].index] = DirectX::XMMatrixTranslationFromVector(
+		DirectX::XMVectorScale(vec, -1.0f)) *
+		mtx *
+		DirectX::XMMatrixTranslationFromVector(vec);
+}
+
+// ボーンの再帰処理
+void Model::RecursiveBorn(int * i, pmd::BornNode & node, const DirectX::XMMATRIX& mtx)
+{
+	pmd[i].bornMtx[node.index] *= mtx;
+
+	for (auto& child : node.child)
+	{
+		RecursiveBorn(i, *child, pmd[i].bornMtx[node.index]);
+	}
+}
+
+// アニメーション
+void Model::Animation(int & i, const unsigned int & flam)
+{
+	std::fill(pmd[&i].bornMtx.begin(), pmd[&i].bornMtx.end(), DirectX::XMMatrixIdentity());
+
+	for (auto itr = pmd[&i].motion.lock()->begin(); itr != pmd[&i].motion.lock()->end(); ++itr)
+	{
+		auto& key = itr->second;
+
+		auto find = std::find_if(key.rbegin(), key.rend(),
+			[flam](const vmd::Motion& m) {return m.flam <= flam; });
+
+		if (find == key.rend())
+		{
+			continue;
+		}
+
+		auto vec = DirectX::XMLoadFloat4(&find->rotation);
+		RotateBorn(i, itr->first, DirectX::XMMatrixRotationQuaternion(vec));
+	}
+
+	RecursiveBorn(&i, pmd[&i].node["センター"], DirectX::XMMatrixIdentity());
+
+	memcpy(pmd[&i].b_data, pmd[&i].bornMtx.data(), ((sizeof(DirectX::XMMATRIX) * pmd[&i].born.lock()->size() + 0xff) &~0xff));
 }
 
 // 描画
 void Model::Draw(int & i)
 {
+	static unsigned int flam = 0;
+	Animation(i, flam / 2);
+	++flam;
+	if (flam >= 90)
+	{
+		flam = 0;
+	}
+
 	list.lock()->SetRoot(*root.lock()->Get());
 	list.lock()->SetPipe(*pipe.lock()->Get());
 
@@ -332,8 +406,6 @@ void Model::Draw(int & i)
 
 		//tex.lock()->SetDraw(pmd[n].toon[model[n].material[i].toonIndex], 6);
 		tex.lock()->SetGrade();
-
-		//(mat.flag == TRUE) ? tex.lock()->SetDraw(model[n].tex[i]) : tex.lock()->SetDraw(model[n].tex.begin()->second);
 
 		//定数ヒープのセット
 		list.lock()->GetList()->SetDescriptorHeaps(1, &pmd[n].heap);

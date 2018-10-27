@@ -5,8 +5,6 @@
 #include "../etc/Release.h"
 #include <dxgi1_6.h>
 
-#pragma comment(lib, "DirectXTex.lib")
-
 // ’¸“_Å‘å”
 #define MAX 4
 

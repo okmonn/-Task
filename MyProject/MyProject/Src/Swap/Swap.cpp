@@ -23,7 +23,7 @@ Swap::~Swap()
 // スワップチェインの生成
 long Swap::Create(void)
 {
-	IDXGIFactory6* factory = nullptr;
+	IDXGIFactory4* factory = nullptr;
 
 	//スワップチェイン設定用構造体
 	DXGI_SWAP_CHAIN_DESC1 desc = {};
