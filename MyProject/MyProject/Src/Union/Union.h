@@ -65,6 +65,12 @@ public:
 	// 画像の読み込み
 	void LoadImg(const std::string& fileName, int& i);
 
+	// PMDの読み込み
+	void LoadPmd(const std::string& fileName, int& i);
+
+	// アニメーションのアタッチ
+	void Attach(const std::string& fileName, int& i);
+
 	// 描画準備
 	void Set(void);
 
@@ -96,6 +102,12 @@ public:
 	void DrawFreelyRectImg(int & i, const float & x1, const float & y1, const float & x2, const float & y2, const float & x3, const float & y3, const float & x4, const float & y4,
 		const float& rectX, const float& rectY, const float& rectSizeX, const float& rectSizeY, const float & alpha, const int & turnX, const int & turnY);
 
+	// PMDのアニメーション
+	void Animation(int& i, const float& animSpeed);
+
+	// PMDの描画
+	void DrawPmd(int& i);
+	
 	// 描画実行
 	void Do(void);
 

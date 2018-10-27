@@ -163,6 +163,19 @@ void func::LoadImg(const std::string & fileName, int & i)
 	Union::Get().LoadImg(fileName, i);
 }
 
+// PMDの読み込み
+void func::LoadPmd(const std::string & fileName, int & i)
+{
+	Union::Get().LoadPmd(fileName, i);
+}
+
+// アニメーションのアタッチ
+void func::Attach(const std::string & fileName, int & i)
+{
+
+	Union::Get().Attach(fileName, i);
+}
+
 // 描画準備
 void func::Set(void)
 {
@@ -227,6 +240,18 @@ void func::DrawFreelyRectImg(int & i, const float & x1, const float & y1, const 
 	const float & x4, const float & y4, const float & rectX, const float & rectY, const float & rectSizeX, const float & rectSizeY, const float & alpha, const int & turnX, const int & turnY)
 {
 	Union::Get().DrawFreelyRectImg(i, x1, y1, x2, y2, x3, y3, x4, y4, rectX, rectY, rectSizeX, rectSizeY, alpha, turnX, turnY);
+}
+
+// PMDの描画
+void func::DrawPmd(int & i)
+{
+	Union::Get().DrawPmd(i);
+}
+
+// アニメーション
+void func::Animation(int & i, const float & animSpeed)
+{
+	Union::Get().Animation(i, animSpeed);
 }
 
 // 描画実行

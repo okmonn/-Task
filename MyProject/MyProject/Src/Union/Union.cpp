@@ -100,8 +100,6 @@ void Union::CreatePipe(void)
 	}
 }
 
-int n = 0;
-
 // クラスのインスタンス
 void Union::Start(void)
 {
@@ -128,7 +126,6 @@ void Union::Start(void)
 	tex = std::make_shared<Texture>(dev, list, con, texRoot, texPipe);
 
 	model = std::make_shared<Model>(dev, list, con, mdlRoot, mdlPipe, tex);
-	model->Load("Model/初音ミク.pmd", n);
 }
 
 // メッセージの確認
@@ -198,14 +195,24 @@ void Union::LoadImg(const std::string & fileName, int& i)
 	tex->Load(fileName, i);
 }
 
+// PMDの読み込み
+void Union::LoadPmd(const std::string & fileName, int & i)
+{
+	model->Load(fileName, i);
+}
+
+// アニメーションのアタッチ
+void Union::Attach(const std::string & fileName, int & i)
+{
+	model->Attach(fileName, i);
+}
+
 // 描画準備
 void Union::Set(void)
 {
 	list->Reset(nullptr);
 
-	static float angle = 0.0f;
-	con->UpDataWvp(angle);
-	++angle;
+	con->UpDataWvp(0.0f);
 
 	list->SetViewport();
 
@@ -219,8 +226,6 @@ void Union::Set(void)
 	ren->SetRender(*dep->GetHeap());
 
 	ChangeWVP(0, 10, -15, 0, 10, 0);
-
-	model->Draw(n);
 }
 
 // ポイント描画
@@ -272,6 +277,18 @@ void Union::DrawFreelyImg(int & i, const float & x1, const float & y1, const flo
 void Union::DrawFreelyRectImg(int & i, const float & x1, const float & y1, const float & x2, const float & y2, const float & x3, const float & y3, const float & x4, const float & y4, const float & rectX, const float & rectY, const float & rectSizeX, const float & rectSizeY, const float & alpha, const int & turnX, const int & turnY)
 {
 	tex->FreelyDrawRect(i, x1, y1, x2, y2, x3, y3, x4, y4, rectX, rectY, rectSizeX, rectSizeY, alpha, turnX, turnY);
+}
+
+// PMDのアニメーション
+void Union::Animation(int & i, const float & animSpeed)
+{
+	model->Animation(i, animSpeed);
+}
+
+// PMDの描画
+void Union::DrawPmd(int & i)
+{
+	model->Draw(i);
 }
 
 // 描画

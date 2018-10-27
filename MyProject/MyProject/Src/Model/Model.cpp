@@ -15,7 +15,7 @@
 Model::Model(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Constant>con,
 	std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe, std::weak_ptr<Texture>tex) :
 	dev(dev), list(list), con(con), root(root), pipe(pipe), tex(tex), 
-	loader(std::make_unique<ModelLoader>(dev)), motion(std::make_unique<MotionLoader>())
+	loader(std::make_unique<ModelLoader>(dev, tex)), motion(std::make_unique<MotionLoader>())
 {
 	pmd.clear();
 }
@@ -31,58 +31,6 @@ Model::~Model()
 
 	loader.reset();
 	motion.reset();
-}
-
-// テクスチャの読み込み
-long Model::LoadTexture(const std::string& fileName, int * i)
-{
-	auto hr = S_OK;
-	std::string path = "";
-	for (unsigned int n = 0; n < pmd[i].material.lock()->size(); ++n)
-	{
-		if (pmd[i].material.lock()->at(n).texPath[0] != '\0')
-		{
-			std::string tmp = (char*)pmd[i].material.lock()->at(n).texPath;
-			if (func::CheckChar("a3.spa", pmd[i].material.lock()->at(n).texPath, 20) == true)
-			{
-				continue;
-			}
-			//乗算テクスチャ
-			if (func::CheckChar("*", pmd[i].material.lock()->at(n).texPath, 20) == true)
-			{
-				auto find = tmp.find_first_of('*');
-
-				path = fileName + tmp.substr(0, find);
-				hr = tex.lock()->Load(path, pmd[i].tex[n]);
-
-				path = fileName + tmp.substr(find + 1, tmp.size());
-				hr = tex.lock()->Load(path, pmd[i].sph[n]);
-			}
-			else
-			{
-				//乗算テクスチャ
-				if (func::CheckChar("sph", pmd[i].material.lock()->at(n).texPath, 20) == true)
-				{
-					path = fileName + tmp;
-					hr = tex.lock()->Load(path, pmd[i].sph[n]);
-				}
-				//加算テクスチャ
-				else if (func::CheckChar("spa", pmd[i].material.lock()->at(n).texPath, 20) == true)
-				{
-					path = fileName + tmp;
-					hr = tex.lock()->Load(path, pmd[i].spa[n]);
-				}
-				//通常テクスチャ
-				else
-				{
-					path = fileName + tmp;
-					hr = tex.lock()->Load(path, pmd[i].tex[n]);
-				}
-			}
-		}
-	}
-
-	return hr;
 }
 
 // マテリアル用シェーダビューの生成
@@ -237,13 +185,14 @@ long Model::Load(const std::string & fileName, int & i)
 	pmd[&i].c_rsc    = loader->GetMaterialRsc(fileName);
 	pmd[&i].b_rsc    = loader->GetBornRsc(fileName);
 	pmd[&i].i_rsc    = loader->GetIndexRsc(fileName);
-
-	auto hr = LoadTexture(func::FindString(fileName, '/'), &i);
-	hr = CreateMaterialView(&i);
+	pmd[&i].sph      = loader->GetSph(fileName);
+	pmd[&i].spa      = loader->GetSpa(fileName);
+	pmd[&i].tex      = loader->GetTex(fileName);
+	pmd[&i].toon     = loader->GetToon(fileName);
+	
+	auto hr = CreateMaterialView(&i);
 	hr = CreateBornView(&i);
 	hr = CreateVertex(&i);
-
-	Attach("first.vmd", i);
 
 	return hr;
 }
@@ -262,13 +211,14 @@ int Model::Attach(const std::string & fileName, int & i)
 }
 
 // ボーンの回転
-void Model::RotateBorn(int & i, const std::string & name, const DirectX::XMMATRIX & mtx)
+void Model::RotateBorn(int & i, const std::string & name, const DirectX::XMMATRIX & mtx, const DirectX::XMMATRIX& mtx2, const float& time)
 {
 	auto vec = DirectX::XMLoadFloat3(&pmd[&i].node[name].start);
 
 	pmd[&i].bornMtx[pmd[&i].node[name].index] = DirectX::XMMatrixTranslationFromVector(
 		DirectX::XMVectorScale(vec, -1.0f)) *
-		mtx *
+		(mtx * (1.0f - time) +
+		(mtx * time)) *
 		DirectX::XMMatrixTranslationFromVector(vec);
 }
 
@@ -284,7 +234,7 @@ void Model::RecursiveBorn(int * i, pmd::BornNode & node, const DirectX::XMMATRIX
 }
 
 // アニメーション
-void Model::Animation(int & i, const unsigned int & flam)
+void Model::Animation(int & i, const float & animSpeed)
 {
 	std::fill(pmd[&i].bornMtx.begin(), pmd[&i].bornMtx.end(), DirectX::XMMatrixIdentity());
 
@@ -292,34 +242,42 @@ void Model::Animation(int & i, const unsigned int & flam)
 	{
 		auto& key = itr->second;
 
-		auto find = std::find_if(key.rbegin(), key.rend(),
-			[flam](const vmd::Motion& m) {return m.flam <= flam; });
-
-		if (find == key.rend())
+		auto now = std::find_if(key.rbegin(), key.rend(),
+			[&](const vmd::Motion& m) {return m.flam <= (unsigned int)pmd[&i].flam; });
+		if (now == key.rend())
 		{
 			continue;
 		}
+		auto nowVec = DirectX::XMLoadFloat4(&now->rotation);
+		float nowFlam = (float)now->flam;
+		
 
-		auto vec = DirectX::XMLoadFloat4(&find->rotation);
-		RotateBorn(i, itr->first, DirectX::XMMatrixRotationQuaternion(vec));
+		auto next = now.base();
+		if (next == key.end())
+		{
+			RotateBorn(i, itr->first, DirectX::XMMatrixRotationQuaternion(nowVec));
+		}
+		else
+		{
+			auto nextVec = DirectX::XMLoadFloat4(&next->rotation);
+			float nextFlam = (float)next->flam;
+			float time = (pmd[&i].flam - nowFlam) / (nextFlam - nowFlam);
+
+			RotateBorn(i, itr->first, DirectX::XMMatrixRotationQuaternion(
+				DirectX::XMQuaternionSlerp(nowVec, nextVec, time)));
+		}
 	}
 
 	RecursiveBorn(&i, pmd[&i].node["センター"], DirectX::XMMatrixIdentity());
 
 	memcpy(pmd[&i].b_data, pmd[&i].bornMtx.data(), ((sizeof(DirectX::XMMATRIX) * pmd[&i].born.lock()->size() + 0xff) &~0xff));
+
+	pmd[&i].flam += animSpeed;
 }
 
 // 描画
 void Model::Draw(int & i)
 {
-	static unsigned int flam = 0;
-	Animation(i, flam / 2);
-	++flam;
-	if (flam >= 90)
-	{
-		flam = 0;
-	}
-
 	list.lock()->SetRoot(*root.lock()->Get());
 	list.lock()->SetPipe(*pipe.lock()->Get());
 
@@ -372,10 +330,10 @@ void Model::Draw(int & i)
 		pmd[n].mat.mirror      = pmd[n].material.lock()->at(i).mirror;
 
 		//sph
-		if (pmd[n].sph.find(i) != pmd[n].sph.end())
+		if (pmd[n].sph.lock()->find(i) != pmd[n].sph.lock()->end())
 		{
 			pmd[n].mat.sphFlag = TRUE;
-			tex.lock()->SetDraw(pmd[n].sph[i], 4);
+			tex.lock()->SetDraw(pmd[n].sph.lock()->at(i), 4);
 		}
 		else
 		{
@@ -383,10 +341,10 @@ void Model::Draw(int & i)
 		}
 
 		//spa
-		if (pmd[n].spa.find(i) != pmd[n].spa.end())
+		if (pmd[n].spa.lock()->find(i) != pmd[n].spa.lock()->end())
 		{
 			pmd[n].mat.spaFlag = TRUE;
-			tex.lock()->SetDraw(pmd[n].spa[i], 5);
+			tex.lock()->SetDraw(pmd[n].spa.lock()->at(i), 5);
 		}
 		else
 		{
@@ -394,18 +352,25 @@ void Model::Draw(int & i)
 		}
 
 		//通常テクスチャ
-		if (pmd[n].tex.find(i) != pmd[n].tex.end())
+		if (pmd[n].tex.lock()->find(i) != pmd[n].tex.lock()->end())
 		{
 			pmd[n].mat.texFlag = TRUE;
-			tex.lock()->SetDraw(pmd[n].tex[i]);
+			tex.lock()->SetDraw(pmd[n].tex.lock()->at(i));
 		}
 		else
 		{
-			tex.lock()->SetDraw(pmd[n].tex.begin()->second);
+			tex.lock()->SetDraw(pmd[n].tex.lock()->begin()->second);
 		}
 
-		//tex.lock()->SetDraw(pmd[n].toon[model[n].material[i].toonIndex], 6);
-		tex.lock()->SetGrade();
+		//トゥーンテクスチャ
+		if (pmd[n].toon.lock()->find(pmd[n].material.lock()->at(i).toonIndex) != pmd[n].toon.lock()->end())
+		{
+			tex.lock()->SetDraw(pmd[n].toon.lock()->at(pmd[n].material.lock()->at(i).toonIndex), 6);
+		}
+		else
+		{
+			tex.lock()->SetGrade();
+		}
 
 		//定数ヒープのセット
 		list.lock()->GetList()->SetDescriptorHeaps(1, &pmd[n].heap);
@@ -427,4 +392,22 @@ void Model::Draw(int & i)
 		//オフセット更新
 		offset += pmd[n].material.lock()->at(i).indexNum;
 	}
+}
+
+// アニメーションの終了確認
+bool Model::CheckEndAnim(int & i)
+{
+	unsigned long flam = 0;
+	for (auto itr = pmd[&i].motion.lock()->begin(); itr != pmd[&i].motion.lock()->end(); ++itr)
+	{
+		for (auto& anim : itr->second)
+		{
+			if (flam < anim.flam)
+			{
+				flam = anim.flam;
+			}
+		}
+	}
+
+	return (pmd[&i].flam > flam);
 }

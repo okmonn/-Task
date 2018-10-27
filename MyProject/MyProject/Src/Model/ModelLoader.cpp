@@ -1,11 +1,16 @@
 #include "ModelLoader.h"
 #include "PmdData.h"
 #include "../Device/Device.h"
+#include "../Texture/Texture.h"
+#include "../Func/Func.h"
 #include "../etc/Release.h"
+#include <Shlwapi.h>
+
+#pragma comment(lib, "shlwapi.lib")
 
 // コンストラクタ
-ModelLoader::ModelLoader(std::weak_ptr<Device>dev) : 
-	dev(dev)
+ModelLoader::ModelLoader(std::weak_ptr<Device>dev, std::weak_ptr<Texture>texture) :
+	dev(dev), texture(texture)
 {
 	vertex.clear();
 	index.clear();
@@ -15,6 +20,10 @@ ModelLoader::ModelLoader(std::weak_ptr<Device>dev) :
 	c_rsc.clear();
 	b_rsc.clear();
 	i_rsc.clear();
+	sph.clear();
+	spa.clear();
+	tex.clear();
+	toon.clear();
 	data.clear();
 }
 
@@ -39,6 +48,98 @@ ModelLoader::~ModelLoader()
 	{
 		Release(itr->second);
 	}
+}
+
+// テクスチャの読み込み
+long ModelLoader::LoadTex(const std::string & fileName)
+{
+	auto hr = S_OK;
+	std::string path = "";
+
+	sph[fileName] = std::make_shared<std::map<int, int>>();
+	spa[fileName] = std::make_shared<std::map<int, int>>();
+	tex[fileName] = std::make_shared<std::map<int, int>>();
+
+	for (unsigned int n = 0; n < material[fileName]->size(); ++n)
+	{
+		if (material[fileName]->at(n).texPath[0] != '\0')
+		{
+			std::string tmp = (char*)material[fileName]->at(n).texPath;
+			if (func::CheckChar("a3.spa", material[fileName]->at(n).texPath, 20) == true)
+			{
+				continue;
+			}
+			//乗算テクスチャ
+			if (func::CheckChar("*", material[fileName]->at(n).texPath, 20) == true)
+			{
+				auto find = tmp.find_first_of('*');
+
+				path = func::FindString(fileName, '/') + tmp.substr(0, find);
+				tex[fileName]->emplace(n, 0);
+				hr = texture.lock()->Load(path, tex[fileName]->at(n));
+
+				path = func::FindString(fileName, '/') + tmp.substr(find + 1, tmp.size());
+				sph[fileName]->emplace(n, 0);
+				hr = texture.lock()->Load(path, sph[fileName]->at(n));
+			}
+			else
+			{
+				//乗算テクスチャ
+				if (func::CheckChar("sph", material[fileName]->at(n).texPath, 20) == true)
+				{
+					path = func::FindString(fileName, '/') + tmp;
+					sph[fileName]->emplace(n, 0);
+					hr = texture.lock()->Load(path, sph[fileName]->at(n));
+				}
+				//加算テクスチャ
+				else if (func::CheckChar("spa", material[fileName]->at(n).texPath, 20) == true)
+				{
+					path = func::FindString(fileName, '/') + tmp;
+					spa[fileName]->emplace(n, 0);
+					hr = texture.lock()->Load(path, spa[fileName]->at(n));
+				}
+				//通常テクスチャ
+				else
+				{
+					path = func::FindString(fileName, '/') + tmp;
+					tex[fileName]->emplace(n, 0);
+					hr = texture.lock()->Load(path, tex[fileName]->at(n));
+				}
+			}
+		}
+	}
+
+	return hr;
+}
+
+// トゥーンテクスチャの読み込み
+long ModelLoader::LoadToon(const std::string & fileName)
+{
+	auto hr = S_OK;
+
+	toon[fileName] = std::make_shared<std::map<int, int>>();
+
+	for (unsigned int i = 0; i < material[fileName]->size(); ++i)
+	{
+		int tmp = (material[fileName]->at(i).toonIndex >= 0xff) ? 0 : material[fileName]->at(i).toonIndex;
+
+		std::string path = func::FindString(fileName, '/') + "toon/" + toonPath[tmp];
+		if (toon[fileName]->find(material[fileName]->at(i).toonIndex) == toon[fileName]->end())
+		{
+			toon[fileName]->emplace(material[fileName]->at(i).toonIndex, 0);
+			hr = texture.lock()->Load(path, toon[fileName]->at(material[fileName]->at(i).toonIndex));
+			if (FAILED(hr))
+			{
+				std::string path2 = fileName + "/" + toonPath[tmp];
+				if (PathFileExistsA(path2.c_str()))
+				{
+					hr = texture.lock()->Load(fileName + "/", toon[fileName]->at(material[fileName]->at(i).toonIndex));
+				}
+			}
+		}
+	}
+
+	return hr;
 }
 
 // ヒープの生成
@@ -198,9 +299,69 @@ long ModelLoader::Load(const std::string & fileName)
 		fread(&itr->pos,      sizeof(itr->pos),      1, file);
 	}
 
+	//IKの読み込み
+	fread(&num, sizeof(USHORT), 1, file);
+	pmd::IkBorn ik = {};
+	for (unsigned int i = 0; i < num; ++i)
+	{
+		fread(&ik.index, sizeof(ik.index), 1, file);
+		fread(&ik.target, sizeof(ik.target), 1, file);
+		fread(&ik.chain, sizeof(ik.chain), 1, file);
+		ik.child.resize(ik.chain);
+		fread(&ik.iteration, sizeof(ik.iteration), 1, file);
+		fread(&ik.weight, sizeof(ik.weight), 1, file);
+		fread(&ik.child[0], sizeof(USHORT) * ik.child.size(), 1, file);
+	}
+
+	//スキンの読み込み
+	unsigned short skinNum = 0;
+	fread(&skinNum, sizeof(skinNum), 1, file);
+	//当然の権利のようにすっ飛ばすで 
+	for (int i = 0; i < skinNum; ++i) {
+		fseek(file, 20, SEEK_CUR);
+		unsigned int vertNum = 0;
+		fread(&vertNum, sizeof(vertNum), 1, file);
+		fseek(file, 1, SEEK_CUR);
+		fseek(file, 16 * vertNum, SEEK_CUR);
+	}
+
+	//表示用表情 
+	unsigned char skinDispNum = 0;
+	fread(&skinDispNum, sizeof(skinDispNum), 1, file);
+	fseek(file, skinDispNum * sizeof(unsigned short), SEEK_CUR);
+
+	//表示用ボーン名 
+	unsigned char boneDispNum = 0;
+	fread(&boneDispNum, sizeof(boneDispNum), 1, file);
+	fseek(file, 50 * boneDispNum, SEEK_CUR);
+
+	//表示ボーンリスト 
+	unsigned int dispBoneNum = 0;
+	fread(&dispBoneNum, sizeof(dispBoneNum), 1, file);
+	fseek(file, 3 * dispBoneNum, SEEK_CUR);
+
+	//英名対応フラグ 
+	unsigned char englishFlg = 0;
+	fread(&englishFlg, sizeof(englishFlg), 1, file);
+	if (englishFlg) {
+		//モデル名20バイト+256バイトコメント 
+		fseek(file, 20 + 256, SEEK_CUR);
+		//ボーン名20バイト*ボーン数 
+		fseek(file, born[fileName]->size() * 20, SEEK_CUR);
+		//(表情数-1)*20バイト。-1なのはベース部分ぶん 
+		fseek(file, (skinNum - 1) * 20, SEEK_CUR);
+		//ボーン数*50バイト。 
+		fseek(file, boneDispNum * 50, SEEK_CUR);
+	}
+
+	//トゥーンパスの読み込み
+	fread(toonPath.data(), sizeof(char) * 100, toonPath.size(), file);
+
 	fclose(file);
 
-	auto hr = CreateHeap(fileName);
+	auto hr = LoadTex(fileName);
+	hr = LoadToon(fileName);
+	hr = CreateHeap(fileName);
 	hr = CreateConRsc(&c_rsc[fileName], ((sizeof(pmd::Mat) + 0xff) &~0xff) * material[fileName]->size());
 	hr = CreateConRsc(&b_rsc[fileName], ((sizeof(DirectX::XMMATRIX) * born[fileName]->size() + 0xff) &~0xff));
 	hr = CreateIndex(fileName);

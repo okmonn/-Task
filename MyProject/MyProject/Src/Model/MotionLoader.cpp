@@ -1,5 +1,6 @@
 #include "MotionLoader.h"
 #include "../etc/Release.h"
+#include <algorithm>
 
 struct MotionData {
 	//ƒ{[ƒ“–¼
@@ -61,6 +62,14 @@ int MotionLoader::Load(const std::string & fileName)
 	}
 
 	fclose(file);
+
+	for (auto itr = motion[fileName]->begin(); itr != motion[fileName]->end(); ++itr)
+	{
+		std::sort(itr->second.begin(), itr->second.end(),
+			[](vmd::Motion& m1, vmd::Motion& m2) {
+			return m1.flam < m2.flam;
+		});
+	}
 
 	return 0;
 }

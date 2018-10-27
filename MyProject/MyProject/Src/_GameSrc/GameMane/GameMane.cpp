@@ -44,9 +44,9 @@ void GameMane::Draw(void)
 // ˆ—
 void GameMane::UpData(void)
 {
-	Draw();
-
 	scene->UpData();
+
+	Draw();
 }
 
 // ˆ—

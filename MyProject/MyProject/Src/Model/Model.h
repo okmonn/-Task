@@ -44,13 +44,13 @@ class Model
 		unsigned int* v_data;
 
 		//テクスチャ
-		std::map<int, int>tex;
+		std::weak_ptr<std::map<int, int>>tex;
 		//乗算テクスチャ
-		std::map<int, int>sph;
+		std::weak_ptr<std::map<int, int>>sph;
 		//加算テクスチャ
-		std::map<int, int>spa;
+		std::weak_ptr<std::map<int, int>>spa;
 		//トゥーンテクスチャ
-		std::map<int, int>toon;
+		std::weak_ptr<std::map<int, int>>toon;
 
 		//ボーンノード
 		std::map<std::string, pmd::BornNode>node;
@@ -62,6 +62,12 @@ class Model
 
 		// モーション
 		std::weak_ptr<std::map<std::string, std::vector<vmd::Motion>>>motion;
+
+		// アニメーションフレーム
+		float flam;
+
+		// アニメーション終了フラグ
+		bool end;
 	};
 
 public:
@@ -78,15 +84,15 @@ public:
 	int Attach(const std::string& fileName, int& i);
 
 	// アニメーション
-	void Animation(int& i, const unsigned int& flam);
+	void Animation(int& i, const float& animSpeed);
 
 	// 描画
 	void Draw(int& i);
 
-private:
-	// テクスチャの読み込み
-	long LoadTexture(const std::string& fileName, int* i);
+	// アニメーションの終了確認
+	bool CheckEndAnim(int& i);
 
+private:
 	// マテリアル用シェーダビューの生成
 	long CreateMaterialView(int* i);
 
@@ -100,7 +106,7 @@ private:
 	long CreateVertex(int* i);
 
 	// ボーンの回転
-	void RotateBorn(int& i, const std::string& name, const DirectX::XMMATRIX& mtx);
+	void RotateBorn(int& i, const std::string& name, const DirectX::XMMATRIX& mtx, const DirectX::XMMATRIX& mtx2 = DirectX::XMMatrixIdentity(), const float& time = 0.0f);
 
 	// ボーンの再帰処理
 	void RecursiveBorn(int* i, pmd::BornNode& node, const DirectX::XMMATRIX& mtx);
