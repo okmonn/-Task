@@ -3,22 +3,24 @@
 #include <string>
 #include <vector>
 
-class Server
+class Client
 {
 public:
 	// コンストラクタ
-	Server();
+	Client();
 	// デストラクタ
-	~Server();
-
-	// クライアントの接続
-	void Accept(void);
+	~Client();
 
 	// 受信
 	void Recv(void);
 
 	// 送信
 	void Send(void);
+
+	// 終了フラグの取得
+	bool GetFlag(void) const {
+		return end;
+	}
 
 private:
 	// テキストの読み込み
@@ -30,18 +32,18 @@ private:
 	// ソケットの生成
 	int Create(void);
 
-	// アドレスとの関連付け
-	int Bind(void);
-
-	// クライアントとの接続待機
-	int Listen(void);
+	// サーバーとの接続
+	int Connect(void);
 
 	// 初期化
 	void Init(void);
 
-	// クライアントとの接続終了
+	// ソケットを閉じる
 	void Close(void);
 
+
+	// サーバーPC名
+	std::string serverName;
 
 	// ポート番号
 	std::string port;
@@ -64,15 +66,15 @@ private:
 	// タイムアウト
 	struct timeval time;
 
+	// 終了フラグ
+	bool end;
+
 	// 受信
 	char r[256];
 
 	// 送信
 	char s[256];
 
-	// クライアントソケット
-	std::vector<SOCKET>client;
-
-	// クライアントアドレス
-	std::vector<struct sockaddr_in>clientAddr;
+	// アドレスリスト
+	std::vector<unsigned long>list;
 };
