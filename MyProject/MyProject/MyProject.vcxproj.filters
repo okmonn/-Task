@@ -130,6 +130,9 @@
     <Filter Include="Dx12\Model\Motion">
       <UniqueIdentifier>{0afdd3a4-c6bc-47ad-a2ee-8ae24bba8837}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{3709a45b-c65d-4980-9bdf-d232fcd8a539}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -227,6 +230,9 @@
     </ClCompile>
     <ClCompile Include="Src\Model\MotionLoader.cpp">
       <Filter>Dx12\Model\Motion</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Network\Client.cpp">
+      <Filter>Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -352,6 +358,9 @@
     </ClInclude>
     <ClInclude Include="Src\Model\MotionLoader.h">
       <Filter>Dx12\Model\Motion</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Network\Client.h">
+      <Filter>Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

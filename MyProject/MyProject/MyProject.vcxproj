@@ -149,6 +149,7 @@
     <ClCompile Include="Src\Model\Model.cpp" />
     <ClCompile Include="Src\Model\ModelLoader.cpp" />
     <ClCompile Include="Src\Model\MotionLoader.cpp" />
+    <ClCompile Include="Src\Network\Client.cpp" />
     <ClCompile Include="Src\Pipe\Pipe.cpp" />
     <ClCompile Include="Src\Point\Point.cpp" />
     <ClCompile Include="Src\Queue\Queue.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="Src\Model\ModelLoader.h" />
     <ClInclude Include="Src\Model\MotionLoader.h" />
     <ClInclude Include="Src\Model\PmdData.h" />
+    <ClInclude Include="Src\Network\Client.h" />
     <ClInclude Include="Src\Pipe\Pipe.h" />
     <ClInclude Include="Src\Point\Point.h" />
     <ClInclude Include="Src\Queue\Queue.h" />
