@@ -15,7 +15,7 @@ public:
 	void Recv(void);
 
 	// 送信
-	void Sent(void);
+	void Send(void);
 
 	// サーバーの認識フラグの取得
 	bool GetFlag(void) const {

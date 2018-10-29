@@ -66,16 +66,14 @@ int Client::Create(void)
 		printf("このコンピュータの名前は%sです\n", name);
 	}
 
-	std::string serverName;
-	serverName.resize(256);
+	char serverName[256];
 	printf("サーバーPC名：");
-	scanf_s("%s", (char*)serverName.data(), sizeof(char) * serverName.size());
-	h = gethostbyname(serverName.c_str());
+	scanf_s("%s", serverName, sizeof(serverName));
+	h = gethostbyname(serverName);
 
-	std::string port;
-	port.resize(5);
+	char port[5];
 	printf("ポート番号：");
-	scanf_s("%s", (char*)port.data(), sizeof(char) * port.size());
+	scanf_s("%s", port, sizeof(port));
 	//アドレス情報
 	in_addr address = {};
 	for (int i = 0; h->h_addr_list[i]; ++i)
@@ -86,7 +84,7 @@ int Client::Create(void)
 	
 	//ソケットの設定
 	addr.sin_family           = AF_INET;
-	addr.sin_port             = htons(std::atoi(port.c_str()));
+	addr.sin_port             = htons(std::atoi(port));
 	addr.sin_addr.S_un.S_addr = address.S_un.S_addr;
 
 	//ソケットの生成
@@ -163,10 +161,10 @@ void Client::Recv(void)
 }
 
 // 送信
-void Client::Sent(void)
+void Client::Send(void)
 {
 	fflush(stdin);
-	scanf_s("%s", s.data(), sizeof(char) * s.size());
+	scanf_s("%s", (char*)s.data(), sizeof(char) * s.size());
 	if (sendto(sock, s.data(), strlen(s.data()), 0, (struct sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR)
 	{
 		printf("送信：失敗：%d\n", WSAGetLastError());
