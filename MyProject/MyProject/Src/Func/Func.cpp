@@ -109,6 +109,48 @@ std::wstring func::ChangeWString(const std::string & st)
 	return wstr;
 }
 
+// ニュートン法
+float func::Newton(const float& input, const float& pos1X, const float& pos1Y, const float& pos2X, const float& pos2Y, const unsigned int& loop)
+{
+	if (pos1X== pos1Y && pos2X == pos2Y)
+	{
+		//直線なので計算不要
+		return input;
+	}
+
+	float t = input;
+	//t^3の係数
+	float k3 = 1 + 3 * pos1X - 3 * pos2X;
+	//t^2の係数
+	float k2 = 3 * pos2X - 6 * pos1X;
+	//tの係数
+	float k1 = 3 * pos1X;
+
+	for (unsigned int i = 0; i < loop; ++i)
+	{
+		//f(x)
+		float ft = (t * t * t) * k3 + (t * t) * k2 + t * k1 - pos1X;
+		if (ft <= 0.0005f && ft >= -0.0005f)
+		{
+			break;
+		}
+		//f(x)の微分結果
+		float fdt = 3 * t * t * k3 + 2 * t*k2 + k1;
+		if (fdt == 0.0f)
+		{
+			break;
+		}
+		t = t - ft / fdt;
+	}
+
+	//反転
+	float reverse = (1.0f - t);
+
+	return 3 * reverse * reverse * t * pos1Y +
+		3 * reverse * t * t * pos2Y +
+		t * t * t;
+}
+
 // ウィンドウサイズのセット
 void func::SetWindowSize(const unsigned int & x, const unsigned int & y)
 {

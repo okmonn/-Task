@@ -16,6 +16,7 @@ ModelLoader::ModelLoader(std::weak_ptr<Device>dev, std::weak_ptr<Texture>texture
 	index.clear();
 	material.clear();
 	born.clear();
+	ikBorn.clear();
 	heap.clear();
 	c_rsc.clear();
 	b_rsc.clear();
@@ -300,17 +301,20 @@ long ModelLoader::Load(const std::string & fileName)
 	}
 
 	//IKÇÃì«Ç›çûÇ›
-	fread(&num, sizeof(USHORT), 1, file);
+	fread(&num, sizeof(unsigned short), 1, file);
 	pmd::IkBorn ik = {};
+	ikBorn[fileName] = std::make_shared<std::map<std::string, pmd::IkBorn>>();
 	for (unsigned int i = 0; i < num; ++i)
 	{
-		fread(&ik.index, sizeof(ik.index), 1, file);
-		fread(&ik.target, sizeof(ik.target), 1, file);
-		fread(&ik.chain, sizeof(ik.chain), 1, file);
+		fread(&ik.index,     sizeof(ik.index),                         1, file);
+		fread(&ik.target,    sizeof(ik.target),                        1, file);
+		fread(&ik.chain,     sizeof(ik.chain),                         1, file);
 		ik.child.resize(ik.chain);
-		fread(&ik.iteration, sizeof(ik.iteration), 1, file);
-		fread(&ik.weight, sizeof(ik.weight), 1, file);
-		fread(&ik.child[0], sizeof(USHORT) * ik.child.size(), 1, file);
+		fread(&ik.iteration, sizeof(ik.iteration),                     1, file);
+		fread(&ik.weight,    sizeof(ik.weight),                        1, file);
+		fread(&ik.child[0],  sizeof(unsigned short) * ik.child.size(), 1, file);
+
+		ikBorn[fileName]->insert(std::make_pair(born[fileName]->at(ik.index).name, ik));
 	}
 
 	//ÉXÉLÉìÇÃì«Ç›çûÇ›

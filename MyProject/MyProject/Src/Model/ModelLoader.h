@@ -33,6 +33,10 @@ public:
 	std::shared_ptr<std::vector<pmd::Born>> GetBorn(const std::string& fileName) {
 		return born[fileName];
 	}
+	// IKボーンの取得
+	std::shared_ptr<std::map<std::string, pmd::IkBorn>> GetIkBorn(const std::string& fileName) {
+		return ikBorn[fileName];
+	}
 	// ヒープの取得
 	ID3D12DescriptorHeap* GetHeap(const std::string& fileName) {
 		return heap[fileName];
@@ -100,6 +104,9 @@ private:
 
 	// ボーン
 	std::map<std::string, std::shared_ptr<std::vector<pmd::Born>>>born;
+
+	// IKボーン
+	std::map < std::string, std::shared_ptr<std::map<std::string, pmd::IkBorn>>>ikBorn;
 
 	// ヒープ
 	std::map<std::string, ID3D12DescriptorHeap*>heap;

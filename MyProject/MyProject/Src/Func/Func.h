@@ -30,6 +30,9 @@ namespace func {
 	// ワイド文字列の変換
 	std::wstring ChangeWString(const std::string& st);
 
+	// ニュートン法
+	float Newton(const float& input, const float& pos1X, const float& pos1Y, const float& pos2X, const float& pos2Y, const unsigned int& loop = 16);
+
 	// ウィンドウサイズのセット
 	void SetWindowSize(const unsigned int& x = 640, const unsigned int& y = 480);
 

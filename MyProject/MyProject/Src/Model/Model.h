@@ -23,6 +23,8 @@ class Model
 		std::weak_ptr<std::vector<pmd::Material>>material;
 		//ボーン
 		std::weak_ptr<std::vector<pmd::Born>>born;
+		//IKボーン
+		std::weak_ptr<std::map<std::string, pmd::IkBorn>>ikBorn;
 
 		//ヒープ
 		ID3D12DescriptorHeap* heap;
@@ -104,6 +106,9 @@ private:
 
 	// 頂点バッファの生成
 	long CreateVertex(int* i);
+
+	// 特定方向に向ける行列を作る
+	DirectX::XMMATRIX LookAt(const DirectX::XMFLOAT3& look, const DirectX::XMFLOAT3& right);
 
 	// ボーンの回転
 	void RotateBorn(int& i, const std::string& name, const DirectX::XMMATRIX& mtx, const DirectX::XMMATRIX& mtx2 = DirectX::XMMatrixIdentity(), const float& time = 0.0f);

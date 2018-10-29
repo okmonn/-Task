@@ -129,7 +129,11 @@ namespace pmd {
 namespace vmd {
 	// モーションデータ
 	struct Motion {
+		//フレーム
 		unsigned long flam;
+		//クォータニオン
 		DirectX::XMFLOAT4 rotation;
+		//補完
+		std::vector<float>inter;
 	};
 };

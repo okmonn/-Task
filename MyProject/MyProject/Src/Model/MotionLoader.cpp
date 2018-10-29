@@ -12,7 +12,7 @@ struct MotionData {
 	//回転
 	DirectX::XMFLOAT4 rotation;
 	//補完
-	unsigned char interpolation[64];
+	std::vector<float>inter;
 };
 
 // コンストラクタ
@@ -43,22 +43,28 @@ int MotionLoader::Load(const std::string & fileName)
 
 	//モーション
 	MotionData m = {};
+	m.inter.resize(64);
 	motion[fileName] = std::make_shared<std::map<std::string, std::vector<vmd::Motion>>>();
 
 	for (unsigned int i = 0; i < num; ++i)
 	{
-		fread(&m.name,          sizeof(m.name),          1, file);
-		fread(&m.flam,          sizeof(m.flam),          1, file);
-		fread(&m.pos,           sizeof(m.pos),           1, file);
-		fread(&m.rotation,      sizeof(m.rotation),      1, file);
-		fread(&m.interpolation, sizeof(m.interpolation), 1, file);
+		fread(&m.name,     sizeof(m.name),                         1, file);
+		fread(&m.flam,     sizeof(m.flam),                         1, file);
+		fread(&m.pos,      sizeof(m.pos),                          1, file);
+		fread(&m.rotation, sizeof(m.rotation),                     1, file);
+		fread(&m.inter[0], sizeof(unsigned char) * m.inter.size(), 1, file);
 
 		if (motion[fileName]->find(m.name) == motion[fileName]->end())
 		{
 			motion[fileName]->insert(std::make_pair(m.name, std::vector<vmd::Motion>()));
 		}
 
-		motion[fileName]->at(m.name).push_back({ m.flam, m.rotation });
+		for (auto& n : m.inter)
+		{
+			n /= 127.0f;
+		}
+
+		motion[fileName]->at(m.name).push_back({ m.flam, m.rotation, m.inter});
 	}
 
 	fclose(file);

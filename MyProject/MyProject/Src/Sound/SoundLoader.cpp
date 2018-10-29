@@ -6,7 +6,7 @@
 #include <tchar.h>
 
 // スレッド最大数
-#define THREAD_MAX 10
+#define THREAD_MAX 5
 
 // コンストラクタ
 SoundLoader::SoundLoader() : 

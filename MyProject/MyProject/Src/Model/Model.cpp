@@ -92,8 +92,6 @@ void Model::SetNode(int * i)
 
 		pmd[i].node[name].child.push_back(&n.second);
 	}
-
-	int n = 0;
 }
 
 // ボーン用シェーダビューの生成
@@ -181,6 +179,7 @@ long Model::Load(const std::string & fileName, int & i)
 	pmd[&i].index    = loader->GetIndex(fileName);
 	pmd[&i].material = loader->GetMaterial(fileName);
 	pmd[&i].born     = loader->GetBorn(fileName);
+	pmd[&i].ikBorn   = loader->GetIkBorn(fileName);
 	pmd[&i].heap     = loader->GetHeap(fileName);
 	pmd[&i].c_rsc    = loader->GetMaterialRsc(fileName);
 	pmd[&i].b_rsc    = loader->GetBornRsc(fileName);
@@ -205,14 +204,37 @@ int Model::Attach(const std::string & fileName, int & i)
 		return -1;
 	}
 
+	pmd[&i].flam = 0;
 	pmd[&i].motion = motion->Get(fileName);
 
 	return 0;
 }
 
+// 特定方向に向ける行列を作る
+DirectX::XMMATRIX Model::LookAt(const DirectX::XMFLOAT3 & look, const DirectX::XMFLOAT3 & right)
+{
+	auto vz = DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&look));
+	auto vx = DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&right));
+	auto vy = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(vz, vx));
+	vx = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(vy, vz));
+	auto mtx = DirectX::XMMatrixIdentity();
+
+	DirectX::XMFLOAT3 fx = {}, fy = {}, fz = {};
+	DirectX::XMStoreFloat3(&fx, vx);
+	DirectX::XMStoreFloat3(&fy, vy);
+	DirectX::XMStoreFloat3(&fz, vz);
+
+	return DirectX::XMMATRIX();
+}
+
 // ボーンの回転
 void Model::RotateBorn(int & i, const std::string & name, const DirectX::XMMATRIX & mtx, const DirectX::XMMATRIX& mtx2, const float& time)
 {
+	if (pmd[&i].node.find(name) == pmd[&i].node.end())
+	{
+		return;
+	}
+
 	auto vec = DirectX::XMLoadFloat3(&pmd[&i].node[name].start);
 
 	pmd[&i].bornMtx[pmd[&i].node[name].index] = DirectX::XMMatrixTranslationFromVector(
