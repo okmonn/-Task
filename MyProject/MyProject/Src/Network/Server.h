@@ -3,24 +3,22 @@
 #include <string>
 #include <vector>
 
-class Client
+class Server
 {
 public:
 	// コンストラクタ
-	Client();
+	Server();
 	// デストラクタ
-	~Client();
+	~Server();
+
+	// クライアントとの接続
+	void Accept(void);
 
 	// 受信
 	void Recv(void);
 
 	// 送信
-	void Sent(void);
-
-	// サーバーの認識フラグの取得
-	bool GetFlag(void) const {
-		return connecting;
-	}
+	void Send(void);
 
 private:
 	// 初期処理
@@ -29,27 +27,33 @@ private:
 	// ソケットの生成
 	int Create(void);
 
-	// サーバーとの接続
-	int Connect(void);
+	// アドレスとの関連
+	int Bind(void);
+
+	// クライアントとの接続待機
+	int Listen(void);
 
 	// 初期化
 	void Init(void);
 
-	// ソケットを閉じる
+	// クライアントとの接続終了
 	void Close(void);
 
 
 	// データ
 	WSADATA data;
 
-	// ソケット
+	// サーバーソケット
 	SOCKET sock;
 
 	// アドレス
 	struct sockaddr_in addr;
 
-	// サーバーのアドレス配列
-	std::vector<unsigned long>list;
+	// クライアントソケット
+	std::vector<SOCKET>client;
+
+	// クライアントアドレス
+	std::vector<struct sockaddr_in>clientAddr;
 
 	// セレクトで使用
 	fd_set fds;
@@ -65,7 +69,4 @@ private:
 
 	// 送信文字
 	std::string s;
-
-	// サーバーの認識フラグ
-	bool connecting;
 };

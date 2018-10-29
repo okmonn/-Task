@@ -3,14 +3,16 @@
 #include <Windows.h>
 #include <iostream>
 #include <ws2tcpip.h>
-#include <string>
 #include <tchar.h>
 
 #pragma comment(lib, "ws2_32.lib")
 
+// 文字最大数
+#define LENGTH_MAX 1024
+
 // コンストラクタ
 Client::Client() : 
-	sock(INVALID_SOCKET)
+	sock(INVALID_SOCKET), connecting(false)
 {
 	data = {};
 	addr = {};
@@ -19,22 +21,17 @@ Client::Client() :
 
 	list.clear();
 
+	r.resize(LENGTH_MAX);
+	s.resize(LENGTH_MAX);
+
 	Init();
 }
 
 // デストラクタ
 Client::~Client()
 {
-}
-
-// 受信
-void Client::Recv(void)
-{
-}
-
-// 送信
-void Client::Sent(void)
-{
+	Close();
+	WSACleanup();
 }
 
 // 初期処理
@@ -69,14 +66,16 @@ int Client::Create(void)
 		printf("このコンピュータの名前は%sです\n", name);
 	}
 
-	char hName[10];
+	std::string serverName;
+	serverName.resize(256);
 	printf("サーバーPC名：");
-	scanf_s("%s", hName, sizeof(hName));
-	h = gethostbyname(hName);
+	scanf_s("%s", (char*)serverName.data(), sizeof(char) * serverName.size());
+	h = gethostbyname(serverName.c_str());
 
-	char port[5];
+	std::string port;
+	port.resize(5);
 	printf("ポート番号：");
-	scanf_s("%s", port, sizeof(port));
+	scanf_s("%s", (char*)port.data(), sizeof(char) * port.size());
 	//アドレス情報
 	in_addr address = {};
 	for (int i = 0; h->h_addr_list[i]; ++i)
@@ -87,12 +86,12 @@ int Client::Create(void)
 	
 	//ソケットの設定
 	addr.sin_family           = AF_INET;
-	addr.sin_port             = htons(std::atoi(port));
+	addr.sin_port             = htons(std::atoi(port.c_str()));
 	addr.sin_addr.S_un.S_addr = address.S_un.S_addr;
 
 	//ソケットの生成
 	sock = socket(addr.sin_family, SOCK_STREAM, 0);
-	if (sock != INVALID_SOCKET)
+	if (sock == INVALID_SOCKET)
 	{
 		OutputDebugString(_T("\nソケットの生成：失敗\n"));
 	}
@@ -119,6 +118,7 @@ int Client::Connect(void)
 			char str[INET_ADDRSTRLEN];
 			printf("%sに接続しました\n", inet_ntop(addr.sin_family, &addr.sin_addr, str, sizeof(str)));
 			FD_SET(sock, &readfds);
+			connecting = true;
 			break;
 		}
 	}
@@ -137,4 +137,48 @@ void Client::Init(void)
 	Start();
 	Create();
 	Connect();
+}
+
+// 受信
+void Client::Recv(void)
+{
+	memcpy(&fds, &readfds, sizeof(fd_set));
+	int len = select(0, &fds, NULL, NULL, &time);
+	if (len != 0)
+	{
+		if (FD_ISSET(sock, &fds))
+		{
+			auto hr = recv(sock, (char*)r.data(), sizeof(char) * r.size(), 0);
+			if (hr == -1)
+			{
+				printf("サーバーが立ち上がっていません\n");
+				connecting = false;
+			}
+			else
+			{
+				printf("受信：%s\n", r.c_str());
+			}
+		}
+	}
+}
+
+// 送信
+void Client::Sent(void)
+{
+	fflush(stdin);
+	scanf_s("%s", s.data(), sizeof(char) * s.size());
+	if (sendto(sock, s.data(), strlen(s.data()), 0, (struct sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR)
+	{
+		printf("送信：失敗：%d\n", WSAGetLastError());
+	}
+}
+
+// ソケットを閉じる
+void Client::Close(void)
+{
+	if (sock != INVALID_SOCKET)
+	{
+		closesocket(sock);
+		sock = INVALID_SOCKET;
+	}
 }
