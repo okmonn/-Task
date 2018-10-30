@@ -93,7 +93,7 @@ void Sound::Load(const std::string & fileName, int& i)
 	}
 
 	snd[&i].wave = loader->GetData(fileName);
-
+	snd[&i].threadFlag = true;
 	snd[&i].th = std::thread(&Sound::Stream, this, &i);
 }
 
