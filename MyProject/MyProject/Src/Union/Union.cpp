@@ -277,10 +277,22 @@ void Union::DrawFreelyRectImg(int & i, const float & x1, const float & y1, const
 	tex->FreelyDrawRect(i, x1, y1, x2, y2, x3, y3, x4, y4, rectX, rectY, rectSizeX, rectSizeY, alpha, turnX, turnY);
 }
 
-// PMDのアニメーション
-void Union::Animation(int & i, const float & animSpeed)
+// PMDのアニメーション時間のリセット
+void Union::ResetAnim(int & i)
 {
-	model->Animation(i, animSpeed);
+	model->ResetAnim(i);
+}
+
+// PMDのアニメーション
+void Union::Animation(int & i, const bool& loop, const float & animSpeed)
+{
+	model->Animation(i, loop, animSpeed);
+}
+
+// アニメーションの終了確認
+bool Union::CheckEndAnim(int & i)
+{
+	return model->CheckEndAnim(i);
 }
 
 // PMDの描画
@@ -326,6 +338,24 @@ void Union::Do(void)
 	swap->Present();
 
 	fen->Wait();
+}
+
+// サウンドの削除
+void Union::DeleteSnd(int & i)
+{
+	snd->DeleteSnd(i);
+}
+
+// 画像の削除
+void Union::DeleteImg(int & i)
+{
+	tex->DeleteImg(i);
+}
+
+// モデルの削除
+void Union::DeleteMdl(int & i)
+{
+	model->DeleteMdl(i);
 }
 
 // 終了

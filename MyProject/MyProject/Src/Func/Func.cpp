@@ -327,22 +327,52 @@ void func::DrawFreelyRectImg(int & i, const float & x1, const float & y1, const 
 	Union::Get().DrawFreelyRectImg(i, x1, y1, x2, y2, x3, y3, x4, y4, rectX, rectY, rectSizeX, rectSizeY, alpha, turnX, turnY);
 }
 
+// PMDのアニメーション時間のリセット
+void func::ResetAnim(int & i)
+{
+	Union::Get().ResetAnim(i);
+}
+
+// アニメーション
+void func::Animation(int & i, const bool & loop, const float & animSpeed)
+{
+	Union::Get().Animation(i, loop, animSpeed);
+}
+
+// アニメーションの終了確認
+bool func::CheckEndAnim(int & i)
+{
+	return Union::Get().CheckEndAnim(i);
+}
+
 // PMDの描画
 void func::DrawPmd(int & i)
 {
 	Union::Get().DrawPmd(i);
 }
 
-// アニメーション
-void func::Animation(int & i, const float & animSpeed)
-{
-	Union::Get().Animation(i, animSpeed);
-}
-
 // 描画実行
 void func::Do(void)
 {
 	Union::Get().Do();
+}
+
+// サウンドの削除
+void func::DeleteSnd(int & i)
+{
+	Union::Get().DeleteSnd(i);
+}
+
+// 画像の削除
+void func::DeleteImg(int & i)
+{
+	Union::Get().DeleteImg(i);
+}
+
+// モデルの削除
+void func::DeleteMdl(int & i)
+{
+	Union::Get().DeleteMdl(i);
 }
 
 // 終了処理

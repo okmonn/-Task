@@ -27,7 +27,7 @@ const DWORD spk[] = {
 
 // コンストラクタ
 Sound::Sound() : 
-	audio(std::make_unique<XAudio2>()), loader(std::make_unique<SoundLoader>()), threadFlag(true)
+	audio(std::make_unique<XAudio2>()), loader(std::make_unique<SoundLoader>())
 {
 	snd.clear();
 }
@@ -35,9 +35,9 @@ Sound::Sound() :
 // デストラクタ
 Sound::~Sound()
 {
-	threadFlag = false;
 	for (auto itr = snd.begin(); itr != snd.end(); ++itr)
 	{
+		itr->second.threadFlag = false;
 		if (itr->second.th.joinable() == true)
 		{
 			itr->second.th.join();
@@ -101,7 +101,7 @@ void Sound::Load(const std::string & fileName, int& i)
 void Sound::Stream(int * i)
 {
 	XAUDIO2_VOICE_STATE st = {};
-	while (threadFlag)
+	while (snd[i].threadFlag)
 	{
 		snd[i].voice->GetState(&st);
 		if (st.BuffersQueued < BUFFER_MAX)
@@ -165,4 +165,19 @@ long Sound::Stop(int & i)
 	}
 
 	return 0;
+}
+
+// サウンドの削除
+void Sound::DeleteSnd(int & i)
+{
+	if (snd.find(&i) != snd.end())
+	{
+		snd[&i].threadFlag = false;
+		if (snd[&i].th.joinable() == true)
+		{
+			snd[&i].th.join();
+		}
+		Destroy(snd[&i].voice);
+		snd.erase(snd.find(&i));
+	}
 }

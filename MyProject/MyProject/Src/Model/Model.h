@@ -68,8 +68,8 @@ class Model
 		// アニメーションフレーム
 		float flam;
 
-		// アニメーション終了フラグ
-		bool end;
+		// アニメーション時間
+		float animTime;
 	};
 
 public:
@@ -85,14 +85,20 @@ public:
 	// モーションの適応
 	int Attach(const std::string& fileName, int& i);
 
+	// アニメーション時間のリセット
+	void ResetAnim(int& i);
+
 	// アニメーション
-	void Animation(int& i, const float& animSpeed);
+	void Animation(int& i, const bool& loop, const float& animSpeed);
 
 	// 描画
 	void Draw(int& i);
 
 	// アニメーションの終了確認
 	bool CheckEndAnim(int& i);
+
+	// モデルの削除
+	void DeleteMdl(int& i);
 
 private:
 	// マテリアル用シェーダビューの生成

@@ -206,6 +206,7 @@ int Model::Attach(const std::string & fileName, int & i)
 
 	pmd[&i].flam = 0;
 	pmd[&i].motion = motion->Get(fileName);
+	pmd[&i].animTime = motion->GetAnimTime(fileName);
 
 	return 0;
 }
@@ -267,8 +268,35 @@ void Model::RecursiveBorn(int * i, pmd::BornNode & node, const DirectX::XMMATRIX
 	}
 }
 
+// アニメーション時間のリセット
+void Model::ResetAnim(int & i)
+{
+	pmd[&i].flam = 0.0f;
+
+	std::fill(pmd[&i].bornMtx.begin(), pmd[&i].bornMtx.end(), DirectX::XMMatrixIdentity());
+
+	for (auto itr = pmd[&i].motion.lock()->begin(); itr != pmd[&i].motion.lock()->end(); ++itr)
+	{
+		auto& key = itr->second;
+
+		auto now = std::find_if(key.rbegin(), key.rend(),
+			[&](const vmd::Motion& m) {return m.flam <= (unsigned int)pmd[&i].flam; });
+		if (now == key.rend())
+		{
+			continue;
+		}
+		auto nowVec = DirectX::XMLoadFloat4(&now->rotation);
+
+		RotateBorn(i, itr->first, DirectX::XMMatrixRotationQuaternion(nowVec));
+	}
+
+	RecursiveBorn(&i, pmd[&i].node["センター"], DirectX::XMMatrixIdentity());
+
+	memcpy(pmd[&i].b_data, pmd[&i].bornMtx.data(), ((sizeof(DirectX::XMMATRIX) * pmd[&i].born.lock()->size() + 0xff) &~0xff));
+}
+
 // アニメーション
-void Model::Animation(int & i, const float & animSpeed)
+void Model::Animation(int & i, const bool& loop, const float & animSpeed)
 {
 	std::fill(pmd[&i].bornMtx.begin(), pmd[&i].bornMtx.end(), DirectX::XMMatrixIdentity());
 
@@ -309,6 +337,10 @@ void Model::Animation(int & i, const float & animSpeed)
 	memcpy(pmd[&i].b_data, pmd[&i].bornMtx.data(), ((sizeof(DirectX::XMMATRIX) * pmd[&i].born.lock()->size() + 0xff) &~0xff));
 
 	pmd[&i].flam += animSpeed;
+	if (loop == true && (pmd[&i].flam >= pmd[&i].animTime + 10.0f))
+	{
+		ResetAnim(i);
+	}
 }
 
 // 描画
@@ -433,17 +465,16 @@ void Model::Draw(int & i)
 // アニメーションの終了確認
 bool Model::CheckEndAnim(int & i)
 {
-	unsigned long flam = 0;
-	for (auto itr = pmd[&i].motion.lock()->begin(); itr != pmd[&i].motion.lock()->end(); ++itr)
-	{
-		for (auto& anim : itr->second)
-		{
-			if (flam < anim.flam)
-			{
-				flam = anim.flam;
-			}
-		}
-	}
+	return (pmd[&i].flam >= pmd[&i].animTime + 10.0f);
+}
 
-	return (pmd[&i].flam > flam);
+// モデルの削除
+void Model::DeleteMdl(int & i)
+{
+	if (pmd.find(&i) != pmd.end())
+	{
+		UnMap(pmd[&i].v_rsc);
+		Release(pmd[&i].v_rsc);
+		pmd.erase(pmd.find(&i));
+	}
 }

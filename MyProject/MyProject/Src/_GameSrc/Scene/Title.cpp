@@ -52,5 +52,5 @@ void Title::UpData(void)
 	{
 		--z;
 	}
-	func::Animation(n);
+	func::Animation(n, true);
 }

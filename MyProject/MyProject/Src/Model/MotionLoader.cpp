@@ -19,6 +19,7 @@ struct MotionData {
 MotionLoader::MotionLoader()
 {
 	motion.clear();
+	animTime.clear();
 }
 
 // デストラクタ
@@ -73,6 +74,8 @@ int MotionLoader::Load(const std::string & fileName)
 			[](vmd::Motion& m1, vmd::Motion& m2) {
 			return m1.flam < m2.flam;
 		});
+
+		animTime[fileName] = max((float)itr->second.back().flam, animTime[fileName]);
 	}
 
 	return 0;

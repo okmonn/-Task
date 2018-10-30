@@ -102,14 +102,29 @@ public:
 	void DrawFreelyRectImg(int & i, const float & x1, const float & y1, const float & x2, const float & y2, const float & x3, const float & y3, const float & x4, const float & y4,
 		const float& rectX, const float& rectY, const float& rectSizeX, const float& rectSizeY, const float & alpha, const int & turnX, const int & turnY);
 
+	// PMDのアニメーション時間のリセット
+	void ResetAnim(int& i);
+
 	// PMDのアニメーション
-	void Animation(int& i, const float& animSpeed);
+	void Animation(int& i, const bool& loop, const float& animSpeed);
+
+	// アニメーションの終了確認
+	bool CheckEndAnim(int& i);
 
 	// PMDの描画
 	void DrawPmd(int& i);
 	
 	// 描画実行
 	void Do(void);
+
+	// サウンドの削除
+	void DeleteSnd(int& i);
+
+	// 画像の削除
+	void DeleteImg(int& i);
+
+	// モデルの削除
+	void DeleteMdl(int& i);
 
 	// 終了
 	void End(void);

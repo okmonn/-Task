@@ -24,6 +24,8 @@ class Sound
 		bool loop;
 		//スレッド
 		std::thread th;
+		//スレッドフラグ
+		bool threadFlag;
 	};
 
 public:
@@ -41,6 +43,9 @@ public:
 	// 停止
 	long Stop(int& i);
 
+	// サウンドの削除
+	void DeleteSnd(int& i);
+
 private:
 	// ソースボイスの生成
 	long Create(int* i, const int channel, const int sample, const int bit);
@@ -54,9 +59,6 @@ private:
 
 	// サウンドローダー
 	std::unique_ptr<SoundLoader>loader;
-
-	// スレッドフラグ
-	bool threadFlag;
 
 	// サウンドデータ
 	std::map<int*, Snd>snd;

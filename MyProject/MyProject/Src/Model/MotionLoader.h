@@ -18,7 +18,15 @@ public:
 		return motion[fileName];
 	}
 
+	// アニメーションの時間の取得
+	float GetAnimTime(const std::string& fileName) {
+		return animTime[fileName];
+	}
+
 private:
 	// モーションデータ
 	std::map<std::string, std::shared_ptr<std::map<std::string, std::vector<vmd::Motion>>>>motion;
+
+	// アニメーションの時間
+	std::map<std::string, float>animTime;
 };
