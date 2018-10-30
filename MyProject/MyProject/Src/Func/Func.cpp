@@ -120,22 +120,24 @@ float func::Newton(const float& input, const float& pos1X, const float& pos1Y, c
 
 	float t = input;
 	//t^3の係数
-	float k3 = 1 + 3 * pos1X - 3 * pos2X;
+	float k3 = 1 + (3 * pos1X) - (3 * pos2X);
 	//t^2の係数
-	float k2 = 3 * pos2X - 6 * pos1X;
+	float k2 = (3 * pos2X) - (6 * pos1X);
 	//tの係数
 	float k1 = 3 * pos1X;
+
+	const float epsilon = 0.0005f;
 
 	for (unsigned int i = 0; i < loop; ++i)
 	{
 		//f(x)
-		float ft = (t * t * t) * k3 + (t * t) * k2 + t * k1 - pos1X;
-		if (ft <= 0.0005f && ft >= -0.0005f)
+		float ft = (t * t * t * k3) + (t * t * k2) + (t * k1) - input;
+		if (ft <= epsilon && ft >= -epsilon)
 		{
 			break;
 		}
 		//f(x)の微分結果
-		float fdt = 3 * t * t * k3 + 2 * t*k2 + k1;
+		float fdt = (3 * t * t * k3) + (2 * t * k2) + k1;
 		if (fdt == 0.0f)
 		{
 			break;
@@ -146,9 +148,44 @@ float func::Newton(const float& input, const float& pos1X, const float& pos1Y, c
 	//反転
 	float reverse = (1.0f - t);
 
-	return 3 * reverse * reverse * t * pos1Y +
-		3 * reverse * t * t * pos2Y +
-		t * t * t;
+	return (3 * reverse * reverse * t * pos1Y) +
+		(3 * reverse * t * t * pos2Y) +
+		(t * t * t);
+}
+
+// 2分法
+float func::Bisection(const float & input, const float & pos1X, const float & pos1Y, const float & pos2X, const float & pos2Y, const unsigned int & loop)
+{
+	if (pos1X == pos1Y && pos2X == pos2Y)
+	{
+		//直線なので計算不要
+		return input;
+	}
+
+	float t = input;
+	float reverse = 1.0f - t;
+
+	const float epsilon = 0.0005f;
+
+	float ft = 0.0f;
+	for (unsigned int i = 0; i < loop; ++i)
+	{
+		ft = (3 * reverse * reverse * t * pos1X) +
+			(3 * reverse * t * t * pos2X) +
+			(t * t * t) - input;
+
+		if (ft <= epsilon && ft >= -epsilon)
+		{
+			break;
+		}
+
+		t -= ft / 2.0f;
+	}
+	reverse = 1.0f - t;
+
+	return (3 * reverse * reverse * t * pos1Y) +
+		(3 * reverse * t * t * pos2Y) +
+		(t * t * t);
 }
 
 // ウィンドウサイズのセット
@@ -161,6 +198,12 @@ void func::SetWindowSize(const unsigned int & x, const unsigned int & y)
 void func::Start(void)
 {
 	Union::Get().Start();
+}
+
+// WVPの更新
+void func::ChangeWVP(const float & eyeX, const float & eyeY, const float & eyeZ, const float & targetX, const float & targetY, const float & targetZ, const float & upX, const float & upY, const float & upZ)
+{
+	Union::Get().ChangeWVP(eyeX, eyeY, eyeZ, targetX, targetY, targetZ, upX, upY, upZ);
 }
 
 // メッセージの確認

@@ -134,6 +134,7 @@ namespace vmd {
 		//クォータニオン
 		DirectX::XMFLOAT4 rotation;
 		//補完
-		std::vector<float>inter;
+		DirectX::XMFLOAT2 a;
+		DirectX::XMFLOAT2 b;
 	};
 };

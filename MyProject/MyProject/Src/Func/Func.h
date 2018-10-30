@@ -33,11 +33,18 @@ namespace func {
 	// ニュートン法
 	float Newton(const float& input, const float& pos1X, const float& pos1Y, const float& pos2X, const float& pos2Y, const unsigned int& loop = 16);
 
+	// 2分法
+	float Bisection(const float& input, const float& pos1X, const float& pos1Y, const float& pos2X, const float& pos2Y, const unsigned int& loop = 32);
+
 	// ウィンドウサイズのセット
 	void SetWindowSize(const unsigned int& x = 640, const unsigned int& y = 480);
 
 	// 初期化・スタート
 	void Start(void);
+
+	// WVPの更新
+	void ChangeWVP(const float& eyeX, const float& eyeY, const float& eyeZ,
+		const float& targetX, const float& targetY, const float& targetZ, const float& upX = 0.0f, const float& upY = 1.0f, const float& upZ = 0.0f);
 
 	// メッセージの確認
 	bool CheckMsg(void);

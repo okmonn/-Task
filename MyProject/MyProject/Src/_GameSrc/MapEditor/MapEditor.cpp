@@ -2,7 +2,8 @@
 #include "../../Func/Func.h"
 
 // コンストラクタ
-MapEditor::MapEditor()
+MapEditor::MapEditor() : 
+	index(0)
 {
 }
 

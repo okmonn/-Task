@@ -15,5 +15,6 @@ public:
 	void UpData(void);
 
 private:
-
+	// マップチップのインデックス
+	unsigned int index;
 };

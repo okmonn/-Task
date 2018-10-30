@@ -12,7 +12,7 @@ struct MotionData {
 	//回転
 	DirectX::XMFLOAT4 rotation;
 	//補完
-	std::vector<float>inter;
+	std::vector<unsigned char>inter;
 };
 
 // コンストラクタ
@@ -24,6 +24,7 @@ MotionLoader::MotionLoader()
 // デストラクタ
 MotionLoader::~MotionLoader()
 {
+	motion.clear();
 }
 
 // 読み込み
@@ -59,12 +60,9 @@ int MotionLoader::Load(const std::string & fileName)
 			motion[fileName]->insert(std::make_pair(m.name, std::vector<vmd::Motion>()));
 		}
 
-		for (auto& n : m.inter)
-		{
-			n /= 127.0f;
-		}
-
-		motion[fileName]->at(m.name).push_back({ m.flam, m.rotation, m.inter});
+		motion[fileName]->at(m.name).push_back({ m.flam, m.rotation, 
+			DirectX::XMFLOAT2((float)m.inter[48] / 127.0f, (float)m.inter[52] / 127.0f), 
+			DirectX::XMFLOAT2((float)m.inter[56] / 127.0f, (float)m.inter[60] / 1270.f) });
 	}
 
 	fclose(file);

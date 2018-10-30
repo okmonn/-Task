@@ -139,6 +139,9 @@
     <Filter Include="Network\Client">
       <UniqueIdentifier>{a00866f9-7a50-43d7-9c7f-9047fca62f5a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\etc">
+      <UniqueIdentifier>{55b44d6c-99ea-4eba-b1fd-d0c126677708}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -373,6 +376,9 @@
     </ClInclude>
     <ClInclude Include="Src\Network\Client.h">
       <Filter>Network\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\_GameSrc\etc\Vector2.h">
+      <Filter>Game\etc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

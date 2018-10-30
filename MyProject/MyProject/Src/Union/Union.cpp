@@ -224,8 +224,6 @@ void Union::Set(void)
 	dep->SetDepth();
 
 	ren->SetRender(*dep->GetHeap());
-
-	ChangeWVP(0, 10, -15, 0, 10, 0);
 }
 
 // ƒ|ƒCƒ“ƒg•`‰æ

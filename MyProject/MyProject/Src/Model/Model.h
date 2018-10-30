@@ -108,7 +108,7 @@ private:
 	long CreateVertex(int* i);
 
 	// “Á’è•ûŒü‚ÉŒü‚¯‚és—ñ‚ğì‚é
-	DirectX::XMMATRIX LookAt(const DirectX::XMFLOAT3& look, const DirectX::XMFLOAT3& right);
+	DirectX::XMMATRIX LookAt(const DirectX::XMFLOAT3& look, const DirectX::XMFLOAT3& up, const DirectX::XMFLOAT3& right);
 
 	// ƒ{[ƒ“‚Ì‰ñ“]
 	void RotateBorn(int& i, const std::string& name, const DirectX::XMMATRIX& mtx, const DirectX::XMMATRIX& mtx2 = DirectX::XMMatrixIdentity(), const float& time = 0.0f);

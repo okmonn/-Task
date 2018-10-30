@@ -211,7 +211,7 @@ int Model::Attach(const std::string & fileName, int & i)
 }
 
 // “Á’è•ûŒü‚ÉŒü‚¯‚és—ñ‚ðì‚é
-DirectX::XMMATRIX Model::LookAt(const DirectX::XMFLOAT3 & look, const DirectX::XMFLOAT3 & right)
+DirectX::XMMATRIX Model::LookAt(const DirectX::XMFLOAT3 & look, const DirectX::XMFLOAT3 & up, const DirectX::XMFLOAT3 & right)
 {
 	auto vz = DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&look));
 	auto vx = DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&right));
@@ -224,7 +224,19 @@ DirectX::XMMATRIX Model::LookAt(const DirectX::XMFLOAT3 & look, const DirectX::X
 	DirectX::XMStoreFloat3(&fy, vy);
 	DirectX::XMStoreFloat3(&fz, vz);
 
-	return DirectX::XMMATRIX();
+	mtx.r[1].m128_f32[1] = fx.x;
+	mtx.r[1].m128_f32[2] = fx.y;
+	mtx.r[1].m128_f32[3] = fx.z;
+
+	mtx.r[2].m128_f32[1] = fy.x;
+	mtx.r[2].m128_f32[2] = fy.y;
+	mtx.r[2].m128_f32[3] = fy.z;
+
+	mtx.r[3].m128_f32[1] = fz.x;
+	mtx.r[3].m128_f32[2] = fz.y;
+	mtx.r[3].m128_f32[3] = fz.z;
+
+	return mtx;
 }
 
 // ƒ{[ƒ“‚Ì‰ñ“]
@@ -284,6 +296,8 @@ void Model::Animation(int & i, const float & animSpeed)
 			auto nextVec = DirectX::XMLoadFloat4(&next->rotation);
 			float nextFlam = (float)next->flam;
 			float time = (pmd[&i].flam - nowFlam) / (nextFlam - nowFlam);
+			time = func::Newton(time, next->a.x, next->a.y, next->b.x, next->b.y);
+			//time = func::Bisection(time, next->a.x, next->a.y, next->b.x, next->b.y);
 
 			RotateBorn(i, itr->first, DirectX::XMMatrixRotationQuaternion(
 				DirectX::XMQuaternionSlerp(nowVec, nextVec, time)));
