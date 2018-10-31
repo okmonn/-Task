@@ -322,6 +322,7 @@ void Model::Animation(int & i, const bool& loop, const float & animSpeed)
 		else
 		{
 			auto nextVec = DirectX::XMLoadFloat4(&next->rotation);
+			auto pos = DirectX::XMLoadFloat3(&next->pos);
 			float nextFlam = (float)next->flam;
 			float time = (pmd[&i].flam - nowFlam) / (nextFlam - nowFlam);
 			time = func::Newton(time, next->a.x, next->a.y, next->b.x, next->b.y);
@@ -331,9 +332,7 @@ void Model::Animation(int & i, const bool& loop, const float & animSpeed)
 				DirectX::XMQuaternionSlerp(nowVec, nextVec, time)));
 		}
 	}
-
-	auto vec = DirectX::XMLoadFloat3(&pmd[&i].motion.lock()->at("センター")[pmd[&i].flam].pos);
-
+	
 	RecursiveBorn(&i, pmd[&i].node["センター"], pmd[&i].bornMtx[pmd[&i].node["センター"].index]);
 
 	memcpy(pmd[&i].b_data, pmd[&i].bornMtx.data(), ((sizeof(DirectX::XMMATRIX) * pmd[&i].born.lock()->size() + 0xff) &~0xff));
