@@ -12,7 +12,7 @@ Title::Title()
 {
 	func::LoadPmd("Model/弱音ハク.pmd", n);
 	func::Attach("swing2.vmd", n);
-	func::LoadImg("Ghost-Halo.png", a);
+	func::LoadImg("Hellgato.png", a);
 }
 
 // デストラクタ
@@ -27,7 +27,7 @@ void Title::Draw(void)
 
 	static int index = 0;
 	static int flam = 0;
-	func::DrawRectImg(a, 0, 0, 100, 118, 0 + (35.5f * index), 0, 35.5f, 65);
+	func::DrawRectImg(a, 0, 0, 100, 118, 0 + (94.5f * index), 0, 94.5f, 53);
 
 	++flam;
 	index = flam / 10 % 4;
