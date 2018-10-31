@@ -3,6 +3,9 @@
 #include <Windows.h>
 #include <algorithm>
 #include <tchar.h>
+#include <filesystem>
+
+namespace fs = std::experimental::filesystem;
 
 // ビット変換
 int func::Bit(const int & i)
@@ -135,6 +138,35 @@ std::wstring func::ChangeWString(const std::string & st)
 	byteSize = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED | MB_ERR_INVALID_CHARS, st.c_str(), -1, &wstr[0], byteSize);
 
 	return wstr;
+}
+
+// ディレクトリのファイル名取得
+std::vector<std::string> func::GetDirFile(const std::string & dir)
+{
+	//列挙の起点
+	fs::path p(dir.c_str());
+
+	std::vector<std::string>fileName;
+
+	auto file = [&](const fs::path& p) -> std::string {
+		if (fs::is_regular_file(p))
+		{
+			return p.filename().string();
+		}
+
+		return std::string();
+	};
+
+	for (auto& i : fs::recursive_directory_iterator(p))
+	{
+		auto dummy = file(i);
+		if (dummy.size() > 0)
+		{
+			fileName.push_back(dummy);
+		}
+	}
+
+	return fileName;
 }
 
 // ニュートン法

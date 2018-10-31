@@ -241,7 +241,7 @@ DirectX::XMMATRIX Model::LookAt(const DirectX::XMFLOAT3 & look, const DirectX::X
 }
 
 // ボーンの回転
-void Model::RotateBorn(int & i, const std::string & name, const DirectX::XMMATRIX & mtx, const DirectX::XMMATRIX& mtx2, const float& time)
+void Model::RotateBorn(int & i, const std::string & name, const DirectX::XMMATRIX & mtx)
 {
 	if (pmd[&i].node.find(name) == pmd[&i].node.end())
 	{
@@ -252,8 +252,7 @@ void Model::RotateBorn(int & i, const std::string & name, const DirectX::XMMATRI
 
 	pmd[&i].bornMtx[pmd[&i].node[name].index] = DirectX::XMMatrixTranslationFromVector(
 		DirectX::XMVectorScale(vec, -1.0f)) *
-		(mtx * (1.0f - time) +
-		(mtx2 * time)) *
+		mtx * 
 		DirectX::XMMatrixTranslationFromVector(vec);
 }
 
@@ -322,17 +321,22 @@ void Model::Animation(int & i, const bool& loop, const float & animSpeed)
 		else
 		{
 			auto nextVec = DirectX::XMLoadFloat4(&next->rotation);
-			auto pos = DirectX::XMLoadFloat3(&next->pos);
 			float nextFlam = (float)next->flam;
 			float time = (pmd[&i].flam - nowFlam) / (nextFlam - nowFlam);
+
 			time = func::Newton(time, next->a.x, next->a.y, next->b.x, next->b.y);
 			//time = func::Bisection(time, next->a.x, next->a.y, next->b.x, next->b.y);
 
+			auto trans = (DirectX::XMMatrixTranslation(now->pos.x, now->pos.y, now->pos.z) * (1.0f - time))
+				+ (DirectX::XMMatrixTranslation(next->pos.x, next->pos.y, next->pos.z) * time);
+
 			RotateBorn(i, itr->first, DirectX::XMMatrixRotationQuaternion(
-				DirectX::XMQuaternionSlerp(nowVec, nextVec, time)));
+				DirectX::XMQuaternionSlerp(nowVec, nextVec, time)) * trans);
 		}
 	}
-	
+
+	auto a = std::fmodf(pmd[&i].flam, (float)pmd[&i].motion.lock()->at("センター")[1].flam);
+
 	RecursiveBorn(&i, pmd[&i].node["センター"], pmd[&i].bornMtx[pmd[&i].node["センター"].index]);
 
 	memcpy(pmd[&i].b_data, pmd[&i].bornMtx.data(), ((sizeof(DirectX::XMMATRIX) * pmd[&i].born.lock()->size() + 0xff) &~0xff));

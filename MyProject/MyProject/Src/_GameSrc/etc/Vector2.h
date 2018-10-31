@@ -9,7 +9,7 @@ public:
 	Vector2(){}
 	Vector2(const T& x, const T& y) :
 	x(x), y(y){}
-	Vector2(ocnst T& i){
+	Vector2(const T& i){
 		Vector2(i, i);
 	}
 	Vector2(const Vector2& vec) {

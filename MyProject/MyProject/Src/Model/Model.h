@@ -117,7 +117,7 @@ private:
 	DirectX::XMMATRIX LookAt(const DirectX::XMFLOAT3& look, const DirectX::XMFLOAT3& up, const DirectX::XMFLOAT3& right);
 
 	// ボーンの回転
-	void RotateBorn(int& i, const std::string& name, const DirectX::XMMATRIX& mtx, const DirectX::XMMATRIX& mtx2 = DirectX::XMMatrixIdentity(), const float& time = 0.0f);
+	void RotateBorn(int& i, const std::string& name, const DirectX::XMMATRIX& mtx);
 
 	// ボーンの再帰処理
 	void RecursiveBorn(int* i, pmd::BornNode& node, const DirectX::XMMATRIX& mtx);

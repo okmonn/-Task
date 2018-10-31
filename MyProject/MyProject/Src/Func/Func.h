@@ -1,6 +1,7 @@
 #pragma once
 #include "InputData.h"
 #include <string>
+#include <vector>
 
 namespace func {
 	// ビット変換
@@ -30,6 +31,9 @@ namespace func {
 
 	// ワイド文字列の変換
 	std::wstring ChangeWString(const std::string& st);
+
+	// ディレクトリのファイル名取得
+	std::vector<std::string> GetDirFile(const std::string& dir);
 
 	// ニュートン法
 	float Newton(const float& input, const float& pos1X, const float& pos1Y, const float& pos2X, const float& pos2Y, const unsigned int& loop = 16);

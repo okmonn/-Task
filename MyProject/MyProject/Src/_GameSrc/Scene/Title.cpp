@@ -1,5 +1,6 @@
 #include "Title.h"
 #include "../../Func/Func.h"
+#include "../MapEditor/MapEditor.h"
 
 int n = 0;
 float x = 0.f;
@@ -27,10 +28,14 @@ void Title::Draw(void)
 
 	static int index = 0;
 	static int flam = 0;
-	func::DrawRectImg(a, 0, 0, 100, 118, 0 + (59 * index), 0, 59, 94/2);
+	func::DrawRectImg(a, 0, 0, 100, 118, 0 + (59 * index), 94/2, 59, 94/2);
 
 	++flam;
-	index = flam / 10 % 6;
+	index = flam / 10 % 8;
+
+	MapEditor map;
+	map.MapInfo({ 640, 480 }, { 10, 10 });
+	map.Draw();
 }
 
 // èàóù
