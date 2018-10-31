@@ -17,6 +17,7 @@ namespace func {
 
 	// •¶Žš—ñ‚ÌŠm”F
 	bool CheckChar(const std::string& find, unsigned char * data, const unsigned int& dataNum = 4);
+	bool CheckChar(const std::string& find, char * data, const unsigned int& dataNum = 4);
 
 	// •¶Žš—ñ‚Ì‘ã“ü
 	void AddChar(const std::string& add, unsigned char* data, const unsigned int& dataNum = 4);

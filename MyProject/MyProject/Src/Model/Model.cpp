@@ -253,7 +253,7 @@ void Model::RotateBorn(int & i, const std::string & name, const DirectX::XMMATRI
 	pmd[&i].bornMtx[pmd[&i].node[name].index] = DirectX::XMMatrixTranslationFromVector(
 		DirectX::XMVectorScale(vec, -1.0f)) *
 		(mtx * (1.0f - time) +
-		(mtx * time)) *
+		(mtx2 * time)) *
 		DirectX::XMMatrixTranslationFromVector(vec);
 }
 
@@ -290,7 +290,7 @@ void Model::ResetAnim(int & i)
 		RotateBorn(i, itr->first, DirectX::XMMatrixRotationQuaternion(nowVec));
 	}
 
-	RecursiveBorn(&i, pmd[&i].node["センター"], DirectX::XMMatrixIdentity());
+	RecursiveBorn(&i, pmd[&i].node["センター"], pmd[&i].bornMtx[pmd[&i].node["センター"].index]);
 
 	memcpy(pmd[&i].b_data, pmd[&i].bornMtx.data(), ((sizeof(DirectX::XMMATRIX) * pmd[&i].born.lock()->size() + 0xff) &~0xff));
 }
@@ -332,7 +332,9 @@ void Model::Animation(int & i, const bool& loop, const float & animSpeed)
 		}
 	}
 
-	RecursiveBorn(&i, pmd[&i].node["センター"], DirectX::XMMatrixIdentity());
+	auto vec = DirectX::XMLoadFloat3(&pmd[&i].motion.lock()->at("センター")[pmd[&i].flam].pos);
+
+	RecursiveBorn(&i, pmd[&i].node["センター"], pmd[&i].bornMtx[pmd[&i].node["センター"].index]);
 
 	memcpy(pmd[&i].b_data, pmd[&i].bornMtx.data(), ((sizeof(DirectX::XMMATRIX) * pmd[&i].born.lock()->size() + 0xff) &~0xff));
 

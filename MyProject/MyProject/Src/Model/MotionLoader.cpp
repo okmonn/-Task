@@ -1,5 +1,6 @@
 #include "MotionLoader.h"
 #include "../etc/Release.h"
+#include "../Func/Func.h"
 #include <algorithm>
 
 struct MotionData {
@@ -55,13 +56,12 @@ int MotionLoader::Load(const std::string & fileName)
 		fread(&m.pos,      sizeof(m.pos),                          1, file);
 		fread(&m.rotation, sizeof(m.rotation),                     1, file);
 		fread(&m.inter[0], sizeof(unsigned char) * m.inter.size(), 1, file);
-
 		if (motion[fileName]->find(m.name) == motion[fileName]->end())
 		{
 			motion[fileName]->insert(std::make_pair(m.name, std::vector<vmd::Motion>()));
 		}
 
-		motion[fileName]->at(m.name).push_back({ m.flam, m.rotation, 
+		motion[fileName]->at(m.name).push_back({ m.flam, m.pos, m.rotation, 
 			DirectX::XMFLOAT2((float)m.inter[48] / 127.0f, (float)m.inter[52] / 127.0f), 
 			DirectX::XMFLOAT2((float)m.inter[56] / 127.0f, (float)m.inter[60] / 1270.f) });
 	}

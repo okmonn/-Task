@@ -56,6 +56,34 @@ bool func::CheckChar(const std::string & find, unsigned char * data, const unsig
 	return false;
 }
 
+// 文字列の確認
+bool func::CheckChar(const std::string & find, char * data, const unsigned int & dataNum)
+{
+	if (find.size() - 1 > dataNum)
+	{
+		OutputDebugString(_T("\n見つけたい文字列がデータ数を超えています\n"));
+		return false;
+	}
+
+	unsigned int cnt = 0;
+	for (unsigned int i = 0; i < dataNum; ++i)
+	{
+		if (data[i] == find[cnt])
+		{
+			if (cnt + 1 < find.size())
+			{
+				++cnt;
+			}
+			else
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 // 文字列の代入
 void func::AddChar(const std::string & add, unsigned char * data, const unsigned int& dataNum)
 {
