@@ -92,7 +92,7 @@ namespace func {
 		const float& r, const float& g, const float& b, const float& alpha = 1.0f);
 
 	// ボックス描画
-	void DrawBox(const float& x1, const float& y1, const float& x2, const float& y2, const float& x3, const float& y3, const float& x4, const float& y4,
+	void DrawBox(const float& x, const float& y, const float& sizeX, const float& sizeY,
 		const float& r, const float& g, const float& b, const float& alpha = 1.0f);
 
 	// 画像の描画

@@ -4,6 +4,24 @@
 
 class MapEditor
 {
+	// カーソル
+	struct Cursor {
+		//ワールド座標
+		Vec2f pos;
+		//ローカル座標
+		Vec2f local;
+		//サイズ
+		Vec2f size;
+		//マップチップ番号
+		unsigned int index;
+	};
+
+	// カメラ
+	struct Camera {
+		//座標
+		Vec2f pos;
+	};
+
 public:
 	// コンストラクタ
 	MapEditor();
@@ -11,7 +29,7 @@ public:
 	~MapEditor();
 
 	// マップ情報のセット
-	void MapInfo(const Vec2f& mapSize, const Vec2& chipCnt);
+	void MapInfo(const Vec2f& mapSize, const Vec2& chipCnt, const Vec2& winSize = { 640, 480 });
 
 	// 描画
 	void Draw(void);
@@ -20,11 +38,12 @@ public:
 	void UpData(void);
 
 private:
-	// カーソル座標
-	Vec2f pos;
+	// カメラの更新
+	void UpDataCam(void);
 
-	// カーソルサイズ
-	Vec2f size;
+	// ローカル座標に変換
+	Vec2f ChangeLocal(const Vec2f& pos);
+
 
 	// マップのサイズ
 	Vec2f mapSize;
@@ -32,8 +51,14 @@ private:
 	// マップチップの数
 	Vec2 chipCnt;
 
-	// マップチップのインデックス
-	unsigned int index;
+	// ウィンドウサイズ
+	Vec2 winSize;
+
+	// カメラ
+	Camera cam;
+
+	// カーソル
+	Cursor cursor;
 
 	// マップデータ
 	std::vector<char> map;

@@ -7,6 +7,7 @@ float x = 0.f;
 float y = 10.f;
 float z = -15.f;
 int a = 0;
+MapEditor map;
 
 // コンストラクタ
 Title::Title()
@@ -33,14 +34,14 @@ void Title::Draw(void)
 	++flam;
 	index = flam / 10 % 8;
 
-	MapEditor map;
-	map.MapInfo({ 640, 480 }, { 10, 10 });
+	map.MapInfo({ 1280, 480 }, { 10, 10 });
 	map.Draw();
 }
 
 // 処理
 void Title::UpData(void)
 {
+	map.UpData();
 	func::ChangeWVP(x, y, z, 0, 10, 0);
 	if (func::CheckKey(INPUT_RIGHT))
 	{

@@ -347,11 +347,10 @@ void func::DrawTriangle(const float & x1, const float & y1, const float & x2, co
 }
 
 // ƒ{ƒbƒNƒX•`‰æ
-void func::DrawBox(const float & x1, const float & y1, const float & x2, const float & y2, const float & x3, const float & y3, const float & x4, const float & y4, 
-	const float & r, const float & g, const float & b, const float & alpha)
+void func::DrawBox(const float & x, const float & y, const float & sizeX, const float & sizeY, const float & r, const float & g, const float & b, const float & alpha)
 {
-	Union::Get().DrawTriangle(x1, y1, x2, y2, x3, y3, r, g, b, alpha);
-	Union::Get().DrawTriangle(x2, y2, x3, y3, x4, y4, r, g, b, alpha);
+	Union::Get().DrawTriangle(x, y, x + sizeX, y, x, y + sizeY, r, g, b, alpha);
+	Union::Get().DrawTriangle(x + sizeX, y, x, y + sizeY, x + sizeX, y + sizeY, r, g, b, alpha);
 }
 
 // ‰æ‘œ‚Ì•`‰æ
