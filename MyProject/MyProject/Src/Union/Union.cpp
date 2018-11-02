@@ -10,6 +10,7 @@
 #include "../Swap/Swap.h"
 #include "../Fence/Fence.h"
 #include "../Render/Render.h"
+#include "../MultiRender/FirstRender.h"
 #include "../Depth/Depth.h"
 #include "../Constant/Constant.h"
 #include "../Root/Root.h"
@@ -113,6 +114,7 @@ void Union::Start(void)
 	swap  = std::make_shared<Swap>(win, que);
 	fen   = std::make_shared<Fence>(dev, que);
 	ren   = std::make_shared<Render>(dev, list, swap);
+	first = std::make_shared<FirstRender>(dev, ren);
 	dep   = std::make_shared<Depth>(dev, list);
 	con   = std::make_shared<Constant>(dev, list);
 

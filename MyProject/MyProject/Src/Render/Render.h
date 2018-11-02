@@ -62,7 +62,4 @@ private:
 
 	// ヒープサイズ
 	unsigned int size;
-
-	ID3D12DescriptorHeap* firstHeap;
-	ID3D12Resource* first;
 };

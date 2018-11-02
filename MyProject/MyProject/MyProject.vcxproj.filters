@@ -133,14 +133,20 @@
     <Filter Include="Network">
       <UniqueIdentifier>{3709a45b-c65d-4980-9bdf-d232fcd8a539}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Network\Server">
-      <UniqueIdentifier>{8e459888-6b15-458a-a36a-437c078c0d6d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Network\Client">
-      <UniqueIdentifier>{a00866f9-7a50-43d7-9c7f-9047fca62f5a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\etc">
       <UniqueIdentifier>{55b44d6c-99ea-4eba-b1fd-d0c126677708}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dx12\MultiRender">
+      <UniqueIdentifier>{9f591aa6-95d0-47a6-8e11-00dca9b3f79f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dx12\MultiRender\First">
+      <UniqueIdentifier>{30571abe-d00b-43e3-a6c5-8a3def21dcc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Client">
+      <UniqueIdentifier>{5cfebdbe-6b0b-40fb-8a75-65b88d73c529}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Server">
+      <UniqueIdentifier>{9ccc41a9-1eb2-44b6-bc85-3ccf64c4f2f2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -240,11 +246,20 @@
     <ClCompile Include="Src\Model\MotionLoader.cpp">
       <Filter>Dx12\Model\Motion</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Network\Server.cpp">
-      <Filter>Network\Server</Filter>
+    <ClCompile Include="Src\MultiRender\MultiRender.cpp">
+      <Filter>Dx12\MultiRender</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\MultiRender\FirstRender.cpp">
+      <Filter>Dx12\MultiRender\First</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Network\Sock.cpp">
+      <Filter>Network</Filter>
     </ClCompile>
     <ClCompile Include="Src\Network\Client.cpp">
       <Filter>Network\Client</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Network\Server.cpp">
+      <Filter>Network\Server</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -371,13 +386,28 @@
     <ClInclude Include="Src\Model\MotionLoader.h">
       <Filter>Dx12\Model\Motion</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Network\Server.h">
-      <Filter>Network\Server</Filter>
+    <ClInclude Include="Src\_GameSrc\etc\Vector2.h">
+      <Filter>Game\etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\MultiRender\MultiRender.h">
+      <Filter>Dx12\MultiRender</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\MultiRender\FirstRender.h">
+      <Filter>Dx12\MultiRender\First</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Network\Information.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Network\Sock.h">
+      <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="Src\Network\Client.h">
       <Filter>Network\Client</Filter>
     </ClInclude>
-    <ClInclude Include="Src\_GameSrc\etc\Vector2.h">
+    <ClInclude Include="Src\Network\Server.h">
+      <Filter>Network\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\_GameSrc\etc\TilesetData.h">
       <Filter>Game\etc</Filter>
     </ClInclude>
   </ItemGroup>

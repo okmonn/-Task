@@ -12,6 +12,7 @@ class List;
 class Swap;
 class Fence;
 class Render;
+class MultiRender;
 class Depth;
 class Constant;
 class Root;
@@ -194,6 +195,9 @@ private:
 
 	// レンダーターゲット
 	std::shared_ptr<Render>ren;
+
+	// マルチレンダー・1
+	std::shared_ptr<MultiRender>first;
 
 	// 深度ステンシル
 	std::shared_ptr<Depth>dep;

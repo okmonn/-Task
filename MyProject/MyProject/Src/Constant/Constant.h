@@ -2,6 +2,7 @@
 #include <DirectXMath.h>
 #include <memory>
 
+struct ID3D12GraphicsCommandList;
 struct ID3D12DescriptorHeap;
 struct ID3D12Resource;
 

@@ -1,9 +1,8 @@
 #pragma once
-#include <winsock2.h>
-#include <string>
-#include <vector>
+#include "Sock.h"
 
-class Server
+class Server :
+	public Sock
 {
 public:
 	// コンストラクタ
@@ -12,23 +11,17 @@ public:
 	~Server();
 
 	// クライアントの接続
-	void Accept(void);
-
-	// 受信
-	void Recv(void);
+	int Accept(void);
 
 	// 送信
-	void Send(void);
+	int Send(const char* data, int size);
+
+	// 受信
+	int Recv(std::vector<char>& data, const unsigned int& index = 0);
 
 private:
-	// テキストの読み込み
-	int LoadText(const std::string& fileName);
-
-	// 初期処理
-	int Start(void);
-
-	// ソケットの生成
-	int Create(void);
+	// 通信の準備
+	int SetUp(void);
 
 	// アドレスとの関連付け
 	int Bind(void);
@@ -40,39 +33,12 @@ private:
 	void Init(void);
 
 	// クライアントとの接続終了
-	void Close(void);
+	int Close(const unsigned int& index = 0);
 
-
-	// ポート番号
-	std::string port;
-
-	// データ
-	WSADATA data;
-
-	// サーバーソケット
-	SOCKET sock;
-
-	// アドレス
-	struct sockaddr_in addr;
-
-	// セレクトで使用
-	fd_set fds;
-
-	// セレクトで使用
-	fd_set readfds;
-
-	// タイムアウト
-	struct timeval time;
-
-	// 受信
-	char r[256];
-
-	// 送信
-	char s[256];
 
 	// クライアントソケット
 	std::vector<SOCKET>client;
 
-	// クライアントアドレス
-	std::vector<struct sockaddr_in>clientAddr;
+	// クライアントのアドレス
+	std::vector<sockaddr_in>clientAddr;
 };

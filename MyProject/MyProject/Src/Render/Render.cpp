@@ -90,62 +90,6 @@ long Render::CreateRsc(void)
 		handle.ptr += size;
 	}
 
-	auto d = rsc[0]->GetDesc();
-	{
-		{
-			firstHeap = nullptr;
-			//ヒープ設定用構造体
-			D3D12_DESCRIPTOR_HEAP_DESC ddesc = {};
-			ddesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-			ddesc.NodeMask = 0;
-			ddesc.NumDescriptors = 2;
-			ddesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-
-			auto hr = dev.lock()->Get()->CreateDescriptorHeap(&ddesc, IID_PPV_ARGS(&firstHeapRTV));
-
-			auto hr = dev.lock()->Get()->CreateDescriptorHeap(&ddesc, IID_PPV_ARGS(&firstHeapRTV));
-		}
-		//プロパティ設定用構造体
-		D3D12_HEAP_PROPERTIES prop = {};
-		prop.Type = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_CUSTOM;
-		prop.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY::D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
-		prop.MemoryPoolPreference = D3D12_MEMORY_POOL::D3D12_MEMORY_POOL_L0;
-		prop.CreationNodeMask = 1;
-		prop.VisibleNodeMask = 1;
-
-		//リソース設定用構造体
-		D3D12_RESOURCE_DESC desc = {};
-		desc.Dimension = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-		desc.Width = d.Width;
-		desc.Height = d.Height;
-		desc.DepthOrArraySize = 1;
-		desc.MipLevels = 1;
-		desc.Format = DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM;
-		desc.SampleDesc.Count = 1;
-		desc.Flags = D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_NONE;
-		desc.Layout = D3D12_TEXTURE_LAYOUT::D3D12_TEXTURE_LAYOUT_UNKNOWN;
-
-		auto hr = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&first));
-		
-		auto handle = firstHeap->GetCPUDescriptorHandleForHeapStart();
-		
-		dev.lock()->Get()->CreateRenderTargetView(first, nullptr, handle);
-		{
-			handle.ptr += dev.lock()->Get()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-
-			D3D12_SHADER_RESOURCE_VIEW_DESC ddesc = {};
-			ddesc.Format = desc.Format;
-			ddesc.ViewDimension = D3D12_SRV_DIMENSION::D3D12_SRV_DIMENSION_TEXTURE2D;
-			ddesc.Texture2D.MipLevels = 1;
-			ddesc.Texture2D.MostDetailedMip = 0;
-			ddesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-
-			dev.lock()->Get()->CreateShaderResourceView(first, &ddesc, handle);
-		}
-		
-
-	}
-
 	return hr;
 }
 

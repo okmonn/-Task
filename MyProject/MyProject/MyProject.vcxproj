@@ -149,8 +149,11 @@
     <ClCompile Include="Src\Model\Model.cpp" />
     <ClCompile Include="Src\Model\ModelLoader.cpp" />
     <ClCompile Include="Src\Model\MotionLoader.cpp" />
+    <ClCompile Include="Src\MultiRender\FirstRender.cpp" />
+    <ClCompile Include="Src\MultiRender\MultiRender.cpp" />
     <ClCompile Include="Src\Network\Client.cpp" />
     <ClCompile Include="Src\Network\Server.cpp" />
+    <ClCompile Include="Src\Network\Sock.cpp" />
     <ClCompile Include="Src\Pipe\Pipe.cpp" />
     <ClCompile Include="Src\Point\Point.cpp" />
     <ClCompile Include="Src\Queue\Queue.cpp" />
@@ -189,8 +192,12 @@
     <ClInclude Include="Src\Model\ModelLoader.h" />
     <ClInclude Include="Src\Model\MotionLoader.h" />
     <ClInclude Include="Src\Model\PmdData.h" />
+    <ClInclude Include="Src\MultiRender\FirstRender.h" />
+    <ClInclude Include="Src\MultiRender\MultiRender.h" />
     <ClInclude Include="Src\Network\Client.h" />
+    <ClInclude Include="Src\Network\Information.h" />
     <ClInclude Include="Src\Network\Server.h" />
+    <ClInclude Include="Src\Network\Sock.h" />
     <ClInclude Include="Src\Pipe\Pipe.h" />
     <ClInclude Include="Src\Point\Point.h" />
     <ClInclude Include="Src\Queue\Queue.h" />
@@ -211,6 +218,7 @@
     <ClInclude Include="Src\Window\Window.h" />
     <ClInclude Include="Src\XAudio2\VoiceCallback.h" />
     <ClInclude Include="Src\XAudio2\XAudio2.h" />
+    <ClInclude Include="Src\_GameSrc\etc\TilesetData.h" />
     <ClInclude Include="Src\_GameSrc\etc\Vector2.h" />
     <ClInclude Include="Src\_GameSrc\GameMane\GameMane.h" />
     <ClInclude Include="Src\_GameSrc\MapEditor\MapEditor.h" />
