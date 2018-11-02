@@ -107,7 +107,7 @@ void Texture::CreateWhite(void)
 	CreateHeap(&white.heap);
 	CreateRsc(&white.rsc, 4, 4);
 
-	//シェーダリソースビュー設定用構造体の設定
+	//シェーダリソースビュー設定用構造体
 	D3D12_SHADER_RESOURCE_VIEW_DESC desc = {};
 	desc.Format                    = white.rsc->GetDesc().Format;
 	desc.ViewDimension             = D3D12_SRV_DIMENSION::D3D12_SRV_DIMENSION_TEXTURE2D;
@@ -128,7 +128,7 @@ void Texture::CreateBlack(void)
 	CreateHeap(&black.heap);
 	CreateRsc(&black.rsc, 4, 4);
 
-	//シェーダリソースビュー設定用構造体の設定
+	//シェーダリソースビュー設定用構造体
 	D3D12_SHADER_RESOURCE_VIEW_DESC desc = {};
 	desc.Format                    = black.rsc->GetDesc().Format;
 	desc.ViewDimension             = D3D12_SRV_DIMENSION::D3D12_SRV_DIMENSION_TEXTURE2D;
@@ -154,7 +154,7 @@ void Texture::CreateGrade(void)
 	CreateHeap(&grade.heap);
 	CreateRsc(&grade.rsc, 256, 256);
 
-	//シェーダリソースビュー設定用構造体の設定
+	//シェーダリソースビュー設定用構造体
 	D3D12_SHADER_RESOURCE_VIEW_DESC desc = {};
 	desc.Format                    = white.rsc->GetDesc().Format;
 	desc.ViewDimension             = D3D12_SRV_DIMENSION::D3D12_SRV_DIMENSION_TEXTURE2D;
