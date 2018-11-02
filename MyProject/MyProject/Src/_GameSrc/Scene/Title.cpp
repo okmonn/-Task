@@ -15,6 +15,7 @@ Title::Title()
 	func::LoadPmd("Model/弱音ハク.pmd", n);
 	func::Attach("ヤゴコロダンス.vmd", n);
 	func::LoadImg("Rsc/Skeleton.png", a);
+	map.MapInfo({ 1280, 960 }, { 10, 10 });
 }
 
 // デストラクタ
@@ -34,7 +35,6 @@ void Title::Draw(void)
 	++flam;
 	index = flam / 10 % 8;
 
-	map.MapInfo({ 1280, 480 }, { 10, 10 });
 	map.Draw();
 }
 

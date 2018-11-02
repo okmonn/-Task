@@ -66,18 +66,58 @@ void MapEditor::UpData(void)
 	}
 }
 
+// カメラ座標の比較
+void MapEditor::ComparisonPos(float & cam, const float & areaSize, const int & winSize)
+{
+	auto size = (float)(winSize / 2);
+
+	if (cam - size < 0.0f)
+	{
+		cam = size;
+	}
+	else if (cam + size > areaSize)
+	{
+		cam = areaSize - size;
+	}
+
+	if (cam < 0.0f)
+	{
+		cam = 0.0f;
+	}
+}
+
 // カメラの更新
 void MapEditor::UpDataCam(void)
 {
-	if (cursor.pos.x > winSize.x / 2)
+	cam.pos = cursor.pos;
+	ComparisonPos(cam.pos.x, mapSize.x, winSize.x);
+	ComparisonPos(cam.pos.y, mapSize.y, winSize.y);
+
+	/*Vec2f size = { (float)(winSize.x / 2), (float)(winSize.y / 2) };
+
+	if (cam.pos.x - size.x < 0.0f)
 	{
-		cam.pos = cursor.pos;
+		cam.pos.x = size.x;
 	}
+	else if (cam.pos.x + size.x > mapSize.x)
+	{
+		cam.pos.x = mapSize.x - size.x;
+	}
+
+	if (cam.pos.x < 0.0f)
+	{
+		cam.pos.x = 0;
+	}*/
 }
 
 // ローカル座標に変換
 Vec2f MapEditor::ChangeLocal(const Vec2f & pos)
 {
 	Vec2f tmp = pos;
-	return (tmp - cam.pos);
+	tmp -= { (cam.pos.x - (float)(winSize.x / 2)), (cam.pos.y - (float)(winSize.y / 2)) };
+	
+	Vec2f remainder = { (float)((int)tmp.x % ((int)mapSize.x / chipCnt.x)), (float)((int)tmp.y % ((int)mapSize.y / chipCnt.y)) };
+	tmp -= remainder;
+
+	return tmp;
 }

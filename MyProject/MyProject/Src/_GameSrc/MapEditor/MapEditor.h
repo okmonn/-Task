@@ -38,6 +38,9 @@ public:
 	void UpData(void);
 
 private:
+	// カメラ座標の比較
+	void ComparisonPos(float& cam, const float& areaSize, const int& winSize);
+
 	// カメラの更新
 	void UpDataCam(void);
 
