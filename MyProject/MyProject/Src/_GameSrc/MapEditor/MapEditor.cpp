@@ -8,11 +8,14 @@ MapEditor::MapEditor() :
 	cursor = {};
 	cam = {};
 	map.clear();
+
+	func::LoadImg("Rsc/tileset.png", tile);
 }
 
 // デストラクタ
 MapEditor::~MapEditor()
 {
+	func::DeleteImg(tile);
 }
 
 // マップ情報のセット
@@ -92,22 +95,6 @@ void MapEditor::UpDataCam(void)
 	cam.pos = cursor.pos;
 	ComparisonPos(cam.pos.x, mapSize.x, winSize.x);
 	ComparisonPos(cam.pos.y, mapSize.y, winSize.y);
-
-	/*Vec2f size = { (float)(winSize.x / 2), (float)(winSize.y / 2) };
-
-	if (cam.pos.x - size.x < 0.0f)
-	{
-		cam.pos.x = size.x;
-	}
-	else if (cam.pos.x + size.x > mapSize.x)
-	{
-		cam.pos.x = mapSize.x - size.x;
-	}
-
-	if (cam.pos.x < 0.0f)
-	{
-		cam.pos.x = 0;
-	}*/
 }
 
 // ローカル座標に変換

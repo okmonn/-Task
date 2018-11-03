@@ -1,6 +1,7 @@
 #pragma once
 #include "../etc/Vector2.h"
 #include <vector>
+#include <string>
 
 class MapEditor
 {
@@ -62,6 +63,12 @@ private:
 
 	// カーソル
 	Cursor cursor;
+
+	// タイルセット画像
+	int tile;
+
+	// オブジェクト画像
+	int obj;
 
 	// マップデータ
 	std::vector<char> map;
