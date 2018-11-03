@@ -2,7 +2,9 @@
 #include "Scene.h"
 #include <memory>
 
-class MapEditor;
+class Camera;
+
+class Map;
 
 class Title :
 	public Scene
@@ -20,5 +22,6 @@ public:
 	void UpData(void);
 
 private:
-	std::shared_ptr<MapEditor>map;
+	std::shared_ptr<Camera>cam;
+	std::shared_ptr<Map>map;
 };

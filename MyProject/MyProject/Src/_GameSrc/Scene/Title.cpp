@@ -1,14 +1,15 @@
 #include "Title.h"
-#include "../MapEditor/MapEditor.h"
 #include "../GameMane/GameMane.h"
 #include "Teach.h"
+#include "../Camera/Camerah.h"
+#include "../Map/Map.h"
 #include "../../Func/Func.h"
 
 // コンストラクタ
 Title::Title()
 {
-	map = std::make_shared<MapEditor>();
-	map->MapInfo({ 1280, 960 }, { 10, 10 });
+	cam = std::make_shared<Camera>();
+	map = std::make_shared<Map>(cam);
 }
 
 // デストラクタ
@@ -19,13 +20,12 @@ Title::~Title()
 // 描画
 void Title::Draw(void)
 {
-	map->Draw();
+	
 }
 
 // 処理
 void Title::UpData(void)
 {
-	map->UpData();
 
 	if (func::CheckTriger(INPUT_RETURN))
 	{

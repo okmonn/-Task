@@ -170,8 +170,10 @@
     <ClCompile Include="Src\Union\Union.cpp" />
     <ClCompile Include="Src\Window\Window.cpp" />
     <ClCompile Include="Src\XAudio2\XAudio2.cpp" />
+    <ClCompile Include="Src\_GameSrc\Camera\Camerah.cpp" />
     <ClCompile Include="Src\_GameSrc\GameMane\GameMane.cpp" />
-    <ClCompile Include="Src\_GameSrc\MapEditor\MapEditor.cpp" />
+    <ClCompile Include="Src\_GameSrc\Map\Map.cpp" />
+    <ClCompile Include="Src\_GameSrc\Obj\Obj.cpp" />
     <ClCompile Include="Src\_GameSrc\Scene\Teach.cpp" />
     <ClCompile Include="Src\_GameSrc\Scene\Title.cpp" />
   </ItemGroup>
@@ -219,10 +221,13 @@
     <ClInclude Include="Src\Window\Window.h" />
     <ClInclude Include="Src\XAudio2\VoiceCallback.h" />
     <ClInclude Include="Src\XAudio2\XAudio2.h" />
+    <ClInclude Include="Src\_GameSrc\Camera\Camerah.h" />
     <ClInclude Include="Src\_GameSrc\etc\TilesetData.h" />
+    <ClInclude Include="Src\_GameSrc\etc\Typedef.h" />
     <ClInclude Include="Src\_GameSrc\etc\Vector2.h" />
     <ClInclude Include="Src\_GameSrc\GameMane\GameMane.h" />
-    <ClInclude Include="Src\_GameSrc\MapEditor\MapEditor.h" />
+    <ClInclude Include="Src\_GameSrc\Map\Map.h" />
+    <ClInclude Include="Src\_GameSrc\Obj\Obj.h" />
     <ClInclude Include="Src\_GameSrc\Scene\Scene.h" />
     <ClInclude Include="Src\_GameSrc\Scene\Teach.h" />
     <ClInclude Include="Src\_GameSrc\Scene\Title.h" />

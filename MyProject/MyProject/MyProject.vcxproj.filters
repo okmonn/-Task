@@ -109,9 +109,6 @@
     <Filter Include="Game\Scene\Title">
       <UniqueIdentifier>{33ad0aea-2d14-485e-a5a9-53d605068b3b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\MapEditor">
-      <UniqueIdentifier>{a2a245a2-a3ca-45c0-944c-13032a76547d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Dx12\Sound">
       <UniqueIdentifier>{2cbdec6b-6d4e-4bb1-9dac-63016149e7a2}</UniqueIdentifier>
     </Filter>
@@ -150,6 +147,15 @@
     </Filter>
     <Filter Include="Game\Scene\Teach">
       <UniqueIdentifier>{90bfcbd5-f245-47ff-b017-962d8a4d4208}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Map">
+      <UniqueIdentifier>{850d6b73-dd24-4881-9d35-731d1a021c92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Camera">
+      <UniqueIdentifier>{743c0cf3-afb0-4ab8-8757-b24303eb4d85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object">
+      <UniqueIdentifier>{62382407-a43c-41bb-a9c3-5806dc2b881d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -228,9 +234,6 @@
     <ClCompile Include="Src\_GameSrc\Scene\Title.cpp">
       <Filter>Game\Scene\Title</Filter>
     </ClCompile>
-    <ClCompile Include="Src\_GameSrc\MapEditor\MapEditor.cpp">
-      <Filter>Game\MapEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Sound\SoundLoader.cpp">
       <Filter>Dx12\Sound\SoundLoader</Filter>
     </ClCompile>
@@ -266,6 +269,15 @@
     </ClCompile>
     <ClCompile Include="Src\_GameSrc\Scene\Teach.cpp">
       <Filter>Game\Scene\Teach</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\_GameSrc\Map\Map.cpp">
+      <Filter>Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\_GameSrc\Camera\Camerah.cpp">
+      <Filter>Game\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\_GameSrc\Obj\Obj.cpp">
+      <Filter>Game\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -365,9 +377,6 @@
     <ClInclude Include="Src\_GameSrc\Scene\Title.h">
       <Filter>Game\Scene\Title</Filter>
     </ClInclude>
-    <ClInclude Include="Src\_GameSrc\MapEditor\MapEditor.h">
-      <Filter>Game\MapEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Sound\SoundLoader.h">
       <Filter>Dx12\Sound\SoundLoader</Filter>
     </ClInclude>
@@ -418,6 +427,18 @@
     </ClInclude>
     <ClInclude Include="Src\_GameSrc\Scene\Teach.h">
       <Filter>Game\Scene\Teach</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\_GameSrc\Map\Map.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\_GameSrc\Camera\Camerah.h">
+      <Filter>Game\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\_GameSrc\etc\Typedef.h">
+      <Filter>Game\etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\_GameSrc\Obj\Obj.h">
+      <Filter>Game\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
