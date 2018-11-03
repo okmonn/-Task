@@ -172,6 +172,7 @@
     <ClCompile Include="Src\XAudio2\XAudio2.cpp" />
     <ClCompile Include="Src\_GameSrc\GameMane\GameMane.cpp" />
     <ClCompile Include="Src\_GameSrc\MapEditor\MapEditor.cpp" />
+    <ClCompile Include="Src\_GameSrc\Scene\Teach.cpp" />
     <ClCompile Include="Src\_GameSrc\Scene\Title.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +224,7 @@
     <ClInclude Include="Src\_GameSrc\GameMane\GameMane.h" />
     <ClInclude Include="Src\_GameSrc\MapEditor\MapEditor.h" />
     <ClInclude Include="Src\_GameSrc\Scene\Scene.h" />
+    <ClInclude Include="Src\_GameSrc\Scene\Teach.h" />
     <ClInclude Include="Src\_GameSrc\Scene\Title.h" />
   </ItemGroup>
   <ItemGroup>

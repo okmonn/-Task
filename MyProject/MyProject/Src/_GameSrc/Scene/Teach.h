@@ -1,17 +1,14 @@
 #pragma once
 #include "Scene.h"
-#include <memory>
 
-class MapEditor;
-
-class Title :
+class Teach :
 	public Scene
 {
 public:
 	// コンストラクタ
-	Title();
+	Teach();
 	// デストラクタ
-	~Title();
+	~Teach();
 
 	// 描画
 	void Draw(void);
@@ -20,5 +17,11 @@ public:
 	void UpData(void);
 
 private:
-	std::shared_ptr<MapEditor>map;
+	// モデル
+	int model;
+
+	// WVP
+	float x = 0.f;
+	float y = 10.f;
+	float z = -15.f;
 };

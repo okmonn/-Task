@@ -1,20 +1,27 @@
 #include "MapEditor.h"
+#include "../etc/TilesetData.h"
 #include "../../Func/Func.h"
 
 // コンストラクタ
 MapEditor::MapEditor() :
-	mapSize(0.0f), chipCnt(0), winSize(0)
+	mapSize(0.0f), chipCnt(0), winSize(0), tile(0), index(0), obj(0), size(_countof(tile1))
 {
 	cursor = {};
 	cam = {};
-	map.clear();
+
+	tileMap.clear();
+	objMap.clear();
 
 	func::LoadImg("Rsc/tileset.png", tile);
+	func::LoadImg("Rsc/objects-Sheet.png", obj);
+
+	draw = &MapEditor::DrawTile1;
 }
 
 // デストラクタ
 MapEditor::~MapEditor()
 {
+	func::DeleteImg(obj);
 	func::DeleteImg(tile);
 }
 
@@ -25,7 +32,33 @@ void MapEditor::MapInfo(const Vec2f & mapSize, const Vec2 & chipCnt, const Vec2&
 	this->chipCnt = chipCnt;
 	this->winSize = winSize;
 	cursor.size = { mapSize.x / chipCnt.x, mapSize.y / chipCnt.y };
-	map.resize(chipCnt.x * chipCnt.y);
+
+	tileMap.resize(chipCnt.x * chipCnt.y);
+	memset(tileMap.data(), -1, sizeof(int) * tileMap.size());
+	for (auto& i : tileMap)
+	{
+		func::LoadImg("Rsc/tileset.png", i);
+	}
+	objMap.resize(chipCnt.x * chipCnt.y);
+	memset(objMap.data(), -1, sizeof(int) * objMap.size());
+	for (auto& i : objMap)
+	{
+		func::LoadImg("Rsc/objects-Sheet.png", i);
+	}
+}
+
+// タイルセット1の描画
+void MapEditor::DrawTile1(void)
+{
+	func::DrawRectImg(tile, cursor.local.x, cursor.local.y, mapSize.x / chipCnt.x * tile1[index].ratio.x, mapSize.y / chipCnt.y * tile1[index].ratio.y,
+		tile1[index].pos.x, tile1[index].pos.y, tile1[index].size.x, tile1[index].size.y);
+}
+
+// タイルセット2の描画
+void MapEditor::DrawTile2(void)
+{
+	func::DrawRectImg(obj, cursor.local.x, cursor.local.y, mapSize.x / chipCnt.x * tile2[index].ratio.x, mapSize.y / chipCnt.y * tile2[index].ratio.y,
+		tile2[index].pos.x, tile2[index].pos.y, tile2[index].size.x, tile2[index].size.y);
 }
 
 // 描画
@@ -40,32 +73,19 @@ void MapEditor::Draw(void)
 		func::DrawLine(mapSize.x / chipCnt.x * x, 0, mapSize.x / chipCnt.x * x, mapSize.y, 1, 1, 1);
 	}
 
-	func::DrawBox(cursor.local.x, cursor.local.y, cursor.size.x, cursor.size.y, 1, 1, 1);
-}
+	(this->*draw)();
 
-// 処理
-void MapEditor::UpData(void)
-{
-	UpDataCam();
-	cursor.local = ChangeLocal(cursor.pos);
-
-	Vec2f size = { mapSize.x / chipCnt.x , mapSize.y / chipCnt.y };
-
-	if (func::CheckTriger(INPUT_RIGHT))
+	int cnt = 0;
+	for (auto& i : tileMap)
 	{
-		cursor.pos.x += (cursor.pos.x + size.x < mapSize.x) ? size.x : 0.0f;
-	}
-	else if (func::CheckTriger(INPUT_LEFT))
-	{
-		cursor.pos.x -= (cursor.pos.x - size.x >= 0.0f) ? size.x : 0.0f;
-	}
-	else if (func::CheckTriger(INPUT_DOWN))
-	{
-		cursor.pos.y += (cursor.pos.y + size.y < mapSize.y) ? size.y : 0.0f;
-	}
-	else if (func::CheckTriger(INPUT_UP))
-	{
-		cursor.pos.y -= (cursor.pos.y - size.y >= 0.0f) ? size.y : 0.0f;
+		if (i != -1)
+		{
+			auto pos = ChangeLocal({ (mapSize.x / chipCnt.x) * (cnt / chipCnt.x), (mapSize.y / chipCnt.y) * (cnt % chipCnt.y) });
+			func::DrawRectImg(i, pos.x, pos.y, 
+				mapSize.x / chipCnt.x * tile1[i].ratio.x, mapSize.y / chipCnt.y * tile1[i].ratio.y,
+				tile1[i].pos.x, tile1[i].pos.y, tile1[i].size.x, tile1[i].size.y);
+		}
+		++cnt;
 	}
 }
 
@@ -108,3 +128,89 @@ Vec2f MapEditor::ChangeLocal(const Vec2f & pos)
 
 	return tmp;
 }
+
+// タイルの変更
+void MapEditor::ChangeTile(void)
+{
+	if (func::CheckTriger(INPUT_W))
+	{
+		size = _countof(tile1);
+		index = (index >= size) ? size - 1 : index;
+		draw = &MapEditor::DrawTile1;
+	}
+	else if (func::CheckTriger(INPUT_S))
+	{
+		size = _countof(tile2);
+		index = (index >= size) ? size - 1 : index;
+		draw = &MapEditor::DrawTile2;
+	}
+}
+
+// マップチップの変更
+void MapEditor::ChangeChip(const int & size)
+{
+	if (func::CheckTriger(INPUT_D))
+	{
+		index += (index + 1 < size) ? 1 : 0;
+	}
+	else if (func::CheckTriger(INPUT_A))
+	{
+		index -= (index - 1 >= 0) ? 1 : 0;
+	}
+}
+
+// カーソルの移動
+void MapEditor::MoveCursor(void)
+{
+	Vec2f size = { mapSize.x / chipCnt.x , mapSize.y / chipCnt.y };
+
+	if (func::CheckTriger(INPUT_RIGHT))
+	{
+		cursor.pos.x += (cursor.pos.x + size.x < mapSize.x) ? size.x : 0.0f;
+	}
+	else if (func::CheckTriger(INPUT_LEFT))
+	{
+		cursor.pos.x -= (cursor.pos.x - size.x >= 0.0f) ? size.x : 0.0f;
+	}
+	else if (func::CheckTriger(INPUT_DOWN))
+	{
+		cursor.pos.y += (cursor.pos.y + size.y < mapSize.y) ? size.y : 0.0f;
+	}
+	else if (func::CheckTriger(INPUT_UP))
+	{
+		cursor.pos.y -= (cursor.pos.y - size.y >= 0.0f) ? size.y : 0.0f;
+	}
+}
+
+// マップチップの配置
+void MapEditor::SetChip(void)
+{
+	if (func::CheckTriger(INPUT_SPACE))
+	{
+		auto x = (int)(cursor.pos.x / (mapSize.x / chipCnt.x));
+		auto y = (int)(cursor.pos.y / (mapSize.y / chipCnt.y));
+
+		if (draw == &MapEditor::DrawTile1)
+		{
+			tileMap[chipCnt.x * x + y] = (tileMap[y + x] == -1) ? index : -1;
+		}
+		else
+		{
+			objMap[chipCnt.x * x + y] = (objMap[y + x] == -1) ? index : -1;
+		}
+	}
+}
+
+// 処理
+void MapEditor::UpData(void)
+{
+	UpDataCam();
+	cursor.local = ChangeLocal(cursor.pos);
+
+	ChangeTile();
+	ChangeChip(size);
+	MoveCursor();
+
+	SetChip();
+}
+

@@ -59,5 +59,7 @@ void GameMane::Run(void)
 		UpData();
 	}
 
+	scene.reset();
+
 	func::End();
 }

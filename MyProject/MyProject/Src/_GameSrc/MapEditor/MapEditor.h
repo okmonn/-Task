@@ -39,6 +39,12 @@ public:
 	void UpData(void);
 
 private:
+	// タイルセット1の描画
+	void DrawTile1(void);
+
+	// タイルセット2の描画
+	void DrawTile2(void);
+
 	// カメラ座標の比較
 	void ComparisonPos(float& cam, const float& areaSize, const int& winSize);
 
@@ -47,6 +53,18 @@ private:
 
 	// ローカル座標に変換
 	Vec2f ChangeLocal(const Vec2f& pos);
+
+	// タイルの変更
+	void ChangeTile(void);
+
+	// マップチップの変更
+	void ChangeChip(const int& size);
+
+	// カーソルの移動
+	void MoveCursor(void);
+
+	// マップチップの配置
+	void SetChip(void);
 
 
 	// マップのサイズ
@@ -67,9 +85,21 @@ private:
 	// タイルセット画像
 	int tile;
 
+	// 配列番号
+	int index;
+
 	// オブジェクト画像
 	int obj;
 
-	// マップデータ
-	std::vector<char> map;
+	// タイルセットのサイズ
+	int size;
+
+	// タイルマップデータ
+	std::vector<int>tileMap;
+
+	// オブジェクトマップデータ
+	std::vector<int>objMap;
+
+	// 関数ポインタ
+	void (MapEditor::*draw)(void);
 };
