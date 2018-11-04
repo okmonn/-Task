@@ -173,7 +173,10 @@
     <ClCompile Include="Src\_GameSrc\Camera\Camerah.cpp" />
     <ClCompile Include="Src\_GameSrc\GameMane\GameMane.cpp" />
     <ClCompile Include="Src\_GameSrc\Map\Map.cpp" />
-    <ClCompile Include="Src\_GameSrc\Obj\Obj.cpp" />
+    <ClCompile Include="Src\_GameSrc\Object\Character.cpp" />
+    <ClCompile Include="Src\_GameSrc\Object\Chip.cpp" />
+    <ClCompile Include="Src\_GameSrc\Object\Object.cpp" />
+    <ClCompile Include="Src\_GameSrc\Object\Player.cpp" />
     <ClCompile Include="Src\_GameSrc\Scene\Teach.cpp" />
     <ClCompile Include="Src\_GameSrc\Scene\Title.cpp" />
   </ItemGroup>
@@ -227,7 +230,10 @@
     <ClInclude Include="Src\_GameSrc\etc\Vector2.h" />
     <ClInclude Include="Src\_GameSrc\GameMane\GameMane.h" />
     <ClInclude Include="Src\_GameSrc\Map\Map.h" />
-    <ClInclude Include="Src\_GameSrc\Obj\Obj.h" />
+    <ClInclude Include="Src\_GameSrc\Object\Character.h" />
+    <ClInclude Include="Src\_GameSrc\Object\Chip.h" />
+    <ClInclude Include="Src\_GameSrc\Object\Object.h" />
+    <ClInclude Include="Src\_GameSrc\Object\Player.h" />
     <ClInclude Include="Src\_GameSrc\Scene\Scene.h" />
     <ClInclude Include="Src\_GameSrc\Scene\Teach.h" />
     <ClInclude Include="Src\_GameSrc\Scene\Title.h" />

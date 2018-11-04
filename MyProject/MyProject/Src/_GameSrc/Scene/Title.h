@@ -3,8 +3,8 @@
 #include <memory>
 
 class Camera;
-
 class Map;
+class Player;
 
 class Title :
 	public Scene
@@ -24,4 +24,5 @@ public:
 private:
 	std::shared_ptr<Camera>cam;
 	std::shared_ptr<Map>map;
+	std::shared_ptr<Player>pl;
 };

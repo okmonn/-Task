@@ -148,14 +148,20 @@
     <Filter Include="Game\Scene\Teach">
       <UniqueIdentifier>{90bfcbd5-f245-47ff-b017-962d8a4d4208}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Map">
-      <UniqueIdentifier>{850d6b73-dd24-4881-9d35-731d1a021c92}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Camera">
       <UniqueIdentifier>{743c0cf3-afb0-4ab8-8757-b24303eb4d85}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Object">
       <UniqueIdentifier>{62382407-a43c-41bb-a9c3-5806dc2b881d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Map">
+      <UniqueIdentifier>{850d6b73-dd24-4881-9d35-731d1a021c92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Chip">
+      <UniqueIdentifier>{bf1a216d-1635-4cf0-8b44-9e2d8c4c45f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Player">
+      <UniqueIdentifier>{3be5397e-1936-462f-80eb-6b11987969a8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -276,8 +282,17 @@
     <ClCompile Include="Src\_GameSrc\Camera\Camerah.cpp">
       <Filter>Game\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Src\_GameSrc\Obj\Obj.cpp">
+    <ClCompile Include="Src\_GameSrc\Object\Chip.cpp">
+      <Filter>Game\Object\Chip</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\_GameSrc\Object\Object.cpp">
       <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\_GameSrc\Object\Character.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\_GameSrc\Object\Player.cpp">
+      <Filter>Game\Object\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -437,8 +452,17 @@
     <ClInclude Include="Src\_GameSrc\etc\Typedef.h">
       <Filter>Game\etc</Filter>
     </ClInclude>
-    <ClInclude Include="Src\_GameSrc\Obj\Obj.h">
+    <ClInclude Include="Src\_GameSrc\Object\Chip.h">
+      <Filter>Game\Object\Chip</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\_GameSrc\Object\Object.h">
       <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\_GameSrc\Object\Character.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\_GameSrc\Object\Player.h">
+      <Filter>Game\Object\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

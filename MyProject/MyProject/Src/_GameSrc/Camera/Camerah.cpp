@@ -1,5 +1,5 @@
 #include "Camerah.h"
-#include "../Obj/Obj.h"
+#include "../Object/Object.h"
 #include "../etc/Typedef.h"
 
 // コンストラクタ
@@ -14,7 +14,7 @@ Camera::~Camera()
 }
 
 // ターゲットのセット
-void Camera::SetTarget(std::weak_ptr<Obj> obj)
+void Camera::SetTarget(std::weak_ptr<Object> obj)
 {
 	this->obj = obj;
 }
@@ -42,7 +42,7 @@ void Camera::ComparisonPos(float & pos, const float & areaSize, const int & winS
 // 処理
 void Camera::UpData(const Vec2f & area)
 {
-	pos = obj.lock()->GetPos();
+	pos = obj.lock()->GetPos() + (obj.lock()->GetSize() / 2.0f);
 	ComparisonPos(pos.x, area.x, WINDOW_X);
 	ComparisonPos(pos.y, area.y, WINDOW_Y);
 }

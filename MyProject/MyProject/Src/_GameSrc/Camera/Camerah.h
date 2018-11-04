@@ -2,7 +2,7 @@
 #include "../etc/Vector2.h"
 #include <memory>
 
-class Obj;
+class Object;
 
 class Camera
 {
@@ -13,7 +13,7 @@ public:
 	~Camera();
 
 	// ターゲットのセット
-	void SetTarget(std::weak_ptr<Obj>obj);
+	void SetTarget(std::weak_ptr<Object>obj);
 
 	// 処理
 	void UpData(const Vec2f& area);
@@ -32,7 +32,7 @@ private:
 
 
 	// ターゲットオブジェクト
-	std::weak_ptr<Obj>obj;
+	std::weak_ptr<Object>obj;
 
 	// 座標
 	Vec2f pos;
