@@ -346,24 +346,9 @@ void Union::Do(void)
 
 	Reset();
 
-	fen->Wait();
-
-
-	/*list->Reset(nullptr);
-
-	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET,
-		swap, ren);
-
-	ren->SetRender(*dep->GetHeap(), color);
-
-	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT,
-		swap, ren);
-
-	list->Close();
-
 	swap->Present();
 
-	fen->Wait();*/
+	fen->Wait();
 }
 
 // ƒTƒEƒ“ƒh‚Ìíœ
