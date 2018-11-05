@@ -24,6 +24,14 @@
 
 #pragma comment(lib, "d3d12.lib")
 
+//クリアカラー
+const FLOAT color[] = {
+	1.0f,
+	0.0f,
+	0.0f,
+	0.0f
+};
+
 // インプットエレメント
 const D3D12_INPUT_ELEMENT_DESC inputs[] = {
 	//0
@@ -114,13 +122,14 @@ void Union::Start(void)
 	swap  = std::make_shared<Swap>(win, que);
 	fen   = std::make_shared<Fence>(dev, que);
 	ren   = std::make_shared<Render>(dev, list, swap);
-	first = std::make_shared<FirstRender>(dev, ren);
 	dep   = std::make_shared<Depth>(dev, list);
 	con   = std::make_shared<Constant>(dev, list);
 
 	CreateRoot();
 
 	CreatePipe();
+
+	first = std::make_shared<FirstRender>(dev, list, swap, ren, texRoot, texPipe);
 
 	pnt = std::make_shared<Point>(dev, list, con, drwRoot, pntPipe);
 	lin = std::make_shared<Line>(dev, list, con, drwRoot, linPipe);
@@ -219,13 +228,13 @@ void Union::Set(void)
 	list->SetViewport();
 
 	list->SetScissor();
-
-	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET,
-		swap, ren);
-
+	
 	dep->SetDepth();
 
-	ren->SetRender(*dep->GetHeap());
+	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET,
+		first);
+
+	first->SetRender(*dep->GetHeap(), color);
 }
 
 // ポイント描画
@@ -325,7 +334,7 @@ void Union::Do(void)
 	Draw();
 
 	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT,
-		swap, ren);
+		first);
 
 	list->Close();
 
@@ -336,6 +345,21 @@ void Union::Do(void)
 	que->Execute(ppCmdLists, _countof(ppCmdLists));
 
 	Reset();
+
+	fen->Wait();
+
+
+	list->Reset(nullptr);
+
+	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET,
+		swap, ren);
+
+	ren->SetRender(*dep->GetHeap(), color);
+
+	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT,
+		swap, ren);
+
+	list->Close();
 
 	swap->Present();
 

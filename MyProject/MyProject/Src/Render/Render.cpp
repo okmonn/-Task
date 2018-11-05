@@ -5,14 +5,6 @@
 #include "../etc/Release.h"
 #include <dxgi1_6.h>
 
-//クリアカラー
-const FLOAT color[] = {
-	1.0f,
-	0.0f,
-	0.0f,
-	0.0f
-};
-
 // コンストラクタ
 Render::Render(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Swap>swap) :
 	dev(dev), list(list), swap(swap), heap(nullptr), size(0)
@@ -94,7 +86,7 @@ long Render::CreateRsc(void)
 }
 
 // レンダーターゲットのセット
-void Render::SetRender(ID3D12DescriptorHeap & depth)
+void Render::SetRender(ID3D12DescriptorHeap & depth, const float * color)
 {
 	//ヒープの先頭ハンドルの取得
 	D3D12_CPU_DESCRIPTOR_HANDLE handle = heap->GetCPUDescriptorHandleForHeapStart();

@@ -1,13 +1,28 @@
 #include "FirstRender.h"
 #include "../Device/Device.h"
+#include "../List/List.h"
+#include "../Swap/Swap.h"
 #include "../Render/Render.h"
+#include "../Root/Root.h"
+#include "../Pipe/Pipe.h"
 #include "../etc/Release.h"
 
+// 頂点最大数
+#define MAX 4  
+
 // コンストラクタ
-FirstRender::FirstRender(std::weak_ptr<Device>dev, std::weak_ptr<Render>render)
+FirstRender::FirstRender(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Swap>swap, std::weak_ptr<Render>render,
+	std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe) : 
+	vertex(nullptr), data(nullptr)
 {
 	this->dev = dev;
+	this->list = list;
+	this->swap = swap;
 	this->render = render;
+	this->root = root;
+	this->pipe = pipe;
+
+	v.clear();
 
 	Init();
 }
@@ -15,6 +30,7 @@ FirstRender::FirstRender(std::weak_ptr<Device>dev, std::weak_ptr<Render>render)
 // デストラクタ
 FirstRender::~FirstRender()
 {
+	Release(vertex);
 	Release(rsc);
 	Release(srv);
 	Release(rtv);
@@ -23,15 +39,18 @@ FirstRender::~FirstRender()
 // 初期化
 void FirstRender::Init(void)
 {
-	CreateRtv();
 	CreateRsc();
+	CreateRtv();
 	CreateSrv();
+
+	CreateVertex();
+	Map();
 }
 
 // レンダーターゲットビューの生成
 void FirstRender::CreateRtv(void)
 {
-	if (FAILED(CreateHeap(&rtv, D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_RTV, D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_NONE)))
+	if (FAILED(CreateHeap(&rtv, D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_RTV)))
 	{
 		return;
 	}
@@ -49,7 +68,7 @@ void FirstRender::CreateRtv(void)
 // シェーダーリソースビューの生成
 void FirstRender::CreateSrv(void)
 {
-	if (FAILED(CreateHeap(&srv, D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE)))
+	if (FAILED(CreateHeap(&srv, D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)))
 	{
 		return;
 	}
@@ -63,4 +82,96 @@ void FirstRender::CreateSrv(void)
 	desc.Shader4ComponentMapping   = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
 	dev.lock()->Get()->CreateShaderResourceView(rsc, &desc, srv->GetCPUDescriptorHandleForHeapStart());
+}
+
+// 頂点リソースの生成
+long FirstRender::CreateVertex(void)
+{
+	v.resize(MAX);
+
+	//プロパティ設定用構造体
+	D3D12_HEAP_PROPERTIES prop = {};
+	prop.CPUPageProperty      = D3D12_CPU_PAGE_PROPERTY::D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+	prop.CreationNodeMask     = 1;
+	prop.MemoryPoolPreference = D3D12_MEMORY_POOL::D3D12_MEMORY_POOL_UNKNOWN;
+	prop.Type                 = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_UPLOAD;
+	prop.VisibleNodeMask      = 1;
+
+	//リソース設定用構造体
+	D3D12_RESOURCE_DESC desc = {};
+	desc.Alignment          = 0;
+	desc.DepthOrArraySize   = 1;
+	desc.Dimension          = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_BUFFER;
+	desc.Flags              = D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_NONE;
+	desc.Format             = DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
+	desc.Height             = 1;
+	desc.Layout             = D3D12_TEXTURE_LAYOUT::D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	desc.MipLevels          = 1;
+	desc.SampleDesc.Count   = 1;
+	desc.SampleDesc.Quality = 0;
+	desc.Width              = sizeof(tex::Vertex) * MAX;
+
+	auto hr = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertex));
+	if (FAILED(hr))
+	{
+		OutputDebugString(_T("\nファーストパス用頂点リソースの生成：失敗\n"));
+	}
+
+	return hr;
+}
+
+// 頂点のマップ
+long FirstRender::Map(void)
+{
+	auto hr = vertex->Map(0, nullptr, (void**)&data);
+	if (FAILED(hr))
+	{
+		OutputDebugString(_T("\nファーストパス用頂点のマップ：失敗\n"));
+	}
+
+	return hr;
+}
+
+// 描画
+void FirstRender::Draw(void)
+{
+	//コマンドリストへのセット
+	list.lock()->SetRoot(*root.lock()->Get());
+	list.lock()->SetPipe(*pipe.lock()->Get());
+
+	auto desc = rsc->GetDesc();
+
+	//UV座標
+	DirectX::XMFLOAT2 leftUp    = { 0.0f,                           0.0f };
+	DirectX::XMFLOAT2 rightUp   = { static_cast<FLOAT>(desc.Width), 0.0f };
+	DirectX::XMFLOAT2 leftDown  = { 0.0f,                           static_cast<FLOAT>(desc.Height) };
+	DirectX::XMFLOAT2 rightDown = { static_cast<FLOAT>(desc.Width), static_cast<FLOAT>(desc.Height) };
+
+	//左上
+	v[0] = { { 0.0f,                           0.0f,                            0.0f }, leftUp,    1.0f };
+	//右上
+	v[1] = { { static_cast<FLOAT>(desc.Width), 0.0f,                            0.0f }, rightUp,   1.0f };
+	//左下
+	v[2] = { { 0.0f,                           static_cast<FLOAT>(desc.Height), 0.0f }, leftDown,  1.0f };
+	//右下
+	v[3] = { { static_cast<FLOAT>(desc.Width), static_cast<FLOAT>(desc.Height), 0.0f }, rightDown, 1.0f };
+
+	//頂点データの更新
+	memcpy(data, v.data(), sizeof(tex::Vertex) * v.size());
+
+	//頂点バッファ設定用構造体の設定
+	D3D12_VERTEX_BUFFER_VIEW view = {};
+	view.BufferLocation = vertex->GetGPUVirtualAddress();
+	view.SizeInBytes    = sizeof(tex::Vertex) * v.size();
+	view.StrideInBytes  = sizeof(tex::Vertex);
+
+	//頂点バッファビューのセット
+	list.lock()->GetList()->IASetVertexBuffers(0, 1, &view);
+
+	//トポロジー設定
+	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+
+	//描画
+	list.lock()->GetList()->DrawInstanced(v.size(), 1, 0, 0);
 }

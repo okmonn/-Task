@@ -12,6 +12,7 @@ class Union;
 class Device;
 class Swap;
 class Render;
+class MultiRender;
 
 class List
 {
@@ -38,6 +39,9 @@ public:
 
 	// バリアのセット
 	void SetBarrier(const D3D12_RESOURCE_STATES& befor, const D3D12_RESOURCE_STATES& affter, std::weak_ptr<Swap>swap, std::weak_ptr<Render>render);
+
+	// バリアのセット
+	void SetBarrier(const D3D12_RESOURCE_STATES& befor, const D3D12_RESOURCE_STATES& affter, std::weak_ptr<MultiRender>multi);
 
 	// コマンドを閉じる
 	void Close(void);

@@ -12,11 +12,11 @@ class List;
 class Swap;
 class Fence;
 class Render;
-class MultiRender;
 class Depth;
 class Constant;
 class Root;
 class Pipe;
+class FirstRender;
 class Point;
 class Line;
 class Triangle;
@@ -196,9 +196,6 @@ private:
 	// レンダーターゲット
 	std::shared_ptr<Render>ren;
 
-	// マルチレンダー・1
-	std::shared_ptr<MultiRender>first;
-
 	// 深度ステンシル
 	std::shared_ptr<Depth>dep;
 
@@ -216,6 +213,9 @@ private:
 	std::shared_ptr<Pipe>triPipe;
 	std::shared_ptr<Pipe>texPipe;
 	std::shared_ptr<Pipe>mdlPipe;
+
+	// マルチレンダー・1
+	std::shared_ptr<FirstRender>first;
 
 	// ポイント
 	std::shared_ptr<Point>pnt;

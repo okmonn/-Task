@@ -3,6 +3,7 @@
 #include "../Device/Device.h"
 #include "../Swap/Swap.h"
 #include "../Render/Render.h"
+#include "../MultiRender/MultiRender.h"
 #include "../etc/Release.h"
 #include <dxgi1_6.h>
 
@@ -103,6 +104,21 @@ void List::SetBarrier(const D3D12_RESOURCE_STATES& befor, const D3D12_RESOURCE_S
 	barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE::D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 	barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE;
 	barrier.Transition.pResource   = render.lock()->GetRsc(swap.lock()->Get()->GetCurrentBackBufferIndex());
+	barrier.Transition.StateBefore = befor;
+	barrier.Transition.StateAfter  = affter;
+	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE;
+
+	list->ResourceBarrier(1, &barrier);
+}
+
+// バリアのセット
+void List::SetBarrier(const D3D12_RESOURCE_STATES & befor, const D3D12_RESOURCE_STATES & affter, std::weak_ptr<MultiRender> multi)
+{
+	//バリアの設定
+	D3D12_RESOURCE_BARRIER barrier = {};
+	barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE::D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrier.Transition.pResource   = multi.lock()->GetRsc();
 	barrier.Transition.StateBefore = befor;
 	barrier.Transition.StateAfter  = affter;
 	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE;
