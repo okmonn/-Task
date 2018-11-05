@@ -11,13 +11,12 @@
 #define MAX 4  
 
 // コンストラクタ
-FirstRender::FirstRender(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Swap>swap, std::weak_ptr<Render>render,
+FirstRender::FirstRender(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Render>render,
 	std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe) : 
 	vertex(nullptr), data(nullptr)
 {
 	this->dev = dev;
 	this->list = list;
-	this->swap = swap;
 	this->render = render;
 	this->root = root;
 	this->pipe = pipe;
@@ -170,6 +169,29 @@ void FirstRender::Draw(void)
 
 	//トポロジー設定
 	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	//ボックス設定用構造体の設定
+	D3D12_BOX box = {};
+	box.back   = 1;
+	box.bottom = vertex->GetDesc().Height;
+	box.front  = 0;
+	box.left   = 0;
+	box.right  = static_cast<UINT>(vertex->GetDesc().Width);
+	box.top = 0;
+
+	////サブリソースに書き込み
+	//auto hr = rsc->WriteToSubresource(0, &box, &rsc->, tex[&i].sub.lock()->RowPitch, tex[&i].sub.lock()->SlicePitch);
+	//if (FAILED(hr))
+	//{
+	//	OutputDebugString(_T("ファーストパス用テクスチャのサブリソース書込み：失敗\n"));
+	//	return ;
+	//}
+
+	//ヒープのセット
+	list.lock()->GetList()->SetDescriptorHeaps(1, &srv);
+
+	//ディスクラプターテーブルのセット
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(1, srv->GetGPUDescriptorHandleForHeapStart());
 
 
 	//描画

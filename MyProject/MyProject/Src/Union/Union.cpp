@@ -129,7 +129,7 @@ void Union::Start(void)
 
 	CreatePipe();
 
-	first = std::make_shared<FirstRender>(dev, list, swap, ren, texRoot, texPipe);
+	first = std::make_shared<FirstRender>(dev, list, ren, texRoot, texPipe);
 
 	pnt = std::make_shared<Point>(dev, list, con, drwRoot, pntPipe);
 	lin = std::make_shared<Line>(dev, list, con, drwRoot, linPipe);
@@ -232,9 +232,9 @@ void Union::Set(void)
 	dep->SetDepth();
 
 	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET,
-		first);
+		swap, ren);
 
-	first->SetRender(*dep->GetHeap(), color);
+	ren->SetRender(*dep->GetHeap(), color);
 }
 
 // ポイント描画
@@ -334,7 +334,7 @@ void Union::Do(void)
 	Draw();
 
 	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT,
-		first);
+		swap, ren);
 
 	list->Close();
 
@@ -349,7 +349,7 @@ void Union::Do(void)
 	fen->Wait();
 
 
-	list->Reset(nullptr);
+	/*list->Reset(nullptr);
 
 	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET,
 		swap, ren);
@@ -363,7 +363,7 @@ void Union::Do(void)
 
 	swap->Present();
 
-	fen->Wait();
+	fen->Wait();*/
 }
 
 // サウンドの削除

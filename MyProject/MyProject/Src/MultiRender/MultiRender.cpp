@@ -55,8 +55,8 @@ long MultiRender::CreateRsc(void)
 	prop.Type                 = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_DEFAULT;
 	prop.CPUPageProperty      = D3D12_CPU_PAGE_PROPERTY::D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
 	prop.MemoryPoolPreference = D3D12_MEMORY_POOL::D3D12_MEMORY_POOL_UNKNOWN;
-	prop.CreationNodeMask     = 1;
-	prop.VisibleNodeMask      = 1;
+	prop.CreationNodeMask     = 0;
+	prop.VisibleNodeMask      = 0;
 
 	////リソース設定用構造体
 	D3D12_RESOURCE_DESC desc = {};
@@ -70,13 +70,11 @@ long MultiRender::CreateRsc(void)
 	desc.Flags            = D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
 	desc.Layout           = D3D12_TEXTURE_LAYOUT::D3D12_TEXTURE_LAYOUT_UNKNOWN;
 
-	/*auto hr = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT, nullptr, IID_PPV_ARGS(&rsc));
+	auto hr = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT, nullptr, IID_PPV_ARGS(&rsc));
 	if (FAILED(hr))
 	{
 		OutputDebugString(_T("\nマルチレンダーのリソースの生成：失敗\n"));
-	}*/
-
-	auto hr = swap.lock()->Get()->GetBuffer(0, IID_PPV_ARGS(&rsc));
+	}
 
 	return hr;
 }
@@ -88,5 +86,5 @@ void MultiRender::SetRender(ID3D12DescriptorHeap & depth, const float * color)
 	list.lock()->GetList()->OMSetRenderTargets(1, &rtv->GetCPUDescriptorHandleForHeapStart(), false, &depth.GetCPUDescriptorHandleForHeapStart());
 
 	//レンダーターゲットのクリア
-	list.lock()->GetList()->ClearRenderTargetView(rtv->GetCPUDescriptorHandleForHeapStart(), color, 0, nullptr);
+	//list.lock()->GetList()->ClearRenderTargetView(rtv->GetCPUDescriptorHandleForHeapStart(), color, 0, nullptr);
 }

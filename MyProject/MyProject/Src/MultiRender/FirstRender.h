@@ -8,7 +8,7 @@ class FirstRender :
 {
 public:
 	// コンストラクタ
-	FirstRender(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Swap>swap, std::weak_ptr<Render>render,
+	FirstRender(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Render>render,
 		std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe);
 	// デストラクタ
 	~FirstRender();

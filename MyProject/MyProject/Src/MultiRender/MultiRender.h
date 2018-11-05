@@ -8,7 +8,6 @@ struct ID3D12Resource;
 
 class Device;
 class List;
-class Swap;
 class Render;
 class Root;
 class Pipe;
@@ -50,9 +49,6 @@ protected:
 
 	// コマンドりリスト
 	std::weak_ptr<List>list;
-
-	// スワップチェイン
-	std::weak_ptr<Swap>swap;
 
 	// レンダーターゲット
 	std::weak_ptr<Render>render;
