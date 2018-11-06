@@ -49,7 +49,7 @@ long Input::CreateDev(void)
 // キーフォーマットのセット
 long Input::SetKeyFormat(void)
 {
-	auto hr = dev->SetDataFormat(&keybord);
+	auto hr = dev->SetDataFormat(&c_dfDIKeyboard);
 	if (FAILED(hr))
 	{
 		OutputDebugString(_T("\nキーフォーマットのセット：失敗\n"));

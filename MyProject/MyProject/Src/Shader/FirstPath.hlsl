@@ -24,15 +24,15 @@ SamplerState smp : register(s0);
 struct Input
 {
     float4 pos : POSITION;
-    float2 uv : TEXCOORD;
+    float2 uv  : TEXCOORD;
 };
 
 // 出力
 struct Out
 {
     float4 svpos : SV_POSITION;
-    float4 pos : POSITION;
-    float2 uv : TEXCOORD;
+    float4 pos   : POSITION;
+    float2 uv    : TEXCOORD;
 };
 
 // 頂点シェーダ
@@ -41,8 +41,8 @@ Out VS(Input input)
 {
     Out o;
     o.svpos = input.pos;
-    o.pos = input.pos;
-    o.uv = input.uv;
+    o.pos   = input.pos;
+    o.uv    = input.uv;
 
     return o;
 }
@@ -50,6 +50,8 @@ Out VS(Input input)
 // ピクセルシェーダ
 float4 PS(Out o) : SV_TARGET
 {
+    return tex.Sample(smp, o.uv);
+    
     //画像サイズ
     float2 size = float2(0.0f, 0.0f);
     tex.GetDimensions(size.x, size.y);
@@ -75,5 +77,9 @@ float4 PS(Out o) : SV_TARGET
     ret += tex.Sample(smp, o.uv + float2( 0.0f             , -2.0f * adjacent.y)) / 9.0f;
 
     ret = ret * 2 - tex.Sample(smp, o.uv + float2(-adjacent.x, 0)) - tex.Sample(smp, o.uv + float2(adjacent.x, 0));
+
+    float color = dot(float3(0.298912f, 0.586611f, 0.114478f), 1 - ret.rgb);
+
+    return float4(color, color, color, 1);
 
 }
