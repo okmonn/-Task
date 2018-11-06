@@ -26,7 +26,7 @@
 
 //クリアカラー
 const FLOAT color[] = {
-	1.0f,
+	0.0f,
 	0.0f,
 	0.0f,
 	0.0f
@@ -75,6 +75,7 @@ void Union::CreateRoot(void)
 	drwRoot = std::make_shared<Root>(dev, L"Src/Shader/Draw.hlsl");
 	texRoot = std::make_shared<Root>(dev, L"Src/Shader/Texture.hlsl");
 	mdlRoot = std::make_shared<Root>(dev, L"Src/Shader/Model.hlsl");
+	fstRoot = std::make_shared<Root>(dev, L"Src/Shader/FirstPath.hlsl");
 }
 
 // パイプラインのインスタンス
@@ -107,6 +108,14 @@ void Union::CreatePipe(void)
 		};
 		mdlPipe->CreatePipe(*input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, true);
 	}
+
+	fstPipe = std::make_shared<Pipe>(dev, swap, fstRoot);
+	{
+		D3D12_INPUT_ELEMENT_DESC input[] = {
+			inputs[0], inputs[2]
+		};
+		fstPipe->CreatePipe(*input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+	}
 }
 
 // クラスのインスタンス
@@ -129,14 +138,14 @@ void Union::Start(void)
 
 	CreatePipe();
 
-	first = std::make_shared<FirstRender>(dev, list, ren, texRoot, texPipe);
-
 	pnt = std::make_shared<Point>(dev, list, con, drwRoot, pntPipe);
 	lin = std::make_shared<Line>(dev, list, con, drwRoot, linPipe);
 	tri = std::make_shared<Triangle>(dev, list, con, drwRoot, triPipe);
 	tex = std::make_shared<Texture>(dev, list, con, texRoot, texPipe);
 
 	model = std::make_shared<Model>(dev, list, con, mdlRoot, mdlPipe, tex);
+
+	first = std::make_shared<FirstRender>(dev, list, fstRoot, fstPipe);
 }
 
 // メッセージの確認
@@ -218,8 +227,8 @@ void Union::Attach(const std::string & fileName, int & i)
 	model->Attach(fileName, i);
 }
 
-// 描画準備
-void Union::Set(void)
+// 1番目のパスに描画
+void Union::FirstDraw(void)
 {
 	list->Reset(nullptr);
 
@@ -228,13 +237,19 @@ void Union::Set(void)
 	list->SetViewport();
 
 	list->SetScissor();
-	
+
 	dep->SetDepth();
 
 	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET,
-		swap, ren);
+		first);
 
-	ren->SetRender(*dep->GetHeap(), color);
+	first->SetRender(*dep->GetHeap(), color);
+}
+
+// 描画準備
+void Union::Set(void)
+{
+	FirstDraw();
 }
 
 // ポイント描画
@@ -328,17 +343,51 @@ void Union::Reset(void)
 	tri->Reset();
 }
 
-// 描画実行
-void Union::Do(void)
+// メインに描画
+void Union::MainDraw(void)
 {
-	Draw();
+	list->Reset(nullptr);
+
+	list->SetViewport();
+
+	list->SetScissor();
+
+	dep->SetDepth();
+
+	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET,
+		swap, ren);
+
+	ren->SetRender(*dep->GetHeap(), color);
+
+	first->Draw();
 
 	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT,
 		swap, ren);
 
 	list->Close();
 
-	//コマンド実行.
+	//コマンド実行
+	ID3D12CommandList* ppCmdLists[] = {
+		list->GetList(),
+	};
+	que->Execute(ppCmdLists, _countof(ppCmdLists));
+
+	swap->Present();
+
+	fen->Wait();
+}
+
+// 描画実行
+void Union::Do(void)
+{
+	Draw();
+
+	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT,
+		first);
+
+	list->Close();
+
+	//コマンド実行
 	ID3D12CommandList* ppCmdLists[] = {
 		list->GetList(),
 	};
@@ -346,9 +395,10 @@ void Union::Do(void)
 
 	Reset();
 
-	swap->Present();
-
 	fen->Wait();
+
+
+	MainDraw();
 }
 
 // サウンドの削除
@@ -372,9 +422,19 @@ void Union::DeleteMdl(int & i)
 // 終了
 void Union::End(void)
 {
+	first.reset();
+	model.reset();
 	pnt.reset();
+	lin.reset();
+	tri.reset();
+	fstPipe.reset();
+	mdlPipe.reset();
 	pntPipe.reset();
+	linPipe.reset();
+	triPipe.reset();
 	texPipe.reset();
+	fstRoot.reset();
+	mdlRoot.reset();
 	drwRoot.reset();
 	texRoot.reset();
 	con.reset();

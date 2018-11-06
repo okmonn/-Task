@@ -150,9 +150,9 @@ void Map::Load(const std::string & fileName, const std::string & type)
 					}
 				}
 				Vec2f rect = { (float)(CHIP_SIZE * (num - (num * cnt - map[type][x * CHIP_Y + y]) - 1)), (float)(CHIP_SIZE * (cnt - 1)) };
-				Vec2f pos  = { (float)(CHIP_SIZE * x), (float)(CHIP_SIZE * y) };
-				Vec2f size = (float)CHIP_SIZE;
-				chip[type].push_back(std::make_shared<Chip>(fileName, map[type][x * CHIP_Y + y], cam, rect, pos, size));
+				Vec2f pos  = { (float)(CHIP_SIZE * x) * cam.lock()->GetLarge(), (float)(CHIP_SIZE * y) * cam.lock()->GetLarge() };
+				Vec2f size = (float)CHIP_SIZE * cam.lock()->GetLarge();
+				chip[type].push_back(std::make_shared<Chip>(fileName, map[type][x * CHIP_Y + y], cam, rect, (float)CHIP_SIZE,  pos, size));
 			}
 		}
 	}

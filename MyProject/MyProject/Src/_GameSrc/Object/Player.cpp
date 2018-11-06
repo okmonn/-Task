@@ -30,10 +30,18 @@ void Player::UpData(void)
 {
 	if (func::CheckKey(INPUT_RIGHT))
 	{
-		pos.x += speed;
+		pos.x += speed * 2;
 	}
 	else if (func::CheckKey(INPUT_LEFT))
 	{
-		pos.x -= speed;
+		pos.x -= speed * 2;
+	}
+	else if (func::CheckKey(INPUT_UP))
+	{
+		pos.y -= speed * 2;
+	}
+	else if (func::CheckKey(INPUT_DOWN))
+	{
+		pos.y += speed * 2;
 	}
 }

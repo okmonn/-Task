@@ -1,7 +1,9 @@
 #pragma once
 #include <memory>
+#include <DirectXMath.h>
 
 enum D3D12_DESCRIPTOR_HEAP_TYPE : int;
+enum D3D12_DESCRIPTOR_HEAP_FLAGS : int;
 
 struct ID3D12DescriptorHeap;
 struct ID3D12Resource;
@@ -11,6 +13,16 @@ class List;
 class Render;
 class Root;
 class Pipe;
+
+namespace multi {
+	// 頂点
+	struct Vertex {
+		//座標
+		DirectX::XMFLOAT3 pos;
+		//uv
+		DirectX::XMFLOAT2 uv;
+	};
+}
 
 class MultiRender
 {
@@ -38,7 +50,7 @@ public:
 
 protected:
 	// ヒープの生成
-	long CreateHeap(ID3D12DescriptorHeap** heap, const D3D12_DESCRIPTOR_HEAP_TYPE& type);
+	long CreateHeap(ID3D12DescriptorHeap** heap, const D3D12_DESCRIPTOR_HEAP_TYPE& type, const D3D12_DESCRIPTOR_HEAP_FLAGS& flag);
 
 	// リソースの生成
 	long CreateRsc(void);
@@ -49,9 +61,6 @@ protected:
 
 	// コマンドりリスト
 	std::weak_ptr<List>list;
-
-	// レンダーターゲット
-	std::weak_ptr<Render>render;
 
 	// ルートシグネチャ
 	std::weak_ptr<Root>root;

@@ -1,5 +1,8 @@
 #pragma once
 #include "../etc/Vector2.h"
+#include <memory>
+
+class Camera;
 
 class Object
 {
@@ -31,6 +34,9 @@ public:
 	}
 
 protected:
+	// カメラ
+	std::weak_ptr<Camera>cam;
+
 	// 画像データ
 	int image;
 
@@ -39,4 +45,10 @@ protected:
 
 	// サイズ
 	Vec2f size;
+
+	// 切り取り座標
+	Vec2f rectPos;
+
+	// 切り取りサイズ
+	Vec2f rectSize;
 };

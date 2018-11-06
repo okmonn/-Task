@@ -2,7 +2,6 @@
 #include "../Device/Device.h"
 #include "../List/List.h"
 #include "../Swap/Swap.h"
-#include "../Render/Render.h"
 #include "../Root/Root.h"
 #include "../Pipe/Pipe.h"
 #include "../etc/Release.h"
@@ -11,13 +10,11 @@
 #define MAX 4  
 
 // コンストラクタ
-FirstRender::FirstRender(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Render>render,
-	std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe) : 
+FirstRender::FirstRender(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe) : 
 	vertex(nullptr), data(nullptr)
 {
 	this->dev = dev;
 	this->list = list;
-	this->render = render;
 	this->root = root;
 	this->pipe = pipe;
 
@@ -49,7 +46,7 @@ void FirstRender::Init(void)
 // レンダーターゲットビューの生成
 void FirstRender::CreateRtv(void)
 {
-	if (FAILED(CreateHeap(&rtv, D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_RTV)))
+	if (FAILED(CreateHeap(&rtv, D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_RTV, D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_NONE)))
 	{
 		return;
 	}
@@ -67,7 +64,7 @@ void FirstRender::CreateRtv(void)
 // シェーダーリソースビューの生成
 void FirstRender::CreateSrv(void)
 {
-	if (FAILED(CreateHeap(&srv, D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)))
+	if (FAILED(CreateHeap(&srv, D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE)))
 	{
 		return;
 	}
@@ -108,7 +105,7 @@ long FirstRender::CreateVertex(void)
 	desc.MipLevels          = 1;
 	desc.SampleDesc.Count   = 1;
 	desc.SampleDesc.Quality = 0;
-	desc.Width              = sizeof(tex::Vertex) * MAX;
+	desc.Width              = sizeof(multi::Vertex) * MAX;
 
 	auto hr = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertex));
 	if (FAILED(hr))
@@ -140,29 +137,23 @@ void FirstRender::Draw(void)
 
 	auto desc = rsc->GetDesc();
 
-	//UV座標
-	DirectX::XMFLOAT2 leftUp    = { 0.0f,                           0.0f };
-	DirectX::XMFLOAT2 rightUp   = { static_cast<FLOAT>(desc.Width), 0.0f };
-	DirectX::XMFLOAT2 leftDown  = { 0.0f,                           static_cast<FLOAT>(desc.Height) };
-	DirectX::XMFLOAT2 rightDown = { static_cast<FLOAT>(desc.Width), static_cast<FLOAT>(desc.Height) };
-
 	//左上
-	v[0] = { { 0.0f,                           0.0f,                            0.0f }, leftUp,    1.0f };
+	v[0] = { { -1.0f,  1.0f, 0.0f }, { 0.0f, 0.0f } };
 	//右上
-	v[1] = { { static_cast<FLOAT>(desc.Width), 0.0f,                            0.0f }, rightUp,   1.0f };
+	v[1] = { {  1.0f,  1.0f, 0.0f }, { 1.0f, 0.0f } };
 	//左下
-	v[2] = { { 0.0f,                           static_cast<FLOAT>(desc.Height), 0.0f }, leftDown,  1.0f };
+	v[2] = { { -1.0f, -1.0f, 0.0f }, { 0.0f, 1.0f } };
 	//右下
-	v[3] = { { static_cast<FLOAT>(desc.Width), static_cast<FLOAT>(desc.Height), 0.0f }, rightDown, 1.0f };
+	v[3] = { {  1.0f, -1.0f, 0.0f }, { 1.0f, 1.0f } };
 
 	//頂点データの更新
-	memcpy(data, v.data(), sizeof(tex::Vertex) * v.size());
+	memcpy(data, v.data(), sizeof(multi::Vertex) * v.size());
 
 	//頂点バッファ設定用構造体の設定
 	D3D12_VERTEX_BUFFER_VIEW view = {};
 	view.BufferLocation = vertex->GetGPUVirtualAddress();
-	view.SizeInBytes    = sizeof(tex::Vertex) * v.size();
-	view.StrideInBytes  = sizeof(tex::Vertex);
+	view.SizeInBytes    = sizeof(multi::Vertex) * v.size();
+	view.StrideInBytes  = sizeof(multi::Vertex);
 
 	//頂点バッファビューのセット
 	list.lock()->GetList()->IASetVertexBuffers(0, 1, &view);
@@ -179,19 +170,11 @@ void FirstRender::Draw(void)
 	box.right  = static_cast<UINT>(vertex->GetDesc().Width);
 	box.top = 0;
 
-	////サブリソースに書き込み
-	//auto hr = rsc->WriteToSubresource(0, &box, &rsc->, tex[&i].sub.lock()->RowPitch, tex[&i].sub.lock()->SlicePitch);
-	//if (FAILED(hr))
-	//{
-	//	OutputDebugString(_T("ファーストパス用テクスチャのサブリソース書込み：失敗\n"));
-	//	return ;
-	//}
-
 	//ヒープのセット
 	list.lock()->GetList()->SetDescriptorHeaps(1, &srv);
 
 	//ディスクラプターテーブルのセット
-	list.lock()->GetList()->SetGraphicsRootDescriptorTable(1, srv->GetGPUDescriptorHandleForHeapStart());
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(0, srv->GetGPUDescriptorHandleForHeapStart());
 
 
 	//描画

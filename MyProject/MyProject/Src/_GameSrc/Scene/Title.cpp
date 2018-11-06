@@ -30,7 +30,7 @@ void Title::Draw(void)
 // ˆ—
 void Title::UpData(void)
 {
-	cam->UpData({640 * 3, 480});
+	cam->UpData({640, 480});
 	pl->UpData();
 	if (func::CheckTriger(INPUT_RETURN))
 	{

@@ -254,6 +254,18 @@ void func::SetWindowSize(const unsigned int & x, const unsigned int & y)
 	Union::Get().SetWinSize(x, y);
 }
 
+// ウィンドウサイズXの取得
+float func::GetWinSizeX(void)
+{
+	return (float)Union::Get().GetWinX();
+}
+
+// ウィンドウサイズYの取得
+float func::GetWinSizeY(void)
+{
+	return (float)Union::Get().GetWinY();
+}
+
 // 初期化・スタート
 void func::Start(void)
 {

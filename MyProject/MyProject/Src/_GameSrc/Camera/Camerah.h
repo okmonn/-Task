@@ -25,6 +25,10 @@ public:
 	Vec2f GetPos(void) const {
 		return pos;
 	}
+	// Šg‘å—¦‚Ìæ“¾
+	float GetLarge(void) const {
+		return large;
+	}
 
 private:
 	// À•W‚Ì”äŠr
@@ -36,4 +40,7 @@ private:
 
 	// À•W
 	Vec2f pos;
+
+	// Šg‘å—¦
+	float large;
 };

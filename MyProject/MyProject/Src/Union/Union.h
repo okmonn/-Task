@@ -153,6 +153,12 @@ private:
 	// パイプラインのインスタンス
 	void CreatePipe(void);
 
+	// 1番目のパスに描画
+	void FirstDraw(void);
+
+	// メインに描画
+	void MainDraw(void);
+
 	// 描画
 	void Draw(void);
 
@@ -206,6 +212,7 @@ private:
 	std::shared_ptr<Root>drwRoot;
 	std::shared_ptr<Root>texRoot;
 	std::shared_ptr<Root>mdlRoot;
+	std::shared_ptr<Root>fstRoot;
 
 	// パイプライン
 	std::shared_ptr<Pipe>pntPipe;
@@ -213,9 +220,7 @@ private:
 	std::shared_ptr<Pipe>triPipe;
 	std::shared_ptr<Pipe>texPipe;
 	std::shared_ptr<Pipe>mdlPipe;
-
-	// マルチレンダー・1
-	std::shared_ptr<FirstRender>first;
+	std::shared_ptr<Pipe>fstPipe;
 
 	// ポイント
 	std::shared_ptr<Point>pnt;
@@ -231,4 +236,7 @@ private:
 
 	// モデル
 	std::shared_ptr<Model>model;
+
+	// マルチレンダー・1
+	std::shared_ptr<FirstRender>first;
 };

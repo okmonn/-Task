@@ -5,7 +5,7 @@
 Teach::Teach() : 
 	model(0), x(0.0f), y(10.0f), z(-15.0f)
 {
-	func::LoadPmd("Model/弱音ハク.pmd", model);
+	func::LoadPmd("Model/初音ミク.pmd", model);
 	func::Attach("ヤゴコロダンス.vmd", model);
 }
 

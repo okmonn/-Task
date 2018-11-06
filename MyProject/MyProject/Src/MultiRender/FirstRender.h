@@ -1,6 +1,5 @@
 #pragma once
 #include "MultiRender.h"
-#include "../etc/VertexData.h"
 #include <vector>
 
 class FirstRender :
@@ -8,8 +7,7 @@ class FirstRender :
 {
 public:
 	// コンストラクタ
-	FirstRender(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Render>render,
-		std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe);
+	FirstRender(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe);
 	// デストラクタ
 	~FirstRender();
 
@@ -37,7 +35,7 @@ private:
 	ID3D12Resource* vertex;
 
 	// 頂点
-	std::vector<tex::Vertex>v;
+	std::vector<multi::Vertex>v;
 
 	// 送信データ
 	unsigned int* data;

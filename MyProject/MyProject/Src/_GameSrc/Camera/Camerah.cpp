@@ -4,7 +4,7 @@
 
 // コンストラクタ
 Camera::Camera() : 
-	pos(0.0f)
+	pos(0.0f), large(3.0f)
 {
 }
 
@@ -30,7 +30,7 @@ void Camera::ComparisonPos(float & pos, const float & areaSize, const int & winS
 	}
 	else if (pos + size > areaSize)
 	{
-		pos = areaSize - size;
+		pos = (areaSize * large) - size;
 	}
 
 	if (pos < 0.0f)

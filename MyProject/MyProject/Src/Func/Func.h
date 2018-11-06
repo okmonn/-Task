@@ -44,6 +44,12 @@ namespace func {
 	// ウィンドウサイズのセット
 	void SetWindowSize(const unsigned int& x = 640, const unsigned int& y = 480);
 
+	// ウィンドウサイズXの取得
+	float GetWinSizeX(void);
+
+	// ウィンドウサイズYの取得
+	float GetWinSizeY(void);
+
 	// 初期化・スタート
 	void Start(void);
 

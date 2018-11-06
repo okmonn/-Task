@@ -335,8 +335,6 @@ void Model::Animation(int & i, const bool& loop, const float & animSpeed)
 		}
 	}
 
-	auto a = std::fmodf(pmd[&i].flam, (float)pmd[&i].motion.lock()->at("センター")[1].flam);
-
 	RecursiveBorn(&i, pmd[&i].node["センター"], pmd[&i].bornMtx[pmd[&i].node["センター"].index]);
 
 	memcpy(pmd[&i].b_data, pmd[&i].bornMtx.data(), ((sizeof(DirectX::XMMATRIX) * pmd[&i].born.lock()->size() + 0xff) &~0xff));
