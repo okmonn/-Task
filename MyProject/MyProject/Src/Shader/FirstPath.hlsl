@@ -50,5 +50,30 @@ Out VS(Input input)
 // ピクセルシェーダ
 float4 PS(Out o) : SV_TARGET
 {
-    return tex.Sample(smp, o.uv);
+    //画像サイズ
+    float2 size = float2(0.0f, 0.0f);
+    tex.GetDimensions(size.x, size.y);
+
+    //隣接するピクセル
+    float2 adjacent = float2(1.0f / size.x, 1.0f / size.y);
+
+    float4 ret = float4(0.0f, 0.0f, 0.0f, 0.0f);
+
+    //上のピクセル
+    ret += tex.Sample(smp, o.uv + float2(-2.0f * adjacent.x, 2.0f * adjacent.y))  / 9.0f;
+    ret += tex.Sample(smp, o.uv + float2( 2.0f * adjacent.x, 2.0f * adjacent.y))  / 9.0f;
+    ret += tex.Sample(smp, o.uv + float2(                 0, 2.0f * adjacent.y))  / 9.0f;
+ 
+    //真ん中のピクセル
+    ret += tex.Sample(smp, o.uv + float2(-2.0f * adjacent.x, 0.0f))               / 9.0f;
+    ret += tex.Sample(smp, o.uv)                                                  / 9.0f;
+    ret += tex.Sample(smp, o.uv + float2( 2.0f * adjacent.x, 0.0f))               / 9.0f;
+ 
+    //下のピクセル
+    ret += tex.Sample(smp, o.uv + float2(-2.0f * adjacent.x, -2.0f * adjacent.y)) / 9.0f;
+    ret += tex.Sample(smp, o.uv + float2( 2.0f * adjacent.x, -2.0f * adjacent.y)) / 9.0f;
+    ret += tex.Sample(smp, o.uv + float2( 0.0f             , -2.0f * adjacent.y)) / 9.0f;
+
+    ret = ret * 2 - tex.Sample(smp, o.uv + float2(-adjacent.x, 0)) - tex.Sample(smp, o.uv + float2(adjacent.x, 0));
+
 }

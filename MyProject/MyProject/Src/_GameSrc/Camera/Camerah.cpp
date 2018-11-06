@@ -28,7 +28,7 @@ void Camera::ComparisonPos(float & pos, const float & areaSize, const int & winS
 	{
 		pos = size;
 	}
-	else if (pos + size > areaSize)
+	else if (pos + size > areaSize * large)
 	{
 		pos = (areaSize * large) - size;
 	}
