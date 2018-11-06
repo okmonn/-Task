@@ -1,10 +1,6 @@
 #pragma once
 #include "Object.h"
 #include "../etc/Typedef.h"
-#include <memory>
-
-class Camera;
-
 
 class Character :
 	public Object
@@ -18,6 +14,9 @@ public:
 	// 描画
 	virtual void Draw(void) = 0;
 
+	// ステータスのセット
+	void SetState(const State& st);
+
 	// ステータスの取得
 	State GetSt(void) const {
 		return st;
@@ -28,9 +27,6 @@ public:
 	}
 
 protected:
-	// カメラ
-	std::weak_ptr<Camera>cam;
-
 	// アニメーション番号
 	int index;
 
@@ -40,11 +36,14 @@ protected:
 	// 移動速度
 	float speed;
 
+	// 反転フラグ
+	bool reverse;
+
 	// ローカル座標
 	Vec2f lpos;
 
-	// 切り取り矩形座標
-	Vec2f rect;
+	// 前の座標
+	Vec2f oldPos;
 
 	// ステータス
 	State st;

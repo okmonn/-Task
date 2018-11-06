@@ -366,36 +366,37 @@ void func::DrawBox(const float & x, const float & y, const float & sizeX, const 
 }
 
 // 画像の描画
-void func::DrawImg(int & i, const float & x, const float & y, const float & alpha, const int & turnX, const int & turnY)
+void func::DrawImg(int & i, const float & x, const float & y, const int & turnX, const int & turnY, const float& alpha)
 {
-	Union::Get().DrawImg(i, x, y, alpha, turnX, turnY);
+	Union::Get().DrawImg(i, x, y, turnX, turnY, alpha);
 }
 
 // 画像の描画・サイズ指定
-void func::DrawSizeImg(int & i, const float & x, const float & y, const float & sizeX, const float & sizeY, const float & alpha, const int & turnX, const int & turnY)
+void func::DrawSizeImg(int & i, const float & x, const float & y, const float & sizeX, const float & sizeY, const int & turnX, const int & turnY, const float & alpha)
 {
-	Union::Get().DrawSizeImg(i, x, y, sizeX, sizeY, alpha, turnX, turnY);
+	Union::Get().DrawSizeImg(i, x, y, sizeX, sizeY, turnX, turnY, alpha);
 }
 
 // 画像の描画・サイズ・範囲指定
 void func::DrawRectImg(int & i, const float & x, const float & y, const float & sizeX, const float & sizeY, 
-	const float & rectX, const float & rectY, const float & rectSizeX, const float & rectSizeY, const float & alpha, const int & turnX, const int & turnY)
+	const float & rectX, const float & rectY, const float & rectSizeX, const float & rectSizeY, const int & turnX, const int & turnY, const float & alpha)
 {
-	Union::Get().DrawRectImg(i, x, y, sizeX, sizeY, rectX, rectY, rectSizeX, rectSizeY, alpha, turnX, turnY);
+	Union::Get().DrawRectImg(i, x, y, sizeX, sizeY, rectX, rectY, rectSizeX, rectSizeY, turnX, turnY, alpha);
 }
 
 // 画像の描画・4点指定
 void func::DrawFreelyImg(int & i, const float & x1, const float & y1, const float & x2, const float & y2, 
-	const float & x3, const float & y3, const float & x4, const float & y4, const float & alpha, const int & turnX, const int & turnY)
+	const float & x3, const float & y3, const float & x4, const float & y4, const int & turnX, const int & turnY, const float & alpha)
 {
-	Union::Get().DrawFreelyImg(i, x1, y1, x2, y2, x3, y3, x4, y4, alpha, turnX, turnY);
+	Union::Get().DrawFreelyImg(i, x1, y1, x2, y2, x3, y3, x4, y4, turnX, turnY, alpha);
 }
 
 // 画像の描画・4点・範囲指定
 void func::DrawFreelyRectImg(int & i, const float & x1, const float & y1, const float & x2, const float & y2, const float & x3, const float & y3, 
-	const float & x4, const float & y4, const float & rectX, const float & rectY, const float & rectSizeX, const float & rectSizeY, const float & alpha, const int & turnX, const int & turnY)
+	const float & x4, const float & y4, const float & rectX, const float & rectY, const float & rectSizeX, const float & rectSizeY, 
+	const int & turnX, const int & turnY, const float & alpha)
 {
-	Union::Get().DrawFreelyRectImg(i, x1, y1, x2, y2, x3, y3, x4, y4, rectX, rectY, rectSizeX, rectSizeY, alpha, turnX, turnY);
+	Union::Get().DrawFreelyRectImg(i, x1, y1, x2, y2, x3, y3, x4, y4, rectX, rectY, rectSizeX, rectSizeY, turnX, turnY, alpha);
 }
 
 // PMDのアニメーション時間のリセット

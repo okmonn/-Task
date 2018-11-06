@@ -10,6 +10,6 @@ enum class State {
 	walk,
 	attack,
 	jump,
-	down,
+	crouch,
 	damage
 };

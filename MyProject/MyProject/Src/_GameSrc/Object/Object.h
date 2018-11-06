@@ -33,6 +33,11 @@ public:
 		this->size = size;
 	}
 
+	// ’†SÀ•W‚Ìæ“¾
+	Vec2f GetCenter(void) const {
+		return { pos.x + size.x / 2.0f, pos.y + size.y / 2.0f };
+	}
+
 protected:
 	// ƒJƒƒ‰
 	std::weak_ptr<Camera>cam;

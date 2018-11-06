@@ -102,23 +102,23 @@ namespace func {
 		const float& r, const float& g, const float& b, const float& alpha = 1.0f);
 
 	// 画像の描画
-	void DrawImg(int& i, const float& x, const float& y, const float& alpha = 1.0f, const int& turnX = 0, const int& turnY = 0);
+	void DrawImg(int& i, const float& x, const float& y, const int& turnX = 0, const int& turnY = 0, const float& alpha = 1.0f);
 
 	// 画像の描画・サイズ指定
 	void DrawSizeImg(int& i, const float& x, const float& y, const float& sizeX, const float& sizeY, 
-		const float& alpha = 1.0f, const int& turnX = 0, const int& turnY = 0);
+		const int& turnX = 0, const int& turnY = 0, const float& alpha = 1.0f);
 
 	// 画像の描画・サイズ・範囲指定
 	void DrawRectImg(int& i, const float& x, const float& y, const float& sizeX, const float& sizeY,
-		const float& rectX, const float& rectY, const float& rectSizeX, const float& rectSizeY, const float& alpha = 1.0f, const int& turnX = 0, const int& turnY = 0);
+		const float& rectX, const float& rectY, const float& rectSizeX, const float& rectSizeY, const int& turnX = 0, const int& turnY = 0, const float& alpha = 1.0f);
 
 	// 画像の描画・4点指定
 	void DrawFreelyImg(int & i, const float & x1, const float & y1, const float & x2, const float & y2,
-		const float & x3, const float & y3, const float & x4, const float & y4, const float & alpha = 1.0f, const int & turnX = 0, const int & turnY = 0);
+		const float & x3, const float & y3, const float & x4, const float & y4, const int & turnX = 0, const int & turnY = 0, const float & alpha = 1.0f);
 
 	// 画像の描画・4点・範囲指定
 	void DrawFreelyRectImg(int & i, const float & x1, const float & y1, const float & x2, const float & y2, const float & x3, const float & y3, const float & x4, const float & y4,
-		const float& rectX, const float& rectY, const float& rectSizeX, const float& rectSizeY, const float & alpha = 1.0f, const int & turnX = 0, const int & turnY = 0);
+		const float& rectX, const float& rectY, const float& rectSizeX, const float& rectSizeY, const int & turnX = 0, const int & turnY = 0, const float & alpha = 1.0f);
 
 	// PMDのアニメーション時間のリセット
 	void ResetAnim(int& i);

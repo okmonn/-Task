@@ -42,7 +42,7 @@ void Camera::ComparisonPos(float & pos, const float & areaSize, const int & winS
 // ˆ—
 void Camera::UpData(const Vec2f & area)
 {
-	pos = obj.lock()->GetPos() + (obj.lock()->GetSize() / 2.0f);
+	pos = obj.lock()->GetCenter();
 	ComparisonPos(pos.x, area.x, WINDOW_X);
 	ComparisonPos(pos.y, area.y, WINDOW_Y);
 }

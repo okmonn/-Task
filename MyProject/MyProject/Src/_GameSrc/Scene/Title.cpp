@@ -11,7 +11,7 @@ Title::Title()
 {
 	cam = std::make_shared<Camera>();
 	map = std::make_shared<Map>(cam);
-	pl = std::make_shared<Player>(cam);
+	pl = std::make_shared<Player>(cam, 0.0f);
 	cam->SetTarget(pl);
 }
 
