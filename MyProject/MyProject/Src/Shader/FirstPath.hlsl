@@ -47,9 +47,24 @@ Out VS(Input input)
     return o;
 }
 
+// 白黒
+float Mono(Out o)
+{
+    return dot(float3(0.298912f, 0.586611f, 0.114478f), tex.Sample(smp, o.uv).rgb);
+}
+
+// 反転
+float4 Reverse(Out o)
+{
+    return float4(1.0f - tex.Sample(smp, o.uv).rgb, tex.Sample(smp, o.uv).a);
+
+}
+
 // ピクセルシェーダ
 float4 PS(Out o) : SV_TARGET
 {
+    float b = Mono(o);
+    return float4(b, b, b, 1);
     return tex.Sample(smp, o.uv);
     
     //画像サイズ
