@@ -63,9 +63,9 @@ float4 Reverse(Out o)
 // ピクセルシェーダ
 float4 PS(Out o) : SV_TARGET
 {
-    float b = Mono(o);
-    return float4(b, b, b, 1);
-    return tex.Sample(smp, o.uv);
+    //float b = Mono(o);
+    //return float4(b, b, b, 1);
+    //return tex.Sample(smp, o.uv);
     
     //画像サイズ
     float2 size = float2(0.0f, 0.0f);
