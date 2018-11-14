@@ -43,4 +43,19 @@ namespace sound
 
 	// 波形データ　ステレオ
 	int LoadStereo(std::vector<float>&data, int bit, FILE* file);
+
+	// ログ関数
+	int Log(const int& bottom, const int& value);
+
+	// 高速フーリエ変換
+	void FFT(const std::vector<float>& waveData, std::vector<float>& real, std::vector<float>& imag, const int& size);
+
+	// ディレイ
+	void Delay(std::vector<float>& waveData, const float& attenuation, const float& delayTime, const int& loop, const int& sample = 44100);
+
+	// ディストーション
+	void Distortion(std::vector<float>& waveData, const float& gain, const float& level);
+
+	// リミッター
+	void Limiter(std::vector<float>& waveData);
 }

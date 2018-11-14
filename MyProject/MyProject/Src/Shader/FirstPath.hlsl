@@ -62,11 +62,7 @@ float4 Reverse(Out o)
 
 // ピクセルシェーダ
 float4 PS(Out o) : SV_TARGET
-{
-    //float b = Mono(o);
-    //return float4(b, b, b, 1);
-    //return tex.Sample(smp, o.uv);
-    
+{ 
     //画像サイズ
     float2 size = float2(0.0f, 0.0f);
     tex.GetDimensions(size.x, size.y);
@@ -91,10 +87,10 @@ float4 PS(Out o) : SV_TARGET
     ret += tex.Sample(smp, o.uv + float2( 2.0f * adjacent.x, -2.0f * adjacent.y)) / 9.0f;
     ret += tex.Sample(smp, o.uv + float2( 0.0f             , -2.0f * adjacent.y)) / 9.0f;
 
-    ret = ret * 2 - tex.Sample(smp, o.uv + float2(-adjacent.x, 0)) - tex.Sample(smp, o.uv + float2(adjacent.x, 0));
+    //ret = ret * 2 - tex.Sample(smp, o.uv + float2(-adjacent.x, 0)) - tex.Sample(smp, o.uv + float2(adjacent.x, 0));
 
-    float color = dot(float3(0.298912f, 0.586611f, 0.114478f), 1 - ret.rgb);
+    //float color = dot(float3(0.298912f, 0.586611f, 0.114478f), ret.rgb);
 
-    return float4(color, color, color, 1);
+    return float4(ret.r, ret.g, ret.b, 1);
 
 }

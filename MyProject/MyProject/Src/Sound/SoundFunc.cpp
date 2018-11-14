@@ -277,3 +277,130 @@ int sound::LoadStereo(std::vector<float>& data, int bit, FILE * file)
 
 	return flag;
 }
+
+// ログ関数
+int sound::Log(const int & bottom, const int & value)
+{
+	return (int)(log(value) / log(bottom));
+}
+
+#define PI 3.14159265f
+
+// 高速フーリエ変換
+void sound::FFT(const std::vector<float>& waveData, std::vector<float>& real, std::vector<float>& imag, const int & size)
+{
+	real.resize(size);
+	imag.resize(size);
+
+	auto stage = sound::Log(2, size);
+
+	//ダミー宣言
+	int tmp1, tmp2, tmp3;
+	float real1, real2, real3;
+	float imag1, imag2, imag3;
+	std::vector<int>index(size, 0);
+
+	for (int s = 1; s <= stage; ++s)
+	{
+		for (int i = 0; i < pow(2, s - 1); ++i)
+		{
+			index[(int)pow(2, s - 1) + i] = index[i] + (int)pow(2, stage - s);
+
+			for (int n = 0; n < pow(2, stage - s); ++n)
+			{
+				tmp1 = (int)pow(2, stage - s + 1) * i + n;
+				tmp2 = (int)pow(2, stage - s) + tmp1;
+				tmp3 = (int)pow(2, s - 1) * n;
+
+				real1 = waveData[tmp1];
+				real2 = waveData[tmp2];
+				real3 = cosf((2.0f * PI * tmp3) / size);
+
+				imag1 = 0.0f;
+				imag2 = 0.0f;
+				imag3 = -sinf((2.0f * PI * tmp3) / size);
+
+				if (s < stage)
+				{
+					real[tmp1] = real1 + real2;
+					real[tmp2] = (real1 - real2) * real3;
+
+					imag[tmp1] = imag1 + imag2;
+					imag[tmp2] = (imag1 - imag2) * real3;
+				}
+				else
+				{
+					real[tmp1] = real1 + real2;
+					real[tmp2] = real1 - real2;
+
+					imag[tmp1] = imag1 + imag2;
+					imag[tmp2] = imag1 - imag2;
+				}
+			}
+		}
+	}
+
+	float r_dummy;
+	float i_dummy;
+
+	//インデックスの並び替え
+	for (int i = 0; i < size; ++i)
+	{
+		if (index[i] > i)
+		{
+			r_dummy = real[index[i]];
+			i_dummy = imag[index[i]];
+
+			real[index[i]] = real[i];
+			imag[index[i]] = imag[i];
+
+			real[i] = r_dummy;
+			imag[i] = i_dummy;
+		}
+	}
+}
+
+// ディレイ
+void sound::Delay(std::vector<float> & waveData, const float & attenuation, const float & delayTime, const int & loop, const int & sample)
+{
+	float back;
+	float tmp;
+
+	for (unsigned int i = 0; i < waveData.size(); ++i)
+	{
+		back = waveData[i];
+		for (int n = 1; n <= loop; ++n)
+		{
+			tmp = i - n * (sample * delayTime);
+			waveData[i] += (tmp >= 0.0f) ? powf(2.0f, (float)n) * back : 0.0f;
+
+			//クリッピング
+			if (waveData[i] > 1.0f)
+			{
+				waveData[i] = 1.0f;
+			}
+		}
+	}
+}
+
+// ディストーション
+void sound::Distortion(std::vector<float>& waveData, const float & gain, const float & level)
+{
+	for (unsigned int i = 0; i < waveData.size(); ++i)
+	{
+		waveData[i] *= gain;
+
+		//クリッピング
+		if (waveData[i] > 1.0f)
+		{
+			waveData[i] = 1.0f;
+		}
+		else if (waveData[i] < -1.0f)
+		{
+			waveData[i] = -1.0f;
+		}
+
+		//音量調節
+		waveData[i] *= level;
+	}
+}
