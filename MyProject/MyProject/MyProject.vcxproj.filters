@@ -483,5 +483,8 @@
     <FxCompile Include="Src\Shader\FirstPath.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
+    <FxCompile Include="Src\Shader\DFT.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
