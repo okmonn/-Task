@@ -145,7 +145,7 @@ void Union::Start(void)
 
 	model = std::make_shared<Model>(dev, list, con, mdlRoot, mdlPipe, tex);
 
-	first = std::make_shared<FirstRender>(dev, list, fstRoot, fstPipe);
+	first = std::make_shared<FirstRender>(dev, list, dep, fstRoot, fstPipe);
 }
 
 // メッセージの確認

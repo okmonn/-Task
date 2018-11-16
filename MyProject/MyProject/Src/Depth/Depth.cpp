@@ -9,7 +9,7 @@
 
 // コンストラクタ
 Depth::Depth(std::weak_ptr<Device>dev, std::weak_ptr<List>list) :
-	un(Union::Get()), dev(dev), list(list), heap(nullptr), rsc(nullptr)
+	un(Union::Get()), dev(dev), list(list), heap(nullptr), srv(nullptr), rsc(nullptr)
 {
 	Init();
 }
@@ -19,6 +19,7 @@ Depth::~Depth()
 {
 	Release(rsc);
 	Release(heap);
+	Release(srv);
 }
 
 // ヒープの生成
@@ -32,6 +33,24 @@ long Depth::CreateHeap(void)
 	desc.Type           = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
 
 	auto hr = dev.lock()->Get()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&heap));
+	if (FAILED(hr))
+	{
+		OutputDebugString(_T("\n深度ステンシル用ヒープの生成：失敗\n"));
+	}
+
+	return hr;
+}
+
+// SRVヒープの生成
+long Depth::CreateSrvHeap(void)
+{
+	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
+	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	desc.NodeMask = 0;
+	desc.NumDescriptors = RSC_MAX;
+	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+
+	auto hr = dev.lock()->Get()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&srv));
 	if (FAILED(hr))
 	{
 		OutputDebugString(_T("\n深度ステンシル用ヒープの生成：失敗\n"));
@@ -94,12 +113,28 @@ void Depth::CreateView(void)
 	dev.lock()->Get()->CreateDepthStencilView(rsc, &desc, heap->GetCPUDescriptorHandleForHeapStart());
 }
 
+// SRVビューの生成
+void Depth::CreateSrvView(void)
+{
+	//シェーダリソースビュー設定用構造体
+	D3D12_SHADER_RESOURCE_VIEW_DESC desc = {};
+	desc.Format = DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT;
+	desc.ViewDimension = D3D12_SRV_DIMENSION::D3D12_SRV_DIMENSION_TEXTURE2D;
+	desc.Texture2D.MipLevels = 1;
+	desc.Texture2D.MostDetailedMip = 0;
+	desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+	dev.lock()->Get()->CreateShaderResourceView(rsc, &desc, srv->GetCPUDescriptorHandleForHeapStart());
+}
+
 // 初期化
 void Depth::Init(void)
 {
 	CreateHeap();
+	CreateSrvHeap();
 	CreateRsc();
 	CreateView();
+	CreateSrvView();
 }
 
 // 深度ステンシルのセット

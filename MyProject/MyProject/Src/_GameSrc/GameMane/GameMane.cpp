@@ -1,5 +1,5 @@
 #include "GameMane.h"
-#include "../Scene/Title.h"
+#include "../Scene/Teach.h"
 #include "../../Func/Func.h"
 
 // ウィンドウサイズ
@@ -28,7 +28,7 @@ void GameMane::Init(void)
 	func::SetWindowSize(WINDOW_X, WINDOW_Y);
 	func::Start();
 
-	ChangeScene(new Title());
+	ChangeScene(new Teach());
 }
 
 // 描画

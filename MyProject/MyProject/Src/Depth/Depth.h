@@ -23,6 +23,9 @@ public:
 	ID3D12DescriptorHeap* GetHeap(void) const {
 		return heap;
 	}
+	ID3D12DescriptorHeap* GetSrvHeap(void) const {
+		return srv;
+	}
 	// リソースの取得
 	ID3D12Resource* GetRsc(void) const {
 		return rsc;
@@ -32,11 +35,17 @@ private:
 	// ヒープの生成
 	long CreateHeap(void);
 
+	// SRVヒープの生成
+	long CreateSrvHeap(void);
+
 	// リソースの生成
 	long CreateRsc(void);
 
 	// リソースビューの生成
 	void CreateView(void);
+
+	// SRVビューの生成
+	void CreateSrvView(void);
 
 	// 初期化
 	void Init(void);
@@ -53,6 +62,9 @@ private:
 
 	// ヒープ
 	ID3D12DescriptorHeap* heap;
+
+	// SRVヒープ
+	ID3D12DescriptorHeap* srv;
 
 	// リソース
 	ID3D12Resource* rsc;

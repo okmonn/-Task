@@ -2,6 +2,7 @@
 #include "../Device/Device.h"
 #include "../List/List.h"
 #include "../Swap/Swap.h"
+#include "../Depth/Depth.h"
 #include "../Root/Root.h"
 #include "../Pipe/Pipe.h"
 #include "../etc/Release.h"
@@ -10,8 +11,8 @@
 #define MAX 4  
 
 // コンストラクタ
-FirstRender::FirstRender(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe) : 
-	vertex(nullptr), data(nullptr)
+FirstRender::FirstRender(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Depth>dep, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe) :
+	vertex(nullptr), data(nullptr), dep(dep)
 {
 	this->dev = dev;
 	this->list = list;
@@ -176,6 +177,9 @@ void FirstRender::Draw(void)
 	//ディスクラプターテーブルのセット
 	list.lock()->GetList()->SetGraphicsRootDescriptorTable(0, srv->GetGPUDescriptorHandleForHeapStart());
 
+	/*auto d = dep.lock()->GetSrvHeap();
+	list.lock()->GetList()->SetDescriptorHeaps(1, &d);
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(1, d->GetGPUDescriptorHandleForHeapStart());*/
 
 	//描画
 	list.lock()->GetList()->DrawInstanced(v.size(), 1, 0, 0);
