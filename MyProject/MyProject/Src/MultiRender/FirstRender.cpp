@@ -177,10 +177,16 @@ void FirstRender::Draw(void)
 	//ディスクラプターテーブルのセット
 	list.lock()->GetList()->SetGraphicsRootDescriptorTable(0, srv->GetGPUDescriptorHandleForHeapStart());
 
-	/*auto d = dep.lock()->GetSrvHeap();
+	list.lock()->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ,
+		dep.lock()->GetRsc());
+
+	auto d = dep.lock()->GetSrvHeap();
 	list.lock()->GetList()->SetDescriptorHeaps(1, &d);
-	list.lock()->GetList()->SetGraphicsRootDescriptorTable(1, d->GetGPUDescriptorHandleForHeapStart());*/
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(1, d->GetGPUDescriptorHandleForHeapStart());
 
 	//描画
 	list.lock()->GetList()->DrawInstanced(v.size(), 1, 0, 0);
+
+	list.lock()->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_DEPTH_WRITE,
+		dep.lock()->GetRsc());
 }

@@ -156,6 +156,8 @@
     <ClCompile Include="Src\Network\Sock.cpp" />
     <ClCompile Include="Src\Pipe\Pipe.cpp" />
     <ClCompile Include="Src\Point\Point.cpp" />
+    <ClCompile Include="Src\Primitive\Plane.cpp" />
+    <ClCompile Include="Src\Primitive\Primitive.cpp" />
     <ClCompile Include="Src\Queue\Queue.cpp" />
     <ClCompile Include="Src\Render\Render.cpp" />
     <ClCompile Include="Src\Root\Root.cpp" />
@@ -206,6 +208,8 @@
     <ClInclude Include="Src\Network\Sock.h" />
     <ClInclude Include="Src\Pipe\Pipe.h" />
     <ClInclude Include="Src\Point\Point.h" />
+    <ClInclude Include="Src\Primitive\Plane.h" />
+    <ClInclude Include="Src\Primitive\Primitive.h" />
     <ClInclude Include="Src\Queue\Queue.h" />
     <ClInclude Include="Src\Render\Render.h" />
     <ClInclude Include="Src\Root\Root.h" />
@@ -309,6 +313,28 @@
       </EntryPointName>
     </FxCompile>
     <FxCompile Include="Src\Shader\Model.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.1</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.1</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.1</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.1</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Src\Shader\Primitive.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.1</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>

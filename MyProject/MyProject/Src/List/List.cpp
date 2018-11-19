@@ -126,6 +126,21 @@ void List::SetBarrier(const D3D12_RESOURCE_STATES & befor, const D3D12_RESOURCE_
 	list->ResourceBarrier(1, &barrier);
 }
 
+// バリアのセット
+void List::SetBarrier(const D3D12_RESOURCE_STATES & befor, const D3D12_RESOURCE_STATES & affter, ID3D12Resource * rsc)
+{
+	//バリアの設定
+	D3D12_RESOURCE_BARRIER barrier = {};
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE::D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrier.Transition.pResource = rsc;
+	barrier.Transition.StateBefore = befor;
+	barrier.Transition.StateAfter = affter;
+	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_FLAGS::D3D12_RESOURCE_BARRIER_FLAG_NONE;
+
+	list->ResourceBarrier(1, &barrier);
+}
+
 // コマンドを閉じる
 void List::Close(void)
 {

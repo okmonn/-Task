@@ -163,6 +163,12 @@
     <Filter Include="Game\Object\Player">
       <UniqueIdentifier>{3be5397e-1936-462f-80eb-6b11987969a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dx12\Primitive">
+      <UniqueIdentifier>{04bfedd5-1579-4e9a-8f4e-f3eb8cee5afc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dx12\Primitive\Plane">
+      <UniqueIdentifier>{351a0d52-d5c9-41b6-9616-6ce995917338}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -293,6 +299,12 @@
     </ClCompile>
     <ClCompile Include="Src\_GameSrc\Object\Player.cpp">
       <Filter>Game\Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Primitive\Primitive.cpp">
+      <Filter>Dx12\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Primitive\Plane.cpp">
+      <Filter>Dx12\Primitive\Plane</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -464,6 +476,12 @@
     <ClInclude Include="Src\_GameSrc\Object\Player.h">
       <Filter>Game\Object\Player</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Primitive\Primitive.h">
+      <Filter>Dx12\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Primitive\Plane.h">
+      <Filter>Dx12\Primitive\Plane</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Src\Window\Icon\Icon.rc">
@@ -484,6 +502,9 @@
       <Filter>リソース ファイル</Filter>
     </FxCompile>
     <FxCompile Include="Src\Shader\DFT.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Src\Shader\Primitive.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
   </ItemGroup>

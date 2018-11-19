@@ -21,6 +21,7 @@ class Point;
 class Line;
 class Triangle;
 class Texture;
+class Plane;
 class Model;
 
 class Union
@@ -211,6 +212,7 @@ private:
 	// ルートシグネチャ
 	std::shared_ptr<Root>drwRoot;
 	std::shared_ptr<Root>texRoot;
+	std::shared_ptr<Root>pmtRoot;
 	std::shared_ptr<Root>mdlRoot;
 	std::shared_ptr<Root>fstRoot;
 
@@ -219,6 +221,7 @@ private:
 	std::shared_ptr<Pipe>linPipe;
 	std::shared_ptr<Pipe>triPipe;
 	std::shared_ptr<Pipe>texPipe;
+	std::shared_ptr<Pipe>pmtPipe;
 	std::shared_ptr<Pipe>mdlPipe;
 	std::shared_ptr<Pipe>fstPipe;
 
@@ -233,6 +236,9 @@ private:
 
 	// テクスチャ
 	std::shared_ptr<Texture>tex;
+
+	// 床
+	std::shared_ptr<Plane>plane;
 
 	// モデル
 	std::shared_ptr<Model>model;

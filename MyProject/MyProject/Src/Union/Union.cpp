@@ -19,6 +19,7 @@
 #include "../Line/Line.h"
 #include "../Triangle/Triangle.h"
 #include "../Texture/Texture.h"
+#include "../Primitive/Plane.h"
 #include "../Model/Model.h"
 #include "../etc/Release.h"
 
@@ -74,6 +75,7 @@ void Union::CreateRoot(void)
 {
 	drwRoot = std::make_shared<Root>(dev, L"Src/Shader/Draw.hlsl");
 	texRoot = std::make_shared<Root>(dev, L"Src/Shader/Texture.hlsl");
+	pmtRoot = std::make_shared<Root>(dev, L"Src/Shader/Primitive.hlsl");
 	mdlRoot = std::make_shared<Root>(dev, L"Src/Shader/Model.hlsl");
 	fstRoot = std::make_shared<Root>(dev, L"Src/Shader/FirstPath.hlsl");
 }
@@ -91,6 +93,14 @@ void Union::CreatePipe(void)
 		pntPipe->CreatePipe(*input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT);
 		linPipe->CreatePipe(*input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE);
 		triPipe->CreatePipe(*input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+	}
+
+	pmtPipe = std::make_shared<Pipe>(dev, swap, pmtRoot);
+	{
+		D3D12_INPUT_ELEMENT_DESC input[] = {
+			inputs[0], inputs[1]
+		};
+		pmtPipe->CreatePipe(*input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	}
 
 	texPipe = std::make_shared<Pipe>(dev, swap, texRoot);
@@ -142,6 +152,8 @@ void Union::Start(void)
 	lin = std::make_shared<Line>(dev, list, con, drwRoot, linPipe);
 	tri = std::make_shared<Triangle>(dev, list, con, drwRoot, triPipe);
 	tex = std::make_shared<Texture>(dev, list, con, texRoot, texPipe);
+
+	plane = std::make_shared<Plane>(dev, list, con, pmtRoot, pmtPipe);
 
 	model = std::make_shared<Model>(dev, list, con, mdlRoot, mdlPipe, tex);
 
@@ -238,12 +250,14 @@ void Union::FirstDraw(void)
 
 	list->SetScissor();
 
-	dep->SetDepth();
-
 	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET,
 		first);
 
+	dep->SetDepth();
+
 	first->SetRender(*dep->GetHeap(), color);
+
+	plane->Draw();
 }
 
 // •`‰æ€”õ
@@ -354,10 +368,10 @@ void Union::MainDraw(void)
 
 	list->SetScissor();
 
-	dep->SetDepth();
-
 	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET,
 		swap, ren);
+
+	//dep->SetDepth();
 
 	ren->SetRender(*dep->GetHeap(), color);
 

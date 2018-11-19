@@ -65,8 +65,13 @@ float4 Reverse(Out o)
 
 // ピクセルシェーダ
 float4 PS(Out o) : SV_TARGET
-{ 
-    return depth.Sample(smp, o.uv);
+{
+    float tmp = pow(depth.Sample(smp, o.uv), 10);
+    if(o.uv.x < 0.5f)
+    {
+        return tmp;
+    }
+    
 
     //画像サイズ
     float2 size = float2(0.0f, 0.0f);

@@ -5,6 +5,7 @@ struct ID3D12CommandAllocator;
 struct ID3D12GraphicsCommandList;
 struct ID3D12RootSignature;
 struct ID3D12PipelineState;
+struct ID3D12Resource;
 
 enum D3D12_RESOURCE_STATES : int;
 
@@ -42,6 +43,9 @@ public:
 
 	// バリアのセット
 	void SetBarrier(const D3D12_RESOURCE_STATES& befor, const D3D12_RESOURCE_STATES& affter, std::weak_ptr<MultiRender>multi);
+
+	// バリアのセット
+	void SetBarrier(const D3D12_RESOURCE_STATES& befor, const D3D12_RESOURCE_STATES& affter, ID3D12Resource* rsc);
 
 	// コマンドを閉じる
 	void Close(void);
