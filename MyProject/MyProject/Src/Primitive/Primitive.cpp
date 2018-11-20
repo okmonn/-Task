@@ -22,10 +22,10 @@ Primitive::~Primitive()
 void Primitive::SetVertex(const DirectX::XMFLOAT3 & pos, const DirectX::XMFLOAT3& size)
 {
 	vertex.resize(4);
-	vertex[0] = { {pos.x,          pos.y,          pos.z },          {0,1,0} };
-	vertex[1] = { {pos.x + size.x, pos.y,          pos.z },         {0,1,0} };
-	vertex[2] = { {pos.x,          pos.y + size.y, pos.z + size.z}, {0,1,0} };
-	vertex[3] = { {pos.x + size.x, pos.y + size.y, pos.z + size.z}, {0,1,0} };
+	vertex[0] = { {pos.x,          pos.y,          pos.z },         {0,1,0} , {0,0} };
+	vertex[1] = { {pos.x + size.x, pos.y,          pos.z },         {0,1,0} ,{1,0} };
+	vertex[2] = { {pos.x,          pos.y + size.y, pos.z + size.z}, {0,1,0} , {0,1} };
+	vertex[3] = { {pos.x + size.x, pos.y + size.y, pos.z + size.z}, {0,1,0} , {1,1} };
 }
 
 // ÉäÉ\Å[ÉXÇÃê∂ê¨

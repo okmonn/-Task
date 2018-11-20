@@ -30,6 +30,12 @@ public:
 	ID3D12Resource* GetRsc(void) const {
 		return rsc;
 	}
+	ID3D12DescriptorHeap* GetShadowHeap(void) const {
+		return shadowHeap;
+	}
+	ID3D12Resource* GetShadowRsc(void) const {
+		return shadowRsc;
+	}
 
 private:
 	// ヒープの生成
@@ -38,8 +44,14 @@ private:
 	// SRVヒープの生成
 	long CreateSrvHeap(void);
 
+	// シャドウヒープの生成
+	long CreateShadowHeap(void);
+
 	// リソースの生成
 	long CreateRsc(void);
+
+	// シャドウリソースの生成
+	long CreateShadowRsc(void);
 
 	// リソースビューの生成
 	void CreateView(void);
@@ -68,4 +80,10 @@ private:
 
 	// リソース
 	ID3D12Resource* rsc;
+
+	// シャドウヒープ
+	ID3D12DescriptorHeap* shadowHeap;
+
+	// シャドウリソース
+	ID3D12Resource* shadowRsc;
 };

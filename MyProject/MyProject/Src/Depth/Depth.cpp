@@ -59,6 +59,24 @@ long Depth::CreateSrvHeap(void)
 	return hr;
 }
 
+// シャドウヒープの生成
+long Depth::CreateShadowHeap(void)
+{
+	D3D12_DESCRIPTOR_HEAP_DESC desc{};
+	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	desc.NodeMask = 0;
+	desc.NumDescriptors = 1;
+	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+
+	auto hr = dev.lock()->Get()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&shadowHeap));
+	if (FAILED(hr))
+	{
+		OutputDebugString(_T("\nシャドウヒープの生成：失敗\n"));
+	}
+
+	return hr;
+}
+
 // リソースの生成
 long Depth::CreateRsc(void)
 {
@@ -99,6 +117,51 @@ long Depth::CreateRsc(void)
 	return hr;
 }
 
+// シャドウリソースの生成
+long Depth::CreateShadowRsc(void)
+{
+	float size = max(un.GetWinX(), un.GetWinY());
+	size = std::ceilf(log2f(size));
+	size = std::powf(2.0f, size);
+	
+	//プロパティ設定用構造体の設定
+	D3D12_HEAP_PROPERTIES prop = {};
+	prop.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY::D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+	prop.CreationNodeMask = 0;
+	prop.MemoryPoolPreference = D3D12_MEMORY_POOL::D3D12_MEMORY_POOL_UNKNOWN;
+	prop.Type = D3D12_HEAP_TYPE::D3D12_HEAP_TYPE_DEFAULT;
+	prop.VisibleNodeMask = 0;
+
+	//リソース設定用構造体の設定
+	D3D12_RESOURCE_DESC desc = {};
+	desc.Alignment = 0;
+	desc.DepthOrArraySize = 1;
+	desc.Dimension = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	desc.Flags = D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+	desc.Format = DXGI_FORMAT::DXGI_FORMAT_R32_TYPELESS;
+	desc.Height = size;
+	desc.Layout = D3D12_TEXTURE_LAYOUT::D3D12_TEXTURE_LAYOUT_UNKNOWN;
+	desc.MipLevels = 0;
+	desc.SampleDesc.Count = 1;
+	desc.SampleDesc.Quality = 0;
+	desc.Width = size;
+
+	//クリア値設定用構造体の設定
+	D3D12_CLEAR_VALUE clear = {};
+	clear.DepthStencil.Depth = 1.0f;
+	clear.DepthStencil.Stencil = 0;
+	clear.Format = DXGI_FORMAT::DXGI_FORMAT_D32_FLOAT;
+
+	auto hr = dev.lock()->Get()->CreateCommittedResource(&prop, D3D12_HEAP_FLAGS::D3D12_HEAP_FLAG_NONE,
+		&desc, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_DEPTH_WRITE, &clear, IID_PPV_ARGS(&shadowRsc));
+	if (FAILED(hr))
+	{
+		OutputDebugString(_T("\nシャドウリソースの生成：失敗\n"));
+	}
+
+	return hr;
+}
+
 // リソースビューの生成
 void Depth::CreateView(void)
 {
@@ -132,7 +195,9 @@ void Depth::Init(void)
 {
 	CreateHeap();
 	CreateSrvHeap();
+	CreateShadowHeap();
 	CreateRsc();
+	CreateShadowRsc();
 	CreateView();
 	CreateSrvView();
 }

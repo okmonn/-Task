@@ -37,6 +37,7 @@ struct Input
     float4 pos   : POSITION;
     //法線
     float3 normal : NORMAL;
+    float2 uv : TEXCOORD;
 };
 
 // 出力
@@ -46,6 +47,7 @@ struct Out
     float4 pos   : POSITION;
    //法線
     float3 normal : NORMAL;
+    float2 uv : TEXCOORD;
 };
 
 // 頂点シェーダ
@@ -62,6 +64,7 @@ Out VS(Input input)
     o.svpos = input.pos;
     o.pos   = input.pos;
     o.normal = input.normal;
+    o.uv = input.uv;
 
     return o;
 }
