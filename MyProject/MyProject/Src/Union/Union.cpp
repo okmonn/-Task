@@ -98,7 +98,7 @@ void Union::CreatePipe(void)
 	pmtPipe = std::make_shared<Pipe>(dev, swap, pmtRoot);
 	{
 		D3D12_INPUT_ELEMENT_DESC input[] = {
-			inputs[0], inputs[1]
+			inputs[0], inputs[1],inputs[2]
 		};
 		pmtPipe->CreatePipe(*input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	}
