@@ -17,6 +17,8 @@ class Constant
 		DirectX::XMFLOAT4X4 world;
 		DirectX::XMFLOAT4X4 view;
 		DirectX::XMFLOAT4X4 projection;
+		DirectX::XMFLOAT4X4 light;
+		DirectX::XMFLOAT4 eye;
 		DirectX::XMFLOAT2   winSize;
 	};
 

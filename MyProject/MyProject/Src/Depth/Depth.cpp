@@ -5,7 +5,7 @@
 #include "../etc/Release.h"
 
 // リソース最大数
-#define RSC_MAX 1
+#define RSC_MAX 2
 
 // コンストラクタ
 Depth::Depth(std::weak_ptr<Device>dev, std::weak_ptr<List>list) :
@@ -18,7 +18,9 @@ Depth::Depth(std::weak_ptr<Device>dev, std::weak_ptr<List>list) :
 Depth::~Depth()
 {
 	Release(rsc);
+	Release(shadowRsc);
 	Release(heap);
+	Release(shadowHeap);
 	Release(srv);
 }
 
@@ -29,7 +31,7 @@ long Depth::CreateHeap(void)
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
 	desc.Flags          = D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	desc.NodeMask       = 0;
-	desc.NumDescriptors = RSC_MAX;
+	desc.NumDescriptors = 1;
 	desc.Type           = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
 
 	auto hr = dev.lock()->Get()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&heap));
@@ -63,10 +65,10 @@ long Depth::CreateSrvHeap(void)
 long Depth::CreateShadowHeap(void)
 {
 	D3D12_DESCRIPTOR_HEAP_DESC desc{};
-	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAGS::D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	desc.NodeMask = 0;
 	desc.NumDescriptors = 1;
-	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
 
 	auto hr = dev.lock()->Get()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&shadowHeap));
 	if (FAILED(hr))
@@ -120,7 +122,7 @@ long Depth::CreateRsc(void)
 // シャドウリソースの生成
 long Depth::CreateShadowRsc(void)
 {
-	float size = max(un.GetWinX(), un.GetWinY());
+	float size = (float)max(un.GetWinX(), un.GetWinY());
 	size = std::ceilf(log2f(size));
 	size = std::powf(2.0f, size);
 	
@@ -139,12 +141,12 @@ long Depth::CreateShadowRsc(void)
 	desc.Dimension = D3D12_RESOURCE_DIMENSION::D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 	desc.Flags = D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 	desc.Format = DXGI_FORMAT::DXGI_FORMAT_R32_TYPELESS;
-	desc.Height = size;
+	desc.Height = (UINT)size;
 	desc.Layout = D3D12_TEXTURE_LAYOUT::D3D12_TEXTURE_LAYOUT_UNKNOWN;
 	desc.MipLevels = 0;
 	desc.SampleDesc.Count = 1;
 	desc.SampleDesc.Quality = 0;
-	desc.Width = size;
+	desc.Width = (UINT64)size;
 
 	//クリア値設定用構造体の設定
 	D3D12_CLEAR_VALUE clear = {};
@@ -176,6 +178,20 @@ void Depth::CreateView(void)
 	dev.lock()->Get()->CreateDepthStencilView(rsc, &desc, heap->GetCPUDescriptorHandleForHeapStart());
 }
 
+// シャドウリソースビューの生成
+void Depth::CreateShadowView(void)
+{
+	//深度ステンシルビュー設定用構造体の設定
+	D3D12_DEPTH_STENCIL_VIEW_DESC desc = {};
+	desc.Flags = D3D12_DSV_FLAGS::D3D12_DSV_FLAG_NONE;
+	desc.Format = DXGI_FORMAT::DXGI_FORMAT_D32_FLOAT;
+	desc.Texture2D.MipSlice = 0;
+	desc.ViewDimension = D3D12_DSV_DIMENSION::D3D12_DSV_DIMENSION_TEXTURE2D;
+
+	//深度ステンシルビュー生成
+	dev.lock()->Get()->CreateDepthStencilView(shadowRsc, &desc, shadowHeap->GetCPUDescriptorHandleForHeapStart());
+}
+
 // SRVビューの生成
 void Depth::CreateSrvView(void)
 {
@@ -190,6 +206,22 @@ void Depth::CreateSrvView(void)
 	dev.lock()->Get()->CreateShaderResourceView(rsc, &desc, srv->GetCPUDescriptorHandleForHeapStart());
 }
 
+// シャドウSRVの生成
+void Depth::CreateShadowSrv(void)
+{
+	//シェーダリソースビュー設定用構造体
+	D3D12_SHADER_RESOURCE_VIEW_DESC desc = {};
+	desc.Format = DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT;
+	desc.ViewDimension = D3D12_SRV_DIMENSION::D3D12_SRV_DIMENSION_TEXTURE2D;
+	desc.Texture2D.MipLevels = 1;
+	desc.Texture2D.MostDetailedMip = 0;
+	desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+	auto handle = srv->GetCPUDescriptorHandleForHeapStart();
+	handle.ptr += dev.lock()->Get()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	dev.lock()->Get()->CreateShaderResourceView(shadowRsc, &desc, handle);
+}
+
 // 初期化
 void Depth::Init(void)
 {
@@ -199,7 +231,9 @@ void Depth::Init(void)
 	CreateRsc();
 	CreateShadowRsc();
 	CreateView();
+	CreateShadowView();
 	CreateSrvView();
+	CreateShadowSrv();
 }
 
 // 深度ステンシルのセット

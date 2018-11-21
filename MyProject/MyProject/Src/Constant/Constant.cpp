@@ -42,6 +42,8 @@ void Constant::InitWvp(void)
 	DirectX::XMStoreFloat4x4(&wvp.projection, DirectX::XMMatrixPerspectiveFovLH(RAD(90.0f), (float)un.GetWinX() / (float)un.GetWinY(), 0.5f, 500.0f));
 	DirectX::XMStoreFloat4x4(&wvp.world, DirectX::XMMatrixIdentity());
 
+
+
 	wvp.winSize = { (float)un.GetWinX(), (float)un.GetWinY() };
 }
 

@@ -56,8 +56,14 @@ private:
 	// リソースビューの生成
 	void CreateView(void);
 
+	// シャドウリソースビューの生成
+	void CreateShadowView(void);
+
 	// SRVビューの生成
 	void CreateSrvView(void);
+
+	// シャドウSRVの生成
+	void CreateShadowSrv(void);
 
 	// 初期化
 	void Init(void);

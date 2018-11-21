@@ -44,6 +44,8 @@ cbuffer wvp : register(b0)
     float4x4 view;
     //プロジェクション行列
     float4x4 projection;
+    float4x4 light;
+    float4 eye;
      //ウィンドウサイズ
     float2 window;
 }
