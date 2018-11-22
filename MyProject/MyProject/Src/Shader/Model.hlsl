@@ -118,13 +118,12 @@ Out VS(VSInput input)
     matrix m = borns[input.born.x] * w + borns[input.born.y] * (1.0f - w);
 
     m = mul(world, m);
+    Out o;
+    o.svpos = mul(m, input.pos);
+ 
     m = mul(view, m);
     m = mul(projection, m);
-
     input.pos = mul(m, input.pos);
-
-    Out o;
-    o.svpos  = input.pos;
     o.pos    = input.pos;
     o.normal = mul(world, input.normal);
     o.uv     = input.uv;
