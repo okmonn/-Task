@@ -146,10 +146,13 @@ void Constant::ChangeWvp(const float & eyeX, const float & eyeY, const float & e
 	DirectX::XMStoreFloat4x4(&wvp.view, DirectX::XMMatrixLookAtLH(eye, tar, upr));
 
 	DirectX::XMFLOAT3 vec = { targetX - eyeX, targetY - eyeY, targetZ - eyeZ };
-	auto distance = 1.0f / std::sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
-	auto pos = DirectX::XMFLOAT3(-1 * distance, 10 * distance, -1 * distance);
+	auto distance = std::sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+	auto pos = DirectX::XMFLOAT3(-1 * distance, 10 * distance, -10 * distance);
 
-	DirectX::XMStoreFloat4x4(&wvp.light, DirectX::XMMatrixLookAtLH(DirectX::XMLoadFloat3(&pos), tar, upr) * DirectX::XMMatrixOrthographicLH(40, 40, 0.1f, 100.0f));
+	pos = DirectX::XMFLOAT3(0, 10, -10);
+
+	DirectX::XMStoreFloat4x4(&wvp.lightView, DirectX::XMMatrixLookAtLH(DirectX::XMLoadFloat3(&pos), tar, upr));
+	DirectX::XMStoreFloat4x4(&wvp.lightProjection, DirectX::XMMatrixOrthographicLH(40, 40, 0.1f, 100.0f));
 
 	wvp.eye = DirectX::XMFLOAT4(eyeX, eyeY, eyeZ, 1.0f);
 
