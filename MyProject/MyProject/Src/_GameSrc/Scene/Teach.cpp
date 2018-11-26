@@ -5,8 +5,8 @@
 Teach::Teach() : 
 	model(0), x(0.0f), y(10.0f), z(-15.0f)
 {
-	func::LoadPmd("Model/初音ミク.pmd", model);
-	func::Attach("ヤゴコロダンス.vmd", model);
+	/*func::LoadPmd("Model/初音ミク.pmd", model);
+	func::Attach("ヤゴコロダンス.vmd", model);*/
 }
 
 // デストラクタ
@@ -17,7 +17,7 @@ Teach::~Teach()
 // 描画
 void Teach::Draw(void)
 {
-	func::DrawPmd(model);
+	//func::DrawPmd(model);
 }
 
 // 処理
@@ -48,5 +48,5 @@ void Teach::UpData(void)
 	{
 		--z;
 	}
-	func::Animation(model, true);
+	//func::Animation(model, true);
 }

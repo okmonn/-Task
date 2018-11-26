@@ -277,7 +277,6 @@ void Union::FirstDraw(void)
 
 
 	model->Shadow(n, sdwRoot, sdwPipe);
-	//model->Draw(n);
 }
 
 // •`‰æ€”õ
@@ -391,13 +390,15 @@ void Union::MainDraw(void)
 	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET,
 		swap, ren);
 
-	//dep->SetDepth();
-
 	ren->SetRender(*dep->GetHeap(), color);
 
 	plane->Draw();
 
-	first->Draw();
+	dep->SetDepth();
+
+	model->Draw(n);
+
+	//first->Draw();
 
 	list->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_PRESENT,
 		swap, ren);
@@ -437,6 +438,8 @@ void Union::Do(void)
 
 
 	MainDraw();
+
+	model->Animation(n, true, 0.5f);
 }
 
 // ƒTƒEƒ“ƒh‚Ìíœ

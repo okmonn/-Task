@@ -519,6 +519,57 @@ void Model::Shadow(int & i, std::shared_ptr<Root>root, std::shared_ptr<Pipe>pipe
 		pmd[n].mat.specula = pmd[n].material.lock()->at(i).specula;
 		pmd[n].mat.mirror = pmd[n].material.lock()->at(i).mirror;
 
+		//sph
+		if (pmd[n].sph.lock()->find(i) != pmd[n].sph.lock()->end())
+		{
+			pmd[n].mat.sphFlag = TRUE;
+			tex.lock()->SetDraw(pmd[n].sph.lock()->at(i), 4);
+		}
+		else
+		{
+			tex.lock()->SetWhite();
+		}
+
+		//spa
+		if (pmd[n].spa.lock()->find(i) != pmd[n].spa.lock()->end())
+		{
+			pmd[n].mat.spaFlag = TRUE;
+			tex.lock()->SetDraw(pmd[n].spa.lock()->at(i), 5);
+		}
+		else
+		{
+			tex.lock()->SetBlack();
+		}
+
+		//通常テクスチャ
+		if (pmd[n].tex.lock()->find(i) != pmd[n].tex.lock()->end())
+		{
+			pmd[n].mat.texFlag = TRUE;
+			tex.lock()->SetDraw(pmd[n].tex.lock()->at(i));
+		}
+		else
+		{
+			tex.lock()->SetDraw(pmd[n].tex.lock()->begin()->second);
+		}
+
+		//トゥーンテクスチャ
+		if (pmd[n].toon.lock()->find(pmd[n].material.lock()->at(i).toonIndex) != pmd[n].toon.lock()->end())
+		{
+			tex.lock()->SetDraw(pmd[n].toon.lock()->at(pmd[n].material.lock()->at(i).toonIndex), 6);
+		}
+		else
+		{
+			tex.lock()->SetGrade();
+		}
+
+		//定数ヒープのセット
+		list.lock()->GetList()->SetDescriptorHeaps(1, &pmd[n].heap);
+		//ディスクリプターテーブルのセット
+		list.lock()->GetList()->SetGraphicsRootDescriptorTable(2, handle);
+
+		//コピー
+		memcpy(data, &pmd[n].mat, sizeof(pmd::Mat));
+
 		//描画
 		list.lock()->GetList()->DrawIndexedInstanced(pmd[n].material.lock()->at(i).indexNum, 1, offset, 0, 0);
 

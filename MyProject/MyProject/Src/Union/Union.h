@@ -249,4 +249,6 @@ private:
 
 	// マルチレンダー・1
 	std::shared_ptr<FirstRender>first;
+
+	int n;
 };

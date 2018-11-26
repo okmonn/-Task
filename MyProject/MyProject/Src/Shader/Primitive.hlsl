@@ -67,6 +67,7 @@ Out VS(Input input)
     input.pos = mul(view, input.pos);
     input.pos = mul(projection, input.pos);
     o.svpos = input.pos;
+    //o.pos = input.pos;
     o.normal = input.normal;
     o.uv = input.uv;
 
@@ -76,9 +77,13 @@ Out VS(Input input)
 // ピクセルシェーダ
 float4 PS(Out o) : SV_TARGET
 {
-    float2 uv = (float2(1, 1) + o.pos.xy * float2(1, -1)) * 0.5;
+    //return depth.Sample(smp, o.uv);
 
+    float2 pos = float2(normalize(o.pos.x), normalize(o.pos.y));
+    float2 uv = (float2(1, 1) + o.uv * float2(1, 1)) * float2(1.0f, 0.5f);
     float dep = depth.Sample(smp,uv);
+
+    return float4(dep,dep,dep, 1);
 
     float color = dep;
 

@@ -2,8 +2,18 @@
 #define RS "RootFlags(ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT),"\
                     "DescriptorTable(CBV(b0, numDescriptors = 1, space = 0, offset = DESCRIPTOR_RANGE_OFFSET_APPEND), "\
                                     "visibility = SHADER_VISIBILITY_VERTEX),"\
+                    "DescriptorTable(SRV(t0, numDescriptors = 1, space = 0, offset = DESCRIPTOR_RANGE_OFFSET_APPEND), "\
+                                    "visibility = SHADER_VISIBILITY_ALL),"\
                     "DescriptorTable(CBV(b1, numDescriptors = 1, space = 0, offset = DESCRIPTOR_RANGE_OFFSET_APPEND), "\
                                     "visibility = SHADER_VISIBILITY_ALL),"\
+                    "DescriptorTable(CBV(b2, numDescriptors = 1, space = 0, offset = DESCRIPTOR_RANGE_OFFSET_APPEND), "\
+                                    "visibility = SHADER_VISIBILITY_VERTEX),"\
+                    "DescriptorTable(SRV(t1, numDescriptors = 1, space = 0, offset = DESCRIPTOR_RANGE_OFFSET_APPEND), "\
+                                    "visibility = SHADER_VISIBILITY_ALL),"\
+                    "DescriptorTable(SRV(t2, numDescriptors = 1, space = 0, offset = DESCRIPTOR_RANGE_OFFSET_APPEND), "\
+                                    "visibility = SHADER_VISIBILITY_PIXEL),"\
+                    "DescriptorTable(SRV(t3, numDescriptors = 1, space = 0, offset = DESCRIPTOR_RANGE_OFFSET_APPEND), "\
+                                    "visibility = SHADER_VISIBILITY_PIXEL),"\
                     "StaticSampler(s0, "\
                                   "filter = FILTER_MIN_MAG_MIP_LINEAR, "\
                                   "addressU = TEXTURE_ADDRESS_CLAMP, "\
@@ -17,6 +27,11 @@
                                   "maxLOD = 3.402823466e+38f, "\
                                   "space = 0, "\
                                   "visibility = SHADER_VISIBILITY_ALL)"
+
+Texture2D<float4> tex : register(t0);
+Texture2D<float4> sph : register(t1);
+Texture2D<float4> spa : register(t2);
+Texture2D<float4> ton : register(t3);
 
 SamplerState smp : register(s0);
 
@@ -35,8 +50,29 @@ cbuffer wvp : register(b0)
     float2 window;
 }
 
+//マテリアル
+cbuffer mat : register(b1)
+{
+    //基本色
+    float3 diffuse;
+    //透明度
+    float alpha;
+    //反射強度
+    float specularity;
+	//反射色
+    float3 specula;
+    //環境色
+    float3 mirror;
+    //乗算テクスチャ対応フラグ
+    bool sphFlag;
+    //加算テクスチャ対応フラグ
+    bool spaFlag;
+    //テクスチャ対応フラグ
+    bool texFlag;
+}
+
 //ボーン
-cbuffer born : register(b1)
+cbuffer born : register(b2)
 {
     //ボーン
     matrix borns[256];
@@ -51,6 +87,8 @@ struct Out
     float4 pos : POSITION;
     //法線
     float3 normal : NORMAL;
+    //uv
+    float2 uv : TEXCOORD;
     //ボーン
     min16uint2 born : BORN;
      //ウェイト
@@ -64,6 +102,8 @@ struct VSInput
     float4 pos : POSITION;
     //法線
     float4 normal : NORMAL;
+    //uv
+    float2 uv : TEXCOORD;
     //ボーン
     min16uint2 born : BORN;
     //ウェイト
@@ -86,6 +126,7 @@ Out VS(VSInput input)
     //o.svpos = input.pos;
     o.pos = input.pos;
     o.normal = mul(world, input.normal);
+    o.uv = input.uv;
     o.born = input.born;
     o.weight = input.weight;
 
@@ -96,5 +137,36 @@ Out VS(VSInput input)
 [RootSignature(RS)]
 float4 PS(Out o) : SV_TARGET
 {
-    return float4(1, 0, 0, 0);
+    return float4(1, 0, 0, 1);
+
+    //ライトの色
+    float3 lightCol = float3(0.6f, 0.6f, 0.6f);
+
+    //視線ベクトル
+    float3 eye = float3(0.0f, 10.0f, -15.0f);
+    float3 ray = normalize(o.pos.xyz - eye);
+
+    //光源ベクトル
+    float3 light = normalize(float3(-1.0f, 1.0f, -1.0f));
+
+    //反射ベクトル
+    float3 ref = reflect(-light, o.normal);
+
+    //スぺキュラ
+    float spec = pow(saturate(dot(ref, ray)), specularity);
+
+    //光源ベクトルと法線との内積
+    float bright = saturate(dot(light, o.normal));
+
+    //ランバート
+    bright = saturate(acos(bright) / 3.14159265f);
+
+    float4 toon = ton.Sample(smp, float2(0.0f, 1.0f - bright));
+
+    //色
+    float3 color = (texFlag == true ? tex.Sample(smp, o.uv).rgb : saturate(diffuse * bright + specula * spec + mirror * lightCol));
+    color = (sphFlag == true ? color * sph.Sample(smp, o.uv).rgb : color);
+    color = (spaFlag == true ? color + spa.Sample(smp, o.uv).rgb : color);
+
+    return float4(color, alpha);
 }
