@@ -3,6 +3,7 @@
 #include "../List/List.h"
 #include "../Swap/Swap.h"
 #include "../Depth/Depth.h"
+#include "../Constant/Constant.h"
 #include "../Root/Root.h"
 #include "../Pipe/Pipe.h"
 #include "../etc/Release.h"
@@ -11,8 +12,8 @@
 #define MAX 4  
 
 // コンストラクタ
-FirstRender::FirstRender(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Depth>dep, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe) :
-	vertex(nullptr), data(nullptr), dep(dep)
+FirstRender::FirstRender(std::weak_ptr<Device>dev, std::weak_ptr<List>list,  std::weak_ptr<Depth>dep, std::weak_ptr<Constant>con, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe) :
+	vertex(nullptr), data(nullptr), dep(dep), con(con)
 {
 	this->dev = dev;
 	this->list = list;
@@ -182,7 +183,10 @@ void FirstRender::Draw(void)
 
 	auto d = dep.lock()->GetSrvHeap();
 	list.lock()->GetList()->SetDescriptorHeaps(1, &d);
-	list.lock()->GetList()->SetGraphicsRootDescriptorTable(1, d->GetGPUDescriptorHandleForHeapStart());
+	auto h = d->GetGPUDescriptorHandleForHeapStart();
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(1, h);
+
+	//con.lock()->SetConstant(2);
 
 	//描画
 	list.lock()->GetList()->DrawInstanced(v.size(), 1, 0, 0);

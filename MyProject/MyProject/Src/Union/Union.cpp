@@ -153,11 +153,11 @@ void Union::Start(void)
 	tri = std::make_shared<Triangle>(dev, list, con, drwRoot, triPipe);
 	tex = std::make_shared<Texture>(dev, list, con, texRoot, texPipe);
 
-	plane = std::make_shared<Plane>(dev, list, con, pmtRoot, pmtPipe);
+	plane = std::make_shared<Plane>(dev, list, dep, con, pmtRoot, pmtPipe);
 
 	model = std::make_shared<Model>(dev, list, con, mdlRoot, mdlPipe, tex);
 
-	first = std::make_shared<FirstRender>(dev, list, dep, fstRoot, fstPipe);
+	first = std::make_shared<FirstRender>(dev, list, dep, con, fstRoot, fstPipe);
 }
 
 // メッセージの確認
@@ -254,16 +254,17 @@ void Union::FirstDraw(void)
 		first);
 
 	dep->SetDepth();
+	dep->SetShadow();
 
 	first->SetRender(*dep->GetHeap(), color);
-
-	plane->Draw();
 }
 
 // 描画準備
 void Union::Set(void)
 {
 	FirstDraw();
+
+	plane->Draw();
 }
 
 // ポイント描画

@@ -69,10 +69,7 @@ float4 PS(Out o) : SV_TARGET
     return tex.Sample(smp, o.uv);
 
     float tmp = pow(depth.Sample(smp, o.uv), 10);
-    if(o.uv.x < 0.5f)
-    {
-        return tmp;
-    }
+    return tmp;
     
 
     //‰æ‘œƒTƒCƒY

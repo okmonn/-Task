@@ -3,13 +3,14 @@
 #include <vector>
 
 class Depth;
+class Constant;
 
 class FirstRender :
 	public MultiRender
 {
 public:
 	// コンストラクタ
-	FirstRender(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Depth>dep, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe);
+	FirstRender(std::weak_ptr<Device>dev, std::weak_ptr<List>list, std::weak_ptr<Depth>dep, std::weak_ptr<Constant>con, std::weak_ptr<Root>root, std::weak_ptr<Pipe>pipe);
 	// デストラクタ
 	~FirstRender();
 
@@ -35,6 +36,8 @@ private:
 
 	// 深度
 	std::weak_ptr<Depth>dep;
+
+	std::weak_ptr<Constant>con;
 
 	// 頂点リソース
 	ID3D12Resource* vertex;

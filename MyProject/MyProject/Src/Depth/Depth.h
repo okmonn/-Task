@@ -19,6 +19,8 @@ public:
 	// 深度ステンシルのセット
 	void SetDepth(void);
 
+	void SetShadow(void);
+
 	// ヒープの取得
 	ID3D12DescriptorHeap* GetHeap(void) const {
 		return heap;

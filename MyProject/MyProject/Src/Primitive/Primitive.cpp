@@ -1,6 +1,7 @@
 #include "Primitive.h"
 #include "../Device/Device.h"
 #include "../List/List.h"
+#include "../Depth/Depth.h"
 #include "../Constant/Constant.h"
 #include "../Root/Root.h"
 #include "../Pipe/Pipe.h"
@@ -86,7 +87,7 @@ void Primitive::Draw(void)
 	list.lock()->SetPipe(*pipe.lock()->Get());
 
 	con.lock()->SetConstant();
-	
+
 	//頂点バッファ設定用構造体の設定
 	D3D12_VERTEX_BUFFER_VIEW view = {};
 	view.BufferLocation = rsc->GetGPUVirtualAddress();

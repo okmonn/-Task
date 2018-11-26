@@ -7,6 +7,7 @@ struct ID3D12DescriptorHeap;
 struct ID3D12Resource;
 class Device;
 class List;
+class Depth;
 class Constant;
 class Root;
 class Pipe;
@@ -48,6 +49,9 @@ protected:
 
 	// 定数
 	std::weak_ptr<Constant>con;
+
+	// 深度バッファ
+	std::weak_ptr<Depth>depth;
 
 	// ルートシグネチャ
 	std::weak_ptr<Root>root;

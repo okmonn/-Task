@@ -44,8 +44,7 @@ cbuffer wvp : register(b0)
     float4x4 view;
     //プロジェクション行列
     float4x4 projection;
-    float4x4 lightview;
-    float4x4 lightProjection;
+    float4x4 light;
     float4 eye;
      //ウィンドウサイズ
     float2 window;
@@ -119,13 +118,12 @@ Out VS(VSInput input)
     matrix m = borns[input.born.x] * w + borns[input.born.y] * (1.0f - w);
     m = mul(world, m);
 
-    matrix light = mul(lightProjection, lightview);
-
     Out o;
     o.svpos = mul(mul(light, m), input.pos);
     m = mul(view, m);
     m = mul(projection, m);
     input.pos = mul(m, input.pos);
+    o.svpos   = input.pos;
     o.pos     = input.pos;
     o.normal  = mul(world, input.normal);
     o.uv      = input.uv;

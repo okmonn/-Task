@@ -27,6 +27,8 @@ cbuffer wvp : register(b0)
     float4x4 view;
 	//プロジェクション行列
     float4x4 projection;
+    float4x4 lightview;
+    float4x4 lightProjection;
 	//ウィンドウサイズ
     float2 window;
 }
@@ -55,14 +57,15 @@ struct Out
 Out VS(Input input)
 {
     //input.pos.xy = float2(-1.0f, 1.0f) + (input.pos.xy / float2((window.x / 2.0f), -(window.y / 2.0f)));
+    matrix light = mul(lightProjection, lightview);
+    Out o;
+    //o.pos   = input.pos;
 
+    o.pos   = mul(mul(light, world), input.pos);
     input.pos = mul(world, input.pos);
     input.pos = mul(view, input.pos);
     input.pos = mul(projection, input.pos);
-
-    Out o;
     o.svpos = input.pos;
-    o.pos   = input.pos;
     o.normal = input.normal;
     o.uv = input.uv;
 
@@ -72,5 +75,6 @@ Out VS(Input input)
 // ピクセルシェーダ
 float4 PS(Out o) : SV_TARGET
 {
-    return float4(1,1,1,1);
+    return float4(1, 1, 1, 1);
+
 }

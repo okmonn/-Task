@@ -241,3 +241,8 @@ void Depth::SetDepth(void)
 {
 	list.lock()->GetList()->ClearDepthStencilView(heap->GetCPUDescriptorHandleForHeapStart(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 }
+
+void Depth::SetShadow(void)
+{
+	list.lock()->GetList()->ClearDepthStencilView(shadowHeap->GetCPUDescriptorHandleForHeapStart(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+}
