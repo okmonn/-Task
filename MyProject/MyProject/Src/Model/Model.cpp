@@ -465,6 +465,74 @@ void Model::Draw(int & i)
 	}
 }
 
+// 影描画
+void Model::Shadow(int & i, std::shared_ptr<Root>root, std::shared_ptr<Pipe>pipe)
+{
+	list.lock()->SetRoot(*root->Get());
+	list.lock()->SetPipe(*pipe->Get());
+
+	con.lock()->SetConstant();
+
+	int* n = &i;
+
+	UINT offset = 0;
+
+	//定数ヒープのセット
+	list.lock()->GetList()->SetDescriptorHeaps(1, &pmd[n].heap);
+
+	//ヒープの先頭ハンドル
+	D3D12_GPU_DESCRIPTOR_HANDLE handle = pmd[n].heap->GetGPUDescriptorHandleForHeapStart();
+	handle.ptr += dev.lock()->Get()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) * pmd[n].material.lock()->size();
+	//ディスクリプターテーブルのセット
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(3, handle);
+
+	//頂点バッファビューのセット
+	D3D12_VERTEX_BUFFER_VIEW vView = {};
+	vView.BufferLocation = pmd[n].v_rsc->GetGPUVirtualAddress();
+	vView.SizeInBytes = sizeof(pmd::Vertex) * pmd[n].vertex.lock()->size();
+	vView.StrideInBytes = sizeof(pmd::Vertex);
+	list.lock()->GetList()->IASetVertexBuffers(0, 1, &vView);
+
+	//頂点インデックスビューのセット
+	D3D12_INDEX_BUFFER_VIEW iView = {};
+	iView.BufferLocation = pmd[n].i_rsc->GetGPUVirtualAddress();
+	iView.Format = DXGI_FORMAT::DXGI_FORMAT_R16_UINT;;
+	iView.SizeInBytes = sizeof(USHORT) * pmd[n].index.lock()->size();
+	list.lock()->GetList()->IASetIndexBuffer(&iView);
+
+	list.lock()->GetList()->IASetPrimitiveTopology(D3D12_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//送信用データ
+	UINT8* data = pmd[n].c_data;
+
+	//ヒープの先頭ハンドル
+	handle = pmd[n].heap->GetGPUDescriptorHandleForHeapStart();
+
+	for (unsigned int i = 0; i < pmd[n].material.lock()->size(); ++i)
+	{
+		pmd[n].mat = {};
+
+		//マテリアル構造体に格納
+		pmd[n].mat.diffuse = pmd[n].material.lock()->at(i).diffuse;
+		pmd[n].mat.alpha = pmd[n].material.lock()->at(i).alpha;
+		pmd[n].mat.specularity = pmd[n].material.lock()->at(i).specularity;
+		pmd[n].mat.specula = pmd[n].material.lock()->at(i).specula;
+		pmd[n].mat.mirror = pmd[n].material.lock()->at(i).mirror;
+
+		//描画
+		list.lock()->GetList()->DrawIndexedInstanced(pmd[n].material.lock()->at(i).indexNum, 1, offset, 0, 0);
+
+		//ハンドル更新
+		handle.ptr += dev.lock()->Get()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE::D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+		//データ更新
+		data = (UINT8*)(((sizeof(pmd::Mat) + 0xff) &~0xff) + (CHAR*)(data));
+
+		//オフセット更新
+		offset += pmd[n].material.lock()->at(i).indexNum;
+	}
+}
+
 // アニメーションの終了確認
 bool Model::CheckEndAnim(int & i)
 {

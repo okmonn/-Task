@@ -1,7 +1,9 @@
 // ルートシグネチャの定義
 #define RS "RootFlags(ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT),"\
                     "DescriptorTable(CBV(b0, numDescriptors = 1, space = 0, offset = DESCRIPTOR_RANGE_OFFSET_APPEND), "\
-                                    "visibility = SHADER_VISIBILITY_VERTEX),"\
+                                    "visibility = SHADER_VISIBILITY_ALL),"\
+                    "DescriptorTable(SRV(t0, numDescriptors = 1, space = 0, offset = DESCRIPTOR_RANGE_OFFSET_APPEND), "\
+                                    "visibility = SHADER_VISIBILITY_ALL),"\
                     "StaticSampler(s0, "\
                                   "filter = FILTER_MIN_MAG_MIP_LINEAR, "\
                                   "addressU = TEXTURE_ADDRESS_WRAP, "\
@@ -16,6 +18,7 @@
                                   "space = 0, "\
                                   "visibility = SHADER_VISIBILITY_ALL)"
 
+Texture2D<float> depth : register(t0);
 SamplerState smp : register(s0);
 
 // ワールドビュープロジェクション
@@ -27,8 +30,7 @@ cbuffer wvp : register(b0)
     float4x4 view;
 	//プロジェクション行列
     float4x4 projection;
-    float4x4 lightview;
-    float4x4 lightProjection;
+    float4x4 light;
 	//ウィンドウサイズ
     float2 window;
 }
@@ -56,12 +58,11 @@ struct Out
 [RootSignature(RS)]
 Out VS(Input input)
 {
-    //input.pos.xy = float2(-1.0f, 1.0f) + (input.pos.xy / float2((window.x / 2.0f), -(window.y / 2.0f)));
-    matrix light = mul(lightProjection, lightview);
+    //input.pos.xy = float2(-1.0f, 1.0f) + (input.pos.xy / float2((window.x / 2.0f), -(window.y / 2.0f)))
     Out o;
     //o.pos   = input.pos;
 
-    o.pos   = mul(mul(light, world), input.pos);
+    o.pos     = mul(mul(light, world), input.pos);
     input.pos = mul(world, input.pos);
     input.pos = mul(view, input.pos);
     input.pos = mul(projection, input.pos);
@@ -75,6 +76,16 @@ Out VS(Input input)
 // ピクセルシェーダ
 float4 PS(Out o) : SV_TARGET
 {
-    return float4(1, 1, 1, 1);
+    float2 uv = (float2(1, 1) + o.pos.xy * float2(1, -1)) * 0.5;
 
+    float dep = depth.Sample(smp,uv);
+
+    float color = dep;
+
+    if(o.pos.z > dep + 0.0005f)
+    {
+        color *= 0.7f;
+    }
+
+    return float4(color,color,color, 1);
 }

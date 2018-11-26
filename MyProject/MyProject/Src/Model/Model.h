@@ -94,6 +94,9 @@ public:
 	// 描画
 	void Draw(int& i);
 
+	// 影描画
+	void Shadow(int& i, std::shared_ptr<Root>root, std::shared_ptr<Pipe>pipe);
+
 	// アニメーションの終了確認
 	bool CheckEndAnim(int& i);
 

@@ -278,6 +278,11 @@ void func::ChangeWVP(const float & eyeX, const float & eyeY, const float & eyeZ,
 	Union::Get().ChangeWVP(eyeX, eyeY, eyeZ, targetX, targetY, targetZ, upX, upY, upZ);
 }
 
+void func::Rotation(const float & angle)
+{
+	Union::Get().Rotation(angle);
+}
+
 // メッセージの確認
 bool func::CheckMsg(void)
 {

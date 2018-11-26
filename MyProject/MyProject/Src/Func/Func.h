@@ -57,6 +57,8 @@ namespace func {
 	void ChangeWVP(const float& eyeX, const float& eyeY, const float& eyeZ,
 		const float& targetX, const float& targetY, const float& targetZ, const float& upX = 0.0f, const float& upY = 1.0f, const float& upZ = 0.0f);
 
+	void Rotation(const float& angle);
+
 	// メッセージの確認
 	bool CheckMsg(void);
 

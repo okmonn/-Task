@@ -25,6 +25,8 @@
 
 #pragma comment(lib, "d3d12.lib")
 
+int n = 0;
+
 //クリアカラー
 const FLOAT color[] = {
 	0.0f,
@@ -78,6 +80,7 @@ void Union::CreateRoot(void)
 	pmtRoot = std::make_shared<Root>(dev, L"Src/Shader/Primitive.hlsl");
 	mdlRoot = std::make_shared<Root>(dev, L"Src/Shader/Model.hlsl");
 	fstRoot = std::make_shared<Root>(dev, L"Src/Shader/FirstPath.hlsl");
+	sdwRoot = std::make_shared<Root>(dev, L"Src/Shader/Shadow.hlsl");
 }
 
 // パイプラインのインスタンス
@@ -126,6 +129,14 @@ void Union::CreatePipe(void)
 		};
 		fstPipe->CreatePipe(*input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	}
+
+	sdwPipe = std::make_shared<Pipe>(dev, swap, sdwRoot);
+	{
+		D3D12_INPUT_ELEMENT_DESC input[] = {
+			inputs[0], inputs[1], inputs[2], inputs[5], inputs[6]
+		};
+		sdwPipe->CreatePipe(*input, _countof(input), D3D12_PRIMITIVE_TOPOLOGY_TYPE::D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE, true);
+	}
 }
 
 // クラスのインスタンス
@@ -158,6 +169,9 @@ void Union::Start(void)
 	model = std::make_shared<Model>(dev, list, con, mdlRoot, mdlPipe, tex);
 
 	first = std::make_shared<FirstRender>(dev, list, dep, con, fstRoot, fstPipe);
+
+	model->Load("Model/初音ミク.pmd", n);
+	model->Attach("ヤゴコロダンス.vmd", n);
 }
 
 // メッセージの確認
@@ -189,6 +203,11 @@ void Union::ChangeWVP(const float & eyeX, const float & eyeY, const float & eyeZ
 	const float & targetZ, const float & upX, const float & upY, const float & upZ)
 {
 	con->ChangeWvp(eyeX, eyeY, eyeZ, targetX, targetY, targetZ, upX, upY, upZ);
+}
+
+void Union::Rotation(const float & angle)
+{
+	con->UpDataWvp(angle);
 }
 
 // キー入力
@@ -244,8 +263,6 @@ void Union::FirstDraw(void)
 {
 	list->Reset(nullptr);
 
-	con->UpDataWvp(0.0f);
-
 	list->SetViewport();
 
 	list->SetScissor();
@@ -257,14 +274,16 @@ void Union::FirstDraw(void)
 	dep->SetShadow();
 
 	first->SetRender(*dep->GetHeap(), color);
+
+
+	model->Shadow(n, sdwRoot, sdwPipe);
+	//model->Draw(n);
 }
 
 // 描画準備
 void Union::Set(void)
 {
 	FirstDraw();
-
-	plane->Draw();
 }
 
 // ポイント描画
@@ -375,6 +394,8 @@ void Union::MainDraw(void)
 	//dep->SetDepth();
 
 	ren->SetRender(*dep->GetHeap(), color);
+
+	plane->Draw();
 
 	first->Draw();
 

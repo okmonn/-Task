@@ -49,6 +49,8 @@ public:
 	void ChangeWVP(const float& eyeX, const float& eyeY, const float& eyeZ,
 		const float& targetX, const float& targetY, const float& targetZ, const float& upX = 0.0f, const float& upY = 1.0f, const float& upZ = 0.0f);
 
+	void Rotation(const float& angle);
+
 	// キー入力
 	bool CheckKey(const int& i);
 
@@ -215,6 +217,7 @@ private:
 	std::shared_ptr<Root>pmtRoot;
 	std::shared_ptr<Root>mdlRoot;
 	std::shared_ptr<Root>fstRoot;
+	std::shared_ptr<Root>sdwRoot;
 
 	// パイプライン
 	std::shared_ptr<Pipe>pntPipe;
@@ -224,6 +227,7 @@ private:
 	std::shared_ptr<Pipe>pmtPipe;
 	std::shared_ptr<Pipe>mdlPipe;
 	std::shared_ptr<Pipe>fstPipe;
+	std::shared_ptr<Pipe>sdwPipe;
 
 	// ポイント
 	std::shared_ptr<Point>pnt;

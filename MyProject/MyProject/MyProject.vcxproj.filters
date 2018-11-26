@@ -507,5 +507,8 @@
     <FxCompile Include="Src\Shader\Primitive.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
+    <FxCompile Include="Src\Shader\Shadow.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

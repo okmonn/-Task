@@ -86,7 +86,14 @@ void Primitive::Draw(void)
 	list.lock()->SetRoot(*root.lock()->Get());
 	list.lock()->SetPipe(*pipe.lock()->Get());
 
+	list.lock()->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ,
+		depth.lock()->GetRsc());
+
 	con.lock()->SetConstant();
+
+	auto h = depth.lock()->GetSrvHeap();
+	list.lock()->GetList()->SetDescriptorHeaps(1, &h);
+	list.lock()->GetList()->SetGraphicsRootDescriptorTable(1, h->GetGPUDescriptorHandleForHeapStart());
 
 	//頂点バッファ設定用構造体の設定
 	D3D12_VERTEX_BUFFER_VIEW view = {};
@@ -102,4 +109,7 @@ void Primitive::Draw(void)
 
 	//描画
 	list.lock()->GetList()->DrawInstanced(vertex.size(), 1, 0, 0);
+
+	list.lock()->SetBarrier(D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_DEPTH_WRITE,
+		depth.lock()->GetRsc());
 }
