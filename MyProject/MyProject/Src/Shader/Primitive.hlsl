@@ -80,7 +80,7 @@ float4 PS(Out o) : SV_TARGET
     //return depth.Sample(smp, o.uv);
 
     float2 pos = float2(normalize(o.pos.x), normalize(o.pos.y));
-    float2 uv = (float2(1, 1) + o.uv * float2(1, 1)) * float2(1.0f, 0.5f);
+    float2 uv = (float2(1, 1) + o.uv * float2(1.0f, 1.0f)) * float2(1.0f, 0.5f);
     float dep = depth.Sample(smp,uv);
 
     return float4(dep,dep,dep, 1);
