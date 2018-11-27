@@ -34,9 +34,11 @@ public:
 
 	// ビューポートのセット
 	void SetViewport(void);
+	void SetViewport(const unsigned& w, const unsigned& h);
 
 	// シザーのセット
 	void SetScissor(void);
+	void SetScissor(const unsigned& w, const unsigned& h);
 
 	// バリアのセット
 	void SetBarrier(const D3D12_RESOURCE_STATES& befor, const D3D12_RESOURCE_STATES& affter, std::weak_ptr<Swap>swap, std::weak_ptr<Render>render);

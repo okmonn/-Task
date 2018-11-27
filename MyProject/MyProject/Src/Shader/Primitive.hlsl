@@ -83,7 +83,7 @@ float4 PS(Out o) : SV_TARGET
     float2 uv = (float2(1, 1) + o.uv * float2(1.0f, 1.0f)) * float2(1.0f, 0.5f);
     float dep = depth.Sample(smp,uv);
 
-    return float4(dep,dep,dep, 1);
+   // return float4(dep,dep,dep, 1);
 
     float color = dep;
 

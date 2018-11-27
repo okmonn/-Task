@@ -83,6 +83,19 @@ void List::SetViewport(void)
 	list->RSSetViewports(1, &view);
 }
 
+void List::SetViewport(const unsigned & w, const unsigned & h)
+{
+	D3D12_VIEWPORT view = {};
+	view.Height = static_cast<float>(h);
+	view.MaxDepth = 1.0f;
+	view.MinDepth = 0.0f;
+	view.TopLeftX = 0.0f;
+	view.TopLeftY = 0.0f;
+	view.Width = static_cast<float>(w);
+
+	list->RSSetViewports(1, &view);
+}
+
 // シザーのセット
 void List::SetScissor(void)
 {
@@ -92,6 +105,17 @@ void List::SetScissor(void)
 	scissor.left   = 0;
 	scissor.right  = static_cast<LONG>(un.GetWinX());
 	scissor.top    = 0;
+
+	list->RSSetScissorRects(1, &scissor);
+}
+
+void List::SetScissor(const unsigned & w, const unsigned & h)
+{
+	RECT scissor = {};
+	scissor.bottom = static_cast<LONG>(h);
+	scissor.left = 0;
+	scissor.right = static_cast<LONG>(w);
+	scissor.top = 0;
 
 	list->RSSetScissorRects(1, &scissor);
 }
