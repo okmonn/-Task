@@ -161,6 +161,13 @@ float4 PS(Out o) : SV_TARGET
 
     float4 toon = ton.Sample(smp, float2(0.0f, 1.0f - bright));
 
+    if(texFlag == false)
+    {
+        discard;
+    }
+
+    return tex.Sample(smp, o.uv);
+
     //êF
     float3 color = (texFlag == true ? tex.Sample(smp, o.uv).rgb : saturate(diffuse * bright + specula * spec + mirror * lightCol));
     color = (sphFlag == true ? color * sph.Sample(smp, o.uv).rgb : color);

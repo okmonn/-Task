@@ -170,7 +170,7 @@ void Union::Start(void)
 
 	first = std::make_shared<FirstRender>(dev, list, dep, con, fstRoot, fstPipe);
 
-	model->Load("Model/初音ミク.pmd", n);
+	model->Load("Model/巡音ルカ.pmd", n);
 	model->Attach("ヤゴコロダンス.vmd", n);
 }
 

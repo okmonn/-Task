@@ -75,9 +75,9 @@ long ModelLoader::LoadTex(const std::string & fileName)
 			{
 				auto find = tmp.find_first_of('*');
 
-				path = func::FindString(fileName, '/') + tmp.substr(0, find);
+				/*path = func::FindString(fileName, '/') + tmp.substr(0, find);
 				tex[fileName]->emplace(n, 0);
-				hr = texture.lock()->Load(path, tex[fileName]->at(n));
+				hr = texture.lock()->Load(path, tex[fileName]->at(n));*/
 
 				path = func::FindString(fileName, '/') + tmp.substr(find + 1, tmp.size());
 				sph[fileName]->emplace(n, 0);
